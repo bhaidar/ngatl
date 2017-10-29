@@ -9,8 +9,25 @@
       "root": "apps/web/src",
       "outDir": "dist",
       "assets": [
-        "assets",
-        "favicon.ico"
+        "assets/blog",
+        "assets/community",
+        "assets/sponsors",
+        "favicon.ico",
+        {
+          "glob": "**/*.jpg",
+          "input": "./assets",
+          "output": "./assets"
+        },
+        {
+          "glob": "**/*.png",
+          "input": "./assets",
+          "output": "./assets"
+        },
+        {
+          "glob": "**/*.gif",
+          "input": "./assets",
+          "output": "./assets"
+        }
       ],
       "index": "index.html",
       "main": "main.ts",
