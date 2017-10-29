@@ -11,6 +11,8 @@
     }
   },
   "exclude": [
+    "apps/mobile",
+    "libs/mobile",
     "**/*.spec.ts",
     "**/*.e2e-spec.ts",
     "node_modules",
