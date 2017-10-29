@@ -14,10 +14,21 @@ npm i
 npm start
 ```
 
-#### Production build
+#### Build and Deploy ng-atl.org to Github pages
+
+Prerequisites:
 
 ```
-npm run ng build -- --app=web -prod
+npm i -g angular-cli-ghpages
+```
+
+Build and deploy to Github pages:
+
+```
+npm run ng build -- --app=web -prod --base-href "/ngatl/apps/web/"
+
+// now run angular-cli-ghpages via shorthand:
+ngh
 ```
 
 ### Develop NgAtl mobile app

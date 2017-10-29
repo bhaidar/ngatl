@@ -87,7 +87,7 @@
       <div class="col-lg-4 col-md-6 col-sm-12 card" *ngFor="let sponsor of sponsors">
         <a [href]="sponsor.url" target="_blank">
           <div class="image-container">
-            <img [src]="'../../assets/' + sponsor.image" alt="sponsor.name">
+            <img [src]="sponsor.image" alt="sponsor.name">
           </div>
           <div class="title">
             {{ sponsor.name }}
@@ -113,7 +113,7 @@
       <div class="col-lg-4 col-md-6 col-sm-12 card" *ngFor="let member of community">
         <div class="image-container">
           <a [href]="member.link" target="_blank">
-            <img [src]="'../../assets/' + member.logo" alt="member.name">
+            <img [src]="member.logo" alt="member.name">
           </a>
         </div>
         <div class="title">

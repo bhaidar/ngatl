@@ -53,96 +53,96 @@ export class HomeComponent implements OnInit {
       {
         name: 'ADP',
         level: 'Gold',
-        image: '/sponsors/adp_logo.svg',
+        image: 'assets/sponsors/adp_logo.svg',
         url: 'https://adp.com/'
       },
       {
         name: 'The Weather Company',
         level: 'Diversity Advocate',
-        image: '/sponsors/weather.png',
+        image: 'assets/sponsors/weather.png',
         url: 'http://www.theweathercompany.com/'
       },
       {
         name: 'GitHub',
         level: 'Diversity Supporter',
-        image: '/sponsors/GitHub_Logo.png',
+        image: 'assets/sponsors/GitHub_Logo.png',
         url: 'https://github.com/'
       },
       {
         name: 'Robert Half Technology',
         level: 'Silver',
-        image: '/sponsors/robert-half.gif',
+        image: 'assets/sponsors/robert-half.gif',
         url: 'https://www.roberthalf.com/jobs/technology'
       },
       {
         name: 'TSYS',
         level: 'Silver',
-        image: '/sponsors/tsys.svg',
+        image: 'assets/sponsors/tsys.svg',
         url: 'http://www.tsys.com/'
       },
       {
         name: 'Progress',
         level: 'Gold',
-        image: '/sponsors/progress.png',
+        image: 'assets/sponsors/progress.png',
         url: 'https://www.progress.com/'
       },
       {
         name: 'Valor Software',
         level: 'Gold',
-        image: '/sponsors/valor_software.png',
+        image: 'assets/sponsors/valor_software.png',
         url: 'https://valor-software.com/#/'
       },
       {
         name: 'Oasis Digital',
         level: 'Silver',
-        image: '/sponsors/od_logo_print_hi.png',
+        image: 'assets/sponsors/od_logo_print_hi.png',
         url: 'https://oasisdigital.com/'
       }
     ].sort(SpeakersService.sorting);
     this.community = [
       {
         name: 'AngularAir',
-        logo: '/community/ng-air-logo-light.png',
+        logo: 'assets/community/ng-air-logo-light.png',
         link: 'https://angularair.com/'
       },
       {
         name: 'ngGirls',
-        logo: '/community/ngGirls.png',
+        logo: 'assets/community/ngGirls.png',
         link: 'http://ng-girls.org/'
       },
       {
         name: 'Vets Who Code',
-        logo: '/community/VetsWhoCode.jpg',
+        logo: 'assets/community/VetsWhoCode.jpg',
         link: 'http://vetswhocode.io/'
       },
       {
         name: 'Atlanta JavaScript Meetup',
-        logo: '/community/AtlJS.png',
+        logo: 'assets/community/AtlJS.png',
         link: 'https://www.meetup.com/AtlantaJavaScript/'
       },
       {
         name: 'Women Who Code, Atlanta',
-        logo: '/community/WomenWhoCode.jpg',
+        logo: 'assets/community/WomenWhoCode.jpg',
         link: 'https://www.meetup.com/Women-Who-Code-Atlanta/'
       },
       {
         name: 'ATL-Angular',
-        logo: '/community/AtlAngular.jpg',
+        logo: 'assets/community/AtlAngular.jpg',
         link: 'https://www.meetup.com/ATL-Angular/'
       },
       {
         name: 'Front End Happy Hour',
-        logo: '/community/front-end-happy-hour.png',
+        logo: 'assets/community/front-end-happy-hour.png',
         link: 'http://frontendhappyhour.com/'
       },
       {
         name: 'Women Techmakers Atlanta',
-        logo: '/community/wtm-logo.png',
+        logo: 'assets/community/wtm-logo.png',
         link: 'https://www.womentechmakers.com/'
       },
       {
         name: 'Google Developer Group Atlanta',
-        logo: '/community/gdg-atl-logo.png',
+        logo: 'assets/community/gdg-atl-logo.png',
         link: 'https://www.meetup.com/gdg-atlanta/'
       }
     ].sort(SpeakersService.sorting);
