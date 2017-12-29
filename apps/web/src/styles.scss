@@ -1,0 +1,93 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'lato';
+
+$fa-font-path: '../../../node_modules/font-awesome/fonts';
+@import '../../../node_modules/font-awesome/scss/font-awesome';
+@import '/variables';
+
+app-root {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+input {
+  outline: none;
+}
+
+.modal-dialog {
+  max-width: 1100px;
+  @media only screen and (max-width: 1280px) and (min-width: 769px) {
+    max-width: 768px;
+  }
+}
+
+.breadcrumb-hero {
+  text-align: center;
+  color: $white;
+  background-color: $lightGray;
+  padding-top: 70px;
+  padding-bottom: 70px;
+  .breadcrumb-title {
+    font-size: 30px;
+    padding-bottom: 5px;
+  }
+  .breadcrumb-links {
+    font-size: 10px;
+  }
+  a, a:hover {
+    color: $white;
+  }
+  .current {
+    color: $primary;
+  }
+}
+
+.normal-button {
+  margin-left: 20px;
+  &:hover {
+    text-decoration: none;
+    color: $primary;
+  }
+  @media only screen and (max-width: 768px) {
+    width: 100%;
+  }
+  border-radius: 25px;
+  color: $primary;
+  display: inline-block;
+  font-size: 14px;
+  padding: 10px 25px;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 700;
+  border: 1px solid $primary;
+  &[disabled] {
+    background-color: $medGray;
+    border-color: $lightGray;
+    cursor: not-allowed;
+  }
+}
+.red-button {
+  &:hover {
+    text-decoration: none;
+    color: white;
+  }
+  @media only screen and (max-width: 768px) {
+    width: 100%;
+  }
+  border-radius: 25px;
+  color: $white;
+  display: inline-block;
+  font-size: 14px;
+  padding: 10px 25px;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 700;
+  background-color: $primary;
+  border: 1px solid $primary;
+  &[disabled] {
+    background-color: $medGray;
+    border-color: $lightGray;
+    cursor: not-allowed;
+  }
+}

@@ -16,12 +16,14 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@ngatl-new/*": [
+      "@ngatl/*": [
         "libs/*"
       ]
     }
   },
   "exclude": [
+    "apps/mobile",
+    "libs/mobile",
     "node_modules",
     "tmp"
   ]

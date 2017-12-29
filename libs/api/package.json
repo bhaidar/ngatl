@@ -1,0 +1,12 @@
+{
+  "name": "@ngatl/api",
+  "version": "0.2.0",
+  "main": "index",
+  "typings": "index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "author": "Bram Borggreve <bram@colmena.io> (https://github.com/beeman) (https://twitter.com/beeman_nl)",
+  "url": "https://github.com/colmena/colmena"
+}

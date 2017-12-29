@@ -1,0 +1,17 @@
+{
+  "name": "@ngatl/module-admin-conference",
+  "version": "0.0.2",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "publish:patch": "np patch --any-branch --yolo",
+    "publish:minor": "np minor --any-branch --yolo",
+    "publish:major": "np major --any-branch --yolo"
+  },
+  "dependencies": {
+    "@colmena/admin-lb-sdk": "0.1.0",
+    "@colmena/admin-ui": "0.1.0"
+  },
+  "license": "MIT"
+}

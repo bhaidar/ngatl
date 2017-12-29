@@ -1,0 +1,34 @@
+<action-bar title="Dashboard" class="action-bar">
+</action-bar>
+<ScrollView>
+  <StackLayout>
+    <StackLayout class="card">
+      <Button text="Barcode" (tap)="openBarcode()"></Button>
+      <StackLayout class="hr-light"></StackLayout>
+    </StackLayout>
+
+    <StackLayout class="card">
+      <Label text="A sample" textWrap="true"></Label>
+      <StackLayout class="hr-light"></StackLayout>
+    </StackLayout>
+
+    <StackLayout class="card">
+      <Label text="This is a sample card. Do with it what you will!" textWrap="true"></Label>
+      <StackLayout class="hr-light"></StackLayout>
+      <GridLayout rows="auto" columns="*,*,*" class="social-controls">
+        <Button col="0" [text]="'fa-heart' | fonticon" class="fa red"></Button>
+        <Button col="1" [text]="'fa-star' | fonticon" class="fa gray"></Button>
+        <Button col="2" [text]="'fa-share-alt' | fonticon" class="fa gray"></Button>
+      </GridLayout>
+      <StackLayout>
+        <TextField hint="First Name" [(ngModel)]="user.firstName"></TextField>
+        <TextField hint="Last Name" [(ngModel)]="user.lastName"></TextField>
+        <TextField hint="Email" [(ngModel)]="user.email" autocapitalizationType="none" autocorrect="false" keyboardType="email"></TextField>
+        <TextField secure="true" hint="Password" [(ngModel)]="user.password" autocapitalizationType="none" autocorrect="false" returnKeyType="go"
+          (returnPress)="login()"></TextField>
+        <Button text="Create" (tap)="create()"></Button>
+        <Button text="Login" (tap)="login()"></Button>
+      </StackLayout>
+    </StackLayout>
+  </StackLayout>
+</ScrollView>

@@ -1,0 +1,74 @@
+    // customized variables
+    @import 'variables';
+    // theme standard rulesets
+    @import '~nativescript-theme-core/scss/index';
+
+    /*pallette chosen from http://www.colourlovers.com/palette/541086/Loyal_Friends*/
+
+    Page {
+        background-color: #EDEDF4;
+    }
+    /*icons*/
+    .fa {
+        font-family: 'FontAwesome', fontawesome-webfont;
+        font-size: 25;
+    }
+
+    //override for action-bar colored fonticons
+    .action-bar Button {
+        color: $ngatl-blue;
+    }
+    .gray {
+        color: gray;
+    }
+    .red {
+        color: red;
+    }
+    .sidedrawer-header {
+      padding: 20 16 0 16;
+      .sidedrawer-header-image {
+        background-color: $white;
+          height: 220;
+          width: 220;
+          border-radius: 60;
+          margin-bottom: 20;
+      }
+    }
+    .sidedrawer-content {
+        .sidedrawer-item {
+            .sidedrawer-list-item-icon {
+                font-size:28;
+            }
+            .sidedrawer-list-item-text {
+                border-width: 0;
+                font-size:20;
+            }
+            &.active {
+                background-color: $white;
+                .sidedrawer-list-item-icon {
+                    color: $ngatl-blue;
+                }
+                .sidedrawer-list-item-text {
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+    /*cards*/
+    .card{
+        margin-top: 10;
+        margin-left: 10;
+        margin-right: 10;
+        padding:10;
+        vertical-align:top;
+        background-color: white;
+        border-width: 1;
+        border-radius: 3;
+        border-color: white;
+    }
+    .hr-light {
+        margin-top: 10;
+    }
+    .social-controls{
+        padding-top: 10;
+    }

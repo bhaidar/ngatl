@@ -1,0 +1,31 @@
+@import "../../../variables";
+.workshop-container {
+  padding-top: 20px;
+  section.workshop {
+    width: 80%;
+    margin: auto auto;
+    .workshop-header {
+      font-size: 1.5em;
+      .instructor {
+        font-style: italic;
+      }
+    }
+    .workshop-body {
+      margin-top: 5px;
+      margin-bottom: 30px;
+      line-height: 1.75em;
+    }
+  }
+}
+.more-soon {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 1.5em;
+  color: $primary;
+  font-weight: bold;
+}
+.workshop-purchase {
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
