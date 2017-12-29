@@ -14,7 +14,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { SystemUser } from '@ngatl/api';
-import { UserActions, ModalActions, WindowService } from '@ngatl/core';
+import { UserActions, ModalActions, WindowService, ProgressService } from '@ngatl/core';
 
 // nativescript
 import { BarcodeScanner } from "nativescript-barcodescanner";
@@ -30,16 +30,23 @@ import { BarcodeComponent } from '../../../shared/components/barcode/barcode.com
 export class DashboardComponent implements AfterViewInit, OnInit, OnDestroy {
   public user: any;
   private _barcode: BarcodeScanner;
+  private _spinnerOn = false;
 
   constructor(
     private _store: Store<any>,
     private _vcRef: ViewContainerRef,
     private _win: WindowService,
+    private _progressService: ProgressService,
   ) { }
 
   public openBarcode() {
     this._barcode = new BarcodeScanner();
     this._openScanner();
+  }
+
+  public toggleSpinner() {
+    this._spinnerOn = !this._spinnerOn;
+    this._progressService.toggleSpinner( this._spinnerOn );
   }
 
   public login() {
