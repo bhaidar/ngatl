@@ -14,7 +14,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { SystemUser } from '@ngatl/api';
-import { UserActions, ModalActions, WindowService, ProgressService } from '@ngatl/core';
+import { BaseComponent, UserActions, ModalActions, WindowService, ProgressService } from '@ngatl/core';
 
 // nativescript
 import { BarcodeScanner } from "nativescript-barcodescanner";
@@ -24,10 +24,10 @@ import { BarcodeComponent } from '../../../shared/components/barcode/barcode.com
 
 @Component({
   moduleId: module.id,
-  selector: 'dashboard',
+  selector: 'ngatl-ns-dashboard',
   templateUrl: 'dashboard.component.html'
 })
-export class DashboardComponent implements AfterViewInit, OnInit, OnDestroy {
+export class DashboardComponent extends BaseComponent implements AfterViewInit, OnInit, OnDestroy {
   public user: any;
   private _barcode: BarcodeScanner;
   private _spinnerOn = false;
@@ -37,7 +37,9 @@ export class DashboardComponent implements AfterViewInit, OnInit, OnDestroy {
     private _vcRef: ViewContainerRef,
     private _win: WindowService,
     private _progressService: ProgressService,
-  ) { }
+  ) {
+    super();
+  }
 
   public openBarcode() {
     this._barcode = new BarcodeScanner();
@@ -47,6 +49,10 @@ export class DashboardComponent implements AfterViewInit, OnInit, OnDestroy {
   public toggleSpinner() {
     this._spinnerOn = !this._spinnerOn;
     this._progressService.toggleSpinner( this._spinnerOn );
+    this._win.setTimeout( _ => {
+      this._spinnerOn = false;
+      this._progressService.toggleSpinner( false );
+    }, 800 );
   }
 
   public login() {

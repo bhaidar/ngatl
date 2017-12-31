@@ -25,7 +25,7 @@ import { DrawerService } from '../../../core/services/drawer.service';
 
 @Component({
   moduleId: module.id,
-  selector: 'home',
+  selector: 'ngatl-ns-home',
   templateUrl: 'home.component.html'
 })
 export class HomeComponent implements AfterViewInit, OnInit {

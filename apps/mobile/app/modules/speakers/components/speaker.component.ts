@@ -11,7 +11,7 @@ import { SpeakerActions } from '../actions';
 
 @Component({
   moduleId: module.id,
-  selector: 'speaker',
+  selector: 'ngatl-ns-speaker',
   templateUrl: 'speaker.component.html'
 })
 export class SpeakerComponent implements AfterViewInit, OnInit {

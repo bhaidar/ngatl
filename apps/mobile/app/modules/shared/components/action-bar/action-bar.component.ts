@@ -8,7 +8,7 @@ import { DrawerService } from '../../../core/services/drawer.service';
 
 @Component({
   moduleId: module.id,
-  selector: 'action-bar',
+  selector: 'ngatl-ns-action-bar',
   templateUrl: 'action-bar.component.html'
 })
 export class ActionBarComponent {

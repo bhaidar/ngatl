@@ -7,7 +7,7 @@ import { Item } from '../../models';
 import { ItemService } from '../../services/item.service';
 
 @Component({
-  selector: 'ns-details',
+  selector: 'ngatl-ns-details',
   moduleId: module.id,
   templateUrl: './item-detail.component.html'
 })

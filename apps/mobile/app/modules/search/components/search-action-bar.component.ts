@@ -15,7 +15,7 @@ import { SearchActions } from '../actions';
 
 @Component({
   moduleId: module.id,
-  selector: 'search-action-bar',
+  selector: 'ngatl-ns-search-action-bar',
   templateUrl: 'search-action-bar.component.html'
 })
 export class SearchActionBarComponent implements OnInit {

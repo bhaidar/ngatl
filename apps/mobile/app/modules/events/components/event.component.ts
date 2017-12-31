@@ -14,7 +14,7 @@ import { EventActions } from '../actions';
 
 @Component({
   moduleId: module.id,
-  selector: 'event',
+  selector: 'ngatl-ns-event',
   templateUrl: 'event.component.html'
 })
 export class EventComponent extends BaseComponent implements AfterViewInit, OnInit {
@@ -97,8 +97,8 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
           month = 1;
           break;
       }
-      startDate = new Date( 2018, month, day, 1 );
-      endDate = new Date( 2018, month, day, 3 );
+      startDate = new Date( 2018, month, day-1, 1 );
+      endDate = new Date( 2018, month, day-1, 3 );
       event = new CalendarEvent( "event " + i, startDate, endDate, false, colors[i * 10 % ( colors.length - 1 )] );
       events.push( event );
       if ( i % 3 == 0 ) {

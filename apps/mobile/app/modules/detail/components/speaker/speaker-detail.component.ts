@@ -5,23 +5,22 @@ import { ActivatedRoute } from '@angular/router';
 import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
 // libs
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs/Subscription';
 
 // app
 import { LoggerService } from '@ngatl/api';
+import { BaseComponent } from '@ngatl/core';
 import { SpeakerState } from '../../../speakers/states';
 import { SpeakerActions } from '../../../speakers/actions';
 import { NSWebViewComponent } from '../../../shared/components/ns-webview/ns-webview.component';
 
 @Component({
   moduleId: module.id,
-  selector: 'speaker-detail',
+  selector: 'ngatl-ns-speaker-detail',
   templateUrl: 'speaker-detail.component.html'
 })
-export class SpeakerDetailComponent implements AfterViewInit, OnInit {
+export class SpeakerDetailComponent extends BaseComponent implements OnInit {
   public detail: any;
   private _id: any;
-  private _subs: Array<Subscription>;
 
   constructor(
     private _store: Store<any>,
@@ -30,25 +29,28 @@ export class SpeakerDetailComponent implements AfterViewInit, OnInit {
     private _vcRef: ViewContainerRef,
     private _modal: ModalDialogService
   ) {
-    this._subs = [];
+    super();
   }
 
   ngOnInit() {
-    this._subs.push(
-      this._store.select(s => s.conference.speakers).subscribe((state: SpeakerState.IState) => {
+
+    this._store.select( s => s.conference.speakers )
+      .takeUntil( this.destroy$ )
+      .subscribe( ( state: SpeakerState.IState ) => {
         this.detail = state.selected;
-        for (let key in this.detail) {
-          console.log(key, this.detail[key]);
+        for ( const key in this.detail ) {
+          console.log( key, this.detail[key] );
         }
-      })
-    );
-    this._subs.push(
-      this._route.params.subscribe(params => {
+      } );
+
+
+    this._route.params
+      .takeUntil( this.destroy$ )
+      .subscribe( params => {
         this._id = params['id'];
-        this._log.info('load detail for:', this._id);
-        this._store.dispatch(new SpeakerActions.SelectAction(this._id));
-      })
-    );
+        this._log.info( 'load detail for:', this._id );
+        this._store.dispatch( new SpeakerActions.SelectAction( this._id ) );
+      } );
   }
 
   public openInfo(data, type) {
@@ -66,13 +68,5 @@ export class SpeakerDetailComponent implements AfterViewInit, OnInit {
         title: data
       }
     });
-  }
-
-  ngAfterViewInit() {}
-
-  ngOnDestroy() {
-    for (let sub of this._subs) {
-      sub.unsubscribe();
-    }
   }
 }

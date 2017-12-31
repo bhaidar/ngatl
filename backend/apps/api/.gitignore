@@ -21,4 +21,5 @@ db.json
 config/local*
 config/production*
 storage/*
+!storage/.gitkeep
 app.yaml

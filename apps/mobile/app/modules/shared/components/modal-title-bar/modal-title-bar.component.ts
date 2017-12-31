@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 // libs
 import { Store } from '@ngrx/store';
@@ -10,11 +10,11 @@ import { ModalDialogParams } from 'nativescript-angular/directives/dialogs';
 import { moreIcon } from '../../../../helpers';
 
 @Component({
-  selector: 'modal-title-bar',
+  selector: 'ngatl-ns-modal-title-bar',
   moduleId: module.id,
   templateUrl: './modal-title-bar.component.html'
 })
-export class ModalTitleBarComponent {
+export class ModalTitleBarComponent implements OnInit {
   @Input() params: ModalDialogParams;
   @Input() title: string;
   @Input() closeText: string;

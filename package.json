@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
+    "postinstall": "cd backend; npm install",
     "start": "npm run start.web",
     "start.web": "ng serve --app=web",
     "start.ios": "cd apps/mobile && tns run ios --emulator --syncAllFiles",
@@ -11,6 +12,7 @@
     "start.api": "cd backend && INITDB=1 npm run dev:api",
     "reset": "npx rimraf -- package-lock.json node_modules && npm i",
     "reset.mobile": "cd apps/mobile && npm run reset",
+    "reset.api": "cd backend && node bin/clean",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",

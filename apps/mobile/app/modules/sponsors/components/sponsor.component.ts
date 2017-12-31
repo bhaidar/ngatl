@@ -11,7 +11,7 @@ import { SponsorActions } from '../actions';
 
 @Component({
   moduleId: module.id,
-  selector: 'sponsor',
+  selector: 'ngatl-ns-sponsor',
   templateUrl: 'sponsor.component.html'
 })
 export class SponsorComponent implements AfterViewInit, OnInit {

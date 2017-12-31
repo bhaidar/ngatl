@@ -9,7 +9,7 @@ import { moreIcon, backIcon } from '../../../../helpers';
 
 @Component({
   moduleId: module.id,
-  selector: 'action-bar-back',
+  selector: 'ngatl-ns-action-bar-back',
   templateUrl: 'action-bar-back.component.html'
 })
 export class ActionBarBackComponent {

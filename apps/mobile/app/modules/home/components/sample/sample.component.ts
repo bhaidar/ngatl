@@ -20,7 +20,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   moduleId: module.id,
-  selector: 'sample',
+  selector: 'ngatl-ns-sample',
   templateUrl: 'sample.component.html'
 })
 export class SampleComponent implements AfterViewInit, OnInit, OnDestroy {

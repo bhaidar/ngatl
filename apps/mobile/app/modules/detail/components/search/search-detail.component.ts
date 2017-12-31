@@ -1,27 +1,26 @@
-import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 // libs
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs/Subscription';
 
 // app
 import { LoggerService } from '@ngatl/api';
+import { BaseComponent } from '@ngatl/core';
 import { SearchState } from '../../../search/states';
 import { SearchActions } from '../../../search/actions';
 
 @Component({
   moduleId: module.id,
-  selector: 'search-detail',
+  selector: 'ngatl-ns-search-detail',
   templateUrl: 'search-detail.component.html'
 })
-export class SearchDetailComponent implements AfterViewInit, OnInit {
+export class SearchDetailComponent extends BaseComponent implements OnInit {
   public detail: any;
   private _id: any;
-  private _subs: Array<Subscription>;
 
   constructor(private _store: Store<any>, private _log: LoggerService, private _route: ActivatedRoute) {
-    this._subs = [];
+    super();
   }
 
   public showOptions() {
@@ -29,25 +28,19 @@ export class SearchDetailComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit() {
-    this._subs.push(
-      this._store.select(s => s.conference.search).subscribe((state: SearchState.IState) => {
+    this._store.select( s => s.conference.search )
+      .takeUntil( this.destroy$ )
+      .subscribe( ( state: SearchState.IState ) => {
         this.detail = state.selected;
-      })
-    );
-    this._subs.push(
-      this._route.params.subscribe(params => {
+      } );
+
+
+    this._route.params
+      .takeUntil( this.destroy$ )
+      .subscribe( params => {
         this._id = params['id'];
-        this._log.info('load detail for:', this._id);
-        this._store.dispatch(new SearchActions.SelectAction(this._id));
-      })
-    );
-  }
-
-  ngAfterViewInit() {}
-
-  ngOnDestroy() {
-    for (let sub of this._subs) {
-      sub.unsubscribe();
-    }
+        this._log.info( 'load detail for:', this._id );
+        this._store.dispatch( new SearchActions.SelectAction( this._id ) );
+      } );
   }
 }

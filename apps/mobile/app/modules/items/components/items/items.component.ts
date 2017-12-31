@@ -4,7 +4,7 @@ import { Item } from '../../models';
 import { ItemService } from '../../services/item.service';
 
 @Component({
-  selector: 'ns-items',
+  selector: 'ngatl-ns-items',
   moduleId: module.id,
   templateUrl: './items.component.html'
 })

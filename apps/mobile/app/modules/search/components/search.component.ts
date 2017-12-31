@@ -15,7 +15,7 @@ import { SearchActions } from '../actions';
 
 @Component({
   moduleId: module.id,
-  selector: 'search',
+  selector: 'ngatl-ns-search',
   templateUrl: 'search.component.html'
 })
 export class SearchComponent implements AfterViewInit, OnInit {
