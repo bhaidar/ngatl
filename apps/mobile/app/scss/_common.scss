@@ -5,8 +5,11 @@
 
     /*pallette chosen from http://www.colourlovers.com/palette/541086/Loyal_Friends*/
 
-    Page {
+    Page, .page {
         background-color: #EDEDF4;
+    }
+    ListView {
+      background-color: #EDEDF4;
     }
     /*icons*/
     .fa {

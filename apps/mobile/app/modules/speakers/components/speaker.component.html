@@ -2,8 +2,9 @@
 <StackLayout class="page h-full">
     <ListView [items]="(speakerState$ | async)?.list" class="list-group h-full">
       <ng-template let-item="item" let-odd="odd" let-even="even">
-        <StackLayout [nsRouterLink]="['/detail/speaker', item.id]">
-          <!--<Image [src]="item.imageUrl"></Image>-->
+        <StackLayout class="card" [nsRouterLink]="['/detail/speaker', item.id]">
+          <Image *ngIf="detail?.imageUrl" [src]="item.imageUrl"></Image>
+          <StackLayout class="hr-light" *ngIf="detail?.imageUrl"></StackLayout>
           <Label [text]="item.name" class="list-group-item"></Label>
         </StackLayout>
       </ng-template>

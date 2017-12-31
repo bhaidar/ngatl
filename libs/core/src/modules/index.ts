@@ -17,4 +17,4 @@ export * from './user';
 export * from './core';
 
 // shared modules
-// export * from './shared';
+export * from './shared';

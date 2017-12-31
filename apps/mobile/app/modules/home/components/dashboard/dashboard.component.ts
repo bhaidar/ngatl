@@ -84,7 +84,7 @@ export class DashboardComponent implements AfterViewInit, OnInit, OnDestroy {
           if ( avail ) {
             this._barcode.scan( {
               formats: "QR_CODE,PDF_417,EAN_13",   // Pass in of you want to restrict scanning to certain types
-              cancelLabel: "EXIT. Also, try the volume buttons!", // iOS only, default 'Close'
+              // cancelLabel: "EXIT. Also, try the volume buttons!", // iOS only, default 'Close'
               cancelLabelBackgroundColor: "#333333", // iOS only, default '#000000' (black)
               message: "Use the volume buttons for extra light", // Android only, default is 'Place a barcode inside the viewfinder rectangle to scan it.'
               showFlipCameraButton: true,   // default false
@@ -97,13 +97,16 @@ export class DashboardComponent implements AfterViewInit, OnInit, OnDestroy {
                 this._barcode = null;
               }, // invoked when the scanner was closed (success or abort)
               resultDisplayDuration: 500,   // Android only, default 1500 (ms), set to 0 to disable echoing the scanned text
-              orientation: "landscape",     // Android only, optionally lock the orientation to either "portrait" or "landscape"
+              orientation: "portrait",     // Android only, optionally lock the orientation to either "portrait" or "landscape"
               openSettingsIfPermissionWasPreviouslyDenied: true // On iOS you can send the user to the settings app if access was previously denied
             } ).then( ( result ) => {
               console.log( 'result:', result );
               if ( result ) {
                 console.log( "Scan format: " + result.format );
                 console.log( "Scan text:   " + result.text );
+                for ( const key in result) {
+                  console.log( key, result[key] );
+                }
               }
             }, ( err ) => {
               console.log( 'error:', err );

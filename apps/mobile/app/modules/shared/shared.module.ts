@@ -8,6 +8,7 @@ import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 
 // libs
 import { NativeScriptUISideDrawerModule } from 'nativescript-pro-ui/sidedrawer/angular';
+import { NativeScriptUICalendarModule } from "nativescript-pro-ui/calendar/angular";
 import { TNSFontIconModule } from 'nativescript-ngx-fonticon';
 
 // app
@@ -19,6 +20,7 @@ const SHARED_MODULES: any[] = [
   NativeScriptRouterModule,
   NativeScriptFormsModule,
   NativeScriptUISideDrawerModule,
+  NativeScriptUICalendarModule,
   TNSFontIconModule
 ];
 
