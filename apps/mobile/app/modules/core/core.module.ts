@@ -143,7 +143,7 @@ const SINGLETON_PROVIDERS: any[] = [
     }),
     // provide native services over top the shared services
     TNSFontIconModule.forRoot({
-      fa: './assets/font-awesome.min.css',
+      ion: './assets/ionicons.min.css',
     }),
 
     // backend services configuration

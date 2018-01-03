@@ -1,9 +1,9 @@
 import { isIOS } from 'platform';
 
 export const backIcon = function() {
-  return `fa-${isIOS ? 'angle-left' : 'arrow-left'}`;
+  return `ion-${isIOS ? 'ios-arrow-back' : 'android-arrow-back'}`;
 };
 
 export const moreIcon = function() {
-  return `fa-ellipsis-${isIOS ? 'h' : 'v'}`;
+  return `ion-${isIOS ? 'ios-more-outline' : 'android-more-vertical'}`;
 };

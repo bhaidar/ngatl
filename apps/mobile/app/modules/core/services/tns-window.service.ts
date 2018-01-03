@@ -29,9 +29,8 @@ export class MobileWindowPlatformService {
   public scrollTo(x?: number, y?: number) {}
   public alert(msg: string | dialogs.AlertOptions): Promise<any> {
     return new Promise(resolve => {
-      if (!this._dialogOpened) {
+      if (!this._dialogOpened && msg) {
         this._dialogOpened = true;
-        console.log('alert msg.constructor.name:', msg.constructor.name);
         console.log('typeof msg:', typeof msg);
         if (msg instanceof Response) {
           try {
@@ -41,14 +40,16 @@ export class MobileWindowPlatformService {
             msg = msg.text();
           }
         }
-        const options: dialogs.AlertOptions = {
-          message: <string>msg,
-          okButtonText: 'Ok'
-        };
-        dialogs.alert(options).then(ok => {
-          this._dialogOpened = false;
-          resolve();
-        });
+        if (typeof msg === 'string') {
+          const options: dialogs.AlertOptions = {
+            message: <string>msg,
+            okButtonText: 'Ok'
+          };
+          dialogs.alert(options).then(ok => {
+            this._dialogOpened = false;
+            resolve();
+          });
+        }
       }
     });
   }

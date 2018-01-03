@@ -1,7 +1,7 @@
-<ngatl-ns-action-bar title="Dashboard" class="action-bar">
+<ngatl-ns-action-bar class="action-bar">
 </ngatl-ns-action-bar>
-<ScrollView>
-  <StackLayout>
+<ScrollView class="page">
+  <StackLayout class="page">
     <StackLayout class="card">
       <Button text="Barcode" (tap)="openBarcode()"></Button>
       <StackLayout class="hr-light"></StackLayout>
@@ -19,9 +19,9 @@
       <Label text="This is a sample card. Do with it what you will!" textWrap="true"></Label>
       <StackLayout class="hr-light"></StackLayout>
       <GridLayout rows="auto" columns="*,*,*" class="social-controls">
-        <Button col="0" [text]="'fa-heart' | fonticon" class="fa red"></Button>
-        <Button col="1" [text]="'fa-star' | fonticon" class="fa gray"></Button>
-        <Button col="2" [text]="'fa-share-alt' | fonticon" class="fa gray"></Button>
+        <Button col="0" [text]="'ion-heart' | fonticon" class="ion red"></Button>
+        <Button col="1" [text]="'ion-star' | fonticon" class="ion gray"></Button>
+        <Button col="2" [text]="'ion-ios-upload-outline' | fonticon" class="ion gray"></Button>
       </GridLayout>
       <StackLayout>
         <TextField hint="First Name" [(ngModel)]="user.firstName"></TextField>

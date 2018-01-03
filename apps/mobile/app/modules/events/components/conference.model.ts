@@ -1,0 +1,186 @@
+import * as observable from "tns-core-modules/data/observable";
+function formatTime(time: Date) {
+    var hour: number = time.getHours();
+    var min: string = time.getMinutes() + "";
+    return (hour <= 12 ? hour : hour - 12) + ":" + (min.length === 1 ? '0' + min : min) + (hour < 12 ? " AM" : " PM")
+}
+
+export class Session extends observable.Observable {
+    constructor(
+        public title: string,
+        public start: Date,
+        public end: Date,
+        public room: string,
+        public isFavourite: boolean,
+        public cssClass?: string) {
+        super();
+        this.cssClass = "session-favorite";
+    }
+
+    get range(): string {
+        return formatTime(this.start) + " - " + formatTime(this.end);
+    }
+
+    public toggleFavourite() {
+        let favourite = this.get("isFavourite");
+        this.set("isFavourite", !favourite);
+        this.set("cssClass", !favourite ? "session-favorite-selected" : "session-favorite-unselected");
+        setTimeout(() => { this.set("cssClass", "session-favorite"); }, 600);
+    }
+}
+
+// Schedule
+var allSessions: Array<Session> = [
+    // Day 1
+    new Session("NativeScript Deep Dive 1",
+        new Date(2018, 0, 30, 9, 30), new Date(2018, 0, 30, 12, 30), "room 1", true),
+    new Session("Smart Design for Smartphones",
+        new Date(2018, 0, 30, 9, 30), new Date(2018, 0, 30, 12, 30), "room 2", false),
+    new Session("Build, Deploy, and Scale your Mobile Backend with Node.js and Modulus",
+        new Date(2018, 0, 30, 9, 30), new Date(2018, 0, 30, 12, 30), "room 3", false),
+    new Session("NativeScript Deep Dive 2",
+        new Date(2018, 0, 30, 13, 30), new Date(2018, 0, 30, 16, 30), "room 1", true),
+    new Session("Smart Design for Smartphones",
+        new Date(2018, 0, 30, 13, 30), new Date(2018, 0, 30, 16, 30), "room 2", false),
+    new Session("Responsive Apps with Telerik DevCraft",
+        new Date(2018, 0, 30, 13, 30), new Date(2018, 0, 30, 16, 30), "room 3", false),
+
+    // Day 2
+    new Session("Telerik Keynote - Mobilizing and Modernizing",
+        new Date(2018, 0, 31, 9, 30), new Date(2018, 0, 31, 12, 30), "room 1", true),
+
+    new Session("A Lap Around NativeScript",
+        new Date(2018, 0, 31, 10, 45), new Date(2018, 0, 31, 11, 30), "room 1", true),
+    new Session("Kendo UI Building Blocks",
+        new Date(2018, 0, 31, 10, 45), new Date(2018, 0, 31, 11, 30), "room 2", false),
+
+    new Session("AngularJS 2.0",
+        new Date(2018, 0, 31, 11, 45), new Date(2018, 0, 31, 12, 30), "room 1", true),
+    new Session("Getting Started with ScreenBuilder",
+        new Date(2018, 0, 31, 11, 45), new Date(2018, 0, 31, 12, 30), "room 2", false),
+
+    new Session("NativeScript Extensibility",
+        new Date(2018, 0, 31, 13, 30), new Date(2018, 0, 31, 14, 15), "room 1", true),
+    new Session("AngularJS and Kendo UI ",
+        new Date(2018, 0, 31, 13, 30), new Date(2018, 0, 31, 14, 15), "room 2", false),
+
+    new Session("Building a CRM Portal in 45 Minutes",
+        new Date(2018, 0, 31, 14, 30), new Date(2018, 0, 31, 15, 15), "room 1", false),
+    new Session("JavaScript Beyond the Basics",
+        new Date(2018, 0, 31, 14, 30), new Date(2018, 0, 31, 15, 15), "room 2", true),
+        
+    // Day 3
+    new Session("Sitefinity Keynote",
+        new Date(2018, 1, 1, 9, 30), new Date(2018, 1, 1, 12, 30), "room 1", true),
+
+    new Session("Introduction to Mobile Testing & Device Cloud",
+        new Date(2018, 1, 1, 10, 45), new Date(2018, 1, 1, 11, 30), "room 1", true),
+    new Session("Using Kendo UI in SharePoint/Office 365",
+        new Date(2018, 1, 1, 10, 45), new Date(2018, 1, 1, 11, 30), "room 2", false),
+
+    new Session("Improving Applications with Telerik Analytics",
+        new Date(2018, 1, 1, 11, 45), new Date(2018, 1, 1, 12, 30), "room 1", true),
+    new Session("Building Offline Ready Mobile Apps",
+        new Date(2018, 1, 1, 11, 45), new Date(2018, 1, 1, 12, 30), "room 2", false),
+
+    new Session("Debugging with Fiddler",
+        new Date(2018, 1, 1, 13, 30), new Date(2018, 1, 1, 14, 15), "room 1", true),
+    new Session("Performance Tuning Your Mobile Web Apps",
+        new Date(2018, 1, 1, 13, 30), new Date(2018, 1, 1, 14, 15), "room 2", false),
+
+    new Session("Cross platform Telerik Native Mobile UI",
+        new Date(2018, 1, 1, 14, 30), new Date(2018, 1, 1, 15, 15), "room 1", false),
+    new Session("Advanced Kendo UI",
+        new Date(2018, 1, 1, 14, 30), new Date(2018, 1, 1, 15, 15), "room 2", true),
+
+    // Day 4
+    new Session("Building Offline Ready Mobile Apps",
+        new Date(2018, 1, 2, 9, 30), new Date(2018, 1, 2, 12, 30), "room 1", true),
+
+    new Session("Introduction to Mobile Testing & Device Cloud",
+        new Date(2018, 1, 2, 10, 45), new Date(2018, 1, 2, 11, 30), "room 1", true),
+    new Session("Cross platform Telerik Native Mobile UI",
+        new Date(2018, 1, 2, 10, 45), new Date(2018, 1, 2, 11, 30), "room 2", false),
+
+    new Session("Using Kendo UI in SharePoint/Office 365",
+        new Date(2018, 1, 2, 11, 45), new Date(2018, 1, 2, 12, 30), "room 1", true),
+    new Session("Advanced Kendo UI",
+        new Date(2018, 1, 2, 11, 45), new Date(2018, 1, 2, 12, 30), "room 2", false),
+
+    new Session("Debugging with Fiddler",
+        new Date(2018, 1, 2, 13, 30), new Date(2018, 1, 2, 14, 15), "room 1", true),
+    new Session("Performance Tuning Your Mobile Web Apps",
+        new Date(2018, 1, 2, 13, 30), new Date(2018, 1, 2, 14, 15), "room 2", false),
+
+    new Session("Cross platform Telerik Native Mobile UI",
+        new Date(2018, 1, 2, 14, 30), new Date(2018, 1, 2, 15, 15), "room 1", false),
+    new Session("Sitefinity Keynote",
+        new Date(2018, 1, 2, 14, 30), new Date(2018, 1, 2, 15, 15), "room 2", true),
+];
+
+export class ConferenceViewModel extends observable.Observable {
+    public sessions: Array<Session>;
+
+    private _selectedDay: number;
+    public get selectedDay(): number {
+        return this._selectedDay;
+    }
+    public set selectedDay(value: number) {
+        if (this._selectedDay !== value) {
+            this._selectedDay = value;
+            this.filter();
+        }
+    }
+
+    private _search: string;
+    public get search(): string {
+        return this._search;
+    }
+    public set search(value: string) {
+        if (this._search !== value) {
+            this._search = value;
+            this.filter();
+        }
+    }
+
+    private _favoritesOnly = false;
+    public get favoritesOnly() {
+        return this._favoritesOnly;
+    }
+    public set favoritesOnly(value: boolean) {
+        this._favoritesOnly = value;
+        this.filter();
+    }
+
+    private filter() {
+        let day = this.selectedDay;
+        let textFilter = this.search ? this.search.toLocaleLowerCase() : this.search;
+
+        let filteredSessions = allSessions.filter((session) => {
+          const isDay = session.start.getDate() === day;
+          const isMatch = !textFilter || session.title.toLocaleLowerCase().indexOf(textFilter) >= 0;
+            let include = false;
+            if (this._favoritesOnly) {
+              include = isDay && session.isFavourite && isMatch;
+            } else {
+              include = isDay && isMatch;
+            }
+            if (include) {
+                session.cssClass = "session-favorite";
+            }
+            return include;
+        });
+
+        this.set("sessions", filteredSessions)
+    }
+
+    constructor() {
+        super();
+        this.selectedDay = 0;
+        this.search = null;
+
+        this.filter();
+    }
+}
+
+export var instance = new ConferenceViewModel();

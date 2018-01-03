@@ -29,7 +29,11 @@ const routes: Routes = [
       {
         path: 'events',
         loadChildren: './modules/events/events.module#EventsModule'
-      }
+      },
+      {
+        path: 'misc',
+        loadChildren: './modules/misc/misc.module#MiscModule'
+      },
     ]
   }
 ];

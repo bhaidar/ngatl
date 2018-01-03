@@ -6,6 +6,7 @@
     "**/.hg": true,
     "**/CVS": true,
     "**/.DS_Store": true,
+    "**/node_modules": true,
     "**/apps/mobile/app/package.json": true,
     "**/apps/mobile/hooks": true,
     "**/apps/mobile/platforms": true,
@@ -33,5 +34,6 @@
   },
   "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": true,
   "editor.insertSpaces": true,
-  "editor.tabSize": 2
+  "editor.tabSize": 2,
+  "editor.wordWrap": "on"
 }

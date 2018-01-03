@@ -1,5 +1,5 @@
-<ngatl-ns-action-bar [title]="'Events'"></ngatl-ns-action-bar>
-<StackLayout class="page h-full">
+<ngatl-ns-action-bar [title]="'Schedule'"></ngatl-ns-action-bar>
+<!-- <StackLayout class="page h-full"> -->
     <!-- <ListView [items]="(eventState$ | async)?.list" class="list-group h-full">
       <ng-template let-item="item" let-odd="odd" let-even="even">
         <StackLayout [nsRouterLink]="['/detail/event', item.id]">
@@ -7,5 +7,49 @@
         </StackLayout>
       </ng-template>
     </ListView> -->
-    <RadCalendar [locale]="locale" [viewMode]="viewMode" [transitionMode]="transitionMode" [eventSource]="eventSource" [eventsViewMode]="eventsViewMode" (dateSelected)="onDateSelected($event)"></RadCalendar>
-</StackLayout>
+    <!-- <RadCalendar [locale]="locale" [viewMode]="viewMode" [transitionMode]="transitionMode" [eventSource]="eventSource" [eventsViewMode]="eventsViewMode" (dateSelected)="onDateSelected($event)"></RadCalendar> -->
+
+
+    <GridLayout rows="auto, *" columns="*" class="schedule-main-content" id="main-content">
+      <!-- Segmented Bar -->
+      <SegmentedBar row="0" [selectedIndex]="selectedDay" (selectedIndexChange)="onDayChange($event)"
+              ios:selectedBackgroundColor="white"
+              android:selectedBackgroundColor="#FAC950" 
+              class="conf-segmented-bar" [items]="days">
+      </SegmentedBar>
+      <GridLayout row="1" rows="auto, auto, *" (loaded)="onBackgroundLoaded($event)">
+          <!-- Search -->
+          <SearchBar row="0" #search hint="Search" text="" (clear)="clear($event)" (submit)="search$.next(search.text)" (tap)="inputTap($event)" (loaded)="doNotShowAndroidKeyboard($event)" android:height="40"></SearchBar>
+          <!-- toggle faviorites -->
+          <StackLayout
+            row="1"
+            orientation="horizontal"
+            class="checkbox-layout">
+            <CheckBox
+              verticalAlignment="top"
+              class="checkbox-item"
+              [checked]="checkboxValue"
+              (loaded)="checkboxLoaded($event)"
+              (checkedChange)="checkedChange($event)"
+              fontSize="25"
+              onTintColor="#fed03d"
+              ios:fillColor="#fed03d">
+            </CheckBox>
+            <Label text="Toggle Favorites" class="label" (tap)="toggleFavoritesOnly()"></Label>
+          </StackLayout>
+          <!-- List -->
+          <ListView row="2" [items]="conferenceModel.sessions" id="sessions-list" separatorColor="#000000" (itemLoading)="changeCellBackground($event)">
+              <ng-template let-item="item">
+                  <GridLayout columns="auto, auto, *" rows="auto, auto" (tap)="item.toggleFavourite()" class="session-container" [class.favorite]="item.isFavourite">
+                      <Image row="0" rowSpan="2" col="0" [src]="item.isFavourite ? 'res://add_to_fav_1' : 'res://add_to_fav'" [ngClass]="item.cssClass"></Image>
+                      <Label row="0" col="1" [text]="item.range" class="session-time"></Label>
+                      
+                      <Label row="0" col="2" [text]="item.room" class="session-room"></Label>                    
+                      <Label row="1" col="1" colSpan="2" [text]="item.title" textWrap="true" class="session-title"></Label>
+                  </GridLayout>
+              </ng-template>
+          </ListView>
+      </GridLayout>
+  </GridLayout>
+
+<!-- </StackLayout> -->

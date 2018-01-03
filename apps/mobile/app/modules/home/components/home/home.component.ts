@@ -18,7 +18,7 @@ import { UserState, IAppState } from '@ngatl/core';
 // nativescript
 import { Page } from 'tns-core-modules/ui/page';
 import { RadSideDrawerComponent } from 'nativescript-pro-ui/sidedrawer/angular';
-import { PushTransition, DrawerTransitionBase, SlideInOnTopTransition } from 'nativescript-pro-ui/sidedrawer';
+import { PushTransition, DrawerTransitionBase, SlideInOnTopTransition, ScaleDownPusherTransition, ReverseSlideOutTransition, SlideAlongTransition } from 'nativescript-pro-ui/sidedrawer';
 
 // app
 import { DrawerService } from '../../../core/services/drawer.service';
@@ -42,7 +42,7 @@ export class HomeComponent implements AfterViewInit, OnInit {
     public drawerService: DrawerService
   ) {
     // this.page.on('loaded', this.onLoaded, this);
-    this._sideDrawerTransition = new SlideInOnTopTransition();
+    this._sideDrawerTransition = new ScaleDownPusherTransition();//SlideInOnTopTransition();
   }
 
   public get sideDrawerTransition(): DrawerTransitionBase {
