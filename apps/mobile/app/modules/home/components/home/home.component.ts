@@ -42,7 +42,7 @@ export class HomeComponent implements AfterViewInit, OnInit {
     public drawerService: DrawerService
   ) {
     // this.page.on('loaded', this.onLoaded, this);
-    this._sideDrawerTransition = new ScaleDownPusherTransition();//SlideInOnTopTransition();
+    this._sideDrawerTransition = new SlideInOnTopTransition();
   }
 
   public get sideDrawerTransition(): DrawerTransitionBase {

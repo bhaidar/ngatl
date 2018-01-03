@@ -1,6 +1,12 @@
 <ngatl-ns-action-bar class="action-bar">
 </ngatl-ns-action-bar>
-<ScrollView class="page">
+<AbsoluteLayout (loaded)="setupPage($event)" class="w-full h-full home-bg">
+    <Image src="res://badge-bottom.png" id="badge-bottom" (tap)="openBarcode()"></Image>
+    <Image src="res://badge-top.png" id="badge-top"></Image>
+    <Label text="" id="beacon" class="beacon"></Label>
+    
+</AbsoluteLayout>
+<!-- <ScrollView class="page">
   <StackLayout class="page">
     <StackLayout class="card">
       <Button text="Barcode" (tap)="openBarcode()"></Button>
@@ -34,4 +40,4 @@
       </StackLayout>
     </StackLayout>
   </StackLayout>
-</ScrollView>
+</ScrollView> -->

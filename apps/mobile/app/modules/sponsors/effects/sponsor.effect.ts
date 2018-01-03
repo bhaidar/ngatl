@@ -54,7 +54,7 @@ export class SponsorEffects {
     .ofType(SponsorActions.ActionTypes.API_ERROR)
     .withLatestFrom(this.store)
     .map(([action, state]: [SponsorActions.ApiErrorAction, any]) => {
-      this.win.alert(action.payload);
+      //this.win.alert(action.payload);
       return new SponsorActions.ChangedAction({
         errors: [action.payload, ...(state.errors || [])]
       });

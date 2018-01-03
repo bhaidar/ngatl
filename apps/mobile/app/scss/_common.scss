@@ -17,6 +17,19 @@
         font-size: 30;
     }
 
+    .home-bg {
+        background-image: url('res://home-bg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+    }
+
+    .beacon {
+        border-radius: 47;
+        background-color:$blue-light;
+        width:100;
+        height:100;
+    }
     //override for action-bar colored fonticons
     .action-bar Button {
         color: $white;

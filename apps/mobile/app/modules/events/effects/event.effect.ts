@@ -54,7 +54,7 @@ export class EventEffects {
     .ofType(EventActions.ActionTypes.API_ERROR)
     .withLatestFrom(this.store)
     .map(([action, state]: [EventActions.ApiErrorAction, any]) => {
-      this.win.alert(action.payload);
+      //this.win.alert(action.payload);
       return new EventActions.ChangedAction({
         errors: [action.payload, ...(state.errors || [])]
       });
