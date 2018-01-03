@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 // nativescript
 import { registerElement } from 'nativescript-angular/element-registry';
+import { topmost } from 'tns-core-modules/ui/frame';
 
 // register plugin components
 // registerElement('VideoPlayer', () => require('nativescript-videoplayer').Video);
@@ -16,5 +17,12 @@ import { NSAppService } from './modules/core/services/ns-app.service';
 export class AppComponent {
   constructor(
     private _appService: NSAppService // DO NOT REMOVE (used to construct singleton)
-  ) {}
+  ) {
+    if (topmost().ios) {
+      let navigationBar = topmost().ios.controller.navigationBar;
+      // 0: default
+      // 1: light
+      navigationBar.barStyle = 1;
+    }
+  }
 }

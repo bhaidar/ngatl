@@ -10,6 +10,7 @@ import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { NativeScriptUISideDrawerModule } from 'nativescript-pro-ui/sidedrawer/angular';
 import { NativeScriptUICalendarModule } from "nativescript-pro-ui/calendar/angular";
 import { TNSFontIconModule } from 'nativescript-ngx-fonticon';
+import { TNSCheckBoxModule } from 'nativescript-checkbox/angular';
 
 // app
 import { SHARED_COMPONENTS, SHARED_ENTRY_COMPONENTS } from './components';
@@ -21,7 +22,8 @@ const SHARED_MODULES: any[] = [
   NativeScriptFormsModule,
   NativeScriptUISideDrawerModule,
   NativeScriptUICalendarModule,
-  TNSFontIconModule
+  TNSFontIconModule,
+  TNSCheckBoxModule,
 ];
 
 @NgModule({

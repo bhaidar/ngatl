@@ -12,14 +12,14 @@
       background-color: #EDEDF4;
     }
     /*icons*/
-    .fa {
-        font-family: 'FontAwesome', fontawesome-webfont;
-        font-size: 25;
+    .ion {
+        font-family: Ionicons, ionicons;
+        font-size: 30;
     }
 
     //override for action-bar colored fonticons
     .action-bar Button {
-        color: $ngatl-blue;
+        color: $white;
     }
     .gray {
         color: gray;
@@ -27,32 +27,41 @@
     .red {
         color: red;
     }
-    .sidedrawer-header {
-      padding: 20 16 0 16;
-      .sidedrawer-header-image {
-        background-color: $white;
-          height: 220;
-          width: 220;
-          border-radius: 0;//60;
-          margin-bottom: 20;
-      }
-    }
-    .sidedrawer-content {
-        .sidedrawer-item {
-            .sidedrawer-list-item-icon {
-                font-size:28;
-            }
-            .sidedrawer-list-item-text {
-                border-width: 0;
-                font-size:20;
-            }
-            &.active {
-                background-color: $white;
+    .sidedrawer-left {
+        background-color: $grey-slate;
+        .sidedrawer-header {
+          padding: 20 16 0 16;
+          background-color: $white;
+    
+          .sidedrawer-header-image {
+            background-color: $white;
+              height: 220;
+              width: 220;
+              border-radius: 0;//60;
+              margin-bottom: 20;
+          }
+        }
+        .sidedrawer-content {
+            background-color: $grey-slate;
+            .sidedrawer-item {
                 .sidedrawer-list-item-icon {
-                    color: $ngatl-blue;
+                    font-size:28;
+                    color: $grey-light;
                 }
                 .sidedrawer-list-item-text {
-                    font-weight: bold;
+                    border-width: 0;
+                    font-size:20;
+                    color: $grey-light;
+                }
+                &.active {
+                    background-color: $white;
+                    .sidedrawer-list-item-icon {
+                        color: $ngatl-red;
+                    }
+                    .sidedrawer-list-item-text {
+                        font-weight: bold;
+                        color: $black;
+                    }
                 }
             }
         }
@@ -75,3 +84,14 @@
     .social-controls{
         padding-top: 10;
     }
+
+    .checkbox-layout {
+        margin: 0 0 0 12;
+        background-color: $dark-blue;
+        .label {
+          margin: 0 10;
+          color: $gold;
+        }
+    }
+
+    @import 'schedule';
