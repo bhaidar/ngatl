@@ -17,7 +17,7 @@ export class AboutComponent {
   constructor(private store: Store<any>, private log: LoggerService) {}
 
   public viewGH() {
-
+    utils.openUrl('http://nstudio.io');
   }
 
   public viewPage() {
@@ -54,7 +54,7 @@ export class AboutComponent {
         utils.openUrl('https://github.com/triniwiz/nativescript-splashscreen');
         break;
       case 10:
-        utils.openUrl('http://www.telerik.com/nativescript-ui');
+        utils.openUrl('https://www.nativescript.org/ui-for-nativescript');
         break;
       case 11:
         utils.openUrl('https://github.com/NathanaelA/nativescript-themes');
@@ -79,6 +79,9 @@ export class AboutComponent {
         break;
       case 18:
         utils.openUrl('https://github.com/TheOriginalJosh/nativescript-swiss-army-knife');
+        break;
+      case 19:
+        utils.openUrl('https://github.com/EddyVerbruggen/nativescript-email');
         break;
     }
   }

@@ -5,49 +5,53 @@
         <!-- <Label text="ngATL" textWrap="true" class="sidedrawer-header-brand"></Label> -->
     </FlexBoxLayout>
     <ScrollView>
-      <StackLayout class="sidedrawer-content" row="0" col="0">
-        <!-- Home -->
-        <GridLayout columns="60,*,auto" rows="60" [nsRouterLink]="['/landing/home']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}" pageTransition="slideLeft" class="sidedrawer-item">
-          <Label [text]="'ion-home' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
-          <Label text="Home" class="sidedrawer-list-item-text" row="0" col="1"></Label>
-        </GridLayout>
-
-         <!-- Schedule -->
-         <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'events']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
-         pageTransition="slideleft" class="sidedrawer-item">
-             <Label [text]="'ion-ios-calendar-outline' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
-             <Label text="Schedule"  class="sidedrawer-list-item-text" row="0" col="1"></Label>
-         </GridLayout>
-
-        <!-- Speakers -->
-        <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'speakers']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
-        pageTransition="slideleft" class="sidedrawer-item">
-            <Label [text]="'ion-ios-people' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
-            <Label text="Speakers"  class="sidedrawer-list-item-text" row="0" col="1"></Label>
-        </GridLayout>
-
-        <!-- Sponsors -->
-        <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'sponsors']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
-        pageTransition="slideleft" class="sidedrawer-item">
-            <Label [text]="'ion-ribbon-b' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
-            <Label text="Sponsors"  class="sidedrawer-list-item-text" row="0" col="1"></Label>
-        </GridLayout>
-
-        <!-- Code of Conduct -->
-        <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'misc', 'conduct']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
-        pageTransition="slideleft" class="sidedrawer-item">
-            <Label [text]="'ion-ios-list-outline' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
-            <Label text="Code of Conduct"  class="sidedrawer-list-item-text" row="0" col="1"></Label>
-        </GridLayout>
-
-        <!-- About -->
-        <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'misc', 'about']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
-        pageTransition="slideleft" class="sidedrawer-item">
-            <Label [text]="'ion-ios-help-outline' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
-            <Label text="About"  class="sidedrawer-list-item-text" row="0" col="1"></Label>
-        </GridLayout>
-
-      </StackLayout>
+      <GridLayout class="sidedrawer-content" rows="*,*,auto" columns="*">
+        <StackLayout row="0" col="0" class="h-full">
+          <!-- Home -->
+          <GridLayout columns="60,*,auto" rows="60" [nsRouterLink]="['/landing/home']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}" pageTransition="slideLeft" class="sidedrawer-item">
+            <Label [text]="'ion-home' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
+            <Label [text]="'menu.home' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
+          </GridLayout>
+  
+           <!-- Schedule -->
+           <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'events']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
+           pageTransition="slideleft" class="sidedrawer-item">
+               <Label [text]="'ion-ios-calendar-outline' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
+               <Label [text]="'menu.schedule' | translate"  class="sidedrawer-list-item-text" row="0" col="1"></Label>
+           </GridLayout>
+  
+          <!-- Speakers -->
+          <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'speakers']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
+          pageTransition="slideleft" class="sidedrawer-item">
+              <Label [text]="'ion-ios-people' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
+              <Label [text]="'menu.speakers' | translate"  class="sidedrawer-list-item-text" row="0" col="1"></Label>
+          </GridLayout>
+  
+          <!-- Sponsors -->
+          <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'sponsors']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
+          pageTransition="slideleft" class="sidedrawer-item">
+              <Label [text]="'ion-ribbon-b' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
+              <Label [text]="'menu.sponsors' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
+          </GridLayout>
+  
+          <!-- Code of Conduct -->
+          <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'misc', 'conduct']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
+          pageTransition="slideleft" class="sidedrawer-item">
+              <Label [text]="'ion-ios-list-outline' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
+              <Label [text]="'menu.conduct' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
+          </GridLayout>
+  
+          <!-- About -->
+          <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'misc', 'about']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
+          pageTransition="slideleft" class="sidedrawer-item">
+              <Label [text]="'ion-ios-help-outline' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
+              <Label [text]="'menu.about' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
+          </GridLayout>
+        </StackLayout>
+        <StackLayout row="2" col="0" class="copyright p-10">
+            <Label [text]="'menu.copyright' | translate" class="c-grey" (tap)="openWeb('http://nstudio.io')"></Label> 
+        </StackLayout>
+      </GridLayout>
     </ScrollView>
   </StackLayout>
   <StackLayout tkMainContent class="page-bg">

@@ -1,5 +1,17 @@
-<ngatl-ns-action-bar [title]="'Code of Conduct'"></ngatl-ns-action-bar>
-<StackLayout class="page h-full">
-    <Label text="TODO" textWrap="true"></Label>
-    
-</StackLayout>
+<ngatl-ns-action-bar [title]="'conduct.title' | translate"></ngatl-ns-action-bar>
+<ScrollView>
+    <StackLayout class="page h-full c-bg-grey-dark">
+        <Label [text]="'general.need-help' | translate" class="h3"></Label>
+        <Label [text]="'general.email-us' | translate" class="h4 c-sky" (tap)="emailUs()"></Label>
+        <StackLayout orientation="horizontal">
+            <Label [text]="'general.tweet-us' | translate" class="h4 p-r-5"></Label>
+            <Label text="@ngAtlanta" class="h4 c-sky" (tap)="openWeb('https://twitter.com/ngAtlanta')"></Label>
+        </StackLayout>
+
+        <inline-html-label
+            [containerClass]="'m-t-10'"
+            [text]="'conduct.code' | translate"
+            (openWebView)="openWeb($event)"></inline-html-label>
+        
+    </StackLayout>
+</ScrollView>

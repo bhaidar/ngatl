@@ -5,21 +5,115 @@ import { Http } from '@angular/http';
 // lib
 import { Observable } from 'rxjs/Observable';
 import { ConferenceSponsorApi } from '@ngatl/api';
+import { sortAlpha } from '../../../helpers';
 
+export interface ILevels {
+  gold: string;
+  silver: string;
+  diversity: string;
+  diversitySupporter: string;
+  attendee: string;
+}
 @Injectable()
 export class SponsorService {
+
+  public levels: ILevels = {
+    gold: 'Gold',
+    silver: 'Silver',
+    diversity: 'Diversity Advocate',
+    diversitySupporter: 'Diversity Supporter',
+    attendee: 'Attendee Prizes'
+  };
+  private _sponsorList: Array<any> = [
+    {
+      name: 'ADP',
+      level: [{name:'Gold'}],
+      image: '~/assets/images/sponsors/adp_logo.jpg',
+      url: 'https://adp.com'
+    },
+    {
+      name: 'The Weather Company',
+      level: [{name:'Diversity Advocate'}],
+      image: '~/assets/images/sponsors/weather.jpg',
+      url: 'http://www.theweathercompany.com'
+    },
+    {
+      name: 'WebJunto',
+      level: [{name:'Gold'}, {name:'Diversity Supporter'}],
+      image: '~/assets/images/sponsors/webjunto.jpg',
+      url: 'http://webjunto.com'
+    },
+    {
+      name: 'JetBrains',
+      level: [{name:'Attendee Prizes'}],
+      image: '~/assets/images/sponsors/jetbrains.jpg',
+      url: 'https://www.jetbrains.com'
+    },
+    {
+      name: 'GitHub',
+      level: [{name:'Diversity Supporter'}],
+      image: '~/assets/images/sponsors/GitHub_Logo.jpg',
+      url: 'https://github.com'
+    },
+    {
+      name: 'Robert Half Technology',
+      level: [{name:'Silver'}],
+      image: '~/assets/images/sponsors/robert-half.jpg',
+      url: 'https://www.roberthalf.com/jobs/technology'
+    },
+    {
+      name: 'TSYS',
+      level: [{name:'Silver'}],
+      image: '~/assets/images/sponsors/tsys.jpg',
+      url: 'http://www.tsys.com'
+    },
+    {
+      name: 'Progress',
+      level: [{name:'Gold'}],
+      image: '~/assets/images/sponsors/progress.jpg',
+      url: 'https://www.progress.com'
+    },
+    {
+      name: 'Valor Software',
+      level: [{name:'Gold'}],
+      image: '~/assets/images/sponsors/valor_software.jpg',
+      url: 'https://valor-software.com'
+    },
+    {
+      name: 'Oasis Digital',
+      level: [{name:'Silver'}],
+      image: '~/assets/images/sponsors/od_logo_print_hi.jpg',
+      url: 'https://oasisdigital.com'
+    }
+  ];
   constructor(private sponsors: ConferenceSponsorApi) {}
 
+  public get sponsorList() {
+    return this._sponsorList;
+  }
+
   public count() {
-    return this.sponsors.count().map(value => value.count);
+    // return this.sponsors.count().map(value => value.count);
+    return Observable.of(this._sponsorList.length);
   }
 
   public fetch() {
     console.log('fetch sponsors!');
-    return this.sponsors.find();
+    // return this.sponsors.find();
+    const sortedList = this._sponsorList.sort(sortAlpha);
+    for (const sponsor of sortedList) {
+      for (const level of sponsor.level) {
+          level.styleClass = `level-${level.name.toLowerCase().replace(/ /ig, '-')}`; 
+          console.log(level.styleClass);
+      }
+    }
+    return Observable.of(sortedList);
   }
 
   public loadDetail(id) {
-    return this.sponsors.findById(id);
+    // return this.sponsors.findById(id);
+    return Observable.of(this._sponsorList.find(s => {
+      return s.name === id;
+    }));
   }
 }

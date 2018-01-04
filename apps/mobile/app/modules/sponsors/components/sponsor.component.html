@@ -1,11 +1,13 @@
 <ngatl-ns-action-bar [title]="'Sponsors'"></ngatl-ns-action-bar>
-<StackLayout class="page h-full">
+<StackLayout class="page h-full p-b-20">
   <ListView [items]="(sponsorState$ | async)?.list" class="list-group h-full">
     <ng-template let-item="item" let-odd="odd" let-even="even">
-      <StackLayout class="card" [nsRouterLink]="['/detail/sponsor', item.id]">
-        <Label [text]="item.name" class="list-group-item"></Label>
-        <StackLayout class="hr-light"></StackLayout>
-        <Label [text]="item.level" class="list-group-item"></Label>
+      <StackLayout class="card sponsor-card" (tap)="viewSite(item)" [ngClass]="item.level[0].styleClass">
+        <Image [src]="item.image" height="120" horizontalAlignment="center" verticalAlignment="center" class="w-full p-5 c-bg-white"></Image>
+        
+        <!-- <StackLayout class="hr-light"></StackLayout> -->
+        <Label [text]="item.name" class="text-center h2 w-full c-white p-5 font-weight-bold"></Label>
+        <Label [text]="level.name" class="level text-center h3 c-white p-2 w-full font-weight-bold" [ngClass]="level.styleClass" *ngFor="let level of item.level"></Label>
       </StackLayout>
     </ng-template>
   </ListView>

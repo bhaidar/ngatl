@@ -7,6 +7,7 @@ import { NativeScriptFormsModule } from 'nativescript-angular/forms';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 
 // libs
+import { TranslateModule } from '@ngx-translate/core';
 import { NativeScriptUISideDrawerModule } from 'nativescript-pro-ui/sidedrawer/angular';
 import { NativeScriptUICalendarModule } from "nativescript-pro-ui/calendar/angular";
 import { TNSFontIconModule } from 'nativescript-ngx-fonticon';
@@ -22,6 +23,7 @@ const SHARED_MODULES: any[] = [
   NativeScriptFormsModule,
   NativeScriptUISideDrawerModule,
   NativeScriptUICalendarModule,
+  TranslateModule,
   TNSFontIconModule,
   TNSCheckBoxModule,
 ];

@@ -47,5 +47,7 @@
   <string>To scan conference badges</string>
   <key>NSFaceIDUsageDescription</key>
   <string>For your security</string>
+	<key>NSAllowsArbitraryLoads</key>
+  <true/>
 </dict>
 </plist>

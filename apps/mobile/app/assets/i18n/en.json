@@ -1,3 +1,20 @@
 {
-  "test": "Test"
+  "menu": {
+    "home": "Home",
+    "schedule": "Schedule",
+    "speakers": "Speakers",
+    "sponsors": "Sponsors",
+    "conduct": "Code of Conduct",
+    "about": "About",
+    "copyright": "2018 ngATL, built by nStudio"
+  },
+  "general": {
+    "need-help": "Need Help?",
+    "email-us": "Email us at info@ng-atl.org",
+    "tweet-us": "Tweet at us",
+    "error": "We're sorry an error occurred."
+  },
+  "conduct": {
+    "title": "Code of Conduct"
+  }
 }

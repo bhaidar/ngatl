@@ -20,12 +20,14 @@ export class TNSTranslateLoader {
       if (this._fileExists(url)) {
         const localFile = this._fileFromPath(url);
         localFile.readText().then(
-          data => {
+          (data: string) => {
             try {
               const json = JSON.parse(data);
+              console.log('loaded json.general.schedule:', json.general.schedule);
               observer.next(json);
               observer.complete();
             } catch (error) {
+              console.log('parse error:', error);
               // Even though the response status was 2xx, this is still an error.
               // The parse error contains the text of the body that failed to parse.
               const errorResult = {
@@ -36,6 +38,7 @@ export class TNSTranslateLoader {
             }
           },
           (error: Object) => {
+            console.log('i18n error:', error);
             const errorResult = { error };
             observer.error(errorResult);
           }

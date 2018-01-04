@@ -210,8 +210,10 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
         setTimeout( () => {
           LinearGradient.drawBackground( background, colors, orientation );
         } );
-        let search = background.getViewById( "search" );
-        search.ios.backgroundImage = UIImage.alloc().init();
+        let search = background.getViewById( 'search' );
+        if (search && search.ios) {
+          search.ios.backgroundImage = UIImage.alloc().init();
+        }
         break;
     }
   }
