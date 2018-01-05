@@ -104,7 +104,7 @@ export class SponsorService {
     for (const sponsor of sortedList) {
       for (const level of sponsor.level) {
           level.styleClass = `level-${level.name.toLowerCase().replace(/ /ig, '-')}`; 
-          console.log(level.styleClass);
+          // console.log(level.styleClass);
       }
     }
     return Observable.of(sortedList);

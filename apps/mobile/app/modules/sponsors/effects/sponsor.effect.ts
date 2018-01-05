@@ -29,7 +29,7 @@ export class SponsorEffects {
     .ofType(SponsorActions.ActionTypes.FETCH)
     .switchMap(action => this.sponsorService.fetch())
     .map(value => {
-      console.log('fetched sponsors:', value);
+      // console.log('fetched sponsors:', value);
       // console.log(JSON.stringify(value));
 
       return new SponsorActions.ChangedAction({

@@ -40,6 +40,13 @@
               <Label [text]="'ion-ios-people' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
               <Label [text]="'menu.community' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
           </GridLayout>
+
+          <!-- Media Partners -->
+          <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'misc', 'media']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
+          pageTransition="slideleft" class="sidedrawer-item">
+              <Label [text]="'ion-wand' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
+              <Label [text]="'menu.media' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
+          </GridLayout>
   
           <!-- Code of Conduct -->
           <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'misc', 'conduct']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"

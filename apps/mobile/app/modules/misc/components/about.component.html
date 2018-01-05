@@ -1,12 +1,19 @@
 <ngatl-ns-action-bar [title]="'menu.about' | translate"></ngatl-ns-action-bar>
 <ScrollView>
-    <GridLayout rows="auto,*" columns="*" class="page">
+    <GridLayout rows="auto,auto,*" columns="*" class="page">
       <StackLayout class="about-bg p-t-10" row="0" col="0">
           <Label text="Built w/ NativeScript for Angular" (tap)="viewPage()" textWrap="true" class="c-black text-center"></Label>
           <Image src="~/assets/nng.png" padding="20" (tap)="viewPage()" horizontalAlignment="center" height="150" class="text-center"></Image>
           <Label text="by nStudio" textWrap="true" class="c-sky text-center p-10 w-full c-bg-black" (tap)="viewGH()"></Label>
       </StackLayout>
-      <StackLayout class="listing p-y-10" row="1" col="0">
+      <StackLayout class="listing alt p-y-10" row="1" col="0">
+          <Label text="Credits:" textWrap="true" class="c-white mention"></Label>
+          <Label text="Ionicons are awesome." textWrap="true" class="c-white" (tap)="viewCredit(1)"></Label>
+          <Label text="Zack Chapple is amazing." textWrap="true" class="c-white" (tap)="viewPlugin(2)"></Label>
+          <Label text="Nitish Dayal is talented." textWrap="true" class="c-white" (tap)="viewCredit(3)"></Label>
+          <Label text="Nathan Walker loves you." textWrap="true" class="c-white" (tap)="viewCredit(4)"></Label>  
+        </StackLayout>
+      <StackLayout class="listing p-y-10" row="2" col="0">
         <Label text="Community plugins used:" textWrap="true" class="c-white mention"></Label>
         <Label text="nativescript-audio" textWrap="true" class="c-white" (tap)="viewPlugin(13)"></Label>
         <Label text="nativescript-email" textWrap="true" class="c-white" (tap)="viewPlugin(19)"></Label>

@@ -174,7 +174,7 @@ export class NSAppService {
       })
     );
     this._modal.showModal(NSWebViewComponent, {
-      viewContainerRef: options.vcRef,
+      viewContainerRef: options.vcRef || this.currentVcRef,
       context: options.context
     });
   }
