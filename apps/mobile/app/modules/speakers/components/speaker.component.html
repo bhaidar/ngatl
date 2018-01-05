@@ -1,11 +1,11 @@
-<ngatl-ns-action-bar [title]="'Speakers'"></ngatl-ns-action-bar>
-<StackLayout class="page h-full">
+<ngatl-ns-action-bar [title]="'menu.speakers' | translate"></ngatl-ns-action-bar>
+<StackLayout class="page h-full p-b-20">
     <ListView [items]="(speakerState$ | async)?.list" class="list-group h-full">
       <ng-template let-item="item" let-odd="odd" let-even="even">
-        <StackLayout class="card" [nsRouterLink]="['/detail/speaker', item.social.twitter]">
-          <Image [src]="item.image" height="250" horizontalAlignment="center" class="w-full" backgroundColor="#fff"></Image>
-          <StackLayout class="hr-light"></StackLayout>
-          <Label [text]="item.name" class="text-center h1 font-weight-bold m-t-5"></Label>
+        <StackLayout class="card" (tap)="openDetail(item)">
+          <Image [src]="item.image" horizontalAlignment="center" class="w-full" backgroundColor="#fff"></Image>
+          <!-- <StackLayout class="hr-light"></StackLayout> -->
+          <Label [text]="item.name" class="text-center t-30 c-grey-dark font-weight-bold m-t-5"></Label>
         </StackLayout>
       </ng-template>
     </ListView>

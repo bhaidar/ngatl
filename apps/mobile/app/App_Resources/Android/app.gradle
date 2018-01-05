@@ -6,11 +6,28 @@
 //}
 
 android {  
+  compileSdkVersion 26
+  buildToolsVersion "26.0.2"
   defaultConfig {  
     generatedDensities = []
-    applicationId = "__PACKAGE__"  
+    applicationId System.getenv('SUPPLY_PACKAGE_NAME') ?: 'io.nstudio.ngatl' 
+    minSdkVersion 21
+    targetSdkVersion 26
   }  
   aaptOptions {  
     additionalParameters "--no-version-vectors"  
-  }  
+  } 
+  buildTypes {
+      debug {
+//            shrinkResources true
+          minifyEnabled true
+//            useProguard false
+          proguardFiles getDefaultProguardFile('proguard-android.txt'), 'src/main/res/proguard-rules.pro'
+      }
+      release {
+//            shrinkResources true
+          minifyEnabled true
+          proguardFiles getDefaultProguardFile('proguard-android.txt'), 'src/main/res/proguard-rules.pro'
+      }
+  } 
 } 

@@ -23,7 +23,9 @@ export class SponsorComponent implements AfterViewInit, OnInit {
     private log: LogService,
     private vcRef: ViewContainerRef,
     private appService: NSAppService,
-  ) {}
+  ) {
+    this.appService.currentVcRef = this.vcRef;
+  }
 
   public viewSite(sponsor: any) {
     this.appService.openWebView({

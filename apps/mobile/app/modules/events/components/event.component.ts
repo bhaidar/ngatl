@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnInit, NgZone } from '@angular/core';
+import { Component, AfterViewInit, OnInit, NgZone, ViewContainerRef } from '@angular/core';
 
 // libs
 import { Store } from '@ngrx/store';
@@ -20,6 +20,7 @@ import { CheckBox } from 'nativescript-checkbox';
 import { LoggerService } from '@ngatl/api';
 import { LocaleState, IAppState, BaseComponent, LogService } from '@ngatl/core';
 import { LinearGradient } from '../../../helpers';
+import { NSAppService } from '../../core/services/ns-app.service';
 import { EventActions } from '../actions';
 import { ConferenceViewModel } from './conference.model';
 
@@ -47,8 +48,11 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
     private store: Store<any>,
     private log: LogService,
     private ngZone: NgZone,
+    private vcRef: ViewContainerRef,
+    private appService: NSAppService,
   ) {
     super();
+    this.appService.currentVcRef = this.vcRef;
     this.conferenceModel = new ConferenceViewModel();
     const day1 = new SegmentedBarItem();
     day1.title = 'Jan 30';

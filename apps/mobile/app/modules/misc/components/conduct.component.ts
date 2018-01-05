@@ -25,7 +25,9 @@ export class ConductComponent {
     private vcRef: ViewContainerRef,
     private win: WindowService,
     private appService: NSAppService,
-  ) {}
+  ) {
+    this.appService.currentVcRef = this.vcRef;
+  }
 
   public emailUs() {
     emailAvailable().then((avail) => {
@@ -46,7 +48,7 @@ export class ConductComponent {
       vcRef: this.vcRef,
       context: {
         url,
-        title: this.translate.instant('general.conduct.title')
+        title: this.translate.instant('conduct.title')
       }
     })
   }

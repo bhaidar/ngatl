@@ -61,14 +61,12 @@ export class HomeComponent implements AfterViewInit, OnInit {
     this.drawerService.toggle(false);
   }
 
-  public openWeb(url: string) {
-    this.appService.openWebView({
-      vcRef: this.vcRef,
-      context: {
-        url,
-        title: 'nStudio'
-      }
-    })
+  public openWeb(url: string, title: string) {
+    this.drawerService.toggle(false);
+    this.drawerService.openWeb$.next({
+      url, 
+      title
+    });
   }
 
   ngOnInit() {

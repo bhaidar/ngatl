@@ -21,6 +21,7 @@ import { LoggerService } from '@ngatl/api';
 import { WindowService, ProgressIndicatorActions, LogService, ProgressService, IAppState, UserState } from '@ngatl/core';
 
 // app
+import { DrawerService } from './drawer.service';
 import { NSWebViewComponent } from '../../shared/components/ns-webview/ns-webview.component';
 
 export interface IOpenWebViewOptions {
@@ -67,6 +68,9 @@ export class NSAppService {
   private _orientation$: Subject<any> = new Subject();
   private _deviceType: 'Phone' | 'Tablet';
 
+  // misc helpers
+  private _currentVcRef: ViewContainerRef;
+
   constructor(
     private _store: Store<any>,
     private _fonticon: TNSFontIconService, // DO NOT REMOVE
@@ -76,7 +80,8 @@ export class NSAppService {
     private _win: WindowService,
     private _logger: LoggerService,
     private _modal: ModalDialogService,
-    private _progressService: ProgressService
+    private _progressService: ProgressService,
+    private _drawerService: DrawerService,
   ) {
     // TNSFontIconService - injected to construct it once for entire app
     this._logger.log('NSAppService constructed!');
@@ -86,6 +91,22 @@ export class NSAppService {
     this._initAppEvents();
     this._initOrientationHandler();
     this._initUser();
+
+    this._drawerService.openWeb$
+      .subscribe((context: {title: string; url: string;}) => {
+        this.openWebView({
+          context: context,
+          vcRef: this.currentVcRef,
+        });
+      })
+  }
+
+  public get currentVcRef() {
+    return this._currentVcRef;
+  }
+
+  public set currentVcRef(value: ViewContainerRef) {
+    this._currentVcRef = value;
   }
 
   public set isPasswordLogin(value: boolean) {

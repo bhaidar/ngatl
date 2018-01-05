@@ -1,24 +1,19 @@
-<ngatl-ns-action-bar [title]="'About'"></ngatl-ns-action-bar>
+<ngatl-ns-action-bar [title]="'menu.about' | translate"></ngatl-ns-action-bar>
 <ScrollView>
     <GridLayout rows="auto,*" columns="*" class="page">
-      <StackLayout class="c-bg-black p-y-10" row="0" col="0">
-          <Label text="Built w/ NativeScript for Angular" (tap)="viewPage()" textWrap="true" class="c-white text-center"></Label>
+      <StackLayout class="about-bg p-t-10" row="0" col="0">
+          <Label text="Built w/ NativeScript for Angular" (tap)="viewPage()" textWrap="true" class="c-black text-center"></Label>
           <Image src="~/assets/nng.png" padding="20" (tap)="viewPage()" horizontalAlignment="center" height="150" class="text-center"></Image>
-          <Label text="by nStudio" textWrap="true" class="c-white text-center" (tap)="viewGH()"></Label>
+          <Label text="by nStudio" textWrap="true" class="c-sky text-center p-10 w-full c-bg-black" (tap)="viewGH()"></Label>
       </StackLayout>
-      <StackLayout class="c-bg-grey-dark listing p-y-10" row="1" col="0">
+      <StackLayout class="listing p-y-10" row="1" col="0">
         <Label text="Community plugins used:" textWrap="true" class="c-white mention"></Label>
         <Label text="nativescript-audio" textWrap="true" class="c-white" (tap)="viewPlugin(13)"></Label>
-        <Label text="nativescript-fancyalert" textWrap="true" class="c-white" (tap)="viewPlugin(3)"></Label>
-        <Label text="nativescript-coachmarks" textWrap="true" class="c-white" (tap)="viewPlugin(15)"></Label>
         <Label text="nativescript-email" textWrap="true" class="c-white" (tap)="viewPlugin(19)"></Label>
         <Label text="nativescript-gif" textWrap="true" class="c-white" (tap)="viewPlugin(4)"></Label>
         <Label text="nativescript-loading-indicator" textWrap="true" class="c-white" (tap)="viewPlugin(5)"></Label>
         <Label text="nativescript-ngx-fonticon" textWrap="true" class="c-white" (tap)="viewPlugin(6)"></Label>
-        <Label text="nativescript-plugin-firebase" textWrap="true" class="c-white" (tap)="viewPlugin(7)"></Label>
         <Label text="nativescript-social-share" textWrap="true" class="c-white" (tap)="viewPlugin(17)"></Label>
-        <Label text="nativescript-slides" textWrap="true" class="c-white" (tap)="viewPlugin(8)"></Label>
-        <Label text="nativescript-swiss-army-knife" textWrap="true" class="c-white" (tap)="viewPlugin(18)"></Label>
         <Label text="nativescript-splashscreen" textWrap="true" class="c-white" (tap)="viewPlugin(9)"></Label>
         <Label text="nativescript-pro-ui" textWrap="true" class="c-white" (tap)="viewPlugin(10)"></Label>
         <Label text="nativescript-themes" textWrap="true" class="c-white" (tap)="viewPlugin(11)"></Label>

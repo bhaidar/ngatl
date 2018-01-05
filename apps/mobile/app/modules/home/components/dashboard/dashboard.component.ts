@@ -25,6 +25,7 @@ import { Animation, AnimationDefinition } from 'tns-core-modules/ui/animation';
 import { screen, isIOS } from 'tns-core-modules/platform';
 
 // app
+import { NSAppService } from '../../../core/services/ns-app.service';
 import { BarcodeComponent } from '../../../shared/components/barcode/barcode.component';
 
 @Component({
@@ -43,9 +44,11 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     private _win: WindowService,
     private _progressService: ProgressService,
     private _page: Page,
+    private _appService: NSAppService,
   ) {
     super();
     this._page.backgroundImage = 'res://home-bg';
+    this._appService.currentVcRef = this._vcRef;
   }
 
   public setupPage(e) {

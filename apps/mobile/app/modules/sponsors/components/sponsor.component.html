@@ -1,4 +1,4 @@
-<ngatl-ns-action-bar [title]="'Sponsors'"></ngatl-ns-action-bar>
+<ngatl-ns-action-bar [title]="'menu.sponsors' | translate"></ngatl-ns-action-bar>
 <StackLayout class="page h-full p-b-20">
   <ListView [items]="(sponsorState$ | async)?.list" class="list-group h-full">
     <ng-template let-item="item" let-odd="odd" let-even="even">

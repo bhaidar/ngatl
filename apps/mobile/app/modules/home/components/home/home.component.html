@@ -1,11 +1,11 @@
 <RadSideDrawer tkToggleNavButton showOverNavigation="true" [drawerTransition]="sideDrawerTransition" selectionBehavior="None" width="100%">
-  <StackLayout tkDrawerContent class="sidedrawer-left">
-    <FlexBoxLayout class="sidedrawer-header" paddingTop="20" height="168">
+  <GridLayout tkDrawerContent class="sidedrawer-left" rows="auto,*,auto" columns="*">
+    <FlexBoxLayout class="sidedrawer-header" paddingTop="20" height="168" row="0" col="0">
         <Image src="res://ngATL" [nsRouterLink]="['/landing/home']" class="sidedrawer-header-image"></Image>
         <!-- <Label text="ngATL" textWrap="true" class="sidedrawer-header-brand"></Label> -->
     </FlexBoxLayout>
-    <ScrollView>
-      <GridLayout class="sidedrawer-content" rows="*,*,auto" columns="*">
+    <ScrollView row="1" col="0">
+      <GridLayout class="sidedrawer-content" rows="*" columns="*">
         <StackLayout row="0" col="0" class="h-full">
           <!-- Home -->
           <GridLayout columns="60,*,auto" rows="60" [nsRouterLink]="['/landing/home']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}" pageTransition="slideLeft" class="sidedrawer-item">
@@ -23,7 +23,7 @@
           <!-- Speakers -->
           <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'speakers']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
           pageTransition="slideleft" class="sidedrawer-item">
-              <Label [text]="'ion-ios-people' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
+              <Label [text]="'ion-mic-b' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
               <Label [text]="'menu.speakers' | translate"  class="sidedrawer-list-item-text" row="0" col="1"></Label>
           </GridLayout>
   
@@ -32,6 +32,13 @@
           pageTransition="slideleft" class="sidedrawer-item">
               <Label [text]="'ion-ribbon-b' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
               <Label [text]="'menu.sponsors' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
+          </GridLayout>
+
+          <!-- Community -->
+          <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'misc', 'community']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
+          pageTransition="slideleft" class="sidedrawer-item">
+              <Label [text]="'ion-ios-people' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
+              <Label [text]="'menu.community' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
           </GridLayout>
   
           <!-- Code of Conduct -->
@@ -48,12 +55,12 @@
               <Label [text]="'menu.about' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
           </GridLayout>
         </StackLayout>
-        <StackLayout row="2" col="0" class="copyright p-10">
-            <Label [text]="'menu.copyright' | translate" class="c-grey" (tap)="openWeb('http://nstudio.io')"></Label> 
-        </StackLayout>
       </GridLayout>
     </ScrollView>
-  </StackLayout>
+    <StackLayout row="2" col="0" class="copyright p-10">
+        <Label [text]="'menu.copyright' | translate" class="label" (tap)="openWeb('http://nstudio.io', 'nStudio')"></Label> 
+    </StackLayout>
+  </GridLayout>
   <StackLayout tkMainContent class="page-bg">
     <router-outlet></router-outlet>
   </StackLayout>

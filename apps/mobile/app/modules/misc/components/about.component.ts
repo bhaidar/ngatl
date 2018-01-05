@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewContainerRef } from '@angular/core';
 
 // libs
 import { Store } from '@ngrx/store';
@@ -6,6 +6,7 @@ import * as utils from 'tns-core-modules/utils/utils';
 
 // app
 import { LoggerService } from '@ngatl/api';
+import { NSAppService } from '../../core/services/ns-app.service';
 
 @Component({
   moduleId: module.id,
@@ -14,7 +15,14 @@ import { LoggerService } from '@ngatl/api';
 })
 export class AboutComponent {
 
-  constructor(private store: Store<any>, private log: LoggerService) {}
+  constructor(
+    private store: Store<any>, 
+    private log: LoggerService,
+    private vcRef: ViewContainerRef,
+    private appService: NSAppService,
+  ) {
+    this.appService.currentVcRef = this.vcRef;
+  }
 
   public viewGH() {
     utils.openUrl('http://nstudio.io');

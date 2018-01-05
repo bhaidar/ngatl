@@ -78,6 +78,10 @@
         border-width: 1;
         border-radius: 3;
         border-color: white;
+
+        &.speaker-card {
+            background-color: $ngatl-red;
+        }
     }
     .hr-light {
         margin-top: 10;
@@ -112,12 +116,14 @@
     }
 
     .listing {
+        background-color: $black;
         Label {
-            margin: 5 0 5 0;
+            margin: 12 0 12 0;
             text-align: center;
 
             &.mention {
                 color: $grey-light;
+                font-style: italic;
             }
 
         }
@@ -136,6 +142,17 @@
         
     }
 
+    .about-bg {
+        background-image: url('~/assets/images/skyline.jpg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+    }
+
     .copyright {
-        background-color: #4d5768;
+        background-color: #404040;
+
+        .label {
+            color: #696969;
+        }
     }

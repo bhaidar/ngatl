@@ -4,7 +4,7 @@
   "readme": "NativeScript Application",
   "repository": "<fill-your-repository-here>",
   "nativescript": {
-    "id": "org.nativescript.mobile",
+    "id": "io.nstudio.ngatl",
     "tns-ios": {
       "version": "3.4.0"
     }
@@ -39,6 +39,7 @@
     "nativescript-pro-ui": "~3.3.0",
     "nativescript-social-share": "~1.5.0",
     "nativescript-socket.io": "~0.9.0",
+    "nativescript-splashscreen": "^2.3.0",
     "nativescript-theme-core": "~1.0.4",
     "nativescript-videoplayer": "~3.1.0",
     "reflect-metadata": "~0.1.8",
