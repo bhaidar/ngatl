@@ -14,6 +14,7 @@ import { DrawerService } from '../../../core/services/drawer.service';
 export class ActionBarComponent {
   @Input() title: string;
   @Input() ready: boolean = true;
+  @Input() intro: boolean = false;
 
   constructor(private router: RouterExtensions, private drawer: DrawerService) {}
 

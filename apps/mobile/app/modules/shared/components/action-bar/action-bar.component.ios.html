@@ -1,11 +1,11 @@
 <ActionBar class="action-bar" [title]="title">
   <StackLayout orientation="horizontal" horizontalAlignment="center" verticalAlignment="center" padding="2" *ngIf="!title">
-    <Image src="res://ngatl_top" class="action-image" [class.enter]="ready"></Image>
+    <Image src="res://ngatl_top" class="action-image" [class.ready]="ready" [class.intro]="intro"></Image>
   </StackLayout>
   <ActionItem (tap)="toggleDrawer()">
-    <Button [text]="'ion-navicon' | fonticon" class="ion action-item"></Button>
+    <Button [text]="'ion-navicon' | fonticon" class="ion action-item" [class.ready]="ready" [class.intro]="intro"></Button>
   </ActionItem>
   <ActionItem (tap)="openSearch()" ios.position="right">
-    <Button [text]="'ion-log-in' | fonticon" nsRouterLink="/search" class="ion action-item"></Button>
+    <Button [text]="'ion-log-in' | fonticon" nsRouterLink="/search" class="ion action-item" [class.ready]="ready" [class.intro]="intro"></Button>
   </ActionItem>
 </ActionBar>

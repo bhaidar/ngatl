@@ -1,4 +1,4 @@
-<ngatl-ns-action-bar class="action-bar" [ready]="appService.shownIntro">
+<ngatl-ns-action-bar class="action-bar" [intro]="showIntro" [ready]="appService.shownIntro"> 
 </ngatl-ns-action-bar>
 <GridLayout id="content-root" rows="*" columns="*">
     <AbsoluteLayout (loaded)="setupPage($event)" class="w-full h-full home-bg" row="0" col="0" *ngIf="appService.shownIntro">

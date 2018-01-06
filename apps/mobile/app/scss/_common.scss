@@ -17,9 +17,9 @@
         font-size: 30;
     }
     //override for action-bar colored fonticons
-    .action-bar Button {
-        color: $white;
-    }
+    // .action-bar Button {
+    //     color: $white;
+    // }
     .gray {
         color: gray;
     }
@@ -116,13 +116,19 @@
         66.25% {
             opacity: 0;
         }
-        86.75% {
+        100% {
             opacity: 1;
         }
     }
+    .action-item {
+        color: $white;
+    }
     .action-image, .action-item {
         opacity: 0;
-        &.enter {
+        &.ready {
+            opacity:1;
+        }
+        &.intro {
             animation-name: action-image-animate;
             animation-duration: 1;
             animation-fill-mode: forwards;

@@ -35,6 +35,7 @@ import { BarcodeComponent } from '../../../shared/components/barcode/barcode.com
 })
 export class DashboardComponent extends BaseComponent implements AfterViewInit, OnInit, OnDestroy {
   public user: any;
+  public showIntro = false;
   private _barcode: BarcodeScanner;
   private _spinnerOn = false;
 
@@ -49,9 +50,6 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     super();
     this._page.backgroundImage = 'res://home-bg';
     this.appService.currentVcRef = this._vcRef;
-    if (!this.appService.shownIntro) {
-      this._page.actionBarHidden = true;
-    }
   }
 
   public setupPage(e) {
@@ -215,8 +213,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   public enter() {
     // ['intro-background', 'intro-logo-bg', 'intro-logo-n', 'intro-logo-ng', 'intro-logo-atl', 'intro-text-one', 'intro-text-two', 'intro-version'].forEach(id => this._page.getViewById(id).className = id + '-exit');
     // this._win.setTimeout(_ => {
-      this.appService.shownIntro = true;
-      this._page.actionBarHidden = false;
+      this.appService.shownIntro = this.showIntro = true;
     // }, 1050);
   }
 
