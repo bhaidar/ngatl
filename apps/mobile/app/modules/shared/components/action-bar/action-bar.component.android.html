@@ -1,7 +1,10 @@
 <ActionBar class="action-bar">
   <GridLayout rows="auto" columns="50,*,50" class="action-bar">
     <Button [text]="'ion-navicon' | fonticon" (tap)="toggleDrawer()" class="ion action-item" row="0" col="0"></Button>
-    <Label [text]="title" row="0" col="1" class="action-bar-title text-center"></Label>
+    <Label [text]="title || ''" row="0" col="1" class="action-bar-title text-center" *ngIf="title"></Label>
+    <StackLayout orientation="horizontal" horizontalAlignment="center" verticalAlignment="center" padding="2" *ngIf="!title" row="0" col="1">
+      <Image src="res://ngatl_top" class="action-image" height="50" [class.enter]="ready"></Image>
+    </StackLayout>
     <Button [text]="'ion-log-in' | fonticon" (tap)="openSearch()" class="ion action-item" row="0" col="2"></Button>
   </GridLayout>
 </ActionBar>

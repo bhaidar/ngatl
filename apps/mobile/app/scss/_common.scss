@@ -100,12 +100,35 @@
     }
 
     @import 'schedule';
+    @import 'intro';
 
     .home-bg {
         background-image: url('res://home-bg');
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
+    }
+
+    @keyframes action-image-animate {
+        0% {
+            opacity: 0;
+        }
+        66.25% {
+            opacity: 0;
+        }
+        86.75% {
+            opacity: 1;
+        }
+    }
+    .action-image, .action-item {
+        opacity: 0;
+        &.enter {
+            animation-name: action-image-animate;
+            animation-duration: 1;
+            animation-fill-mode: forwards;
+            animation-iteration-count: 1;
+            animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
     }
 
     .beacon {

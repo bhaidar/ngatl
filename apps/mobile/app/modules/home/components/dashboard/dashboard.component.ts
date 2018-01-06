@@ -17,7 +17,7 @@ import { SystemUser } from '@ngatl/api';
 import { BaseComponent, UserActions, ModalActions, WindowService, ProgressService } from '@ngatl/core';
 
 // nativescript
-import { BarcodeScanner } from "nativescript-barcodescanner";
+import { BarcodeScanner } from 'nativescript-barcodescanner';
 import { Page } from 'tns-core-modules/ui/page';
 import { AnimationCurve } from 'tns-core-modules/ui/enums';
 import { View } from 'tns-core-modules/ui/core/view';
@@ -44,11 +44,14 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     private _win: WindowService,
     private _progressService: ProgressService,
     private _page: Page,
-    private _appService: NSAppService,
+    public appService: NSAppService,
   ) {
     super();
     this._page.backgroundImage = 'res://home-bg';
-    this._appService.currentVcRef = this._vcRef;
+    this.appService.currentVcRef = this._vcRef;
+    if (!this.appService.shownIntro) {
+      this._page.actionBarHidden = true;
+    }
   }
 
   public setupPage(e) {
@@ -209,6 +212,14 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     this._store.dispatch(new UserActions.CreateFinishAction(user));
   }
 
+  public enter() {
+    // ['intro-background', 'intro-logo-bg', 'intro-logo-n', 'intro-logo-ng', 'intro-logo-atl', 'intro-text-one', 'intro-text-two', 'intro-version'].forEach(id => this._page.getViewById(id).className = id + '-exit');
+    // this._win.setTimeout(_ => {
+      this.appService.shownIntro = true;
+      this._page.actionBarHidden = false;
+    // }, 1050);
+  }
+
   ngOnInit() {
     this.user = {
       firstName: 'Any',
@@ -219,7 +230,13 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     };
   }
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() {
+    if (!this.appService.shownIntro) {
+      this._win.setTimeout(_ => {
+          ['intro-background', 'intro-logo-bg', 'intro-logo-n', 'intro-logo-ng', 'intro-logo-atl', 'intro-text-one', 'intro-text-two', 'intro-version'].forEach(id => this._page.getViewById(id).className = id + '-enter');
+        }, 1000);
+    }
+  }
 
   ngOnDestroy() { }
 
@@ -230,28 +247,28 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
         this._barcode.available().then( ( avail: boolean ) => {
           if ( avail ) {
             this._barcode.scan( {
-              formats: "QR_CODE,PDF_417,EAN_13",   // Pass in of you want to restrict scanning to certain types
-              // cancelLabel: "EXIT. Also, try the volume buttons!", // iOS only, default 'Close'
+              formats: 'QR_CODE,PDF_417,EAN_13',   // Pass in of you want to restrict scanning to certain types
+              // cancelLabel: 'EXIT. Also, try the volume buttons!', // iOS only, default 'Close'
               cancelLabel: 'Cancel',
-              cancelLabelBackgroundColor: "#000", // iOS only, default '#000000' (black)
-              message: "Use the volume buttons for extra light", // Android only, default is 'Place a barcode inside the viewfinder rectangle to scan it.'
+              cancelLabelBackgroundColor: '#000', // iOS only, default '#000000' (black)
+              message: 'Use the volume buttons for extra light', // Android only, default is 'Place a barcode inside the viewfinder rectangle to scan it.'
               showFlipCameraButton: true,   // default false
               preferFrontCamera: false,     // default false
               showTorchButton: true,        // default false
               beepOnScan: true,             // Play or Suppress beep on scan (default true)
               torchOn: false,               // launch with the flashlight on (default false)
               closeCallback: () => {
-                console.log( "Scanner closed" );
+                console.log( 'Scanner closed' );
                 this._barcode = null;
               }, // invoked when the scanner was closed (success or abort)
               resultDisplayDuration: 500,   // Android only, default 1500 (ms), set to 0 to disable echoing the scanned text
-              orientation: "portrait",     // Android only, optionally lock the orientation to either "portrait" or "landscape"
+              orientation: 'portrait',     // Android only, optionally lock the orientation to either 'portrait' or 'landscape'
               openSettingsIfPermissionWasPreviouslyDenied: true // On iOS you can send the user to the settings app if access was previously denied
             } ).then( ( result ) => {
               console.log( 'result:', result );
               if ( result ) {
-                console.log( "Scan format: " + result.format );
-                console.log( "Scan text:   " + result.text );
+                console.log( 'Scan format: ' + result.format );
+                console.log( 'Scan text:   ' + result.text );
                 for ( const key in result) {
                   console.log( key, result[key] );
                 }

@@ -1,6 +1,6 @@
 <ActionBar class="action-bar" [title]="title">
   <StackLayout orientation="horizontal" horizontalAlignment="center" verticalAlignment="center" padding="2" *ngIf="!title">
-    <Image src="res://ngATL-top" class="action-image"></Image>
+    <Image src="res://ngatl_top" class="action-image" [class.enter]="ready"></Image>
   </StackLayout>
   <ActionItem (tap)="toggleDrawer()">
     <Button [text]="'ion-navicon' | fonticon" class="ion action-item"></Button>

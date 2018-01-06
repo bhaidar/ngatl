@@ -23,7 +23,6 @@ export class TNSTranslateLoader {
           (data: string) => {
             try {
               const json = JSON.parse(data);
-              console.log('loaded json.general.schedule:', json.general.schedule);
               observer.next(json);
               observer.complete();
             } catch (error) {

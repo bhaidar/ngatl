@@ -56,6 +56,7 @@ export function toggleHttpLogs(
 @Injectable()
 export class NSAppService {
   private _appVersion: string;
+  private _shownIntro = false;
 
   // Auth helpers
   private _isPasswordLogin: boolean;
@@ -99,6 +100,14 @@ export class NSAppService {
           vcRef: this.currentVcRef,
         });
       })
+  }
+
+  public set shownIntro(value: boolean) {
+    this._shownIntro = value;
+  }
+
+  public get shownIntro() {
+    return this._shownIntro;
   }
 
   public get currentVcRef() {

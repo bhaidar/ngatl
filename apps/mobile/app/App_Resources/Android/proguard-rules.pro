@@ -92,6 +92,8 @@
 ######### Telerik ui
 -keep,includedescriptorclasses public class com.telerik.widget.list.** { public *; }
 -keep,includedescriptorclasses public interface com.telerik.widget.list.** { *; }
+-keep,includedescriptorclasses public class com.telerik.android.primitives.widget.** { public *; }
+-keep,includedescriptorclasses public interface com.telerik.android.primitives.widget.** { *; }
 # for some reason
 -dontwarn com.telerik.widget.feedback.**
 

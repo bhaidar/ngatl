@@ -1,11 +1,50 @@
-<ngatl-ns-action-bar class="action-bar">
+<ngatl-ns-action-bar class="action-bar" [ready]="appService.shownIntro">
 </ngatl-ns-action-bar>
-<AbsoluteLayout (loaded)="setupPage($event)" class="w-full h-full home-bg">
-    <Image src="res://badge-bottom.png" id="badge-bottom" (tap)="openBarcode()"></Image>
-    <Image src="res://badge-top.png" id="badge-top"></Image>
-    <Label text="" id="beacon" class="beacon"></Label>
-    
-</AbsoluteLayout>
+<GridLayout id="content-root" rows="*" columns="*">
+    <AbsoluteLayout (loaded)="setupPage($event)" class="w-full h-full home-bg" row="0" col="0" *ngIf="appService.shownIntro">
+        <Image src="res://badge_bottom.png" id="badge-bottom" (tap)="openBarcode()"></Image>
+        <Image src="res://badge_top.png" id="badge-top"></Image>
+        <Label text="" id="beacon" class="beacon"></Label>  
+    </AbsoluteLayout>
+    <GridLayout id="intro-elements" (tap)="enter()" row="0" col="0" *ngIf="!appService.shownIntro">
+        <GridLayout id="intro-background" class="intro-background-intro" originY="0"></GridLayout>
+        
+        <GridLayout id="intro-logo-bg" class="intro-logo-bg-intro" backgroundColor="#fff" width="93" height="93" horizontalAlignment="center" verticalAlignment="center" borderRadius="100" ></GridLayout>
+        <GridLayout id="intro-logo-n" class="intro-logo-n-intro" backgroundImage="res://ngatlsplash" width="331" height="354" horizontalAlignment="center" verticalAlignment="center" ></GridLayout>
+
+        <GridLayout id="intro-logo-ng" class="intro-logo-ng-intro" backgroundImage="res://ng" width="118" height="134" horizontalAlignment="center" verticalAlignment="center"></GridLayout>
+        <GridLayout id="intro-logo-atl" class="intro-logo-atl-intro" backgroundImage="res://atl" width="171" height="131" horizontalAlignment="center" verticalAlignment="center"></GridLayout>
+
+        <Label id="intro-text-one"
+                class="intro-text-one-intro"
+                text="Diversity, Inclusion&#xA;and Angular"
+                fontSize="37"
+                horizontalAlignment="center"
+                verticalAlignment="center"
+                textWrap="true"
+                color="white"
+                textAlignment="center"></Label>
+        <Label id="intro-text-two"
+                class="intro-text-two-intro"
+                text="1st annual Angular conference in Atlanta, GA&#xA;focused on diversity in technology."
+                fontSize="19"
+                horizontalAlignment="center"
+                verticalAlignment="center"
+                textWrap="true"
+                color="#8DA1AB"
+                textAlignment="center"></Label>
+
+        <Label id="intro-version"
+                class="intro-version-intro"
+                text="Enjoy the time of your life."
+                fontSize="14"
+                horizontalAlignment="center"
+                verticalAlignment="center"
+                color="white"
+                textAlignment="center"></Label>
+    </GridLayout>
+</GridLayout>
+
 <!-- <ScrollView class="page">
   <StackLayout class="page">
     <StackLayout class="card">

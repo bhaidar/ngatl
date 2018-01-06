@@ -34,6 +34,8 @@ import 'nativescript-angular/router';
 
 // ns plugins
 import 'nativescript-ngx-fonticon';
+import 'nativescript-pro-ui/listview';
+import 'nativescript-pro-ui/sidedrawer';
 
 /**
  * app shared code
