@@ -9,7 +9,8 @@ import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 // libs
 import { TranslateModule } from '@ngx-translate/core';
 import { NativeScriptUISideDrawerModule } from 'nativescript-pro-ui/sidedrawer/angular';
-import { NativeScriptUICalendarModule } from "nativescript-pro-ui/calendar/angular";
+// import { NativeScriptUICalendarModule } from 'nativescript-pro-ui/calendar/angular';
+import { NativeScriptUIListViewModule } from 'nativescript-pro-ui/listview/angular';
 import { TNSFontIconModule } from 'nativescript-ngx-fonticon';
 import { TNSCheckBoxModule } from 'nativescript-checkbox/angular';
 
@@ -22,7 +23,8 @@ const SHARED_MODULES: any[] = [
   NativeScriptRouterModule,
   NativeScriptFormsModule,
   NativeScriptUISideDrawerModule,
-  NativeScriptUICalendarModule,
+  // NativeScriptUICalendarModule,
+  NativeScriptUIListViewModule,
   TranslateModule,
   TNSFontIconModule,
   TNSCheckBoxModule,

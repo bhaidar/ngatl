@@ -1,11 +1,40 @@
 <ngatl-ns-action-bar class="action-bar" [intro]="showIntro" [ready]="appService.shownIntro"> 
 </ngatl-ns-action-bar>
 <GridLayout id="content-root" rows="*" columns="*">
-    <AbsoluteLayout (loaded)="startBadge($event)" class="w-full h-full home-bg" row="0" col="0" *ngIf="appService.shownIntro">
+    <AbsoluteLayout (loaded)="startBadge($event)" (tap)="retractTest()" class="w-full h-full home-bg" row="0" col="0" *ngIf="appService.shownIntro && !showScans">
         <Image src="res://badge_bottom.png" id="badge-bottom" (tap)="openBarcode()"></Image>
         <Image src="res://badge_top.png" id="badge-top"></Image>
         <Label text="" id="beacon" class="beacon"></Label>  
     </AbsoluteLayout>
+
+    <RadListView *ngIf="showScans" [items]="scans"
+      id="scans-listview"
+      row="0" col="0"
+      class="w-full h-full"
+      backgroundColor="transparent"
+      swipeActions="true"
+      (itemSwipeProgressStarted)="onSwipeCellStarted($event)"
+      (itemSwipeProgressEnded)="onSwipeCellFinished($event)"
+      (itemTap)="onItemTap($event)">
+      <ng-template tkListItemTemplate let-item="item">
+        <StackLayout class="card scanned" (tap)="openItem(item)">
+          <!-- <Image [src]="item.image" horizontalAlignment="center" class="w-full" backgroundColor="#fff"></Image> -->
+          <!-- <StackLayout class="hr-light"></StackLayout> -->
+          <Label [text]="item.ticket_full_name" class="text-center t-30 c-grey-dark font-weight-bold m-t-5"></Label>
+        </StackLayout>
+      </ng-template>
+      <!-- <ng-template tkListViewFooter>
+        <StackLayout>
+            <ToyStoreBanner *ngIf="!isKids"></ToyStoreBanner>
+        </StackLayout>
+      </ng-template> -->
+      <ng-template tkListItemSwipeTemplate rows="auto" columns="*,100">
+        <GridLayout rows="auto" columns="*,100">
+          <Button row="0" col="1" [fontSize]="fontSize" [text]="'item.delete-lbl' | translate" class="swipe-delete-btn" (tap)="remove($event)"></Button>
+        </GridLayout>
+      </ng-template>
+    </RadListView>
+
     <GridLayout id="intro-elements" row="0" col="0" *ngIf="!appService.shownIntro">
         <GridLayout id="intro-background" class="intro-background-intro" originY="0"></GridLayout>
         

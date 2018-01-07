@@ -14,7 +14,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { SystemUser } from '@ngatl/api';
-import { BaseComponent, UserActions, LogService, ModalActions, WindowService, ProgressService } from '@ngatl/core';
+import { BaseComponent, UserActions, LogService, ModalActions, WindowService, ProgressService, UserState, IAppState } from '@ngatl/core';
 
 // nativescript
 import { BarcodeScanner } from 'nativescript-barcodescanner';
@@ -24,9 +24,10 @@ import { GestureTypes, SwipeGestureEventData } from 'tns-core-modules/ui/gesture
 import { AnimationCurve } from 'tns-core-modules/ui/enums';
 import { View } from 'tns-core-modules/ui/core/view';
 import { Animation, AnimationDefinition } from 'tns-core-modules/ui/animation';
-import { screen, isIOS } from 'tns-core-modules/platform';
+import { screen, isIOS, isAndroid } from 'tns-core-modules/platform';
 
 // app
+import { IConferenceAppState } from '../../../ngrx';
 import { NSAppService } from '../../../core/services/ns-app.service';
 import { BarcodeComponent } from '../../../shared/components/barcode/barcode.component';
 
@@ -40,6 +41,9 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   public showIntro = false;
   public swipeEnable = true;
   public showSwiper = false;
+  public showScans = false;
+  public fontSize = 15;
+  public scans: Array<UserState.IRegisteredUser> = [];
   private _barcode: BarcodeScanner;
   private _spinnerOn = false;
   private _beaconView: View;
@@ -64,6 +68,92 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     this._stopAnime = this._stopAnimeFn.bind(this);
     this._restartAnime = this._restartAnimeFn.bind(this);
     this._swipeHandler = this._swipeHandlerFn.bind(this);
+
+    // test
+    this.scans = [
+      {
+        ticket_full_name: 'Mike Ryan'
+      }
+    ];
+  }
+
+  public openItem(item) {
+
+  }
+
+  public onItemTap(e) {
+    if (e && isAndroid) {
+      // android does not respond to tap events on items so use this
+      // const persoItem = this.activeItems[e.index];
+      // if (persoItem) {
+      //   this.viewDetail(persoItem);
+      // }
+    }
+  }
+
+  public onSwipeCellStarted(args: any) {
+    // if (!this._density) {
+    //   this._density = 0;
+    // }
+    // const delta = Math.floor(this._density) !== this._density ? 1.1 : .1;
+    // let right = this.isKids ? 0 : Math.round(this._density * 100);
+    // let threshold = this.isKids ? 0 : Math.round(this._density * 50);
+    // if (args) {
+    //   if (typeof args.index === 'number' && args.index > -1 && this.activeItems && this.activeItems.length) {
+    //     this._swipeItemIndex = args.index;
+    //     const persoItem = this.activeItems[args.index];
+    //     if (persoItem) {
+    //       // if item is flattening, do not allow swipe
+    //       const isFlattening = (<any>persoItem).showGears;
+    //       if (isFlattening) {
+    //         // disable swipe
+    //         right = threshold = 0;
+    //       }
+    //     }
+    //   } else {
+    //     // no valid item index
+    //     // disable swipe
+    //     right = threshold = 0;
+    //   }
+    //   if (args.data && args.data.swipeLimits) {
+    //     const swipeLimits = args.data.swipeLimits;
+    //     swipeLimits.top = 0;
+    //     swipeLimits.bottom = 0;
+    //     swipeLimits.left = 0;//Math.round(this._density * 100);
+    //     // if kids, don't allow swipe right
+    //     swipeLimits.right = right;
+    //     swipeLimits.threshold = threshold;
+    //   }
+    // }
+  }
+
+  public onSwipeCellFinished(args: any) {
+    // if (args && typeof args.index === 'number' && args.index > -1) {
+    //   this._swipeItemIndex = args.index;
+    // }
+  }
+
+  public remove(e) {
+    // if (this._swipeItemIndex > -1 && this.activeItems && this.activeItems.length) {
+    //   const persoItem = this.activeItems[this._swipeItemIndex];
+    //   if (persoItem) {
+    //     const prefix = this.isVideo ? 'video' : 'call-info';
+    //     const promptOptions: ConfirmOptions = {
+    //       message: this._translate.instant(`${prefix}.delete-warning-txt`),
+    //       okButtonText: this._translate.instant('general.yes-lbl'),
+    //       cancelButtonText: this._translate.instant('general.no-lbl'),
+    //     };
+
+    //     (<any>this._win.confirm(<any>promptOptions)).then(
+    //       result => {
+    //         if (result) {
+    //           this._store.dispatch(new PersoItemActions.DeleteAction(persoItem.id));
+    //         }
+    //       });
+    //   }
+    // } else {
+    //   this.appService.showAlert(this._translate.instant('generic.error-lbl'));
+    // }
   }
 
   public startBadge(e) {
@@ -103,8 +193,6 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     const top = <View>this._page.getViewById('badge-top');
     const bottom = <View>this._page.getViewById('badge-bottom');
     if (bottom && top) {
-      // this._log.debug('image:', top);
-      // this._log.debug('image width:', top.effectiveWidth);
   
       bottom.animate({
         translate: {
@@ -133,6 +221,8 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
           iterations: 1,
           curve: AnimationCurve.easeIn// AnimationCurve.spring
         });
+      }, _ => {
+
       });
   
       top.animate({
@@ -166,6 +256,8 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
         }, _ => {
 
         });
+      }, _ => {
+
       });
     }
   }
@@ -192,12 +284,15 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   private _stopAnimeFn() {
     this._log.debug('_stopAnimeFn!');
     this._log.debug(this._beaconAnime);
-    // if (this._beaconAnime) {
-    //   this._log.debug(this._beaconAnime.isPlaying);
-    //   if (this._beaconAnime.isPlaying === true) {
-    //     this._beaconAnime.cancel();
-    //   }
-    // }
+  }
+
+  private _stopBeacon() {
+    if (this._beaconAnime) {
+      // this._log.debug(this._beaconAnime.isPlaying);
+      if (this._beaconAnime.isPlaying === true) {
+        this._beaconAnime.cancel();
+      }
+    }
   }
 
   private _playBeacon(delay: number = 1000) {
@@ -275,6 +370,52 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     }
   }
 
+  private _retractBadge() {
+    const top = <View>this._page.getViewById('badge-top');
+    const bottom = <View>this._page.getViewById('badge-bottom');
+    if (bottom && top) {
+  
+      bottom.animate({
+        translate: {
+          x: (screen.mainScreen.widthDIPs/2) - 275,
+          y: -600
+        },
+        scale: {
+          x: .6,
+          y: .6,
+        },
+        opacity:0,
+        rotate:0,
+        duration: 600,
+        iterations: 1,
+      }).then(_ => {
+        this._ngZone.run(() => {
+          this.showScans = true;
+        });
+      }, _ => {
+
+      });
+  
+      top.animate({
+        translate: {
+          x: (screen.mainScreen.widthDIPs/2) - 42,
+          y: -600
+        },
+        scale: {
+          x: .4,
+          y: .4,
+        },
+        rotate: 0,
+        duration: 600,
+        iterations: 1,
+      }).then(_ => {
+
+      }, _ => {
+
+      });
+    }
+  }
+
   public openBarcode() {
     this._barcode = new BarcodeScanner();
     this._openScanner();
@@ -336,6 +477,13 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
       email: 'user@ngatl.org',
       password: '12341234'
     };
+    // this._store.select((s: IAppState) => s.user)
+    //   .takeUntil(this.destroy$)
+    //   .subscribe((s: UserState.IState) => {
+    //     if (s.scanned) {
+    //       this.scans = [...s.scanned];
+    //     }
+    //   });
     if (!this.appService.shownIntro) {
       this.showSwiper = true;
     }
@@ -345,16 +493,18 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     this._setupSwipe();
   }
 
+  public retractTest() {
+    this._stopBeacon();
+    this._retractBadge();
+  }
+
   private _setupSwipe() {
     if (!this.appService.shownIntro) {
-      console.log('ngAfterViewInit...');
+      // console.log('ngAfterViewInit...');
 
       this._win.setTimeout(_ => {
-        // this.swipeEnable = true;
-        console.log('another timeout fired...', this.swipeEnable);
 
         const mainScreen = <View>this._page.getViewById('intro-elements'); 
-        console.log('mainScreen:', mainScreen);
         if (mainScreen) {
           mainScreen.on(GestureTypes.swipe, this._swipeHandler);
         }

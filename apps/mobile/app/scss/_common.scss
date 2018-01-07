@@ -82,6 +82,10 @@
         &.speaker-card {
             background-color: $ngatl-red;
         }
+
+        &.scanned {
+            background-color: transparent;
+        }
     }
     .hr-light {
         margin-top: 10;
