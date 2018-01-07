@@ -1,5 +1,4 @@
 // nativescript
-import { NativeScriptHttpClientModule } from 'nativescript-angular/http-client';
 import { ModalDialogParams } from 'nativescript-angular/directives/dialogs';
 
 // angular
@@ -101,7 +100,6 @@ const SINGLETON_PROVIDERS: any[] = [
 
 @NgModule({
   imports: [
-    NativeScriptHttpClientModule,
     LibCoreModule.forRoot([
       {
         provide : PlatformLanguageToken,

@@ -303,26 +303,30 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   }
 
   public enter() {
-    // ['intro-background', 'intro-logo-bg', 'intro-logo-n', 'intro-logo-ng', 'intro-logo-atl', 'intro-text-one', 'intro-text-two', 'intro-version'].forEach(id => this._page.getViewById(id).className = id + '-exit');
-    // this._win.setTimeout(_ => {
-      
+    ['intro-background', 'intro-logo-n', 'intro-logo-ng', 'intro-logo-atl', 'intro-text-one', 'intro-text-two', 'intro-version', 'intro-swipe'].forEach(id => { //'intro-logo-bg', 
+      const p = this._page.getViewById(id);
+      if (p) {
+        p.className = id + '-enter';
+      }
+    });
 
-      // this._win.setTimeout(_ => {
-          ['intro-background', 'intro-logo-bg', 'intro-logo-n', 'intro-logo-ng', 'intro-logo-atl', 'intro-text-one', 'intro-text-two', 'intro-version', 'swipe-start'].forEach(id => {
-            const p = this._page.getViewById(id);
-            if (p) {
-              p.className = id + '-enter';
-            }
-          });
-
-          this._win.setTimeout(_ => {
-            this._ngZone.run(() => {
-              this.appService.shownIntro = this.showIntro = true;
-            });
-          }, 2000);
-        // });
-    // }, 1050);
+    this._win.setTimeout(_ => {
+      this._ngZone.run(() => {
+        this.appService.shownIntro = this.showIntro = true;
+      });
+    }, 1500);
   }
+
+  // public showIntroTest() {
+  //   this.appService.shownIntro = this.showIntro = false;
+  //   ['intro-background', 'intro-logo-n', 'intro-logo-ng', 'intro-logo-atl', 'intro-text-one', 'intro-text-two', 'intro-version', 'intro-swipe'].forEach(id => { //'intro-logo-bg', 
+  //     const p = this._page.getViewById(id);
+  //     if (p) {
+  //       p.className = id + '-intro';
+  //     }
+  //   });
+  //   this._setupSwipe();
+  // }
 
   ngOnInit() {
     this.user = {
@@ -338,10 +342,14 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   }
 
   ngAfterViewInit() {
+    this._setupSwipe();
+  }
+
+  private _setupSwipe() {
     if (!this.appService.shownIntro) {
       console.log('ngAfterViewInit...');
 
-      setTimeout(_ => {
+      this._win.setTimeout(_ => {
         // this.swipeEnable = true;
         console.log('another timeout fired...', this.swipeEnable);
 
@@ -350,16 +358,6 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
         if (mainScreen) {
           mainScreen.on(GestureTypes.swipe, this._swipeHandler);
         }
-        // const swipeStart = <View>this._page.getViewById('swipe-start');
-        // console.log('swipeStart:', swipeStart);
-        // if (swipeStart) {
-        //   swipeStart.on(GestureTypes.swipe, (args: SwipeGestureEventData) => {
-        //     console.log(args.direction);
-        //     if (args.direction) {
-
-        //     }
-        //   });
-        // }
       }, 5000);
     }
   }
@@ -424,6 +422,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
               }
             }, ( err ) => {
               this._log.debug( 'error:', err );
+              this._restartAnimeFn();
             } );
           }
         } );
