@@ -126,11 +126,11 @@ export class UserService extends Cache {
 
   public findUser(badgeId: string, allUsers: Array<UserState.IRegisteredUser>, scanned: Array<UserState.IRegisteredUser>) {
     const foundUser = allUsers.find(u => {
-      return u.ticket_reference === badgeId;
+      return u.unique_ticket_url.indexOf(badgeId) > -1;
     });
     if (scanned) {
       const alreadyScanned = scanned.find(u => {
-        return u.ticket_reference === badgeId;
+        return u.unique_ticket_url.indexOf(badgeId) > -1;
       });
       if (alreadyScanned) {
         return null;

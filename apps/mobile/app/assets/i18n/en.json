@@ -10,6 +10,10 @@
     "about": "About",
     "copyright": "2018 ngATL, built by nStudio"
   },
+  "dialogs": {
+    "yes-login": "'Yes, login!'",
+    "no": "No"
+  },
   "general": {
     "need-help": "Need Help?",
     "email-us": "Email us at info@ng-atl.org",
@@ -17,7 +21,7 @@
     "error": "We're sorry an error occurred."
   },
   "user": {
-    "badge-claim": "Would you like to claim this badge?",
+    "badge-claim": "Is this your badge",
     "already-scanned": "You have already scanned this delightful individual."
   },
   "conduct": {

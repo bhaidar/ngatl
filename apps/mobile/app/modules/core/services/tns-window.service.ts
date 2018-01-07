@@ -53,7 +53,7 @@ export class MobileWindowPlatformService {
       }
     });
   }
-  public confirm(msg: string | dialogs.ConfirmOptions): Promise<any> {
+  public confirm(msg: any): Promise<any> {
     return new Promise((resolve, reject) => {
       if (!this._dialogOpened) {
         this._dialogOpened = true;

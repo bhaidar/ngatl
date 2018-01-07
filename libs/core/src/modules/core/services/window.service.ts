@@ -5,35 +5,64 @@ import { Injectable } from '@angular/core';
 export class WindowPlatformService {
   public navigator: any = {};
   public location: any = {};
-  public alert( msg: string ) { };
+  public alert( msg: any ) { };
+  public confirm( msg: any ) { };
+  public setTimeout( 
+    handler: (...args: any[]) => void,
+    timeout?: number
+  ) { return 0; };
+  public clearTimeout( timeoutId: number ) { };
+  public setInterval( 
+    handler: (...args: any[]) => void,
+    ms?: number,
+    ...args: any[]
+  ) { return 0; };
+  public clearInterval( intervalId: number ) { };
 }
 
 @Injectable()
 export class WindowService {
 
   constructor(
-    private _platformWindowService: WindowPlatformService,
+    private _platformWindow: WindowPlatformService,
   ) {
 
   }
 
   public get navigator() {
-    return this._platformWindowService.navigator;
+    return this._platformWindow.navigator;
   }
 
   public get location() {
-    return this._platformWindowService.location;
+    return this._platformWindow.location;
   }
 
-  public alert(msg: string) {
-    return new Promise( ( resolve ) => {
-      this._platformWindowService.alert( msg );
-      resolve();
+  public alert(msg: any): Promise<any> {
+    return new Promise( ( resolve, reject ) => {
+      const result: any = this._platformWindow.alert( msg );
+      console.log('WindowService -- result instanceof Promise', result instanceof Promise);
+      if (result) {
+        console.log('WindowService -- result.constructor.name', result.constructor.name);
+      }
+      if (result && result instanceof Promise) {
+        result.then(resolve, reject);
+      } else {
+        resolve();
+      }
     });
   }
 
-  public confirm(msg: string) {
-    return;
+  public confirm(msg: any): Promise<any> {
+    return new Promise( ( resolve, reject ) => {
+      const result: any = this._platformWindow.confirm( msg );
+      if (result instanceof Promise) {
+        result.then(resolve, reject);
+      } else if (result) {
+        resolve();
+      } else {
+        reject();
+      }
+    });
   }
 
   public btoa(msg: string): string {
@@ -55,20 +84,24 @@ export class WindowService {
     handler: (...args: any[]) => void,
     timeout?: number,
   ): number {
-    return 0;
+    return this._platformWindow.setTimeout(handler, timeout);
   }
 
-  public clearTimeout(timeoutId: number): void {}
+  public clearTimeout(timeoutId: number): void {
+    return this._platformWindow.clearTimeout(timeoutId);
+  }
 
   public setInterval(
     handler: (...args: any[]) => void,
     ms?: number,
     ...args: any[]
   ): number {
-    return 0;
+    return this._platformWindow.setInterval(handler, ms, args);
   }
 
-  public clearInterval(intervalId: number): void {}
+  public clearInterval(intervalId: number): void {
+    return this._platformWindow.clearInterval(intervalId);
+  }
 
   // google analytics stub for web
   public ga(

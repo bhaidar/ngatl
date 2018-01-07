@@ -12,6 +12,7 @@ import { DeviceOrientation } from 'tns-core-modules/ui/enums';
 import { TNSFontIconService } from 'nativescript-ngx-fonticon';
 import { isIOS, device } from 'tns-core-modules/platform';
 import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
+import * as dialogs from 'tns-core-modules/ui/dialogs';
 
 // libs
 import { Store } from '@ngrx/store';
@@ -226,7 +227,12 @@ export class NSAppService {
       this._userService.promptUserClaim$
         .subscribe((user: UserState.IRegisteredUser) => {
           this._win.setTimeout(_ => {
-            (<any>this._win.confirm(this._translate.instant('user.badge-claim'))).then(_ => {
+            let options: dialogs.ConfirmOptions = {
+              message: `${this._translate.instant('user.badge-claim')} ${user.ticket_full_name}?`,
+              okButtonText: this._translate.instant('dialogs.yes-login'),
+              cancelButtonText: this._translate.instant('dialogs.no'),
+            };
+            this._win.confirm(options).then(_ => {
               this._ngZone.run(() => {
                 this._store.dispatch(new UserActions.LoginSuccessAction(user));
               });

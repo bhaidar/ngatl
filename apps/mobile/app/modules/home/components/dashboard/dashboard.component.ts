@@ -307,8 +307,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     // this._win.setTimeout(_ => {
       
 
-      setTimeout(_ => {
-        console.log('timeout fired...');
+      // this._win.setTimeout(_ => {
           ['intro-background', 'intro-logo-bg', 'intro-logo-n', 'intro-logo-ng', 'intro-logo-atl', 'intro-text-one', 'intro-text-two', 'intro-version', 'swipe-start'].forEach(id => {
             const p = this._page.getViewById(id);
             if (p) {
@@ -316,12 +315,12 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
             }
           });
 
-          setTimeout(_ => {
+          this._win.setTimeout(_ => {
             this._ngZone.run(() => {
               this.appService.shownIntro = this.showIntro = true;
             });
           }, 2000);
-        }, 1000);
+        // });
     // }, 1050);
   }
 
@@ -417,7 +416,10 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
                   this._log.debug( key, result[key] );
                 }
                 this._ngZone.run(() => {
-                  this._store.dispatch(new UserActions.FindUserAction({ badgeGuid: result.text }));
+                  if (result.text) {
+                    const badgeGuid = result.text.split('/').slice(-1)[0];
+                    this._store.dispatch(new UserActions.FindUserAction({ badgeGuid }));
+                  }
                 });
               }
             }, ( err ) => {
