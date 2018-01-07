@@ -12,6 +12,7 @@ export interface IStorageKeys {
   LOCALE: string;
   TOKEN: string;
   USER: string;
+  SCANNED: string;
   // TODO: add more (refactor rest of codebase to use these)
 }
 
@@ -19,6 +20,7 @@ export const StorageKeys: IStorageKeys = {
   LOCALE : `${PREFIX_KEY}locale`,
   TOKEN : `${PREFIX_KEY}user-token`,
   USER : `${PREFIX_KEY}current-user`,
+  SCANNED : `${PREFIX_KEY}scanned`,
 };
 
 @Injectable()

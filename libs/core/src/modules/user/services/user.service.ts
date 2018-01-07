@@ -1,6 +1,6 @@
 import { Injectable, } from '@angular/core';
 import { Router } from '@angular/router';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 // libs
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
@@ -41,10 +41,12 @@ export class UserService extends Cache {
   private _preventDefaultSpinnerTimeout: number;
   // control alerts
   private _showingAlert = false;
+  // badge list
+  private _promptUserClaim$: Subject<UserState.IRegisteredUser> = new Subject();
 
   constructor(
     private _store: Store<IAppState>,
-    private _http: Http,
+    private _http: HttpClient,
     private _log: LogService,
     private _storageService: StorageService,
     private _win: WindowService,
@@ -62,7 +64,8 @@ export class UserService extends Cache {
       .select('user')
       .skip(1) // ignore the wiring, only listen to effect chain reaction
       .subscribe((state: UserState.IState) => {
-        this.currentUserId = state.current && state.current.id ? state.current.id : null;
+        // this.currentUserId = state.current && state.current.id ? state.current.id : null;
+        this.currentUserId = state.current && state.current.number ? state.current.number : null;
       });
   }
 
@@ -91,6 +94,10 @@ export class UserService extends Cache {
     }
   }
 
+  public get promptUserClaim$() {
+    return this._promptUserClaim$;
+  }
+
   /**
    * Subscribe to this (public getter below) to customize app behavior
    * whenever an unauthorized attempt to a route is made
@@ -117,28 +124,67 @@ export class UserService extends Cache {
     return this._systemUserApi.create(user);
   }
 
-  public getCurrentUser(): Observable<SystemUser> {
-    let storedUser = this.cache;
-    if ( !storedUser ) {
-      // check if there is a token
-      return this.loadUser();
-    } else {
-      // ensure network is updated to handle auth token headers
-      if ( storedUser.authenticationToken ) {
-        this._network.authToken = storedUser.authenticationToken;
-      } else {
-        // check storage
-        const token = this.token;
-        if ( token ) {
-          this._network.authToken = token;
-        } else {
-          // no valid token, force user to relogin
-          storedUser = null;
-        }
+  public findUser(badgeId: string, allUsers: Array<UserState.IRegisteredUser>, scanned: Array<UserState.IRegisteredUser>) {
+    const foundUser = allUsers.find(u => {
+      return u.ticket_reference === badgeId;
+    });
+    if (scanned) {
+      const alreadyScanned = scanned.find(u => {
+        return u.ticket_reference === badgeId;
+      });
+      if (alreadyScanned) {
+        return null;
       }
     }
+    return foundUser;
+  }
 
-    return Observable.of(storedUser ? new SystemUser(storedUser) : null);
+  public loadAll(): Observable<UserState.ILoadAllResult> {
+    return this._http.get('/assets/users.json')
+      .map((users) => {
+        // this._log.debug(typeof users);
+        // this._log.debug('isarray:', Array.isArray(users));
+        // this._log.debug(users);
+        let scanned = [];
+        const savedScans = this._storageService.getItem(StorageKeys.SCANNED);
+        if (savedScans) {
+          scanned = savedScans.map(u => new UserState.RegisteredUser(u))
+        }
+        return {
+          all: (<Array<any>>users).map(u => new UserState.RegisteredUser(u)),
+          scanned
+        };
+      });
+  }
+
+  public saveScans(scanned: Array<UserState.IRegisteredUser>) {
+    if (scanned) {
+      this._storageService.setItem(StorageKeys.SCANNED, scanned);
+    }
+  }
+
+  public getCurrentUser(): Observable<UserState.IRegisteredUser> {
+    let storedUser = this.cache;
+    // if ( !storedUser ) {
+    //   // check if there is a token
+    //   return this.loadUser();
+    // } else {
+    //   // ensure network is updated to handle auth token headers
+    //   if ( storedUser.authenticationToken ) {
+    //     this._network.authToken = storedUser.authenticationToken;
+    //   } else {
+    //     // check storage
+    //     const token = this.token;
+    //     if ( token ) {
+    //       this._network.authToken = token;
+    //     } else {
+    //       // no valid token, force user to relogin
+    //       storedUser = null;
+    //     }
+    //   }
+    // }
+
+    return Observable.of(storedUser ? new UserState.RegisteredUser(storedUser) : null);
   }
 
   public isAuthenticated(): boolean {
@@ -211,7 +257,7 @@ export class UserService extends Cache {
     return Observable.of(null);
   }
 
-  public persistUser(user: SystemUser) {
+  public persistUser(user: UserState.IRegisteredUser) {// SystemUser) {
     // persist user
     this.cache = user;
   }

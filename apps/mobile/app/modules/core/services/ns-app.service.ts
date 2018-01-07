@@ -15,10 +15,10 @@ import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
 
 // libs
 import { Store } from '@ngrx/store';
+import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
-import { LoggerService } from '@ngatl/api';
-import { WindowService, ProgressIndicatorActions, LogService, ProgressService, IAppState, UserState } from '@ngatl/core';
+import { WindowService, ProgressIndicatorActions, LogService, ProgressService, IAppState, UserState, UserService, UserActions } from '@ngatl/core';
 
 // app
 import { DrawerService } from './drawer.service';
@@ -79,13 +79,15 @@ export class NSAppService {
     private _ngRouter: Router,
     private _ngZone: NgZone,
     private _win: WindowService,
-    private _logger: LoggerService,
+    private _log: LogService,
+    private _translate: TranslateService,
     private _modal: ModalDialogService,
     private _progressService: ProgressService,
     private _drawerService: DrawerService,
+    private _userService: UserService,
   ) {
     // TNSFontIconService - injected to construct it once for entire app
-    this._logger.log('NSAppService constructed!');
+    this._log.debug('NSAppService constructed!');
 
     // initialize core services
     this._initAppVersion();
@@ -202,11 +204,39 @@ export class NSAppService {
   private _initUser() {
     this._store.select( ( s: IAppState ) => s.user )
       .subscribe( (user: UserState.IState) => {
-        console.log( 'current user:', user.current );
+        this._log.debug( 'current user:', user.current );
         if ( user.current ) {
-          console.log( 'name:', user.current.firstName );
+          this._log.debug( 'name:', user.current.ticket_first_name );
+        }
+
+        if (user.all) {
+          this._log.debug('all user count:', user.all.length);
+          // this._log.debug('first user...');
+          // const firstUser = user.all[0];
+          // for (const key in firstUser) {
+          //   this._log.debug(key, firstUser[key]);
+          // }
+        }
+
+        if (user.scanned) {
+          this._log.debug('scanned user count:', user.scanned.length);
         }
       });
+
+      this._userService.promptUserClaim$
+        .subscribe((user: UserState.IRegisteredUser) => {
+          this._win.setTimeout(_ => {
+            (<any>this._win.confirm(this._translate.instant('user.badge-claim'))).then(_ => {
+              this._ngZone.run(() => {
+                this._store.dispatch(new UserActions.LoginSuccessAction(user));
+              });
+            }, _ => {
+              this._ngZone.run(() => {
+                this._store.dispatch(new UserActions.AddUserAction(user));
+              });
+            });
+          }, 500);
+        });
   }
 
   private _initAppVersion() {
@@ -228,15 +258,15 @@ export class NSAppService {
   private _initAppEvents() {
     // For the future - may want to use these
     TNSApplication.on(TNSApplication.resumeEvent, () => {
-      console.log(`TNSApplication.resumeEvent`);
+      this._log.debug(`TNSApplication.resumeEvent`);
     });
     TNSApplication.on(TNSApplication.suspendEvent, () => {
-      console.log(`TNSApplication.suspendEvent`);
+      this._log.debug(`TNSApplication.suspendEvent`);
     });
   }
 
   private _initOrientationHandler() {
-    console.log('initializing orientation handling.');
+    this._log.debug('initializing orientation handling.');
     this._deviceType = device.deviceType;
 
     // set initial orientation
@@ -244,7 +274,7 @@ export class NSAppService {
 
     // handle orientation changes
     TNSApplication.on(TNSApplication.orientationChangedEvent, e => {
-      console.log(`Old: ${this.orientation}; New: ${e.newValue}`);
+      this._log.debug(`Old: ${this.orientation}; New: ${e.newValue}`);
       this._ngZone.run(() => {
         this.orientation = getOrientation();
         // this.cdRef.detectChanges();

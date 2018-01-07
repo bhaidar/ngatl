@@ -6,6 +6,7 @@ import {
   Action,
   Store,
 } from '@ngrx/store';
+import { TranslateService } from '@ngx-translate/core';
 import {
   Actions,
   Effect,
@@ -27,6 +28,7 @@ import {
 } from '../../helpers';
 import { UserService } from '../services/user.service';
 import { UserActions } from '../actions/user.action';
+import { UserState } from '../states';
 import {
   IAppState,
   AppActions,
@@ -34,28 +36,28 @@ import {
 
 @Injectable()
 export class UserEffects extends Analytics {
-  @Effect()
-  checkEmail$: Observable<Action> =
-    this._actions$
-        .ofType(UserActions.ActionTypes.CHECK_EMAIL)
-        .withLatestFrom(this._store)
-        .map(([action, state]: [UserActions.CheckEmailAction, IAppState]) => {
-          let alreadyChecked = false;
-          if ( state.user.reservedEmails ) {
-            // prevents repetitive api calls to check for existence of previously entered email
-            alreadyChecked = !!state.user.reservedEmails.find(
-              email => email === action.payload);
-          }
-          if ( alreadyChecked ) {
-            return new UserActions.ChangedAction({
-              reservedEmails : [...(state.user.reservedEmails || [])],
-              emailAvailable : null,
-              errors : [],
-            });
-          } else {
-            return new UserActions.SearchAction(action.payload);
-          }
-        });
+  // @Effect()
+  // checkEmail$: Observable<Action> =
+  //   this._actions$
+  //       .ofType(UserActions.ActionTypes.CHECK_EMAIL)
+  //       .withLatestFrom(this._store)
+  //       .map(([action, state]: [UserActions.CheckEmailAction, IAppState]) => {
+  //         let alreadyChecked = false;
+  //         if ( state.user.reservedEmails ) {
+  //           // prevents repetitive api calls to check for existence of previously entered email
+  //           alreadyChecked = !!state.user.reservedEmails.find(
+  //             email => email === action.payload);
+  //         }
+  //         if ( alreadyChecked ) {
+  //           return new UserActions.ChangedAction({
+  //             reservedEmails : [...(state.user.reservedEmails || [])],
+  //             emailAvailable : null,
+  //             errors : [],
+  //           });
+  //         } else {
+  //           return new UserActions.SearchAction(action.payload);
+  //         }
+  //       });
 
   // @Effect()
   // searchEmail$: Observable<Action> =
@@ -91,49 +93,49 @@ export class UserEffects extends Analytics {
   //                      err => Observable.of(new UserActions.ApiErrorAction(err)));
   //       });
 
-  @Effect()
-  emailConnect$: Observable<Action> =
-  this._actions$
-    .ofType( UserActions.ActionTypes.EMAIL_CONNECT )
-    .switchMap( ( action: UserActions.EmailConnectAction ) => {
+  // @Effect()
+  // emailConnect$: Observable<Action> =
+  // this._actions$
+  //   .ofType( UserActions.ActionTypes.EMAIL_CONNECT )
+  //   .switchMap( ( action: UserActions.EmailConnectAction ) => {
 
-      // Make sureforgotPaswordSent state is false when submitting the form
-      // Also clear errors so when the Store first fires, we don't get the invaalertlid password
-      this._store.dispatch( new UserActions.ChangedAction( {
-        forgotPasswordSent: false,
-        errors: []
-      } ) );
+  //     // Make sureforgotPaswordSent state is false when submitting the form
+  //     // Also clear errors so when the Store first fires, we don't get the invaalertlid password
+  //     this._store.dispatch( new UserActions.ChangedAction( {
+  //       forgotPasswordSent: false,
+  //       errors: []
+  //     } ) );
 
-      this._progressService.toggleSpinner( true );
-      return this._userService
-        .emailConnect( {
-          email: action.payload.username,
-          password: action.payload.password,
-        } )
-        .map( ( response: any ) => {
-          console.log( 'this._userService.emailConnect' );
-          for ( const key in response ) {
-            console.log( key, response[key] );
-          }
-          if ( response && response.token ) {
-            const token = response.token;
-            this._userService.token = token;
-            if ( response.user ) {
-              const userId = response.user.id;
-              return new UserActions.LoginAction( userId );
-            } else {
-              // extra protection against possible null/undefined
-              // could happen if api call goes out midstream
-              // could use i18n token here but for now, this will help
-              return new UserActions.LoginFailedAction( 'User not found.' );
-            }
-          } else {
-            return new UserActions.LoginFailedAction( 'User not found.' );
-          }
-        } )
-        .catch(
-        err => Observable.of( new UserActions.LoginFailedAction( err ) ) );
-    } );
+  //     this._progressService.toggleSpinner( true );
+  //     return this._userService
+  //       .emailConnect( {
+  //         email: action.payload.username,
+  //         password: action.payload.password,
+  //       } )
+  //       .map( ( response: any ) => {
+  //         console.log( 'this._userService.emailConnect' );
+  //         for ( const key in response ) {
+  //           console.log( key, response[key] );
+  //         }
+  //         if ( response && response.token ) {
+  //           const token = response.token;
+  //           this._userService.token = token;
+  //           if ( response.user ) {
+  //             const userId = response.user.id;
+  //             return new UserActions.LoginAction( userId );
+  //           } else {
+  //             // extra protection against possible null/undefined
+  //             // could happen if api call goes out midstream
+  //             // could use i18n token here but for now, this will help
+  //             return new UserActions.LoginFailedAction( 'User not found.' );
+  //           }
+  //         } else {
+  //           return new UserActions.LoginFailedAction( 'User not found.' );
+  //         }
+  //       } )
+  //       .catch(
+  //       err => Observable.of( new UserActions.LoginFailedAction( err ) ) );
+  //   } );
 
   // @Effect()
   // firebaseConnect$: Observable<Action> =
@@ -191,76 +193,76 @@ export class UserEffects extends Analytics {
   //       .catch(
   //         err => Observable.of(new UserActions.ApiErrorAction(err)));
 
-  @Effect()
-  createFinish$: Observable<any> =
-    this._actions$
-        .ofType(UserActions.ActionTypes.CREATE_FINISH)
-        .switchMap((action: UserActions.CreateFinishAction) =>
-          this._userService
-              .createUser(action.payload)
-              .map(
-            user => {
-              console.log( UserActions.CreateFinishAction );
-              console.log( user );
-              for ( const key in user ) {
-                console.log( key, user[key] );
-              }
-                  this._postingData = null; // just clear since no longer needed
-                  // this._userService.token = user.authenticationToken;
-                  // this.track(Tracking.Actions.SIGN_UP, {
-                  //   user_id : user.id.toString(),
-                  //   sign_up_method : this._signUpMethod || 'Unknown',
-                  // });
-                  return new UserActions.LoginSuccessAction( new SystemUser( {
-                    id: (<any>user).id,
-                    email: user.email,
-                    username: user.email,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                  }));
-                })
-              .catch(
-                err => Observable.of(new UserActions.ApiErrorAction(err))),
-        );
+  // @Effect()
+  // createFinish$: Observable<any> =
+  //   this._actions$
+  //       .ofType(UserActions.ActionTypes.CREATE_FINISH)
+  //       .switchMap((action: UserActions.CreateFinishAction) =>
+  //         this._userService
+  //             .createUser(action.payload)
+  //             .map(
+  //           user => {
+  //             console.log( UserActions.CreateFinishAction );
+  //             console.log( user );
+  //             for ( const key in user ) {
+  //               console.log( key, user[key] );
+  //             }
+  //                 this._postingData = null; // just clear since no longer needed
+  //                 // this._userService.token = user.authenticationToken;
+  //                 // this.track(Tracking.Actions.SIGN_UP, {
+  //                 //   user_id : user.id.toString(),
+  //                 //   sign_up_method : this._signUpMethod || 'Unknown',
+  //                 // });
+  //                 return new UserActions.LoginSuccessAction( new SystemUser( {
+  //                   id: (<any>user).id,
+  //                   email: user.email,
+  //                   username: user.email,
+  //                   firstName: user.firstName,
+  //                   lastName: user.lastName,
+  //                 }));
+  //               })
+  //             .catch(
+  //               err => Observable.of(new UserActions.ApiErrorAction(err))),
+  //       );
 
-  @Effect()
-  login$: Observable<Action> =
-    this._actions$
-        .ofType(UserActions.ActionTypes.LOGIN)
-        .switchMap((action: UserActions.LoginAction) =>
-          this._userService
-              .loadUser(action.payload)
-              .map(
-                user => {
-                  return new UserActions.LoginSuccessAction( user );
-                })
-              .catch(
-                err => Observable.of(new UserActions.LoginFailedAction(err))),
-        );
+  // @Effect()
+  // login$: Observable<Action> =
+  //   this._actions$
+  //       .ofType(UserActions.ActionTypes.LOGIN)
+  //       .switchMap((action: UserActions.LoginAction) =>
+  //         this._userService
+  //             .loadUser(action.payload)
+  //             .map(
+  //               user => {
+  //                 return new UserActions.LoginSuccessAction( user );
+  //               })
+  //             .catch(
+  //               err => Observable.of(new UserActions.LoginFailedAction(err))),
+  //       );
 
   @Effect()
   loginSuccess$: Observable<Action> =
     this._actions$
-        .ofType(UserActions.ActionTypes.LOGIN_SUCCESS)
-        .map((action: UserActions.LoginSuccessAction) => {
-          const user = action.payload;
-          if (user) {
-            this._userService.persistUser(user);
+      .ofType( UserActions.ActionTypes.LOGIN_SUCCESS )
+      .map( ( action: UserActions.LoginSuccessAction ) => {
+        const user = action.payload;
+        if ( user ) {
+          this._userService.persistUser( user );
 
-            this._trackUser(user);
+          // this._trackUser(user);
 
-            // this.track(Tracking.Actions.LOG_IN, {
-            //   user_id : user.id.toString(),
-            // });
+          // this.track(Tracking.Actions.LOG_IN, {
+          //   user_id : user.id.toString(),
+          // });
 
-            return new UserActions.ChangedAction({
-              current : user,
-              errors : [],
-            });
-          } else {
-            return new UserActions.LoginFailedAction(this._userService.translateService.instant('generic.connection-error-lbl'));
-          }
-        });
+          return new UserActions.ChangedAction( {
+            current: user,
+            errors: [],
+          } );
+        } else {
+          return new UserActions.LoginFailedAction( this._userService.translateService.instant( 'generic.connection-error-lbl' ) );
+        }
+      } );
 
   // @Effect()
   // forgotPassword$: Observable<Action> =
@@ -386,55 +388,56 @@ export class UserEffects extends Analytics {
   @Effect()
   logout$: Observable<Action> =
     this._actions$
-        .ofType(UserActions.ActionTypes.LOGOUT)
-        .map((action: UserActions.LogoutAction) => {
-          this._log.debug(UserActions.ActionTypes.LOGOUT);
-          // clear persisted user
-          this._userService.clear();
-          // clear token
-          this._userService.removeToken();
-          // this.track(Tracking.Actions.LOG_OUT, {}); // ensure blank properties are passed
-          return new UserActions.LogoutSuccessAction();
-        });
+      .ofType( UserActions.ActionTypes.LOGOUT )
+      .map( ( action: UserActions.LogoutAction ) => {
+        this._log.debug( UserActions.ActionTypes.LOGOUT );
+        // clear persisted user
+        this._userService.clear();
+        // clear token
+        this._userService.removeToken();
+        // this.track(Tracking.Actions.LOG_OUT, {}); // ensure blank properties are passed
+        return new UserActions.LogoutSuccessAction();
+      } );
 
   @Effect()
   logoutSuccess$: Observable<Action> =
     this._actions$
-        .ofType(UserActions.ActionTypes.LOGOUT_SUCCESS)
-        .map((action: UserActions.LogoutSuccessAction) => {
-          return new UserActions.ChangedAction({
-            current : null,
-            reservedEmails : null,
-            errors : [],
-          });
-        });
+      .ofType( UserActions.ActionTypes.LOGOUT_SUCCESS )
+      .map( ( action: UserActions.LogoutSuccessAction ) => {
+        return new UserActions.ChangedAction( {
+          current: null,
+          scanned: [],
+          reservedEmails: null,
+          errors: [],
+        } );
+      } );
 
   @Effect()
   resetErrors$: Observable<Action> =
-    this._actions$.ofType(UserActions.ActionTypes.RESET_ERRORS).map(
-      (action: UserActions.ResetErrorsAction) =>
-        new UserActions.ChangedAction({
-          errors : [],
-        }),
+    this._actions$.ofType( UserActions.ActionTypes.RESET_ERRORS ).map(
+      ( action: UserActions.ResetErrorsAction ) =>
+        new UserActions.ChangedAction( {
+          errors: [],
+        } ),
     );
 
-  @Effect({ dispatch : false })
+  @Effect( { dispatch: false } )
   unauthorized$ =
     this._actions$
-        .ofType(UserActions.ActionTypes.UNAUTHORIZED)
-        // limit these since many could fire at same time
-        // many different api calls firing simultaneously which may all return 401s
-        .debounce((value) => Promise.resolve(500))
-        .do((action: UserActions.UnauthorizedAction) => {
-          // always hide loader
-          this._progressService.toggleSpinner();
-          // log user out completely
-          this._store.dispatch(new UserActions.LogoutAction());
-          this._log.debug('unauthorized$ fired, about to call this._userService.setUnauthorizedRoute(url)');
-          // use explicity payload or current router.url or root route
-          const url = action.payload || this._router.url || '/';
-          // this._userService.setUnauthorizedRoute(url);
-        });
+      .ofType( UserActions.ActionTypes.UNAUTHORIZED )
+      // limit these since many could fire at same time
+      // many different api calls firing simultaneously which may all return 401s
+      .debounce( ( value ) => Promise.resolve( 500 ) )
+      .do( ( action: UserActions.UnauthorizedAction ) => {
+        // always hide loader
+        this._progressService.toggleSpinner();
+        // log user out completely
+        this._store.dispatch( new UserActions.LogoutAction() );
+        this._log.debug( 'unauthorized$ fired, about to call this._userService.setUnauthorizedRoute(url)' );
+        // use explicity payload or current router.url or root route
+        const url = action.payload || this._router.url || '/';
+        // this._userService.setUnauthorizedRoute(url);
+      } );
 
   /**
    * Handle all other action API_ERROR's here to ensure 401's are handled consistently
@@ -474,68 +477,163 @@ export class UserEffects extends Analytics {
   apiError$: Observable<Action> =
     this._actions$
       .ofType(
-        UserActions.ActionTypes.LOGIN_FAILURE,
-        UserActions.ActionTypes.API_ERROR,
-      )
-      .withLatestFrom(this._store)
-    .map( ( [action, state]: [UserActions.LoginFailedAction | UserActions.ApiErrorAction, IAppState] ) => {
-      console.log( 'UserEffect.apiError$...' );
-      console.log( action.type );
-      if ( action.payload ) {
-        console.log('error:');
-        console.log( action.payload );
-        console.log(action.payload.constructor.name);
-        if ( typeof action.payload === 'object' ) {
-          for ( let key in action.payload ) {
-            console.log( key, action.payload[key] );
+      UserActions.ActionTypes.LOGIN_FAILURE,
+      UserActions.ActionTypes.API_ERROR,
+    )
+      .withLatestFrom( this._store )
+      .map( ( [action, state]: [UserActions.LoginFailedAction | UserActions.ApiErrorAction, IAppState] ) => {
+        console.log( 'UserEffect.apiError$...' );
+        console.log( action.type );
+        if ( action.payload ) {
+          console.log( 'error:' );
+          console.log( action.payload );
+          console.log( action.payload.constructor.name );
+          if ( typeof action.payload === 'object' ) {
+            for ( let key in action.payload ) {
+              console.log( key, action.payload[key] );
+            }
           }
         }
-      }
         this._progressService.toggleSpinner();
         // TODO: alert?
-        return new UserActions.ChangedAction({
-          errors : [
+        return new UserActions.ChangedAction( {
+          errors: [
             action.payload,
-            ...(state.user.errors || [])
+            ...( state.user.errors || [] )
           ],
-        });
-      });
+        } );
+      } );
 
-  @Effect({ dispatch : false })
+  @Effect()
+  initCurrentAndLoadAll$: Observable<Action> =
+    this._actions$
+      .ofType( UserActions.ActionTypes.INIT_CURRENT_LOAD_ALL )
+      .switchMap( ( action: UserActions.InitCurrentAndLoadAllAction ) => {
+
+        this._progressService.toggleSpinner();
+        return this._userService.loadAll()
+          .map( ( result: UserState.ILoadAllResult ) => {// Array<UserState.IRegisteredUser>) => {
+            this._progressService.toggleSpinner( false );
+            return new UserActions.ChangedAction( {
+              current: action.payload,
+              all: result.all,
+              scanned: result.scanned,
+            } );
+          } )
+          .catch( ( err ) => {
+            return Observable.of( new UserActions.LoginFailedAction( err ) );
+          } );
+      } );
+
+  @Effect()
+  findUser$: Observable<Action> =
+    this._actions$
+      .ofType( UserActions.ActionTypes.FIND_USER )
+      .withLatestFrom( this._store )
+      .map( ( [action, state]: [UserActions.FindUserAction, IAppState] ) => {
+
+        // this._progressService.toggleSpinner();
+        const foundUser = this._userService.findUser( action.payload.badgeGuid, state.user.all, state.user.scanned );
+        // this._progressService.toggleSpinner(false);
+        if ( foundUser ) {
+          if ( state.user.current || action.payload.forceAdd ) {
+            return new UserActions.AddUserAction( foundUser );
+          } else {
+            // if they haven't claimed one themselves, prompt if they want to claim it
+            this._userService.promptUserClaim$.next( foundUser );
+            return new AppActions.NoopAction();
+          }
+        } else {
+          // assume user has already been scanned
+          this._win.setTimeout( _ => {
+            this._win.alert( this._translate.instant( 'user.already-scanned' ) );
+          }, 300 );
+          return new AppActions.NoopAction();
+        }
+      } );
+
+  @Effect()
+  addUser$: Observable<Action> =
+    this._actions$
+      .ofType( UserActions.ActionTypes.ADD_USER )
+      .withLatestFrom( this._store )
+      .map( ( [action, state]: [UserActions.AddUserAction, IAppState] ) => {
+
+        // this._progressService.toggleSpinner();
+        const currentScanned = state.user.scanned || [];
+        const alreadyScanned = currentScanned.find(u => u.number === action.payload.number);
+        if (alreadyScanned) {
+          this._win.setTimeout( _ => {
+            this._win.alert( this._translate.instant( 'user.already-scanned' ) );
+          }, 300 );
+          return new AppActions.NoopAction();
+        } else {
+          const scanned = [
+            action.payload,
+            ...currentScanned,
+          ];
+          this._userService.saveScans(scanned);
+          return new UserActions.ChangedAction({
+            scanned
+          })
+        }
+      } );
+
+      @Effect()
+      removeScannedUser$: Observable<Action> =
+        this._actions$
+          .ofType( UserActions.ActionTypes.REMOVE_SCANNED_USER )
+          .withLatestFrom( this._store )
+          .map( ( [action, state]: [UserActions.RemoveScannedUserAction, IAppState] ) => {
+    
+            // this._progressService.toggleSpinner();
+            const currentScanned = [...(state.user.scanned || [])];
+            const index = currentScanned.findIndex(u => u.number === action.payload.number);
+            if (index > -1) {
+              currentScanned.splice(index, 1);
+              this._userService.saveScans(currentScanned);
+              return new UserActions.ChangedAction({
+                scanned: currentScanned
+              })
+            } 
+          } );
+
+  @Effect( { dispatch: false } )
   loaderOff$: Observable<Action> =
     this._actions$
-        .ofType(
-          UserActions.ActionTypes.LOGOUT,
-          UserActions.ActionTypes.LOGIN_FAILURE,
-          UserActions.ActionTypes.UNAUTHORIZED,
-          UserActions.ActionTypes.API_ERROR,
-          UserActions.ActionTypes.CHANGED,
-        )
-        // always hide loader when finally updating user state
-        .do(
-          _ => {
-            this._progressService.toggleSpinner();
-          });
+      .ofType(
+      UserActions.ActionTypes.LOGOUT,
+      UserActions.ActionTypes.LOGIN_FAILURE,
+      UserActions.ActionTypes.UNAUTHORIZED,
+      UserActions.ActionTypes.API_ERROR,
+      UserActions.ActionTypes.CHANGED,
+    )
+      // always hide loader when finally updating user state
+      .do(
+      _ => {
+        this._progressService.toggleSpinner();
+      } );
 
   // Any startWith observables - Should always BE LAST!
   @Effect()
   init$: Observable<Action> =
     this._actions$
-        .ofType(UserActions.ActionTypes.INIT)
-        .startWith(new UserActions.InitAction())
-        .switchMap((action: UserActions.InitAction) =>
-          this._userService
-              .getCurrentUser()
-              .map(
-                user => {
-                  this._trackUser(user);
-                  return new UserActions.ChangedAction({
-                    current : user,
-                  });
-                })
-              .catch(
-                err => Observable.of(new UserActions.ApiErrorAction(err))),
-        );
+      .ofType( UserActions.ActionTypes.INIT )
+      .startWith( new UserActions.InitAction() )
+      .switchMap( ( action: UserActions.InitAction ) =>
+        this._userService
+          .getCurrentUser()
+          .map(
+          user => {
+            this._trackUser( user );
+            return new UserActions.InitCurrentAndLoadAllAction( user );
+            // return new UserActions.ChangedAction({
+            //   current : user,
+            // });
+          } )
+          .catch(
+          err => Observable.of( new UserActions.ApiErrorAction( err ) ) ),
+    );
 
   private _postingData: any; // used with create user chain
 
@@ -546,6 +644,7 @@ export class UserEffects extends Analytics {
     private _actions$: Actions,
     private _router: Router,
     private _win: WindowService,
+    private _translate: TranslateService,
     private _progressService: ProgressService,
     private _userService: UserService,
   ) {
@@ -553,21 +652,21 @@ export class UserEffects extends Analytics {
     this.category = Tracking.Categories.USERS;
   }
 
-  private _trackUser(user: SystemUser) {
+  private _trackUser( user: UserState.IRegisteredUser ) {// SystemUser) {
     if ( user ) {
-      const id = user.id.toString();
+      const id = user.number.toString();// user.id.toString();
       const props: any = {
         // must be a string!!
         // otherwise can end up with errors like:
         // Error in firebase.analytics.logEvent: Error: Cannot convert number to Ljava/lang/String; at index 1
-        user_id : id,
+        user_id: id,
       };
       // track analytics for user
-      this.track(Tracking.Actions.SET_USER_PROPERTIES_USER, props);
-      this.analytics.identify({
-        key : 'user_id',
-        value : id,
-      });
+      this.track( Tracking.Actions.SET_USER_PROPERTIES_USER, props );
+      this.analytics.identify( {
+        key: 'user_id',
+        value: id,
+      } );
     }
   }
 }

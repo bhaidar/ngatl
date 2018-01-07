@@ -91,7 +91,7 @@
     }
 
     .checkbox-layout {
-        margin: 0 0 0 12;
+        padding: 5 0 5 12;
         background-color: $dark-blue;
         .label {
           margin: 0 10;
@@ -137,6 +137,15 @@
         }
     }
 
+    // modal action bar override
+    .action-bar {
+        &.modal-ab {
+            .action-item {
+                opacity:1;
+            }
+        }
+    }
+
     .beacon {
         border-radius: 47;
         background-color:$blue-light;
@@ -144,12 +153,13 @@
         height:100;
     }
 
-    .listing {
-        background-color: $black;
+    .c-bg-dark-blue {
+        background-color:  $dark-blue;
+    }
 
-        &.alt {
-            background-color: $ngatl-red;
-        }
+    .listing {
+        background-color:  $dark-blue;
+
         Label {
             margin: 12 0 12 0;
             text-align: center;

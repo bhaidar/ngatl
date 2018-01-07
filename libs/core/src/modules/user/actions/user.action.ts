@@ -9,6 +9,7 @@ export namespace UserActions {
 
   export interface IUserActions {
     INIT: string;
+    INIT_CURRENT_LOAD_ALL: string;
     EMAIL_SUBSCRIBE: string;
     UPDATE: string;
     LOGIN: string;
@@ -24,6 +25,9 @@ export namespace UserActions {
     CHECK_EMAIL: string;
     CREATE: string;
     CREATE_FINISH: string;
+    FIND_USER: string;
+    ADD_USER: string;
+    REMOVE_SCANNED_USER: string;
     DELETE: string;
     EMAIL_CONNECT: string;
     FIREBASE_CONNECT: string;
@@ -35,6 +39,7 @@ export namespace UserActions {
 
   export const ActionTypes: IUserActions = {
     INIT : type(`${CATEGORY} Init`),
+    INIT_CURRENT_LOAD_ALL: type(`${CATEGORY} Init current and load all`),
     EMAIL_SUBSCRIBE : type(`${CATEGORY} Email Subscribe`),
     UPDATE : type(`${CATEGORY} Update`),
     LOGIN : type(`${CATEGORY} Login`),
@@ -50,6 +55,9 @@ export namespace UserActions {
     CHECK_EMAIL : type(`${CATEGORY} Check Email Availability`),
     CREATE : type(`${CATEGORY} Create`),
     CREATE_FINISH : type(`${CATEGORY} Create Finish`),
+    FIND_USER: type(`${CATEGORY} Find User`),
+    ADD_USER: type(`${CATEGORY} Add User`),
+    REMOVE_SCANNED_USER: type(`${CATEGORY} Remove Scanned User`),
     DELETE : type(`${CATEGORY} Delete`),
     EMAIL_CONNECT : type(`${CATEGORY} Email Connect`),
     FIREBASE_CONNECT : type(`${CATEGORY} Firebase Connect`),
@@ -62,6 +70,11 @@ export namespace UserActions {
   export class InitAction implements Action {
     type = ActionTypes.INIT;
     payload: string = null;
+  }
+
+  export class InitCurrentAndLoadAllAction implements Action {
+    type = ActionTypes.INIT_CURRENT_LOAD_ALL;
+    constructor(public payload: UserState.IRegisteredUser) {}
   }
 
   /**
@@ -100,7 +113,7 @@ export namespace UserActions {
     /**
      * @param payload user object
      */
-    constructor(public payload: SystemUser) {}
+    constructor(public payload: UserState.IRegisteredUser){}// SystemUser) {}
   }
 
   export class LoginFailedAction implements Action {
@@ -222,6 +235,33 @@ export namespace UserActions {
      * @param payload user data
      */
     constructor(public payload: SystemUser) {}
+  }
+
+  export class FindUserAction implements Action {
+    type = ActionTypes.FIND_USER;
+
+    /**
+     * @param payload badge reference guid
+     */
+    constructor(public payload: { badgeGuid: string, forceAdd?: boolean }) {}
+  }
+
+  export class AddUserAction implements Action {
+    type = ActionTypes.ADD_USER;
+
+    /**
+     * @param payload add a user to saved badge scan list
+     */
+    constructor(public payload: UserState.IRegisteredUser) {}
+  }
+
+  export class RemoveScannedUserAction implements Action {
+    type = ActionTypes.REMOVE_SCANNED_USER;
+
+    /**
+     * @param payload user object
+     */
+    constructor(public payload: UserState.IRegisteredUser) {}
   }
 
   export class EmailConnectAction implements Action {

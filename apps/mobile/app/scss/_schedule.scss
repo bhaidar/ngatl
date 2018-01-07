@@ -11,14 +11,14 @@
 }
 
 .schedule-main-content {
-  background-color: #1b286c;
+  background-color: $dark-blue;
   .conf-segmented-bar {
     color: white;
     margin: 12 11 12 11;
   }
   
   SearchBar {
-    background-color: #1b286c;
+    background-color: $dark-blue;
     padding: -1 0 0 0;
   }
   
@@ -31,7 +31,7 @@
     background-color: #000;
 
     &.favorite {
-      background-color: #1b286c;
+      background-color: $ngatl-dark-red;// $dark-blue;
     }
   }
   

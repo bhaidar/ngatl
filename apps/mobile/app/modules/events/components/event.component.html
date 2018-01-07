@@ -19,7 +19,7 @@
       </SegmentedBar>
       <GridLayout row="1" rows="auto, auto, *" (loaded)="onBackgroundLoaded($event)">
           <!-- Search -->
-          <SearchBar row="0" id="search" #search hint="Search" text="" (clear)="clear($event)" (submit)="search$.next(search.text)" (tap)="inputTap($event)" (loaded)="doNotShowAndroidKeyboard($event)" android:height="40"></SearchBar>
+          <SearchBar row="0" id="search" #search hint="Search" text="" (clear)="clear($event)" (submit)="search$.next(search.text)" (loaded)="doNotShowAndroidKeyboard($event)" android:height="40"></SearchBar>
           <!-- toggle faviorites -->
           <StackLayout
             row="1"

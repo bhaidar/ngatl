@@ -32,7 +32,7 @@ import { DrawerService } from '../../../core/services/drawer.service';
 })
 export class HomeComponent implements AfterViewInit, OnInit {
   @ViewChild(RadSideDrawerComponent) public drawerComponent: RadSideDrawerComponent;
-  public user: SystemUser;
+  public user: UserState.IRegisteredUser;// SystemUser;
 
   private _sideDrawerTransition: DrawerTransitionBase;
 

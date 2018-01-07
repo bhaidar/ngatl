@@ -14,11 +14,13 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { SystemUser } from '@ngatl/api';
-import { BaseComponent, UserActions, ModalActions, WindowService, ProgressService } from '@ngatl/core';
+import { BaseComponent, UserActions, LogService, ModalActions, WindowService, ProgressService } from '@ngatl/core';
 
 // nativescript
 import { BarcodeScanner } from 'nativescript-barcodescanner';
+import * as app from 'tns-core-modules/application';
 import { Page } from 'tns-core-modules/ui/page';
+import { GestureTypes, SwipeGestureEventData } from 'tns-core-modules/ui/gestures';
 import { AnimationCurve } from 'tns-core-modules/ui/enums';
 import { View } from 'tns-core-modules/ui/core/view';
 import { Animation, AnimationDefinition } from 'tns-core-modules/ui/animation';
@@ -36,11 +38,20 @@ import { BarcodeComponent } from '../../../shared/components/barcode/barcode.com
 export class DashboardComponent extends BaseComponent implements AfterViewInit, OnInit, OnDestroy {
   public user: any;
   public showIntro = false;
+  public swipeEnable = true;
+  public showSwiper = false;
   private _barcode: BarcodeScanner;
   private _spinnerOn = false;
+  private _beaconView: View;
+  private _beaconAnime: Animation;
+  private _stopAnime: () => void;
+  private _restartAnime: () => void;
+  private _swipeHandler: (args: SwipeGestureEventData) => void;
 
   constructor(
     private _store: Store<any>,
+    private _log: LogService,
+    private _ngZone: NgZone,
     private _vcRef: ViewContainerRef,
     private _win: WindowService,
     private _progressService: ProgressService,
@@ -50,84 +61,23 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     super();
     this._page.backgroundImage = 'res://home-bg';
     this.appService.currentVcRef = this._vcRef;
+    this._stopAnime = this._stopAnimeFn.bind(this);
+    this._restartAnime = this._restartAnimeFn.bind(this);
+    this._swipeHandler = this._swipeHandlerFn.bind(this);
   }
 
-  public setupPage(e) {
-    console.log('setupPage:');
-    console.log(e.object);
-    console.log('screen:');
-    console.log(screen.mainScreen.widthDIPs + 'x' + screen.mainScreen.heightDIPs);
-    const top = <View>this._page.getViewById('badge-top');
-    const bottom = <View>this._page.getViewById('badge-bottom');
-    // console.log('image:', top);
-    // console.log('image width:', top.effectiveWidth);
-
-    bottom.animate({
-      translate: {
-        x: (screen.mainScreen.widthDIPs/2) - 275,
-        y: -600
-      },
-      scale: {
-        x: .6,
-        y: .6,
-      },
-      rotate:3,
-      duration: 1,
-      iterations: 1,
-    }).then(_ => {
-      bottom.animate({
-        translate: {
-          x: (screen.mainScreen.widthDIPs/2) - 275,
-          y: -80
-        },
-        scale: {
-          x: .6,
-          y: .6,
-        },
-        rotate: -8,
-        duration: 800,
-        iterations: 1,
-        curve: AnimationCurve.easeIn// AnimationCurve.spring
-      });
-    });
-
-    top.animate({
-      translate: {
-        x: (screen.mainScreen.widthDIPs/2) - 42,
-        y: -600
-      },
-      scale: {
-        x: .4,
-        y: .4,
-      },
-      rotate: 0,
-      duration: 1,
-      iterations: 1,
-    }).then(_ => {
-      top.animate({
-        translate: {
-          x: (screen.mainScreen.widthDIPs/2) - 42,
-          y: -180
-        },
-        scale: {
-          x: .4,
-          y: .4,
-        },
-        rotate: 18,
-        duration: 800,
-        iterations: 1,
-        curve: AnimationCurve.easeIn,
-      });
-    });
-
-    this._playBeacon();
+  public startBadge(e) {
+    this._log.debug('startBadge:');
+    this._log.debug(screen.mainScreen.widthDIPs + 'x' + screen.mainScreen.heightDIPs);
+    this._initBeacon();
+    this._showBadge();
   }
 
-  private _playBeacon(delay: number = 1000) {
-    if (this._page) {
-      const beacon = <View>this._page.getViewById('beacon');
-      if (beacon) {
-        beacon.animate({
+  private _initBeacon() {
+    return new Promise((resolve) => {
+      this._beaconView = <View>this._page.getViewById('beacon');
+      if (this._beaconView) {
+        this._beaconAnime = this._beaconView.createAnimation({
           translate: {
             x: (screen.mainScreen.widthDIPs/2) - 46,
             y: 260
@@ -139,8 +89,135 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
           opacity:0,
           duration: 1,
           iterations: 1
+        });
+        this._beaconAnime.play().then(_ => {
+          resolve();
+        }, _ => {
+
+        });
+      }
+    });
+  }
+
+  private _showBadge() {
+    const top = <View>this._page.getViewById('badge-top');
+    const bottom = <View>this._page.getViewById('badge-bottom');
+    if (bottom && top) {
+      // this._log.debug('image:', top);
+      // this._log.debug('image width:', top.effectiveWidth);
+  
+      bottom.animate({
+        translate: {
+          x: (screen.mainScreen.widthDIPs/2) - 275,
+          y: -600
+        },
+        scale: {
+          x: .6,
+          y: .6,
+        },
+        rotate:3,
+        duration: 1,
+        iterations: 1,
+      }).then(_ => {
+        bottom.animate({
+          translate: {
+            x: (screen.mainScreen.widthDIPs/2) - 275,
+            y: -80
+          },
+          scale: {
+            x: .6,
+            y: .6,
+          },
+          rotate: -8,
+          duration: 800,
+          iterations: 1,
+          curve: AnimationCurve.easeIn// AnimationCurve.spring
+        });
+      });
+  
+      top.animate({
+        translate: {
+          x: (screen.mainScreen.widthDIPs/2) - 42,
+          y: -600
+        },
+        scale: {
+          x: .4,
+          y: .4,
+        },
+        rotate: 0,
+        duration: 1,
+        iterations: 1,
+      }).then(_ => {
+        top.animate({
+          translate: {
+            x: (screen.mainScreen.widthDIPs/2) - 42,
+            y: -180
+          },
+          scale: {
+            x: .4,
+            y: .4,
+          },
+          rotate: 18,
+          duration: 800,
+          iterations: 1,
+          curve: AnimationCurve.easeIn,
         }).then(_ => {
-          beacon.animate({
+          this._startBeacon();
+        }, _ => {
+
+        });
+      });
+    }
+  }
+
+  private _startBeacon() {
+    app.on(app.suspendEvent, this._stopAnime);
+    app.on(app.resumeEvent, this._restartAnime);
+    this._playBeacon();
+  }
+
+  private _restartAnimeFn() {
+    this._log.debug('_restartAnimeFn!');
+    this._log.debug(this._beaconAnime);
+    if (this._beaconAnime) {
+      this._log.debug(this._beaconAnime.isPlaying);
+      if (this._beaconAnime.isPlaying !== true) {
+        this._initBeacon().then(_ => {
+          this._startBeacon();
+        });
+      }
+    }
+  }
+
+  private _stopAnimeFn() {
+    this._log.debug('_stopAnimeFn!');
+    this._log.debug(this._beaconAnime);
+    // if (this._beaconAnime) {
+    //   this._log.debug(this._beaconAnime.isPlaying);
+    //   if (this._beaconAnime.isPlaying === true) {
+    //     this._beaconAnime.cancel();
+    //   }
+    // }
+  }
+
+  private _playBeacon(delay: number = 1000) {
+    if (this._page) {
+      if (this._beaconView) {
+        this._beaconAnime = this._beaconView.createAnimation({
+          translate: {
+            x: (screen.mainScreen.widthDIPs/2) - 46,
+            y: 260
+          },
+          scale: {
+            x: .5,
+            y: .5,
+          },
+          opacity:0,
+          duration: 1,
+          iterations: 1
+        });
+        this._beaconAnime.play().then(_ => {
+          this._beaconAnime = this._beaconView.createAnimation({
             translate: {
               x: (screen.mainScreen.widthDIPs/2) - 46,
               y: 260
@@ -154,8 +231,9 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
             duration: 500,
             iterations: 1,
             curve: AnimationCurve.easeIn
-          }).then(_ => {
-            beacon.animate({
+          });
+          this._beaconAnime.play().then(_ => {
+            this._beaconAnime = this._beaconView.createAnimation({
               translate: {
                 x: (screen.mainScreen.widthDIPs/2) - 46,
                 y: 260
@@ -168,7 +246,8 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
               duration: 500,
               iterations: 1,
               curve: AnimationCurve.easeOut
-            }).then(_ => {
+            });
+            this._beaconAnime.play().then(_ => {
               this._playBeacon(800);
             }, _ => {
 
@@ -179,6 +258,19 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
         }, _ => {
 
         });
+        // beacon.animate().then(_ => {
+        //   beacon.animate().then(_ => {
+        //     beacon.animate().then(_ => {
+        //       this._playBeacon(800);
+        //     }, _ => {
+
+        //     });
+        //   }, _ => {
+
+        //   });
+        // }, _ => {
+
+        // });
       }
     }
   }
@@ -205,7 +297,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     // this._store.dispatch(new UserActions.CreateAction(this.user));
     const user = new SystemUser( this.user );
     for ( const key in user ) {
-      console.log( key, user[key] );
+      this._log.debug( key, user[key] );
     }
     this._store.dispatch(new UserActions.CreateFinishAction(user));
   }
@@ -213,7 +305,23 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   public enter() {
     // ['intro-background', 'intro-logo-bg', 'intro-logo-n', 'intro-logo-ng', 'intro-logo-atl', 'intro-text-one', 'intro-text-two', 'intro-version'].forEach(id => this._page.getViewById(id).className = id + '-exit');
     // this._win.setTimeout(_ => {
-      this.appService.shownIntro = this.showIntro = true;
+      
+
+      setTimeout(_ => {
+        console.log('timeout fired...');
+          ['intro-background', 'intro-logo-bg', 'intro-logo-n', 'intro-logo-ng', 'intro-logo-atl', 'intro-text-one', 'intro-text-two', 'intro-version', 'swipe-start'].forEach(id => {
+            const p = this._page.getViewById(id);
+            if (p) {
+              p.className = id + '-enter';
+            }
+          });
+
+          setTimeout(_ => {
+            this._ngZone.run(() => {
+              this.appService.shownIntro = this.showIntro = true;
+            });
+          }, 2000);
+        }, 1000);
     // }, 1050);
   }
 
@@ -225,23 +333,62 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
       email: 'user@ngatl.org',
       password: '12341234'
     };
+    if (!this.appService.shownIntro) {
+      this.showSwiper = true;
+    }
   }
 
   ngAfterViewInit() {
     if (!this.appService.shownIntro) {
-      this._win.setTimeout(_ => {
-          ['intro-background', 'intro-logo-bg', 'intro-logo-n', 'intro-logo-ng', 'intro-logo-atl', 'intro-text-one', 'intro-text-two', 'intro-version'].forEach(id => this._page.getViewById(id).className = id + '-enter');
-        }, 1000);
+      console.log('ngAfterViewInit...');
+
+      setTimeout(_ => {
+        // this.swipeEnable = true;
+        console.log('another timeout fired...', this.swipeEnable);
+
+        const mainScreen = <View>this._page.getViewById('intro-elements'); 
+        console.log('mainScreen:', mainScreen);
+        if (mainScreen) {
+          mainScreen.on(GestureTypes.swipe, this._swipeHandler);
+        }
+        // const swipeStart = <View>this._page.getViewById('swipe-start');
+        // console.log('swipeStart:', swipeStart);
+        // if (swipeStart) {
+        //   swipeStart.on(GestureTypes.swipe, (args: SwipeGestureEventData) => {
+        //     console.log(args.direction);
+        //     if (args.direction) {
+
+        //     }
+        //   });
+        // }
+      }, 5000);
     }
   }
 
-  ngOnDestroy() { }
+  private _swipeHandlerFn(args: SwipeGestureEventData) {
+    console.log('mainScreen swipe:', args.direction);
+    if (args.direction) {
+      this.enter();
+      // also turn swipe off to prevent further swipes
+      const mainScreen = <View>this._page.getViewById('intro-elements'); 
+        if (mainScreen) {
+          mainScreen.off(GestureTypes.swipe, this._swipeHandler);
+        }
+    }
+  }
+
+  ngOnDestroy() { 
+    super.ngOnDestroy();
+    app.off(app.suspendEvent, this._stopAnime);
+    app.off(app.resumeEvent, this._restartAnime);
+  }
 
   private _openScanner(requestPerm: boolean = true) {
     this._barcode.hasCameraPermission().then( ( granted: boolean ) => {
-      console.log( 'granted:', granted );
+      this._log.debug( 'granted:', granted );
       if ( granted ) {
         this._barcode.available().then( ( avail: boolean ) => {
+          this._log.debug( 'avail:', avail );
           if ( avail ) {
             this._barcode.scan( {
               formats: 'QR_CODE,PDF_417,EAN_13',   // Pass in of you want to restrict scanning to certain types
@@ -255,23 +402,26 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
               beepOnScan: true,             // Play or Suppress beep on scan (default true)
               torchOn: false,               // launch with the flashlight on (default false)
               closeCallback: () => {
-                console.log( 'Scanner closed' );
+                this._log.debug( 'Scanner closed' );
                 this._barcode = null;
               }, // invoked when the scanner was closed (success or abort)
               resultDisplayDuration: 500,   // Android only, default 1500 (ms), set to 0 to disable echoing the scanned text
               orientation: 'portrait',     // Android only, optionally lock the orientation to either 'portrait' or 'landscape'
               openSettingsIfPermissionWasPreviouslyDenied: true // On iOS you can send the user to the settings app if access was previously denied
             } ).then( ( result ) => {
-              console.log( 'result:', result );
+              this._log.debug( 'result:', result );
               if ( result ) {
-                console.log( 'Scan format: ' + result.format );
-                console.log( 'Scan text:   ' + result.text );
+                this._log.debug( 'Scan format: ' + result.format );
+                this._log.debug( 'Scan text:   ' + result.text );
                 for ( const key in result) {
-                  console.log( key, result[key] );
+                  this._log.debug( key, result[key] );
                 }
+                this._ngZone.run(() => {
+                  this._store.dispatch(new UserActions.FindUserAction({ badgeGuid: result.text }));
+                });
               }
             }, ( err ) => {
-              console.log( 'error:', err );
+              this._log.debug( 'error:', err );
             } );
           }
         } );

@@ -2,7 +2,7 @@ import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 
 // nativescript
 import { NativeScriptModule } from 'nativescript-angular/nativescript.module';
-import { NativeScriptHttpModule } from 'nativescript-angular/http';
+// import { NativeScriptHttpModule } from 'nativescript-angular/http';
 
 // app
 import { CoreModule } from './modules/core/core.module';
@@ -20,7 +20,6 @@ LoopBackConfig.setBaseURL(apiBaseUrl);
 @NgModule({
   imports: [
     NativeScriptModule,
-    NativeScriptHttpModule,
     CoreModule,
     SharedModule,
     AppRoutingModule

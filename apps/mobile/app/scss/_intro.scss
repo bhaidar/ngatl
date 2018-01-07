@@ -28,10 +28,20 @@
       animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
       opacity: 1;
   }
-  100% {
-      transform: scale(0, 0) translate(0, -260);
+  84.9% {
+      transform: scale(.1, .1) translate(0, -260);
       animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
-      opacity: 0;
+      opacity: .1;
+  }
+  85% {
+    transform: scale(.4, .4) translate(0, -200);
+    animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    opacity: .9;
+  }
+  100% {
+    transform: scale(18, 18) translate(0, -60);
+    animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    opacity: 0;
   }
 }
 @keyframes intro-logo-bg-enter {
@@ -269,6 +279,39 @@
   }
 }
 
+@keyframes intro-swipe-intro {
+  0% {
+      opacity: 0;
+      transform: translate(0, 170);
+  }
+  88.25% {
+      opacity: 0;
+      transform: translate(0, 170);
+  }
+  100% {
+      opacity: .9;
+      transform: translate(0, 170);
+  }
+}
+@keyframes intro-swipe-enter {
+  0% {
+      opacity: 0.8;
+      transform: translate(0, 170);
+  }
+  12% {
+      opacity: 0;
+      transform: translate(0, 170);
+  }
+  75.2% {
+      opacity: 0;
+      transform: translate(0, 170);
+  }
+  100% {
+      opacity: 0;
+      transform: translate(0, 170);
+  }
+}
+
 @keyframes intro-version-intro {
   0% {
       opacity: 0;
@@ -300,6 +343,10 @@
       opacity: 0;
       transform: translate(0, 260);
   }
+}
+
+.swipe-text {
+  font-size: 40;
 }
 
 .intro-logo-bg-intro {
@@ -353,6 +400,13 @@
 }
 .intro-version-intro {
   animation-name: intro-version-intro;
+  animation-duration: 4;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+.intro-swipe-intro {
+  animation-name: intro-swipe-intro;
   animation-duration: 4;
   animation-fill-mode: forwards;
   animation-iteration-count: 1;
@@ -485,6 +539,20 @@
   animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 .intro-version-exit {
+  animation-name: fade-exit;
+  animation-duration: 1;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+.intro-swipe-enter {
+  animation-name: intro-swipe-enter;
+  animation-duration: 1.25;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+.intro-swipe-exit {
   animation-name: fade-exit;
   animation-duration: 1;
   animation-fill-mode: forwards;

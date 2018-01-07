@@ -2,11 +2,68 @@ import { SystemUser } from '@ngatl/api';
 
 export namespace UserState {
 
+  export interface IRegisteredUser {
+    number?: number;
+    ticket_created_date?: string;
+    ticket_last_updated_date?: string;
+    ticket?: string;
+    ticket_full_name?: string;
+    ticket_first_name?: string;
+    ticket_last_name?: string;
+    ticket_email?: string;
+    ticket_company_name?: string;
+    ticket_phone_number?: string;
+    event?: string;
+    void_status?: string;
+    discount_status?: string;
+    ticket_reference?: string;
+    tags?: string;
+    unique_ticket_url?: string;
+    unique_order_url?: string;
+    order_reference?: string;
+    order_name?: string;
+    order_email?: string;
+    order_company_name?: string;
+    order_phone_number?: string;
+    order_discount_code?: string;
+    order_ip?: string;
+    order_created_date?: string;
+    order_completed_date?: string;
+    payment_reference?: string;
+    scanned_date?: number;
+    note?: string;
+  }
+
+  export interface ILoadAllResult { 
+    all: Array<UserState.IRegisteredUser>;
+    scanned: Array<UserState.IRegisteredUser>; 
+  }
+
+  export class RegisteredUser implements IRegisteredUser {
+    constructor(model?: any) {
+      for (const key in model) {
+        const cleanKey = key.toLowerCase().replace(/ /ig, '_');
+        const isDate = false;//cleanKey.indexOf('date') > -1;
+        this[cleanKey] = isDate ? new Date(model[key]) : model[key];
+      }
+    }
+  }
+
   export interface IState {
     /**
      * Current Authenticated User
      */
-    current?: SystemUser;
+    current?: IRegisteredUser;//SystemUser;
+    /**
+     * list of all registered users
+     */
+    all?: Array<IRegisteredUser>;
+
+    /**
+     * list of scanned users
+     */
+    scanned?: Array<IRegisteredUser>;
+
     anonymousEmail?: string;
     /**
      * An available email for user to signup with.

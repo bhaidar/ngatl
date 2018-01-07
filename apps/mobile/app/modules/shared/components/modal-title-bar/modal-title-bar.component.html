@@ -1,4 +1,4 @@
-<GridLayout rows="auto" columns="70,*,70" class="action-bar p-10" row="0" col="0">
+<GridLayout rows="auto" columns="70,*,70" class="action-bar p-10 modal-ab" row="0" col="0">
     <Label [text]="closeText" (tap)="close()" class="action-item" backgroundColor="transparent" row="0" col="0"></Label>
     <Label [text]="title" class="action-bar-title-modal text-center" row="0" col="1"></Label>
     <Button [text]="moreIcon | fonticon" (tap)="more()" class="action-item" row="0" col="2" *ngIf="showMoreButton"></Button>

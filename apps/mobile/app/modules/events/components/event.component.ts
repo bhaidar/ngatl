@@ -7,22 +7,23 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { CalendarViewMode, CalendarTransitionMode, CalendarEvent, CalendarEventsViewMode } from 'nativescript-pro-ui/calendar';
 import { Color } from 'tns-core-modules/color';
+import { View } from 'tns-core-modules/ui/core/view';
 import { isIOS, platformNames, device } from 'tns-core-modules/platform';
-import { EventData } from "tns-core-modules/data/observable";
-import { SearchBar } from "tns-core-modules/ui/search-bar";
-import { View } from "tns-core-modules/ui/core/view";
-import { ListView, ItemEventData } from "tns-core-modules/ui/list-view";
+import { EventData } from 'tns-core-modules/data/observable';
+import { SearchBar } from 'tns-core-modules/ui/search-bar';
+import { Page } from 'tns-core-modules/ui/page';
+import { ListView, ItemEventData } from 'tns-core-modules/ui/list-view';
 import { SegmentedBarItem, SegmentedBar } from 'tns-core-modules/ui/segmented-bar';
 import * as utils from "tns-core-modules/utils/utils";
 import { CheckBox } from 'nativescript-checkbox';
 
 // app
 import { LoggerService } from '@ngatl/api';
-import { LocaleState, IAppState, BaseComponent, LogService } from '@ngatl/core';
+import { LocaleState, IAppState, BaseComponent, LogService, WindowService } from '@ngatl/core';
 import { LinearGradient } from '../../../helpers';
 import { NSAppService } from '../../core/services/ns-app.service';
 import { EventActions } from '../actions';
-import { ConferenceViewModel } from './conference.model';
+import { ConferenceViewModel, Session } from './conference.model';
 
 @Component( {
   moduleId: module.id,
@@ -43,6 +44,7 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
   public eventsViewMode = CalendarEventsViewMode.Inline;
   public checkboxValue = false;
   private _checkbox: CheckBox;
+  private _listview: ListView;
 
   constructor(
     private store: Store<any>,
@@ -50,6 +52,8 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
     private ngZone: NgZone,
     private vcRef: ViewContainerRef,
     private appService: NSAppService,
+    private win: WindowService,
+    private page: Page,
   ) {
     super();
     this.appService.currentVcRef = this.vcRef;
@@ -152,6 +156,13 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
     }
   }
 
+  public getListView() {
+    if (!this._listview) {
+      this._listview = this.page.getViewById('sessions-list');
+    }
+    return this._listview || { refresh: () => void {}};
+  }
+
   public toggleFavoritesOnly() {
     this.conferenceModel.favoritesOnly = !this.conferenceModel.favoritesOnly;
     this.checkboxValue = this.conferenceModel.favoritesOnly;
@@ -184,6 +195,13 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
     }
   }
 
+  public toggleItemFav(item: Session) {
+    item.toggleFavourite();
+    this.win.setTimeout(_ => {
+      this.getListView().refresh();
+    }, 2000);
+  }
+
   public changeCellBackground( args: ItemEventData ) {
     if ( args.ios ) {
       var cell = <UITableViewCell>args.ios;
@@ -202,7 +220,7 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
 
   public onBackgroundLoaded( args: EventData ) {
     let background = <View>args.object;
-    let colors = new Array<Color>( new Color( "#333e77" ), new Color( "#1b286c" ) );
+    let colors = new Array<Color>( new Color( "#1d2b41" ), new Color( "#151F2F" ) );
     let orientation = LinearGradient.Orientation.Top_Bottom;
 
     switch ( device.os ) {

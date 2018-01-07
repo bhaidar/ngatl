@@ -16,6 +16,10 @@
     "tweet-us": "Tweet at us",
     "error": "We're sorry an error occurred."
   },
+  "user": {
+    "badge-claim": "Would you like to claim this badge?",
+    "already-scanned": "You have already scanned this delightful individual."
+  },
   "conduct": {
     "title": "Code of Conduct"
   }
