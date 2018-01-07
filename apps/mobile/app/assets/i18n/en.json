@@ -11,7 +11,7 @@
     "copyright": "2018 ngATL, built by nStudio"
   },
   "dialogs": {
-    "yes-login": "'Yes, login!'",
+    "yes-login": "Yes, login!",
     "no": "No"
   },
   "general": {
