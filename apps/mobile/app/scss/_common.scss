@@ -178,6 +178,10 @@ ListView {
 }
 .action-item {
     color: $white;
+
+    &.help {
+        color: $blue-light;
+    }
 }
 .action-image, .action-item {
     opacity: 0;
@@ -229,6 +233,12 @@ ListView {
 }
 .c-bg-gold {
     background-color: $gold;
+}
+.c-light-blue {
+    color: $blue-light;
+}
+.c-bg-light-blue {
+    background-color: $blue-light;
 }
 .c-grey-darker {
     color: $grey-darker;

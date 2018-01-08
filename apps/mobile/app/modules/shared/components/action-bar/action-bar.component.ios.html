@@ -5,7 +5,7 @@
   <ActionItem (tap)="toggleDrawer()">
     <Button [text]="'ion-navicon' | fonticon" class="ion action-item" [class.ready]="ready" [class.intro]="intro"></Button>
   </ActionItem>
-  <ActionItem (tap)="openProfile()" ios.position="right" *ngIf="currentUser">
-    <Button [text]="'ion-person' | fonticon" nsRouterLink="/profile" class="ion action-item" [class.ready]="ready" [class.intro]="intro"></Button>
+  <ActionItem (tap)="openProfile()" ios.position="right">
+    <Button [text]="currentUser ? ('ion-person' | fonticon) : ('ion-ios-help' | fonticon)" nsRouterLink="/profile" class="ion action-item" [class.ready]="ready" [class.intro]="intro" [class.help]="!currentUser"></Button>
   </ActionItem>
 </ActionBar>

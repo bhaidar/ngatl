@@ -534,7 +534,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     this.badgeExit = true;
     this._win.setTimeout(_ => {
       this.showScans = true;
-    }, 500);
+    }, 800);
     // const top = <View>this._page.getViewById('badge-top');
     // const bottom = <View>this._page.getViewById('badge-bottom');
     // if (bottom && top) {
@@ -650,6 +650,9 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
           if (!this.badgeExit && this.scans.length) {
             // first scan! retract the intro badge out of view
             this._retractBadge();
+          } else if (this.badgeExit && this.scans.length === 0) {
+            // replace badge drop
+            this.badgeExit = this.showScans = false;
           }
         }
       });
@@ -720,54 +723,58 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
       this._log.debug( 'granted:', granted );
       if ( granted ) {
         this._barcode.available().then( ( avail: boolean ) => {
-          this._log.debug( 'avail:', avail );
+          this._log.debug( 'avail:', avail ); 
           if ( avail ) {
-            this._barcode.scan( {
-              formats: 'QR_CODE,PDF_417,EAN_13',   // Pass in of you want to restrict scanning to certain types
-              // cancelLabel: 'EXIT. Also, try the volume buttons!', // iOS only, default 'Close'
-              cancelLabel: 'Cancel',
-              cancelLabelBackgroundColor: '#000', // iOS only, default '#000000' (black)
-              message: 'Use the volume buttons for extra light', // Android only, default is 'Place a barcode inside the viewfinder rectangle to scan it.'
-              showFlipCameraButton: true,   // default false
-              preferFrontCamera: false,     // default false
-              showTorchButton: true,        // default false
-              beepOnScan: true,             // Play or Suppress beep on scan (default true)
-              torchOn: false,               // launch with the flashlight on (default false)
-              closeCallback: () => {
-                this._log.debug( 'Scanner closed' );
-                this._barcode = null;
-              }, // invoked when the scanner was closed (success or abort)
-              resultDisplayDuration: 500,   // Android only, default 1500 (ms), set to 0 to disable echoing the scanned text
-              orientation: 'portrait',     // Android only, optionally lock the orientation to either 'portrait' or 'landscape'
-              openSettingsIfPermissionWasPreviouslyDenied: true // On iOS you can send the user to the settings app if access was previously denied
-            } ).then( ( result ) => {
-              this._log.debug( 'result:', result );
-              if ( result ) {
-                this._log.debug( 'Scan format: ' + result.format );
-                this._log.debug( 'Scan text:   ' + result.text );
-                for ( const key in result) {
-                  this._log.debug( key, result[key] );
-                }
-                this._ngZone.run(() => {
-                  if (result.text) {
-                    const badgeGuid = result.text.split('/').slice(-1)[0];
-                    this._store.dispatch(new UserActions.FindUserAction({ badgeGuid }));
-                  }
-                });
-              }
-            }, ( err ) => {
-              this._log.debug( 'error:', err );
-              // this._restartAnimeFn();
-            } );
+            this._launchScanner();
           }
         } );
       } else if (requestPerm) {
         this._barcode.requestCameraPermission().then( () => {
-          this._openScanner(false); // prevent loop on
+          this._launchScanner();
         } );
       } else {
         //this._win.alert( 'Please enable camera permissions in your device settings.' );
       }
+    } );
+  }
+
+  private _launchScanner() {
+    this._barcode.scan( {
+      formats: 'QR_CODE,PDF_417,EAN_13',   // Pass in of you want to restrict scanning to certain types
+      // cancelLabel: 'EXIT. Also, try the volume buttons!', // iOS only, default 'Close'
+      cancelLabel: 'Cancel',
+      cancelLabelBackgroundColor: '#000', // iOS only, default '#000000' (black)
+      message: 'Use the volume buttons for extra light', // Android only, default is 'Place a barcode inside the viewfinder rectangle to scan it.'
+      showFlipCameraButton: true,   // default false
+      preferFrontCamera: false,     // default false
+      showTorchButton: true,        // default false
+      beepOnScan: true,             // Play or Suppress beep on scan (default true)
+      torchOn: false,               // launch with the flashlight on (default false)
+      closeCallback: () => {
+        this._log.debug( 'Scanner closed' );
+        this._barcode = null;
+      }, // invoked when the scanner was closed (success or abort)
+      resultDisplayDuration: 500,   // Android only, default 1500 (ms), set to 0 to disable echoing the scanned text
+      orientation: 'portrait',     // Android only, optionally lock the orientation to either 'portrait' or 'landscape'
+      openSettingsIfPermissionWasPreviouslyDenied: true // On iOS you can send the user to the settings app if access was previously denied
+    } ).then( ( result ) => {
+      this._log.debug( 'result:', result );
+      if ( result ) {
+        this._log.debug( 'Scan format: ' + result.format );
+        this._log.debug( 'Scan text:   ' + result.text );
+        for ( const key in result) {
+          this._log.debug( key, result[key] );
+        }
+        this._ngZone.run(() => {
+          if (result.text) {
+            const badgeGuid = result.text.split('/').slice(-1)[0];
+            this._store.dispatch(new UserActions.FindUserAction({ badgeGuid }));
+          }
+        });
+      }
+    }, ( err ) => {
+      this._log.debug( 'error:', err );
+      // this._restartAnimeFn();
     } );
   }
 }

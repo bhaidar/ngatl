@@ -10,7 +10,7 @@ import { RouterExtensions } from 'nativescript-angular/router';
 
 // app
 // import { LoggerService } from '@ngatl/api';
-import { LogService, IAppState, UserState, BaseComponent } from '@ngatl/core';
+import { LogService, IAppState, UserState, BaseComponent, UserActions, WindowService } from '@ngatl/core';
 
 @Component({
   moduleId: module.id,
@@ -24,9 +24,17 @@ export class ProfileComponent extends BaseComponent implements AfterViewInit, On
   constructor(
     private store: Store<any>, 
     private router: RouterExtensions, 
-    private log: LogService
+    private log: LogService,
+    private win: WindowService,
   ) {
     super();
+  }
+
+  public logout() {
+    this.store.dispatch(new UserActions.LogoutAction());
+    this.win.setTimeout(_ => {
+      this.router.back();
+    }, 300);
   }
 
   ngOnInit() {
