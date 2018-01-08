@@ -1,39 +1,53 @@
 <ngatl-ns-action-bar class="action-bar" [intro]="showIntro" [ready]="appService.shownIntro"> 
 </ngatl-ns-action-bar>
 <GridLayout id="content-root" rows="*" columns="*">
-    <AbsoluteLayout (loaded)="startBadge($event)" (tap)="retractTest()" class="w-full h-full home-bg" row="0" col="0" *ngIf="appService.shownIntro && !showScans">
-        <Image src="res://badge_bottom.png" id="badge-bottom" (tap)="openBarcode()"></Image>
-        <Image src="res://badge_top.png" id="badge-top"></Image>
-        <Label text="" id="beacon" class="beacon"></Label>  
+    <AbsoluteLayout (loaded)="startBadge($event)" class="w-full h-full home-bg" row="0" col="0" *ngIf="appService.shownIntro && !showScans"><!--(tap)="retractTest()"-->
+        <Image src="res://badge_bottom.png" id="badge-bottom" (tap)="openBarcode()" class="badge-bottom-intro" [class.exit]="badgeExit"></Image>
+        <Image src="res://badge_top.png" id="badge-top" class="badge-top-intro" [class.exit]="badgeExit"></Image>
+        <Label text="" id="beacon" class="beacon beacon-pulse" [class.exit]="badgeExit"></Label>  
     </AbsoluteLayout>
 
-    <RadListView *ngIf="showScans" [items]="scans"
-      id="scans-listview"
-      row="0" col="0"
-      class="w-full h-full"
-      backgroundColor="transparent"
-      swipeActions="true"
-      (itemSwipeProgressStarted)="onSwipeCellStarted($event)"
-      (itemSwipeProgressEnded)="onSwipeCellFinished($event)"
-      (itemTap)="onItemTap($event)">
-      <ng-template tkListItemTemplate let-item="item">
-        <StackLayout class="card scanned" (tap)="openItem(item)">
-          <!-- <Image [src]="item.image" horizontalAlignment="center" class="w-full" backgroundColor="#fff"></Image> -->
-          <!-- <StackLayout class="hr-light"></StackLayout> -->
-          <Label [text]="item.ticket_full_name" class="text-center t-30 c-grey-dark font-weight-bold m-t-5"></Label>
-        </StackLayout>
-      </ng-template>
-      <!-- <ng-template tkListViewFooter>
-        <StackLayout>
-            <ToyStoreBanner *ngIf="!isKids"></ToyStoreBanner>
-        </StackLayout>
-      </ng-template> -->
-      <ng-template tkListItemSwipeTemplate rows="auto" columns="*,100">
-        <GridLayout rows="auto" columns="*,100">
-          <Button row="0" col="1" [fontSize]="fontSize" [text]="'item.delete-lbl' | translate" class="swipe-delete-btn" (tap)="remove($event)"></Button>
-        </GridLayout>
-      </ng-template>
-    </RadListView>
+    <GridLayout row="0" col="0" rows="auto,*" columns="*" class="c-bg-transparent" *ngIf="showScans">
+      <GridLayout class="card badge-scan" rows="*" columns="*,auto" (tap)="openBarcode()" row="0" col="0" [touchColor]="'#151F2F,#273957'">
+        <Label [text]="'user.scan-action' | translate" class="label c-white t-20" row="0" col="0"></Label>
+        <Image src="~/assets/images/barcode.png" row="0" col="1" height="50"></Image>
+      </GridLayout>
+      <RadListView [items]="scans"
+        id="scans-listview"
+        row="1" col="0"
+        class="c-bg-transparent"
+        separatorColor="transparent"
+        swipeActions="true"
+        (itemLoading)="disableRowColor($event)"
+        (itemSwipeProgressStarted)="itemSwipeProgressStarted($event)"
+        (itemSwipeProgressEnded)="itemSwipeProgressEnded($event)"
+        (itemSwipeProgressChanged)="itemSwipeProgressChanged($event)"
+        (itemTap)="onItemTap($event)">
+        <ng-template tkListItemTemplate let-item="item">
+          <GridLayout class="card scanned" rows="auto,10,auto" columns="auto,10,*,auto" [class.swiping]="item.swiping" (tap)="openItem(item)">
+            <!-- <Image [src]="item.image" horizontalAlignment="center" class="w-full" backgroundColor="#fff"></Image> -->
+            <Label [text]="'ion-social-angular-outline' | fonticon" class="ion t-30 c-ngatl-red" row="0" col="0"></Label>
+            
+            <!-- <StackLayout class="hr-light"></StackLayout> -->
+            <Label [text]="item.ticket_full_name" class="t-25 c-grey-darker font-weight-bold label" row="0" col="2"></Label>
+            <Label [text]="'ion-ios-compose' | fonticon" class="ion t-40 c-gold label" row="0" col="3"></Label>
+            <Label [text]="item.note" row="2" colSpan="4" class="t-20 c-gold label"></Label>
+            
+          </GridLayout>
+        </ng-template>
+        <!-- <ng-template tkListViewHeader>
+          <GridLayout class="card badge-scan" rows="*" columns="*,auto" (tap)="openBarcode()">
+              <Label [text]="'user.scan-action' | translate" class="label c-white t-20" row="0" col="0"></Label>
+              <Image src="~/assets/images/barcode.png" row="0" col="1" height="50"></Image>
+          </GridLayout>
+        </ng-template> -->
+        <ng-template tkListItemSwipeTemplate rows="auto" columns="*,100">
+          <GridLayout rows="11,*" columns="*,100">
+            <Button row="1" col="1" [fontSize]="fontSize" [text]="'item.delete-lbl' | translate" class="swipe-delete-btn" (tap)="remove($event)"></Button>
+          </GridLayout>
+        </ng-template>
+      </RadListView>
+    </GridLayout>
 
     <GridLayout id="intro-elements" row="0" col="0" *ngIf="!appService.shownIntro">
         <GridLayout id="intro-background" class="intro-background-intro" originY="0"></GridLayout>

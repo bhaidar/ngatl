@@ -10,20 +10,23 @@ import { RouterExtensions } from 'nativescript-angular/router';
 
 // app
 import { moreIcon, backIcon } from '../../helpers';
-import { LoggerService } from '@ngatl/api';
-import { SearchActions } from '../actions';
+import { LogService, IAppState } from '@ngatl/core';
 
 @Component({
   moduleId: module.id,
-  selector: 'ngatl-ns-search-action-bar',
-  templateUrl: 'search-action-bar.component.html'
+  selector: 'ngatl-ns-profile-action-bar',
+  templateUrl: 'profile-action-bar.component.html'
 })
-export class SearchActionBarComponent implements OnInit {
+export class ProfileActionBarComponent implements OnInit {
   public searchInput: string;
   public backIcon: string;
   public moreIcon: string;
 
-  constructor(private store: Store<any>, private router: RouterExtensions, private log: LoggerService) {}
+  constructor(
+    private store: Store<IAppState>, 
+    private router: RouterExtensions, 
+    private log: LogService
+  ) {}
 
   public back() {
     this.router.back();
@@ -31,15 +34,6 @@ export class SearchActionBarComponent implements OnInit {
 
   public more() {
     this.log.info('more!');
-  }
-
-  public onClear() {
-    this.searchInput = '';
-    this.store.dispatch(new SearchActions.ClearAction());
-  }
-
-  public onSubmit() {
-    this.store.dispatch(new SearchActions.SearchAction(this.searchInput));
   }
 
   ngOnInit() {

@@ -32,6 +32,7 @@ export namespace UserState {
     payment_reference?: string;
     scanned_date?: number;
     note?: string;
+    swiping?: boolean;
   }
 
   export interface ILoadAllResult { 

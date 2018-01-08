@@ -16,6 +16,7 @@ import { TNSCheckBoxModule } from 'nativescript-checkbox/angular';
 
 // app
 import { SHARED_COMPONENTS, SHARED_ENTRY_COMPONENTS } from './components';
+import { SHARED_DIRECTIVES } from './directives';
 // import { SHARED_PIPES } from './pipes';
 
 const SHARED_MODULES: any[] = [
@@ -34,13 +35,15 @@ const SHARED_MODULES: any[] = [
   imports: [...SHARED_MODULES],
   declarations: [
     ...SHARED_COMPONENTS,
+    ...SHARED_DIRECTIVES,
     ...SHARED_ENTRY_COMPONENTS
     // ...SHARED_PIPES
   ],
   entryComponents: [...SHARED_ENTRY_COMPONENTS],
   exports: [
     ...SHARED_MODULES,
-    ...SHARED_COMPONENTS
+    ...SHARED_COMPONENTS,
+    ...SHARED_DIRECTIVES,
     // ...SHARED_PIPES
   ],
   schemas: [NO_ERRORS_SCHEMA]

@@ -3,18 +3,18 @@ import { NativeScriptRouterModule } from 'nativescript-angular/router';
 import { Routes } from '@angular/router';
 
 import { SharedModule } from '../shared/shared.module';
-import { SEARCH_COMPONENTS, SearchComponent } from './components';
+import { PROFILE_COMPONENTS, ProfileComponent } from './components';
 
 const routes: Routes = [
   {
     path: '',
-    component: SearchComponent
+    component: ProfileComponent
   }
 ];
 
 @NgModule({
   imports: [SharedModule, NativeScriptRouterModule.forChild(routes)],
-  declarations: [...SEARCH_COMPONENTS],
+  declarations: [...PROFILE_COMPONENTS],
   schemas: [NO_ERRORS_SCHEMA]
 })
-export class SearchModule {}
+export class ProfileModule {}

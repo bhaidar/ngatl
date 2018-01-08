@@ -36,8 +36,6 @@ import { SocketNative } from './services/api-socket.native';
 import { StorageNative } from './services/api-storage.native';
 import { EventEffects } from '../events/effects';
 import { EVENT_PROVIDERS } from '../events/services';
-import { SearchEffects } from '../search/effects';
-import { SEARCH_PROVIDERS } from '../search/services';
 import { SpeakerEffects } from '../speakers/effects';
 import { SPEAKER_PROVIDERS } from '../speakers/services';
 import { SponsorEffects } from '../sponsors/effects';
@@ -93,7 +91,6 @@ export function createTranslateLoader() {
 const SINGLETON_PROVIDERS: any[] = [
   ...CORE_PROVIDERS,
   ...EVENT_PROVIDERS,
-  ...SEARCH_PROVIDERS,
   ...SPEAKER_PROVIDERS,
   ...SPONSOR_PROVIDERS
 ];
@@ -157,7 +154,6 @@ const SINGLETON_PROVIDERS: any[] = [
     StoreModule.forFeature('conference', reducers),
     EffectsModule.forFeature( [
       EventEffects,
-      SearchEffects,
       SpeakerEffects,
       SponsorEffects
     ] )

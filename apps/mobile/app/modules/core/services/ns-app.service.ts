@@ -228,14 +228,19 @@ export class NSAppService {
         .subscribe((user: UserState.IRegisteredUser) => {
           this._win.setTimeout(_ => {
             let options: dialogs.ConfirmOptions = {
-              message: `${this._translate.instant('user.badge-claim')} ${user.ticket_full_name}?`,
+              title: this._translate.instant('dialogs.confirm'),
+              message: `${this._translate.instant('user.badge-claim')} '${user.ticket_full_name}'?`,
               okButtonText: this._translate.instant('dialogs.yes-login'),
               cancelButtonText: this._translate.instant('dialogs.no'),
             };
-            this._win.confirm(options).then(_ => {
-              this._ngZone.run(() => {
-                this._store.dispatch(new UserActions.LoginSuccessAction(user));
-              });
+            this._win.confirm(options, () => {
+              this._log.debug('fancyalert confirm:', user);
+              // fancy alert confirm
+              this._confirmClaim(user); 
+            }).then(_ => {
+              if (!isIOS) {
+                this._confirmClaim(user); 
+              }
             }, _ => {
               this._ngZone.run(() => {
                 this._store.dispatch(new UserActions.AddUserAction(user));
@@ -243,6 +248,12 @@ export class NSAppService {
             });
           }, 500);
         });
+  }
+
+  private _confirmClaim(user: UserState.IRegisteredUser) {
+    this._ngZone.run(() => {
+      this._store.dispatch(new UserActions.LoginSuccessAction(user));
+    });
   }
 
   private _initAppVersion() {

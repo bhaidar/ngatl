@@ -14,8 +14,8 @@ const routes: Routes = [
   },
   // push/pop navigation pages
   {
-    path: 'search',
-    loadChildren: './modules/search/search.module#SearchModule'
+    path: 'profile',
+    loadChildren: './modules/profile/profile.module#ProfileModule'
   },
   {
     path: 'detail',

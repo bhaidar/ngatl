@@ -5,6 +5,6 @@
     <StackLayout orientation="horizontal" horizontalAlignment="center" verticalAlignment="center" padding="2" *ngIf="!title" row="0" col="1">
       <Image src="res://ngatl_top" class="action-image" height="50" [class.ready]="ready" [class.intro]="intro"></Image>
     </StackLayout>
-    <Button [text]="'ion-log-in' | fonticon" (tap)="openSearch()" class="ion action-item" row="0" col="2" [class.ready]="ready" [class.intro]="intro"></Button>
+    <Button [text]="'ion-person' | fonticon" (tap)="openProfile()" class="ion action-item" row="0" col="2" [class.ready]="ready" [class.intro]="intro" *ngIf="currentUser"></Button>
   </GridLayout>
 </ActionBar>

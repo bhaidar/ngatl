@@ -11,8 +11,12 @@
     "copyright": "2018 ngATL, built by nStudio"
   },
   "dialogs": {
+    "confirm": "Confirm",
     "yes-login": "Yes, login!",
-    "no": "No"
+    "yes-delete": "Yes, delete",
+    "cancel": "Cancel",
+    "no": "No",
+    "delete-scan": "Are you sure want to remove the badge scan for"
   },
   "item": {
     "delete-lbl": "Delete"
@@ -25,6 +29,7 @@
   },
   "user": {
     "badge-claim": "Is this your badge",
+    "scan-action": "Scan a badge",
     "already-scanned": "You have already scanned this delightful individual."
   },
   "conduct": {

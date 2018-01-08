@@ -1,6 +1,9 @@
 // angular
 import { Injectable } from '@angular/core';
 
+// app
+import { isObject, isNativeScript } from '../../helpers';
+
 @Injectable()
 export class WindowPlatformService {
   public navigator: any = {};
@@ -40,11 +43,8 @@ export class WindowService {
   public alert(msg: any): Promise<any> {
     return new Promise( ( resolve, reject ) => {
       const result: any = this._platformWindow.alert( msg );
-      console.log('WindowService -- result instanceof Promise', result instanceof Promise);
-      if (result) {
-        console.log('WindowService -- result.constructor.name', result.constructor.name);
-      }
-      if (result && result instanceof Promise) {
+      if (isObject(result) && result.then) {
+        console.log('WindowService -- using result.then promise');
         result.then(resolve, reject);
       } else {
         resolve();
@@ -52,10 +52,10 @@ export class WindowService {
     });
   }
 
-  public confirm(msg: any): Promise<any> {
+  public confirm(msg: any, action?: Function /* used for fancyalerts on mobile*/): Promise<any> {
     return new Promise( ( resolve, reject ) => {
-      const result: any = this._platformWindow.confirm( msg );
-      if (result instanceof Promise) {
+      const result: any = (<any>this._platformWindow).confirm( msg, isNativeScript() ? action : undefined );
+      if (isObject(result) && result.then) {
         result.then(resolve, reject);
       } else if (result) {
         resolve();

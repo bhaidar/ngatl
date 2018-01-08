@@ -23,7 +23,7 @@ npm-debug.log
 app/modules/shared/components/action-bar/action-bar-back.component.html
 app/modules/shared/components/action-bar/action-bar-segment.component.html
 app/modules/shared/components/action-bar/action-bar.component.html
-app/modules/search/components/search-action-bar.component.html
+app/modules/profile/components/profile-action-bar.component.html
 /report/
 .nsbuildinfo
 /temp/

@@ -1,205 +1,281 @@
-    // customized variables
-    @import 'variables';
-    // theme standard rulesets
-    @import '~nativescript-theme-core/scss/index';
+// customized variables
+@import 'variables';
+// theme standard rulesets
+@import '~nativescript-theme-core/scss/index';
 
-    /*pallette chosen from http://www.colourlovers.com/palette/541086/Loyal_Friends*/
+/*pallette chosen from http://www.colourlovers.com/palette/541086/Loyal_Friends*/
 
-    Page, .page {
-        background-color: #EDEDF4;
+Page, .page {
+    background-color: #EDEDF4;
+}
+ListView {
+    background-color: #EDEDF4;
+}
+/*icons*/
+.ion {
+    font-family: Ionicons, ionicons;
+    font-size: 30;
+}
+//override for action-bar colored fonticons
+// .action-bar Button {
+//     color: $white;
+// }
+.gray {
+    color: gray;
+}
+.red {
+    color: red;
+}
+
+@keyframes cell-bg-default {
+    0% {
+        background-color: rgba(255,255,255,1);
     }
-    ListView {
-      background-color: #EDEDF4;
+    100% {
+        background-color: rgba(255,255,255,.4);
     }
-    /*icons*/
-    .ion {
-        font-family: Ionicons, ionicons;
-        font-size: 30;
+}
+@keyframes cell-bg-touch {
+    0% {
+        background-color: rgba(255,255,255,.2);
     }
-    //override for action-bar colored fonticons
-    // .action-bar Button {
-    //     color: $white;
-    // }
-    .gray {
-        color: gray;
+    100% {
+        background-color: rgba(255,255,255,1);
     }
-    .red {
-        color: red;
-    }
-    .sidedrawer-left {
-        background-color: $grey-slate;
-        .sidedrawer-header {
-          padding: 20 16 0 16;
-          background-color: $white;
-    
-          .sidedrawer-header-image {
-            background-color: $white;
-              height: 220;
-              width: 220;
-              border-radius: 0;//60;
-              margin-bottom: 20;
-          }
+}
+
+.sidedrawer-left {
+    background-color: $grey-slate;
+    .sidedrawer-header {
+        padding: 20 16 0 16;
+        background-color: $white;
+
+        .sidedrawer-header-image {
+        background-color: $white;
+            height: 220;
+            width: 220;
+            border-radius: 0;//60;
+            margin-bottom: 20;
         }
-        .sidedrawer-content {
-            background-color: $grey-slate;
-            .sidedrawer-item {
+    }
+    .sidedrawer-content {
+        background-color: $grey-slate;
+        .sidedrawer-item {
+            .sidedrawer-list-item-icon {
+                horizontal-align: center;
+                text-align: center;
+                font-size:28;
+                color: $grey-light;
+            }
+            .sidedrawer-list-item-text {
+                border-width: 0;
+                font-size:20;
+                color: $grey-light;
+            }
+            &.active {
+                background-color: $white;
                 .sidedrawer-list-item-icon {
-                    horizontal-align: center;
-                    text-align: center;
-                    font-size:28;
-                    color: $grey-light;
+                    color: $ngatl-red;
                 }
                 .sidedrawer-list-item-text {
-                    border-width: 0;
-                    font-size:20;
-                    color: $grey-light;
-                }
-                &.active {
-                    background-color: $white;
-                    .sidedrawer-list-item-icon {
-                        color: $ngatl-red;
-                    }
-                    .sidedrawer-list-item-text {
-                        font-weight: bold;
-                        color: $black;
-                    }
+                    font-weight: bold;
+                    color: $black;
                 }
             }
         }
     }
-    /*cards*/
-    .card{
-        margin-top: 10;
-        margin-left: 10;
-        margin-right: 10;
-        padding:10;
-        vertical-align:top;
-        background-color: white;
-        border-width: 1;
-        border-radius: 3;
-        border-color: white;
+}
+/*cards*/
+.card{
+    margin-top: 10;
+    margin-left: 10;
+    margin-right: 10;
+    padding:10;
+    vertical-align:top;
+    background-color: white;
+    border-width: 1;
+    border-radius: 3;
+    border-color: white;
 
-        &.speaker-card {
-            background-color: $ngatl-red;
-        }
-
-        &.scanned {
-            background-color: transparent;
-        }
-    }
-    .hr-light {
-        margin-top: 10;
-    }
-    .social-controls{
-        padding-top: 10;
+    &.speaker-card {
+        background-color: $ngatl-red;
     }
 
-    .checkbox-layout {
-        padding: 5 0 5 12;
-        background-color: $dark-blue;
-        .label {
-          margin: 0 10;
-          color: $gold;
-        }
+    &.scanned {
+        padding: 10 20 10 20;
+        // background-color: rgba(255,255,255,.2);
+        animation-name: cell-bg-default;
+        animation-duration: .3;
+        animation-fill-mode: forwards;
+        animation-iteration-count: 1;
+
+        // &.swiping {
+        //     // background-color: rgba(255,255,255,1);
+        //     animation-name: cell-bg-touch;
+        //     animation-duration: .3;
+        //     animation-fill-mode: forwards;
+        //     animation-iteration-count: 1;
+        // }
     }
 
-    @import 'schedule';
-    @import 'intro';
-
-    .home-bg {
-        background-image: url('res://home-bg');
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
+    &.badge-scan {
+        padding: 10 10 10 20;
+        background-color: $ngatl-blue-translucent;
+        margin-top:15;
+        margin-bottom: 10;
     }
 
-    @keyframes action-image-animate {
-        0% {
-            opacity: 0;
-        }
-        66.25% {
-            opacity: 0;
-        }
-        100% {
-            opacity: 1;
-        }
+    .label {
+        vertical-align: center;
     }
-    .action-item {
-        color: $white;
+}
+.hr-light {
+    margin-top: 10;
+}
+.social-controls{
+    padding-top: 10;
+}
+
+.checkbox-layout {
+    padding: 5 0 5 12;
+    background-color: $dark-blue;
+    .label {
+        margin: 0 10;
+        color: $gold;
     }
-    .action-image, .action-item {
+}
+
+.swipe-delete-btn {
+    background-color:$ngatl-red-translucent;
+    color:$white;
+    // height: 100%;
+    border-radius: 30;
+    width: 60;
+    height: 60;
+    vertical-align: center;
+}
+
+@import 'schedule';
+@import 'intro';
+
+// .home-bg {
+//     background-image: url('res://home-bg');
+//     background-repeat: no-repeat;
+//     background-position: center;
+//     background-size: cover;
+// }
+
+@keyframes action-image-animate {
+    0% {
         opacity: 0;
-        &.ready {
+    }
+    66.25% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+.action-item {
+    color: $white;
+}
+.action-image, .action-item {
+    opacity: 0;
+    &.ready {
+        opacity:1;
+    }
+    &.intro {
+        animation-name: action-image-animate;
+        animation-duration: 1;
+        animation-fill-mode: forwards;
+        animation-iteration-count: 1;
+        animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+}
+
+// modal action bar override
+.action-bar {
+    &.modal-ab {
+        .action-item {
             opacity:1;
         }
-        &.intro {
-            animation-name: action-image-animate;
-            animation-duration: 1;
-            animation-fill-mode: forwards;
-            animation-iteration-count: 1;
-            animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+}
+
+.beacon {
+    border-radius: 47;
+    background-color:$blue-light;
+    width:100;
+    height:100;
+}
+
+.c-dark-blue {
+    color:  $dark-blue;
+}
+.c-bg-dark-blue {
+    background-color:  $dark-blue;
+}
+.c-bg-transparent {
+    background-color: transparent;
+}
+.c-ngatl-red {
+    color: $ngatl-red;
+}
+.c-bg-ngatl-red {
+    background-color: $ngatl-red;
+}
+.c-gold {
+    color: $gold;
+}
+.c-bg-gold {
+    background-color: $gold;
+}
+.c-grey-darker {
+    color: $grey-darker;
+}
+.t-40 {
+    font-size: 40;
+}
+
+.listing {
+    background-color:  $dark-blue;
+
+    Label {
+        margin: 12 0 12 0;
+        text-align: center;
+
+        &.mention {
+            color: $grey-light;
+            font-style: italic;
         }
+
     }
+}
 
-    // modal action bar override
-    .action-bar {
-        &.modal-ab {
-            .action-item {
-                opacity:1;
-            }
-        }
+
+.level, .sponsor-card {
+    background-color: #50e3c2;
+    padding:3;
+    &.level-silver {
+        background-color: #9498a2;
     }
-
-    .beacon {
-        border-radius: 47;
-        background-color:$blue-light;
-        width:100;
-        height:100;
+    &.level-gold {
+        background-color: #ffb720;
     }
+    
+}
 
-    .c-bg-dark-blue {
-        background-color:  $dark-blue;
+.about-bg {
+    background-image: url('~/assets/images/skyline.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.copyright {
+    background-color: #404040;
+
+    .label {
+        color: #696969;
     }
-
-    .listing {
-        background-color:  $dark-blue;
-
-        Label {
-            margin: 12 0 12 0;
-            text-align: center;
-
-            &.mention {
-                color: $grey-light;
-                font-style: italic;
-            }
-
-        }
-    }
-
-
-    .level, .sponsor-card {
-        background-color: #50e3c2;
-        padding:3;
-        &.level-silver {
-            background-color: #9498a2;
-        }
-        &.level-gold {
-            background-color: #ffb720;
-        }
-        
-    }
-
-    .about-bg {
-        background-image: url('~/assets/images/skyline.jpg');
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-    }
-
-    .copyright {
-        background-color: #404040;
-
-        .label {
-            color: #696969;
-        }
-    }
+}

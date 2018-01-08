@@ -595,7 +595,9 @@ export class UserEffects extends Analytics {
               return new UserActions.ChangedAction({
                 scanned: currentScanned
               })
-            } 
+            } else {
+              return new AppActions.NoopAction();
+            }
           } );
 
   @Effect( { dispatch: false } )
