@@ -4,7 +4,7 @@
     <AbsoluteLayout (loaded)="startBadge($event)" class="w-full h-full home-bg" row="0" col="0" *ngIf="appService.shownIntro && !showScans"><!--(tap)="retractTest()"-->
         <Image src="res://badge_bottom.png" id="badge-bottom" (tap)="openBarcode()" class="badge-bottom-intro" [class.exit]="badgeExit"></Image>
         <Image src="res://badge_top.png" id="badge-top" class="badge-top-intro" [class.exit]="badgeExit"></Image>
-        <Label text="" id="beacon" class="beacon beacon-pulse" [class.exit]="badgeExit"></Label>  
+        <Label text="" id="beacon" class="beacon beacon-pulse" [class.exit]="badgeExit" (tap)="openBarcode()"></Label>  
     </AbsoluteLayout>
 
     <GridLayout row="0" col="0" rows="auto,*" columns="*" class="c-bg-transparent" *ngIf="showScans">

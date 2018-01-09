@@ -1,11 +1,14 @@
 <ActionBar class="action-bar" [title]="title">
-  <StackLayout orientation="horizontal" horizontalAlignment="center" verticalAlignment="center" padding="2" [visibility]="title ? 'collapsed' : 'visible'">
+  <StackLayout orientation="horizontal" horizontalAlignment="center" verticalAlignment="center" padding="2" *ngIf="!title">
     <Image src="res://ngatl_top" class="action-image" [class.ready]="ready" [class.intro]="intro"></Image>
   </StackLayout>
   <ActionItem (tap)="toggleDrawer()">
     <Button [text]="'ion-navicon' | fonticon" class="ion action-item" [class.ready]="ready" [class.intro]="intro"></Button>
   </ActionItem>
-  <ActionItem (tap)="openHelpOrProfile()" ios.position="right">
-    <Button [text]="currentUser ? ('ion-person' | fonticon) : ('ion-ios-help' | fonticon)" nsRouterLink="/profile" class="ion action-item" [class.ready]="ready" [class.intro]="intro" [class.help]="!currentUser"></Button>
+  <ActionItem (tap)="openProfile()" ios.position="right" *ngIf="currentUser">
+    <Button [text]="'ion-person' | fonticon" nsRouterLink="/profile" class="ion action-item" [class.ready]="ready" [class.intro]="intro"></Button>
+  </ActionItem>
+  <ActionItem (tap)="openHelp()" ios.position="right" *ngIf="!currentUser">
+    <Button [text]="'ion-ios-help' | fonticon" class="ion action-item help" [class.ready]="ready" [class.intro]="intro"></Button>
   </ActionItem>
 </ActionBar>

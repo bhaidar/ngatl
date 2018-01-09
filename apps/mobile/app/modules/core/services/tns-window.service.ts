@@ -76,8 +76,8 @@ export class MobileWindowPlatformService {
         if (isIOS) {
           TNSFancyAlert.customViewColor = '#b52d31';
           TNSFancyAlert.backgroundViewColor = '#151F2F';
-          TNSFancyAlert.showAnimationType = TNSFancyAlert.SHOW_ANIMATION_TYPES.SlideInFromTop;
-          TNSFancyAlert.hideAnimationType = TNSFancyAlert.HIDE_ANIMATION_TYPES.SlideOutToBottom;
+          TNSFancyAlert.showAnimationType = TNSFancyAlert.SHOW_ANIMATION_TYPES.SlideInFromCenter;
+          TNSFancyAlert.hideAnimationType = TNSFancyAlert.HIDE_ANIMATION_TYPES.SlideOutToCenter;
     
           // TNSFancyAlert.showInfo(null, msg);
           TNSFancyAlert.showCustomButtons([
@@ -127,8 +127,8 @@ export class MobileWindowPlatformService {
         if (isIOS) {
           TNSFancyAlert.customViewColor = '#b52d31';
           TNSFancyAlert.backgroundViewColor = '#151F2F';
-          TNSFancyAlert.showAnimationType = TNSFancyAlert.SHOW_ANIMATION_TYPES.SlideInFromTop;
-          TNSFancyAlert.hideAnimationType = TNSFancyAlert.HIDE_ANIMATION_TYPES.SlideOutToBottom;
+          TNSFancyAlert.showAnimationType = TNSFancyAlert.SHOW_ANIMATION_TYPES.SlideInFromCenter;
+          TNSFancyAlert.hideAnimationType = TNSFancyAlert.HIDE_ANIMATION_TYPES.SlideOutFromCenter;
           TNSFancyAlert.showCustomButtons([
             new TNSFancyAlertButton({
               label: options.cancelButtonText,

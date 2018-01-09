@@ -767,14 +767,18 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
         //   this._log.debug( key, result[key] );
         // }
         // this result handler fires more than once - prevent dupe firing
+        // this._log.debug( 'typeof this._scanResultTimeout', typeof this._scanResultTimeout );
         if (typeof this._scanResultTimeout === 'undefined') {
           this._scanResultTimeout = this._win.setTimeout(_ => {
             this._resetScanTimeout();
           }, 1500);
           this._ngZone.run(() => {
+            this._log.debug('this._ngZone.run result.text:', result.text);
             if (result.text) {
               const badgeGuid = result.text.split('/').slice(-1)[0];
+              this._log.debug('badgeGuid:', badgeGuid);
               this._store.dispatch(new UserActions.FindUserAction({ badgeGuid }));
+              // this._log.debug('this._store.dispatch(new UserActions.FindUserAction with:', badgeGuid);
             }
           });
         }
