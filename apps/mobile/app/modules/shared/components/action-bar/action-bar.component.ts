@@ -5,8 +5,9 @@ import { Store } from '@ngrx/store';
 import { RouterExtensions } from 'nativescript-angular/router';
 
 // app
+import { NSAppService } from '../../../core/services/ns-app.service';
 import { DrawerService } from '../../../core/services/drawer.service';
-import { IAppState, UserState } from '@ngatl/core';
+import { IAppState, UserState, ModalActions } from '@ngatl/core';
 
 @Component({
   moduleId: module.id,
@@ -22,7 +23,8 @@ export class ActionBarComponent {
   constructor(
     private store: Store<IAppState>,
     private router: RouterExtensions, 
-    private drawer: DrawerService
+    private drawer: DrawerService,
+    private appService: NSAppService,
   ) {}
 
   ngOnInit() {
@@ -36,7 +38,16 @@ export class ActionBarComponent {
     this.drawer.toggle();
   }
 
-  public openProfile() {
-    this.router.navigate(['/profile']);
+  public openHelpOrProfile() {
+    if (this.currentUser) {
+      this.router.navigate(['/profile']);
+    } else {
+      // this.store.dispatch(new ModalActions.OpenAction({
+      //   cmpType: HelpComponent,
+      //   modalOptions: {
+      //     viewContainerRef: this.appService.currentVcRef,
+      //   }
+      // }))
+    }
   }
 }

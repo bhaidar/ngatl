@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit, ViewContainerRef } from '@angular/core';
 
 // libs
 import { Store } from '@ngrx/store';
@@ -11,6 +11,7 @@ import { RouterExtensions } from 'nativescript-angular/router';
 // app
 // import { LoggerService } from '@ngatl/api';
 import { LogService, IAppState, UserState, BaseComponent, UserActions, WindowService } from '@ngatl/core';
+import { NSAppService } from '../../core/services/ns-app.service';
 
 @Component({
   moduleId: module.id,
@@ -26,8 +27,11 @@ export class ProfileComponent extends BaseComponent implements AfterViewInit, On
     private router: RouterExtensions, 
     private log: LogService,
     private win: WindowService,
+    private vcRef: ViewContainerRef,
+    private appService: NSAppService,
   ) {
     super();
+    this.appService.currentVcRef = this.vcRef;
   }
 
   public logout() {

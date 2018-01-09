@@ -1,11 +1,11 @@
 <ActionBar class="action-bar" [title]="title">
-  <StackLayout orientation="horizontal" horizontalAlignment="center" verticalAlignment="center" padding="2" *ngIf="!title">
+  <StackLayout orientation="horizontal" horizontalAlignment="center" verticalAlignment="center" padding="2" [visibility]="title ? 'collapsed' : 'visible'">
     <Image src="res://ngatl_top" class="action-image" [class.ready]="ready" [class.intro]="intro"></Image>
   </StackLayout>
   <ActionItem (tap)="toggleDrawer()">
     <Button [text]="'ion-navicon' | fonticon" class="ion action-item" [class.ready]="ready" [class.intro]="intro"></Button>
   </ActionItem>
-  <ActionItem (tap)="openProfile()" ios.position="right">
+  <ActionItem (tap)="openHelpOrProfile()" ios.position="right">
     <Button [text]="currentUser ? ('ion-person' | fonticon) : ('ion-ios-help' | fonticon)" nsRouterLink="/profile" class="ion action-item" [class.ready]="ready" [class.intro]="intro" [class.help]="!currentUser"></Button>
   </ActionItem>
 </ActionBar>
