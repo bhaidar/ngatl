@@ -63,7 +63,7 @@ export class MobileWindowPlatformService {
     return new Promise(resolve => {
       if (!this._dialogOpened && msg) {
         this._dialogOpened = true;
-        console.log('typeof msg:', typeof msg);
+        // console.log('typeof msg:', typeof msg);
         if (msg instanceof Response) {
           try {
             msg = msg.json();
@@ -79,9 +79,21 @@ export class MobileWindowPlatformService {
           TNSFancyAlert.showAnimationType = TNSFancyAlert.SHOW_ANIMATION_TYPES.SlideInFromTop;
           TNSFancyAlert.hideAnimationType = TNSFancyAlert.HIDE_ANIMATION_TYPES.SlideOutToBottom;
     
-          TNSFancyAlert.showInfo(null, msg);
-          this._dialogOpened = false;
-          resolve();
+          // TNSFancyAlert.showInfo(null, msg);
+          TNSFancyAlert.showCustomButtons([
+            new TNSFancyAlertButton({
+              label: 'Ok',
+              action: () => {
+                this._dialogOpened = false;
+                resolve();
+              }
+            })
+          ],
+          SCLAlertViewStyleKit.imageOfWarning(),
+            '#fff',
+            '_______________',
+            msg,
+          );
         } else {
           if (typeof msg === 'string') {
             const options: dialogs.AlertOptions = {
@@ -136,7 +148,7 @@ export class MobileWindowPlatformService {
           ],
             SCLAlertViewStyleKit.imageOfQuestion(),
             '#fff',
-            options.title,
+            options.title || '_______________',
             options.message,  
             options.cancelButtonText, 
           );

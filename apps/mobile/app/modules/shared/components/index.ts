@@ -3,6 +3,7 @@ import { ActionBarComponent } from './action-bar/action-bar.component';
 import { ModalTitleBarComponent } from './modal-title-bar/modal-title-bar.component';
 import { NSWebViewComponent } from './ns-webview/ns-webview.component';
 import { BarcodeComponent } from './barcode/barcode.component';
+import { HelpComponent } from './help/help.component';
 import {
   InlineHtmlComponent,
   InlineHtmlLabelComponent,
@@ -17,6 +18,7 @@ export const SHARED_COMPONENTS: any[] = [
   InlineHtmlComponent,
   InlineHtmlLabelComponent,
   InlineHtmlLinkableLabelComponent,
+  HelpComponent,
 ];
 
-export const SHARED_ENTRY_COMPONENTS: any[] = [NSWebViewComponent, BarcodeComponent];
+export const SHARED_ENTRY_COMPONENTS: any[] = [NSWebViewComponent, BarcodeComponent, HelpComponent];

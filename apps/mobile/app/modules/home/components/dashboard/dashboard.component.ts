@@ -169,6 +169,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   private _spinnerOn = false;
   private _beaconView: View;
   private _beaconAnime: Animation;
+  private _scanResultTimeout: number;
   // private _stopAnime: () => void;
   // private _restartAnime: () => void;
   private _swipeHandler: (args: SwipeGestureEventData) => void;
@@ -758,23 +759,40 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
       orientation: 'portrait',     // Android only, optionally lock the orientation to either 'portrait' or 'landscape'
       openSettingsIfPermissionWasPreviouslyDenied: true // On iOS you can send the user to the settings app if access was previously denied
     } ).then( ( result ) => {
-      this._log.debug( 'result:', result );
+      // this._log.debug( 'result:', result );
       if ( result ) {
-        this._log.debug( 'Scan format: ' + result.format );
+        // this._log.debug( 'Scan format: ' + result.format );
         this._log.debug( 'Scan text:   ' + result.text );
-        for ( const key in result) {
-          this._log.debug( key, result[key] );
+        // for ( const key in result) {
+        //   this._log.debug( key, result[key] );
+        // }
+        // this result handler fires more than once - prevent dupe firing
+        if (typeof this._scanResultTimeout === 'undefined') {
+          this._scanResultTimeout = this._win.setTimeout(_ => {
+            this._resetScanTimeout();
+          }, 1500);
+          this._ngZone.run(() => {
+            if (result.text) {
+              const badgeGuid = result.text.split('/').slice(-1)[0];
+              this._store.dispatch(new UserActions.FindUserAction({ badgeGuid }));
+            }
+          });
         }
-        this._ngZone.run(() => {
-          if (result.text) {
-            const badgeGuid = result.text.split('/').slice(-1)[0];
-            this._store.dispatch(new UserActions.FindUserAction({ badgeGuid }));
-          }
-        });
       }
     }, ( err ) => {
       this._log.debug( 'error:', err );
       // this._restartAnimeFn();
     } );
+  }
+
+  // public testAlert() {
+  //   this._win.alert('testing this out yo, any good with multiple lines?');
+  // }
+
+  private _resetScanTimeout() {
+    if (typeof this._scanResultTimeout !== 'undefined') {
+      this._win.clearTimeout(this._scanResultTimeout);
+      this._scanResultTimeout = undefined;
+    }
   }
 }
