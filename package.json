@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "postinstall": "cd backend; npm install",
+    "postinstall": "cd backend && npm install",
     "start": "npm run start.web",
     "start.web": "ng serve --app=web",
     "start.ios": "cd apps/mobile && tns run ios --emulator --syncAllFiles",
