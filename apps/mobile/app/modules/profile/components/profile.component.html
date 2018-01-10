@@ -1,7 +1,35 @@
 <ngatl-ns-search-action-bar></ngatl-ns-search-action-bar>
-<StackLayout class="page">
-    <Label text="TODO" textWrap="true"></Label>
-    <Button text="Logout" (tap)="logout()"></Button>
-    
-    
-</StackLayout>
+<GridLayout id="example-background" loaded="onBackgroundLoaded">
+  <GridLayout id="form-content" class="form-content" rows="auto,*,auto" loaded="onContentLoaded">
+    <StackLayout class="top-border" row="0"></StackLayout>
+    <ScrollView row="1" class="fields-section">
+      <StackLayout>
+        <!-- Name -->
+        <GridLayout ios:columns="auto,*" android:rows="auto, auto" verticalAlignment="top">
+          <Label text="Name" class="field-title"></Label>
+          <TextField id="name" text="{{currentUser.name}}" class="field" ios:col="1" android:row="1" tap="onTextInputTapped"></TextField>
+        </GridLayout>
+        <StackLayout class="line"></StackLayout>
+        <!-- Email -->
+        <GridLayout ios:columns="auto,*" android:rows="auto, auto" verticalAlignment="top">
+          <Label text="Email" class="field-title"></Label>
+          <TextField id="email" text="{{currentUser.email}}" class="field" ios:col="1" android:row="1" tap="onTextInputTapped"></TextField>
+        </GridLayout>
+        <StackLayout class="line"></StackLayout>
+        <!-- Notes -->
+        <StackLayout>
+          <Label text="Notes" class="field-title" ios:visibility="collapse"></Label>
+          <TextView id="bio" text="{{currentUser.notes}}" android:hint="Add bio" ios:hint="Bio" class="field-multiline" tap="onTextInputTapped"></TextView>
+        </StackLayout>
+        <StackLayout class="line"></StackLayout>
+        <!-- Swiped -->
+        <GridLayout columns="*, auto" verticalAlignment="top">
+          <Label text="Swiped (WTF?)" class="field-switch-title"></Label>
+          <Switch checked="{{currentUser.swiping}}" class="field-switch"></Switch>
+        </GridLayout>
+      </StackLayout>
+    </ScrollView>
+  </GridLayout>
+  <!-- Picture -->
+  <Image id="image" src="res://user" class="profile-picture" tap="onProfilePictureTapped"></Image>
+</GridLayout>
