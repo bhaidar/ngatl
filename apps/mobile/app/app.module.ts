@@ -13,7 +13,7 @@ import { AppComponent } from './app.component';
 // should ideally only be done in ApiService upon construction
 import { LoopBackConfig } from '@ngatl/api';
 
-const apiBaseUrl = 'http://127.0.0.1:3000'; // 'https://ngatl.now.sh';
+const apiBaseUrl = 'http://ngatl.v0id.nl'; // 'https://ngatl.now.sh';
 
 LoopBackConfig.setBaseURL(apiBaseUrl);
 

@@ -225,20 +225,20 @@ export class UserEffects extends Analytics {
   //               err => Observable.of(new UserActions.ApiErrorAction(err))),
   //       );
 
-  // @Effect()
-  // login$: Observable<Action> =
-  //   this._actions$
-  //       .ofType(UserActions.ActionTypes.LOGIN)
-  //       .switchMap((action: UserActions.LoginAction) =>
-  //         this._userService
-  //             .loadUser(action.payload)
-  //             .map(
-  //               user => {
-  //                 return new UserActions.LoginSuccessAction( user );
-  //               })
-  //             .catch(
-  //               err => Observable.of(new UserActions.LoginFailedAction(err))),
-  //       );
+  @Effect()
+  login$: Observable<Action> =
+    this._actions$
+        .ofType(UserActions.ActionTypes.LOGIN)
+        .switchMap((action: UserActions.LoginAction) =>
+          this._userService
+              .claimUser(action.payload, this._currentBadgeId)
+              .map(
+                user => {
+                  return new UserActions.LoginSuccessAction( user );
+                })
+              .catch(
+                err => Observable.of(new UserActions.LoginFailedAction(err))),
+        );
 
   @Effect()
   loginSuccess$: Observable<Action> =
@@ -505,10 +505,10 @@ export class UserEffects extends Analytics {
       } );
 
   @Effect()
-  initCurrentAndLoadAll$: Observable<Action> =
+  initCurrentAndLoadScanned$: Observable<Action> =
     this._actions$
-      .ofType( UserActions.ActionTypes.INIT_CURRENT_LOAD_ALL )
-      .switchMap( ( action: UserActions.InitCurrentAndLoadAllAction ) => {
+      .ofType( UserActions.ActionTypes.INIT_CURRENT_LOAD_SCANNED )
+      .switchMap( ( action: UserActions.InitCurrentAndLoadScannedAction ) => {
 
         this._progressService.toggleSpinner();
         return this._userService.loadAll()
@@ -516,7 +516,7 @@ export class UserEffects extends Analytics {
             this._progressService.toggleSpinner( false );
             return new UserActions.ChangedAction( {
               current: action.payload,
-              all: result.all,
+              // all: result.all,
               scanned: result.scanned,
             } );
           } )
@@ -530,26 +530,36 @@ export class UserEffects extends Analytics {
     this._actions$
       .ofType( UserActions.ActionTypes.FIND_USER )
       .withLatestFrom( this._store )
-      .map( ( [action, state]: [UserActions.FindUserAction, IAppState] ) => {
+      .switchMap( ( [action, state]: [UserActions.FindUserAction, IAppState] ) => {
 
         // this._progressService.toggleSpinner();
-        const foundUser = this._userService.findUser( action.payload.badgeGuid, state.user.all, state.user.scanned );
-        // this._progressService.toggleSpinner(false);
-        if ( foundUser ) {
-          if ( state.user.current || action.payload.forceAdd ) {
-            return new UserActions.AddUserAction( foundUser );
-          } else {
-            // if they haven't claimed one themselves, prompt if they want to claim it
-            this._userService.promptUserClaim$.next( foundUser );
-            return new AppActions.NoopAction();
-          }
-        } else {
-          // assume user has already been scanned
-          this._win.setTimeout( _ => {
-            this._win.alert( this._translate.instant( 'user.already-scanned' ) );
-          }, 300 );
-          return new AppActions.NoopAction();
-        }
+        this._currentBadgeId = action.payload.badgeGuid;
+        return this._userService.findUser( action.payload.badgeGuid, state.user.scanned )
+          .map((foundUser) => {
+            // this._progressService.toggleSpinner(false);
+            if ( foundUser ) {
+              if ( state.user.current || action.payload.forceAdd ) {
+                // just add to logged in users scanned list
+                return new UserActions.AddUserAction( foundUser );
+              } else if (!foundUser.claimed) {
+                // if they haven't claimed one themselves, prompt if they want to claim it
+                this._userService.promptUserClaim$.next( foundUser );
+                return new AppActions.NoopAction();
+              } else {
+                // TODO: check if sponsor, if so the prompt them to enter pin code to verify they are a valid member of the sponsor group
+                this._userService.promptSponsorPin$.next( foundUser );
+                return new AppActions.NoopAction();
+              }
+            } else {
+              // assume user has already been scanned
+              this._win.setTimeout( _ => {
+                this._win.alert( this._translate.instant( 'user.already-scanned' ) );
+              }, 300 );
+              return new AppActions.NoopAction();
+            }
+          })
+          .catch((err) => Observable.of(new UserActions.LoginFailedAction(err)));
+        
       } );
 
   @Effect()
@@ -557,26 +567,31 @@ export class UserEffects extends Analytics {
     this._actions$
       .ofType( UserActions.ActionTypes.ADD_USER )
       .withLatestFrom( this._store )
-      .map( ( [action, state]: [UserActions.AddUserAction, IAppState] ) => {
+      .switchMap( ( [action, state]: [UserActions.AddUserAction, IAppState] ) => {
 
-        // this._progressService.toggleSpinner();
-        const currentScanned = state.user.scanned || [];
-        const alreadyScanned = currentScanned.find(u => u.number === action.payload.number);
-        if (alreadyScanned) {
-          this._win.setTimeout( _ => {
-            this._win.alert( this._translate.instant( 'user.already-scanned' ) );
-          }, 300 );
-          return new AppActions.NoopAction();
-        } else {
-          const scanned = [
-            action.payload,
-            ...currentScanned,
-          ];
-          this._userService.saveScans(scanned);
-          return new UserActions.ChangedAction({
-            scanned
-          })
-        }
+        return this._userService.loadUser(action.payload.attendee.id)
+          .map( ( result: UserState.IRegisteredUser ) => {
+            const currentScanned = state.user.scanned || [];
+            const alreadyScanned = currentScanned.find(u => u.id === result.id);
+            if (alreadyScanned) {
+              this._win.setTimeout( _ => {
+                this._win.alert( this._translate.instant( 'user.already-scanned' ) );
+              }, 300 );
+              return new AppActions.NoopAction();
+            } else {
+              const scanned = [
+                result,
+                ...currentScanned,
+              ];
+              this._userService.saveScans(scanned);
+              return new UserActions.ChangedAction({
+                scanned
+              });
+            }
+          } )
+          .catch( ( err ) => {
+            return Observable.of( new AppActions.NoopAction() );
+          } );
       } );
 
       @Effect()
@@ -588,7 +603,7 @@ export class UserEffects extends Analytics {
     
             // this._progressService.toggleSpinner();
             const currentScanned = [...(state.user.scanned || [])];
-            const index = currentScanned.findIndex(u => u.number === action.payload.number);
+            const index = currentScanned.findIndex(u => u.id === action.payload.id);
             if (index > -1) {
               currentScanned.splice(index, 1);
               this._userService.saveScans(currentScanned);
@@ -628,7 +643,7 @@ export class UserEffects extends Analytics {
           .map(
           user => {
             this._trackUser( user );
-            return new UserActions.InitCurrentAndLoadAllAction( user );
+            return new UserActions.InitCurrentAndLoadScannedAction( user );
             // return new UserActions.ChangedAction({
             //   current : user,
             // });
@@ -638,6 +653,7 @@ export class UserEffects extends Analytics {
     );
 
   private _postingData: any; // used with create user chain
+  private _currentBadgeId: string;
 
   constructor(
     public analytics: AnalyticsService,
@@ -656,7 +672,7 @@ export class UserEffects extends Analytics {
 
   private _trackUser( user: UserState.IRegisteredUser ) {// SystemUser) {
     if ( user ) {
-      const id = user.number.toString();// user.id.toString();
+      const id = user.id;
       const props: any = {
         // must be a string!!
         // otherwise can end up with errors like:

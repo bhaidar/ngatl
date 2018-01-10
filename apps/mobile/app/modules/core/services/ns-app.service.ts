@@ -10,16 +10,17 @@ import * as TNSApplication from 'tns-core-modules/application';
 import * as TNSUtils from 'tns-core-modules/utils/utils';
 import { DeviceOrientation } from 'tns-core-modules/ui/enums';
 import { TNSFontIconService } from 'nativescript-ngx-fonticon';
-import { isIOS, device } from 'tns-core-modules/platform';
+import { isIOS, device, isAndroid } from 'tns-core-modules/platform';
 import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
 import * as dialogs from 'tns-core-modules/ui/dialogs';
+import * as permissions from 'nativescript-permissions';
 
 // libs
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
-import { WindowService, ProgressIndicatorActions, LogService, ProgressService, IAppState, UserState, UserService, UserActions } from '@ngatl/core';
+import { WindowService, ProgressIndicatorActions, LogService, ProgressService, IAppState, UserState, UserService, UserActions, IPromptOptions } from '@ngatl/core';
 
 // app
 import { DrawerService } from './drawer.service';
@@ -202,21 +203,79 @@ export class NSAppService {
     });
   }
 
+  /**
+   * consistent permission handling
+   */
+  public handlePermission(
+    androidPermissions: Array<any>,
+    explanation?: string,
+  ): Promise<boolean> {
+    this._log.debug('handlePermission');
+    return new Promise((
+      resolve,
+      reject,
+    ) => {
+      if ( isAndroid ) {
+        const deviceSdk = parseInt(device.sdkVersion, 10);
+        if ( deviceSdk >= 23 ) {
+          permissions.requestPermission(androidPermissions, explanation)
+                     .then(() => {
+                       this._log.debug('Permissions granted!');
+                       this._ngZone.run(() => {
+                         resolve(true);
+                       });
+                     }, () => {
+                       reject();
+                     })
+                     .catch(() => {
+                       this._log.debug('Uh oh, no permissions - plan B time!');
+                       reject();
+                     });
+        } else {
+          this._ngZone.run(() => {
+            // lower SDK versions will grant permission from AndroidManifest file
+            resolve(true);
+          });
+        }
+      } else {
+        const status = PHPhotoLibrary.authorizationStatus();
+        // this.log.debug('PHPhotoLibrary.authorizationStatus:', status);
+        // this.log.debug('PHAuthorizationStatus.Authorized:', PHAuthorizationStatus.Authorized);
+        // this.log.debug('PHAuthorizationStatus.Denied:', PHAuthorizationStatus.Denied);
+        // this.log.debug('PHAuthorizationStatus.NotDetermined:', PHAuthorizationStatus.NotDetermined);
+        // this.log.debug('PHAuthorizationStatus.Restricted:', PHAuthorizationStatus.Restricted);
+        if ( status === PHAuthorizationStatus.Authorized ) {
+          this._log.debug('Permissions granted!');
+          this._ngZone.run(() => {
+            resolve(true);
+          });
+        } else if ( status === PHAuthorizationStatus.Denied ) {
+          reject();
+        } else if ( status === PHAuthorizationStatus.NotDetermined ) {
+          // request
+          PHPhotoLibrary.requestAuthorization((status) => {
+            if ( status === PHAuthorizationStatus.Authorized ) {
+              this._ngZone.run(() => {
+                resolve(true);
+              });
+            } else {
+              reject();
+            }
+          });
+        } else if ( status === PHAuthorizationStatus.Restricted ) {
+          // usually won't happen
+          reject();
+        }
+      }
+    });
+  }
+
   private _initUser() {
     this._store.select( ( s: IAppState ) => s.user )
       .subscribe( (user: UserState.IState) => {
         this._log.debug( 'current user:', user.current );
         if ( user.current ) {
-          this._log.debug( 'name:', user.current.ticket_first_name );
-        }
-
-        if (user.all) {
-          this._log.debug('all user count:', user.all.length);
-          // this._log.debug('first user...');
-          // const firstUser = user.all[0];
-          // for (const key in firstUser) {
-          //   this._log.debug(key, firstUser[key]);
-          // }
+          this._log.debug( 'name:', user.current.name );
         }
 
         if (user.scanned) {
@@ -225,11 +284,11 @@ export class NSAppService {
       });
 
       this._userService.promptUserClaim$
-        .subscribe((user: UserState.IRegisteredUser) => {
+        .subscribe((user: UserState.IClaimStatus) => {
           this._win.setTimeout(_ => {
             let options: dialogs.ConfirmOptions = {
               title: this._translate.instant('dialogs.confirm'),
-              message: `${this._translate.instant('user.badge-claim')} '${user.ticket_full_name}'?`,
+              message: `${this._translate.instant('user.badge-claim')} '${user.attendee.name}'?`,
               okButtonText: this._translate.instant('dialogs.yes-login'),
               cancelButtonText: this._translate.instant('dialogs.no'),
             };
@@ -248,11 +307,34 @@ export class NSAppService {
             });
           }, 500);
         });
+
+      this._userService.promptSponsorPin$
+        .subscribe((user: UserState.IClaimStatus) => {
+          this._win.setTimeout(_ => {
+            let options: IPromptOptions = {
+              action: () => {
+                this._log.debug('fancyalert confirm:', user);
+                // fancy alert confirm
+                this._confirmClaim(user); 
+              },
+              placeholder: this._translate.instant('dialogs.pin-number'),
+              initialValue: '',
+              msg: `${this._translate.instant('user.confirm-sponsor-pin')}`,
+              okButtonText: this._translate.instant('dialogs.confirm'),
+              cancelButtonText: this._translate.instant('dialogs.no'),
+            };
+            this._win.prompt(options).then(_ => {
+              // action handled in options
+            }, _ => {
+
+            });
+          }, 500);
+        });
   }
 
-  private _confirmClaim(user: UserState.IRegisteredUser) {
+  private _confirmClaim(user: UserState.IClaimStatus) {
     this._ngZone.run(() => {
-      this._store.dispatch(new UserActions.LoginSuccessAction(user));
+      this._store.dispatch(new UserActions.LoginAction(user));
     });
   }
 

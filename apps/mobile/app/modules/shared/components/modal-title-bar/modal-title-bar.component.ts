@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 // libs
 import { Store } from '@ngrx/store';
+import { ModalActions } from '@ngatl/core';
 
 // nativescript
 import { ModalDialogParams } from 'nativescript-angular/directives/dialogs';
@@ -20,6 +21,7 @@ export class ModalTitleBarComponent implements OnInit {
   @Input() closeText: string;
   @Input() showMoreButton: boolean;
   @Output() moreAction: EventEmitter<any> = new EventEmitter();
+  @Input() customClose: () => void;
 
   public moreIcon: string;
 
@@ -38,6 +40,12 @@ export class ModalTitleBarComponent implements OnInit {
   }
 
   public close() {
-    this.params.closeCallback();
+    if ( this.customClose ) {
+      this.customClose();
+    } else {
+      this._store.dispatch(new ModalActions.CloseAction({
+        params : this.params,
+      }));
+    }
   }
 }

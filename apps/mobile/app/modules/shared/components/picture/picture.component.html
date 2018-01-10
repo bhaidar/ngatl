@@ -1,0 +1,16 @@
+
+<GridLayout
+  [class.picture-none]="!selectedImage"
+  [class.picture-upload-box]="selectedImage"
+  horizontalAlignment="left"
+  (tap)="choose()">
+
+  <Image
+    stretch="aspectFit"
+    [class.placeholder]="!selectedImage"
+    [class.profile-image]="selectedImage"
+    verticalAlignment="center"
+    horizontalAlignment="center"
+    [src]="selectedImage || 'res://uploadpic'">
+  </Image>
+</GridLayout>

@@ -65,7 +65,7 @@ export function platformLangFactory() {
 //   return TNSFirebase;
 // }
 
-NetworkCommonService.API_URL = '';
+NetworkCommonService.API_URL = 'http://ngatl.v0id.nl/api/v1/';
 
 /**
  * DEBUGGING

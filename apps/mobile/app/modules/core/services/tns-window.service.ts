@@ -7,7 +7,7 @@ import { device, isIOS } from 'tns-core-modules/platform';
 import * as timer from 'tns-core-modules/timer';
 
 // app
-import { isString } from '@ngatl/core';
+import { isString, IPromptOptions } from '@ngatl/core';
 
 declare var SCLAlertViewStyleKit;
 
@@ -74,10 +74,7 @@ export class MobileWindowPlatformService {
         }
 
         if (isIOS) {
-          TNSFancyAlert.customViewColor = '#b52d31';
-          TNSFancyAlert.backgroundViewColor = '#151F2F';
-          TNSFancyAlert.showAnimationType = TNSFancyAlert.SHOW_ANIMATION_TYPES.SlideInFromCenter;
-          TNSFancyAlert.hideAnimationType = TNSFancyAlert.HIDE_ANIMATION_TYPES.SlideOutToCenter;
+          this._defaultColors();
     
           // TNSFancyAlert.showInfo(null, msg);
           TNSFancyAlert.showCustomButtons([
@@ -125,10 +122,7 @@ export class MobileWindowPlatformService {
         }
 
         if (isIOS) {
-          TNSFancyAlert.customViewColor = '#b52d31';
-          TNSFancyAlert.backgroundViewColor = '#151F2F';
-          TNSFancyAlert.showAnimationType = TNSFancyAlert.SHOW_ANIMATION_TYPES.SlideInFromCenter;
-          TNSFancyAlert.hideAnimationType = TNSFancyAlert.HIDE_ANIMATION_TYPES.SlideOutFromCenter;
+          this._defaultColors();
           TNSFancyAlert.showCustomButtons([
             new TNSFancyAlertButton({
               label: options.cancelButtonText,
@@ -165,6 +159,63 @@ export class MobileWindowPlatformService {
       }
     });
   }
+  public prompt(options: IPromptOptions) {
+    return new Promise((resolve, reject) => {
+      if (!this._dialogOpened && msg) {
+        this._dialogOpened = true;
+
+        if (isIOS) {
+          this._defaultColors();
+
+          TNSFancyAlert.showTextField(
+            options.placeholder,
+            options.initialValue,
+            new TNSFancyAlertButton({
+              label: options.okButtonText,
+              action: (value: any) => {
+                this._dialogOpened = false;
+                if (value) {
+                  console.log(`User entered ${value}`);
+                  options.action(value);
+                  resolve(value);
+                } else {
+                  reject();
+                }
+              }
+            }),
+            SCLAlertViewStyleKit.imageOfWarning(),
+            '#fff',
+            '_______________',
+            options.msg,
+          );
+        } else {    
+          let opt: dialogs.PromptOptions = {
+            title: options.okButtonText,
+            message: options.msg,
+            defaultText: options.initialValue || '',
+            inputType: dialogs.inputType.text,
+            okButtonText: options.okButtonText,
+            cancelButtonText: options.cancelButtonText
+          };
+          dialogs.prompt(opt).then((result: any) => {
+            this._dialogOpened = false;
+            if (result && result.text) {
+              console.log(`User entered ${result.text}`);
+              options.action(result.text);
+              resolve(result.text);
+            } else {
+              reject();
+            }
+          }, () => {
+            // canceled
+            this._dialogOpened = false;
+            reject();
+          });
+          
+        }
+      }
+    });    
+  } 
   public open(...args: Array<any>) {
     // might have this open a WebView modal
     return null;
@@ -180,5 +231,11 @@ export class MobileWindowPlatformService {
   }
   public clearInterval(intervalId: number): void {
     timer.clearInterval(intervalId);
+  }
+  private _defaultColors() {
+    TNSFancyAlert.customViewColor = '#b52d31';
+    TNSFancyAlert.backgroundViewColor = '#151F2F';
+    TNSFancyAlert.showAnimationType = TNSFancyAlert.SHOW_ANIMATION_TYPES.SlideInFromCenter;
+    TNSFancyAlert.hideAnimationType = TNSFancyAlert.HIDE_ANIMATION_TYPES.SlideOutFromCenter;
   }
 }

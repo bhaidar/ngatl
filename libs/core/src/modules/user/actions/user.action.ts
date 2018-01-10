@@ -9,7 +9,7 @@ export namespace UserActions {
 
   export interface IUserActions {
     INIT: string;
-    INIT_CURRENT_LOAD_ALL: string;
+    INIT_CURRENT_LOAD_SCANNED: string;
     EMAIL_SUBSCRIBE: string;
     UPDATE: string;
     LOGIN: string;
@@ -39,7 +39,7 @@ export namespace UserActions {
 
   export const ActionTypes: IUserActions = {
     INIT : type(`${CATEGORY} Init`),
-    INIT_CURRENT_LOAD_ALL: type(`${CATEGORY} Init current and load all`),
+    INIT_CURRENT_LOAD_SCANNED: type(`${CATEGORY} Init current and load scanned`),
     EMAIL_SUBSCRIBE : type(`${CATEGORY} Email Subscribe`),
     UPDATE : type(`${CATEGORY} Update`),
     LOGIN : type(`${CATEGORY} Login`),
@@ -72,8 +72,8 @@ export namespace UserActions {
     payload: string = null;
   }
 
-  export class InitCurrentAndLoadAllAction implements Action {
-    type = ActionTypes.INIT_CURRENT_LOAD_ALL;
+  export class InitCurrentAndLoadScannedAction implements Action {
+    type = ActionTypes.INIT_CURRENT_LOAD_SCANNED;
     constructor(public payload: UserState.IRegisteredUser) {}
   }
 
@@ -104,7 +104,7 @@ export namespace UserActions {
     /**
      * @param payload user id
      */
-    constructor(public payload?: number) {}
+    constructor(public payload?: UserState.IClaimStatus) {}
   }
 
   export class LoginSuccessAction implements Action {
@@ -252,7 +252,7 @@ export namespace UserActions {
     /**
      * @param payload add a user to saved badge scan list
      */
-    constructor(public payload: UserState.IRegisteredUser) {}
+    constructor(public payload: UserState.IClaimStatus) {}
   }
 
   export class RemoveScannedUserAction implements Action {

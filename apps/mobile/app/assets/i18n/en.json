@@ -10,13 +10,20 @@
     "about": "About",
     "copyright": "2018 ngATL, built by nStudio"
   },
+  "error": {
+    "upload-photo-lbl": "Sorry, an error occurred uploading that photo."
+  },
   "dialogs": {
     "confirm": "Confirm",
+    "yes": "Yes",
     "yes-login": "Yes, login!",
     "yes-delete": "Yes, delete",
     "cancel": "Cancel",
     "no": "No",
-    "delete-scan": "Are you sure want to remove the badge scan for"
+    "delete-scan": "Are you sure want to remove the badge scan for",
+    "pin-number": "Pin number",
+    "camera": "Camera",
+    "confirm-photo-delete": "Are you sure you want to remove this photo?"
   },
   "item": {
     "delete-lbl": "Delete"
@@ -26,10 +33,13 @@
     "help": "Help",
     "email-us": "Email us at info@ng-atl.org",
     "tweet-us": "Tweet at us",
-    "error": "We're sorry an error occurred."
+    "error": "We're sorry an error occurred.",
+    "photo-album-tle": "Photo Album",
+    "edit": "Edit"
   },
   "user": {
     "badge-claim": "Is this your badge",
+    "confirm-sponsor-pin": "Please confirm the sponsor PIN:",
     "scan-action": "Scan a badge",
     "already-scanned": "You have already scanned this delightful individual."
   },

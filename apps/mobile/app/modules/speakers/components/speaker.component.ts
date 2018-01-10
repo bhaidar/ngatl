@@ -46,9 +46,6 @@ export class SpeakerComponent extends BaseComponent implements AfterViewInit, On
       .takeUntil( this.destroy$ )
       .subscribe( ( speakers: SpeakerState.IState ) => {
         this._all = speakers.list;
-        console.log('this._all:', this._all);
-        console.log('typeof this._all:', typeof this._all);
-        console.log('Array.isArray(this._all):', Array.isArray(this._all));
         this.speakerState$.next( this._all );
       } );
 
@@ -63,12 +60,6 @@ export class SpeakerComponent extends BaseComponent implements AfterViewInit, On
     if ( value ) {
       lowercaseValue = value.toLowerCase();
     }
-    console.log('search:', lowercaseValue);
-    console.log('this._all:', this._all);
-    console.log('this._all.filter:', this._all.filter);
-    console.log('this._all.reduce:', this._all.reduce);
-    console.log('this._all.map:', this._all.map);
-    console.log('this.search$:', this.search$);
     const results = this._all.filter( ( s: any ) => {
       return s.name.toLowerCase().indexOf( lowercaseValue ) > -1;
     } );

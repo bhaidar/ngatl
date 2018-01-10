@@ -9,6 +9,8 @@ import {
   InlineHtmlLabelComponent,
   InlineHtmlLinkableLabelComponent,
 } from './inline-html/inline-html.component';
+import { CameraModalComponent } from './camera-modal/camera-modal.component';
+import { PictureComponent } from './picture/picture.component';
 
 export const SHARED_COMPONENTS: any[] = [
   ActionBarBackComponent, 
@@ -19,6 +21,8 @@ export const SHARED_COMPONENTS: any[] = [
   InlineHtmlLabelComponent,
   InlineHtmlLinkableLabelComponent,
   HelpComponent,
+  CameraModalComponent,
+  PictureComponent,
 ];
 
-export const SHARED_ENTRY_COMPONENTS: any[] = [NSWebViewComponent, BarcodeComponent, HelpComponent];
+export const SHARED_ENTRY_COMPONENTS: any[] = [NSWebViewComponent, BarcodeComponent, HelpComponent, CameraModalComponent];

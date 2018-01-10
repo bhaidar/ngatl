@@ -4,12 +4,22 @@ import { Injectable } from '@angular/core';
 // app
 import { isObject, isNativeScript } from '../../helpers';
 
+export interface IPromptOptions {
+  placeholder: string;
+  initialValue: string;
+  action: Function;
+  msg?: string;
+  okButtonText?: string;
+  cancelButtonText?: string;
+}
+
 @Injectable()
 export class WindowPlatformService {
   public navigator: any = {};
   public location: any = {};
   public alert( msg: any ) { };
   public confirm( msg: any ) { };
+  public prompt( options: any ) {};
   public setTimeout( 
     handler: (...args: any[]) => void,
     timeout?: number
@@ -55,6 +65,19 @@ export class WindowService {
   public confirm(msg: any, action?: Function /* used for fancyalerts on mobile*/): Promise<any> {
     return new Promise( ( resolve, reject ) => {
       const result: any = (<any>this._platformWindow).confirm( msg, isNativeScript() ? action : undefined );
+      if (isObject(result) && result.then) {
+        result.then(resolve, reject);
+      } else if (result) {
+        resolve();
+      } else {
+        reject();
+      }
+    });
+  }
+
+  public prompt(options: IPromptOptions) {
+    return new Promise( ( resolve, reject ) => {
+      const result: any = (<any>this._platformWindow).prompt(options);
       if (isObject(result) && result.then) {
         result.then(resolve, reject);
       } else if (result) {

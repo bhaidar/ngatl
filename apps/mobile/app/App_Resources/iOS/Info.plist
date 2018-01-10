@@ -33,8 +33,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
@@ -43,11 +41,47 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>NSCameraUsageDescription</key>
+	<string>Upload photos directly from your camera</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Record notes about friends</string>
   <key>NSCameraUsageDescription</key>
   <string>To scan conference badges</string>
   <key>NSFaceIDUsageDescription</key>
   <string>For your security</string>
-	<key>NSAllowsArbitraryLoads</key>
-  <true/>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>To upload profile pictures</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>To upload profile pictures</string>
+	<key>NSAppTransportSecurity</key>
+  <dict>
+    <key>NSAllowsArbitraryLoads</key>
+    <true/>
+		<key>NSAllowsArbitraryLoadsForMedia</key>
+		<true/>
+		<key>NSAllowsArbitraryLoadsInWebContent</key>
+		<true/>
+  </dict>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>io.nstudio.ngatl</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+					<string>ngatl</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

@@ -1,6 +1,6 @@
 import { Injectable, } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 // libs
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
@@ -42,7 +42,9 @@ export class UserService extends Cache {
   // control alerts
   private _showingAlert = false;
   // badge list
-  private _promptUserClaim$: Subject<UserState.IRegisteredUser> = new Subject();
+  private _promptUserClaim$: Subject<UserState.IClaimStatus> = new Subject();
+  // sponsor handling
+  private _promptSponsorPin$: Subject<UserState.IClaimStatus> = new Subject();
 
   constructor(
     private _store: Store<IAppState>,
@@ -65,7 +67,7 @@ export class UserService extends Cache {
       .skip(1) // ignore the wiring, only listen to effect chain reaction
       .subscribe((state: UserState.IState) => {
         // this.currentUserId = state.current && state.current.id ? state.current.id : null;
-        this.currentUserId = state.current && state.current.number ? state.current.number : null;
+        this.currentUserId = state.current && state.current.id ? state.current.id : null;
       });
   }
 
@@ -98,6 +100,10 @@ export class UserService extends Cache {
     return this._promptUserClaim$;
   }
 
+  public get promptSponsorPin$() {
+    return this._promptSponsorPin$;
+  }
+
   /**
    * Subscribe to this (public getter below) to customize app behavior
    * whenever an unauthorized attempt to a route is made
@@ -124,24 +130,26 @@ export class UserService extends Cache {
     return this._systemUserApi.create(user);
   }
 
-  public findUser(badgeId: string, allUsers: Array<UserState.IRegisteredUser>, scanned: Array<UserState.IRegisteredUser>) {
-    const foundUser = allUsers.find(u => {
-      return u.unique_ticket_url.indexOf(badgeId) > -1;
-    });
-    if (scanned) {
-      const alreadyScanned = scanned.find(u => {
-        return u.unique_ticket_url.indexOf(badgeId) > -1;
+  public findUser(badgeId: string, scanned: Array<UserState.IRegisteredUser>) {
+    // if (scanned) {
+    //   const alreadyScanned = scanned.find(u => {
+    //     return u.unique_ticket_url.indexOf(badgeId) > -1;
+    //   });
+    //   if (alreadyScanned) {
+    //     return null;
+    //   }
+    // }
+    // return foundUser;
+    return this._http.get(`${NetworkCommonService.API_URL}ConferenceTickets/${badgeId}/claim`)
+      .map((claimStatus: UserState.IClaimStatus) => {
+        return claimStatus;
       });
-      if (alreadyScanned) {
-        return null;
-      }
-    }
-    return foundUser;
+
   }
 
   public loadAll(): Observable<UserState.ILoadAllResult> {
-    return this._http.get('/assets/users.json')
-      .map((users) => {
+    // return this._http.get(`${NetworkCommonService.API_URL}ConferenceAttendees`)//'/assets/users.json')
+    //   .map((users) => {
         // this._log.debug(typeof users);
         // this._log.debug('isarray:', Array.isArray(users));
         // this._log.debug(users);
@@ -150,11 +158,15 @@ export class UserService extends Cache {
         if (savedScans) {
           scanned = savedScans.map(u => new UserState.RegisteredUser(u))
         }
-        return {
-          all: (<Array<any>>users).map(u => new UserState.RegisteredUser(u)),
+        if (scanned.length) {
+          // TODO: may want to query updates from colmena to get latest attendee profile updates
+          // will want to get new photo or other information if user had updated it
+        }
+        return Observable.of({
+          // all: (<Array<any>>users).map(u => new UserState.RegisteredUser(u)),
           scanned
-        };
-      });
+        });
+      // });
   }
 
   public saveScans(scanned: Array<UserState.IRegisteredUser>) {
@@ -233,28 +245,40 @@ export class UserService extends Cache {
   //   return this._apiUsers.deleteUser(id);
   // }
 
+  public loadUser(id: string): Observable<UserState.IRegisteredUser> {
+    // get user with all details in case reloading from a fresh login
+    return this._http.get(`${NetworkCommonService.API_URL}ConferenceAttendees/${id}?filter=%7B"include":%7B"relation":"notes","scope":%7B"include":"peer"%7D%7D%7D`)
+      .map((user: any) => {
+        return new UserState.RegisteredUser(user);
+      });
+  }
+
   /**
-   * Load user object and cache it (aka persist in browser/mobile device)
+   * claim user badge and cache it (aka persist in browser/mobile device)
    * @param token authenticated token
    */
-  public loadUser(id?: number): Observable<SystemUser> {
-    if ( typeof id !== 'undefined' ) {
-      return this._systemUserApi.getCurrent().map((user: any) => {
-        /**
-         * NOTE: Get user doesn't return the authenticationToken,
-         * so we need to add it manually.
-         */
-        if ( !user.authenticationToken ) {
-          const token = this.token;
-          if ( token ) {
-            user.authenticationToken = this.token;
-          }
-        }
-        return user;
+  public claimUser(user: UserState.IClaimStatus, badgeId: string): Observable<UserState.IRegisteredUser> {
+    return this._http.get(`${NetworkCommonService.API_URL}ConferenceTickets/${badgeId}/claim?confirm=true`)
+      .map((user: any) => {
+        return new UserState.RegisteredUser(user.attendee);
       });
-    }
-    // no token, no user
-    return Observable.of(null);
+      // if ( typeof id !== 'undefined' ) {
+    //   return this._systemUserApi.getCurrent().map((user: any) => {
+    //     /**
+    //      * NOTE: Get user doesn't return the authenticationToken,
+    //      * so we need to add it manually.
+    //      */
+    //     if ( !user.authenticationToken ) {
+    //       const token = this.token;
+    //       if ( token ) {
+    //         user.authenticationToken = this.token;
+    //       }
+    //     }
+    //     return user;
+    //   });
+    // }
+    // // no token, no user
+    // return Observable.of(null);
   }
 
   public persistUser(user: UserState.IRegisteredUser) {// SystemUser) {

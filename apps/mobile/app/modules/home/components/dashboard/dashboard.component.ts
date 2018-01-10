@@ -279,7 +279,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
       const scan = this.scans[this._swipeItemIndex];
       if (scan) {
         const promptOptions: dialogs.ConfirmOptions = {
-          message: `${this._translate.instant(`dialogs.delete-scan`)} '${scan.ticket_full_name}'?`,
+          message: `${this._translate.instant(`dialogs.delete-scan`)} '${scan.name}'?`,
           okButtonText: this._translate.instant('dialogs.yes-delete'),
           cancelButtonText: this._translate.instant('dialogs.cancel'),
         };
