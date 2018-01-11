@@ -1,7 +1,7 @@
 <ActionBar class="action-bar">
   <StackLayout orientation="horizontal" horizontalAlignment="center" verticalAlignment="center" padding="2">
-    <Image src="res://ngatl_top" class="action-image" [class.ready]="ready" [class.intro]="intro" *ngIf="!title" (tap)="refreshUser()"></Image>
-    <Label [text]="title" class="action-bar-title" *ngIf="title"></Label>
+    <Image src="res://ngatl_top" class="action-image" [class.ready]="ready" [class.intro]="intro" [visibility]="title ? 'collapsed' : 'visible'" (tap)="refreshUser()"></Image>
+    <Label [text]="title" class="action-bar-title" [visibility]="title ? 'visible' : 'collapsed'"></Label>
   </StackLayout>
   <ActionItem (tap)="toggleDrawer()">
     <Button [text]="'ion-navicon' | fonticon" class="ion action-item" [class.ready]="ready" [class.intro]="intro"></Button>

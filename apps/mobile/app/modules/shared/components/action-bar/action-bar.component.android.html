@@ -1,10 +1,10 @@
 <ActionBar class="action-bar">
   <GridLayout rows="auto" columns="50,*,50" class="action-bar">
     <Button [text]="'ion-navicon' | fonticon" (tap)="toggleDrawer()" class="ion action-item" row="0" col="0" [class.ready]="ready" [class.intro]="intro"></Button>
-    <Label [text]="title || ''" row="0" col="1" class="action-bar-title text-center" *ngIf="title"></Label>
-    <StackLayout orientation="horizontal" horizontalAlignment="center" verticalAlignment="center" padding="2" *ngIf="!title" row="0" col="1">
-      <Image src="res://ngatl_top" class="action-image" height="50" [class.ready]="ready" [class.intro]="intro"></Image>
+    <StackLayout orientation="horizontal" horizontalAlignment="center" verticalAlignment="center" padding="2" row="0" col="1">
+      <Image src="res://ngatl_top" class="action-image" height="50" [class.ready]="ready" [class.intro]="intro" *ngIf="!title"></Image>
+      <Label [text]="title || ''" class="action-bar-title text-center" *ngIf="title"></Label>
     </StackLayout>
-    <Button [text]="'ion-person' | fonticon" (tap)="openProfile()" class="ion action-item" row="0" col="2" [class.ready]="ready" [class.intro]="intro" *ngIf="currentUser"></Button>
+    <Button [text]="currentUser ? ('ion-person' | fonticon) : ('ion-ios-help' | fonticon)" (tap)="openProfileOrHelp()" class="ion action-item" row="0" col="2" [class.ready]="ready" [class.intro]="intro" *ngIf="currentUser"></Button>
   </GridLayout>
 </ActionBar>

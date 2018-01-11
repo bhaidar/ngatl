@@ -111,29 +111,29 @@ export class ProfileComponent extends BaseComponent
     for (const key in this.currentUser) {
       this.log.debug(key, this.currentUser[key]);
     }
-    // this.progress.toggleSpinner(true);
-    // this.store.dispatch(new UserActions.UpdateAction(this.currentUser));
-    // this.win.setTimeout(_ => {
-    //   this.progress.toggleSpinner(false);
-    // }, 1500);
+    this.progress.toggleSpinner(true);
+    this.store.dispatch(new UserActions.UpdateAction(this.currentUser));
+    this.win.setTimeout(_ => {
+      this.progress.toggleSpinner(false);
+    }, 1500);
   }
 
   ngOnInit() {
-    this.currentUser = new UserState.RegisteredUser(
-      {
-        name: 'Nathan Walker',
-        phone: '5038106104'
-      }
-    );
-    // this.store
-    //   .select((s: IAppState) => s.user)
-    //   .takeUntil(this.destroy$)
-    //   .subscribe((s: UserState.IState) => {
-    //     // clone so user can make editing changes to bindings
-    //     this.currentUser = new UserState.RegisteredUser(
-    //       Object.assign({}, s.current)
-    //     );
-    //   });
+    // this.currentUser = new UserState.RegisteredUser(
+    //   {
+    //     name: 'Nathan Walker',
+    //     phone: '5038106104'
+    //   }
+    // );
+    this.store
+      .select((s: IAppState) => s.user)
+      .takeUntil(this.destroy$)
+      .subscribe((s: UserState.IState) => {
+        // clone so user can make editing changes to bindings
+        this.currentUser = new UserState.RegisteredUser(
+          Object.assign({}, s.current)
+        );
+      });
   }
 
   ngAfterViewInit() {}
