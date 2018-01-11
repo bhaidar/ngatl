@@ -226,41 +226,83 @@ export class UserEffects extends Analytics {
   //       );
 
   @Effect()
+  claimUser$: Observable<Action> =
+    this._actions$
+      .ofType( UserActions.ActionTypes.CLAIM_USER )
+      .switchMap( ( action: UserActions.ClaimUserAction ) =>
+        this._userService
+          .claimUser( action.payload, this._currentBadgeId )
+          .map( user => {
+            return new UserActions.LoginAction( action.payload );
+          } )
+          .catch( err => {
+            this._log.debug( 'claim error:', err );
+            return Observable.of( new UserActions.ApiErrorAction( err ) );
+          } ) );
+
+  @Effect()
+  unclaimUser$: Observable<Action> =
+    this._actions$
+      .ofType( UserActions.ActionTypes.UNCLAIM_USER )
+      .switchMap( ( action: UserActions.UnclaimUserAction ) =>
+        this._userService
+          .unclaimUser( action.payload )
+          .map( unclaimed => {
+            // clear badge and claim
+            this._userService.badgeId = null;
+            this._userService.claimId = null;
+            return new UserActions.LogoutAction();
+          } )
+          .catch( err => {
+            this._log.debug( 'claim error:', err );
+            return Observable.of( new UserActions.ApiErrorAction( err ) );
+          } ) );
+
+  @Effect()
   login$: Observable<Action> =
     this._actions$
-        .ofType(UserActions.ActionTypes.LOGIN)
-        .switchMap((action: UserActions.LoginAction) =>
-          this._userService
-              .claimUser(action.payload, this._currentBadgeId)
-              .map(
-                user => {
-                  return new UserActions.LoginSuccessAction( user );
-                })
-              .catch(
-                err => Observable.of(new UserActions.LoginFailedAction(err))),
-        );
+      .ofType( UserActions.ActionTypes.LOGIN )
+      .map( ( action: UserActions.LoginAction ) => {
+        const user = action.payload;
+        if ( user ) {
+          this._userService.badgeId = this._currentBadgeId;
+          // clear ref, no longer needed
+          this._currentBadgeId = null;
+          this._userService.claimId = user.attendee.id;
+          // TODO: use real/secure token
+          this._userService.token = 'admin-token';
+          return new UserActions.RefreshUserAction( user.attendee.id );
+        } else {
+          return new UserActions.LoginFailedAction( 'login failed' );
+        }
+      } );
 
   @Effect()
   loginSuccess$: Observable<Action> =
     this._actions$
       .ofType( UserActions.ActionTypes.LOGIN_SUCCESS )
-      .map( ( action: UserActions.LoginSuccessAction ) => {
+      .switchMap( ( action: UserActions.LoginSuccessAction ) => {
         const user = action.payload;
         if ( user ) {
-          this._userService.persistUser( user );
+          this._userService.loadUser( user.id )
+            .map( user => {
+              this._userService.persistUser( user );
 
-          // this._trackUser(user);
+              // this._trackUser(user);
 
-          // this.track(Tracking.Actions.LOG_IN, {
-          //   user_id : user.id.toString(),
-          // });
+              // this.track(Tracking.Actions.LOG_IN, {
+              //   user_id : user.id.toString(),
+              // });
 
-          return new UserActions.ChangedAction( {
-            current: user,
-            errors: [],
-          } );
+              return new UserActions.ChangedAction( {
+                current: user,
+                errors: [],
+              } );
+            } )
+            .catch( err => Observable.of( new UserActions.LoginFailedAction( this._userService.translateService.instant( 'generic.connection-error-lbl' ) ) ) );
+
         } else {
-          return new UserActions.LoginFailedAction( this._userService.translateService.instant( 'generic.connection-error-lbl' ) );
+          return Observable.of( new UserActions.LoginFailedAction( this._userService.translateService.instant( 'generic.connection-error-lbl' ) ) );
         }
       } );
 
@@ -391,6 +433,7 @@ export class UserEffects extends Analytics {
       .ofType( UserActions.ActionTypes.LOGOUT )
       .map( ( action: UserActions.LogoutAction ) => {
         this._log.debug( UserActions.ActionTypes.LOGOUT );
+        this._currentBadgeId = null;
         // clear persisted user
         this._userService.clear();
         // clear token
@@ -504,26 +547,26 @@ export class UserEffects extends Analytics {
         } );
       } );
 
-  @Effect()
-  initCurrentAndLoadScanned$: Observable<Action> =
-    this._actions$
-      .ofType( UserActions.ActionTypes.INIT_CURRENT_LOAD_SCANNED )
-      .switchMap( ( action: UserActions.InitCurrentAndLoadScannedAction ) => {
+  // @Effect()
+  // initCurrentAndLoadScanned$: Observable<Action> =
+  //   this._actions$
+  //     .ofType( UserActions.ActionTypes.INIT_CURRENT_LOAD_SCANNED )
+  //     .switchMap( ( action: UserActions.InitCurrentAndLoadScannedAction ) => {
 
-        this._progressService.toggleSpinner();
-        return this._userService.loadAll()
-          .map( ( result: UserState.ILoadAllResult ) => {// Array<UserState.IRegisteredUser>) => {
-            this._progressService.toggleSpinner( false );
-            return new UserActions.ChangedAction( {
-              current: action.payload,
-              // all: result.all,
-              scanned: result.scanned,
-            } );
-          } )
-          .catch( ( err ) => {
-            return Observable.of( new UserActions.LoginFailedAction( err ) );
-          } );
-      } );
+  //       this._progressService.toggleSpinner();
+  //       return this._userService.loadAll()
+  //         .map( ( result: UserState.ILoadAllResult ) => {// Array<UserState.IRegisteredUser>) => {
+  //           this._progressService.toggleSpinner( false );
+  //           return new UserActions.ChangedAction( {
+  //             current: action.payload,
+  //             // all: result.all,
+  //             scanned: result.scanned,
+  //           } );
+  //         } )
+  //         .catch( ( err ) => {
+  //           return Observable.of( new UserActions.LoginFailedAction( err ) );
+  //         } );
+  //     } );
 
   @Effect()
   findUser$: Observable<Action> =
@@ -535,20 +578,38 @@ export class UserEffects extends Analytics {
         // this._progressService.toggleSpinner();
         this._currentBadgeId = action.payload.badgeGuid;
         return this._userService.findUser( action.payload.badgeGuid, state.user.scanned )
-          .map((foundUser) => {
+          .map( ( foundUser ) => {
             // this._progressService.toggleSpinner(false);
             if ( foundUser ) {
-              if ( state.user.current || action.payload.forceAdd ) {
-                // just add to logged in users scanned list
-                return new UserActions.AddUserAction( foundUser );
-              } else if (!foundUser.claimed) {
-                // if they haven't claimed one themselves, prompt if they want to claim it
-                this._userService.promptUserClaim$.next( foundUser );
-                return new AppActions.NoopAction();
+              if ( state.user.current ) {
+                // authenticated
+                if (state.user.current.id === foundUser.attendee.id) {
+                  // re-scanning yourself for fun
+                  this._win.setTimeout( _ => {
+                    this._win.alert( this._translate.instant( 'user.scan-yourself' ) );
+                  }, 300 );
+                  return new AppActions.NoopAction();
+                } else {
+                  // just add to notes
+                  return new UserActions.AddUserAction( foundUser );
+                }
               } else {
-                // TODO: check if sponsor, if so the prompt them to enter pin code to verify they are a valid member of the sponsor group
-                this._userService.promptSponsorPin$.next( foundUser );
-                return new AppActions.NoopAction();
+                // if they had already claimed this user id, then just log them in with it
+                const claimedLocallyId = this._userService.claimId;
+                if ( claimedLocallyId === foundUser.attendee.id ) {
+                  return new UserActions.LoginAction( foundUser );
+                } else if ( !foundUser.claimed ) {
+                  // if they haven't claimed one themselves, prompt if they want to claim it
+                  this._userService.promptUserClaim$.next( foundUser );
+                  return new AppActions.NoopAction();
+                } else {
+                  this._win.setTimeout( _ => {
+                    this._win.alert( this._translate.instant( 'user.already-claimed' ) );
+                  }, 300 );
+                  // TODO: check if sponsor, if so the prompt them to enter pin code to verify they are a valid member of the sponsor group
+                  // this._userService.promptSponsorPin$.next( foundUser );
+                  return new AppActions.NoopAction();
+                }
               }
             } else {
               // assume user has already been scanned
@@ -557,9 +618,9 @@ export class UserEffects extends Analytics {
               }, 300 );
               return new AppActions.NoopAction();
             }
-          })
-          .catch((err) => Observable.of(new UserActions.LoginFailedAction(err)));
-        
+          } )
+          .catch( ( err ) => Observable.of( new UserActions.LoginFailedAction( err ) ) );
+
       } );
 
   @Effect()
@@ -569,51 +630,106 @@ export class UserEffects extends Analytics {
       .withLatestFrom( this._store )
       .switchMap( ( [action, state]: [UserActions.AddUserAction, IAppState] ) => {
 
-        return this._userService.loadUser(action.payload.attendee.id)
+        if ( state.user.current ) {
+          const currentScanned = state.user.current.notes || [];
+          const alreadyScanned = currentScanned.find( u => u.peerAttendeeId === action.payload.attendee.id );
+          this._currentScanAttendee = action.payload.attendee;
+          if ( alreadyScanned ) {
+            this._win.setTimeout( _ => {
+              this._win.alert( this._translate.instant( 'user.already-scanned' ) );
+            }, 300 );
+            return Observable.of( new AppActions.NoopAction() );
+          } else {
+            return this._userService.createAttendeeNote( action.payload.attendee.id )
+              .map( ( result: UserState.IRegisteredUser ) => {
+                return new UserActions.RefreshUserAction( this._userService.currentUserId );
+              } )
+              .catch( ( err ) => {
+                return Observable.of( new AppActions.NoopAction() );
+              } );
+          }
+        } else {
+          // do nothing
+          return Observable.of( new AppActions.NoopAction() );
+        }
+      } );
+
+  @Effect()
+  updateNote$: Observable<Action> =
+    this._actions$
+      .ofType( UserActions.ActionTypes.UPDATE_NOTE )
+      .withLatestFrom( this._store )
+      .switchMap( ( [action, state]: [UserActions.UpdateNoteAction, IAppState] ) =>
+        this._userService.updateAttendeeNote( action.payload )
+          .map( ( result: UserState.IConferenceAttendeeNote ) => {
+            return new UserActions.RefreshUserAction( this._userService.currentUserId );
+          } )
+          .catch( ( err ) => {
+            return Observable.of( new AppActions.NoopAction() );
+          } ) );
+
+  @Effect()
+  refreshUser$: Observable<Action> =
+    this._actions$
+      .ofType( UserActions.ActionTypes.REFRESH_USER )
+      .withLatestFrom( this._store )
+      .switchMap( ( [action, state]: [UserActions.RefreshUserAction, IAppState] ) => {
+        this._log.debug( 'loadUser:', action.payload );
+        return this._userService.loadUser( action.payload )
           .map( ( result: UserState.IRegisteredUser ) => {
-            const currentScanned = state.user.scanned || [];
-            const alreadyScanned = currentScanned.find(u => u.id === result.id);
-            if (alreadyScanned) {
-              this._win.setTimeout( _ => {
-                this._win.alert( this._translate.instant( 'user.already-scanned' ) );
-              }, 300 );
-              return new AppActions.NoopAction();
-            } else {
-              const scanned = [
-                result,
-                ...currentScanned,
-              ];
-              this._userService.saveScans(scanned);
-              return new UserActions.ChangedAction({
-                scanned
-              });
+            if ( result && result.notes && ( this._currentScanAttendee || this._currentSavedNotes ) ) {
+              // update with appropriate name
+              // TODO: won't need this when Bram can add name in there
+              for ( let i = 0; i < result.notes.length; i++ ) {
+                if ( this._currentScanAttendee ) {
+                  if ( result.notes[i].peerAttendeeId === this._currentScanAttendee.id ) {
+                    result.notes[i].name = this._currentScanAttendee.name;
+                    break;
+                  }
+                } else if ( this._currentSavedNotes && this._currentSavedNotes.length ) {
+                  const savedNote = this._currentSavedNotes.find( n => n.id === result.notes[i].id );
+                  if ( savedNote ) {
+                    // ensure names are preserved
+                    result.notes[i].name = savedNote.name;
+                  }
+                }
+              }
             }
+            this._currentScanAttendee = this._currentSavedNotes = null; // reset
+            this._userService.persistUser( result );
+            return new UserActions.ChangedAction( {
+              current: result
+            } );
           } )
           .catch( ( err ) => {
             return Observable.of( new AppActions.NoopAction() );
           } );
       } );
 
-      @Effect()
-      removeScannedUser$: Observable<Action> =
-        this._actions$
-          .ofType( UserActions.ActionTypes.REMOVE_SCANNED_USER )
-          .withLatestFrom( this._store )
-          .map( ( [action, state]: [UserActions.RemoveScannedUserAction, IAppState] ) => {
-    
-            // this._progressService.toggleSpinner();
-            const currentScanned = [...(state.user.scanned || [])];
-            const index = currentScanned.findIndex(u => u.id === action.payload.id);
-            if (index > -1) {
-              currentScanned.splice(index, 1);
-              this._userService.saveScans(currentScanned);
-              return new UserActions.ChangedAction({
-                scanned: currentScanned
-              })
-            } else {
-              return new AppActions.NoopAction();
-            }
-          } );
+  @Effect()
+  removeScannedUser$: Observable<Action> =
+    this._actions$
+      .ofType( UserActions.ActionTypes.REMOVE_SCANNED_USER )
+      .withLatestFrom( this._store )
+      .switchMap( ( [action, state]: [UserActions.RemoveScannedUserAction, IAppState] ) => {
+
+        // this._progressService.toggleSpinner();
+        const currentUser = Object.assign( {}, state.user.current );
+        const index = currentUser.notes.findIndex( u => u.id === action.payload.id );
+        if ( index > -1 ) {
+          const note = currentUser.notes[index];
+          this._userService.deleteAttendeeNote( note.id )
+            .map( ( result: any ) => {
+              currentUser.notes.splice( index, 1 );
+              return new UserActions.ChangedAction( {
+                current: new UserState.RegisteredUser( currentUser )
+              } )
+            } )
+            .catch( err => Observable.of( new UserActions.ApiErrorAction( err ) ) );
+        } else {
+          return Observable.of( new AppActions.NoopAction() );
+        }
+      } );
 
   @Effect( { dispatch: false } )
   loaderOff$: Observable<Action> =
@@ -640,13 +756,17 @@ export class UserEffects extends Analytics {
       .switchMap( ( action: UserActions.InitAction ) =>
         this._userService
           .getCurrentUser()
-          .map(
-          user => {
-            this._trackUser( user );
-            return new UserActions.InitCurrentAndLoadScannedAction( user );
-            // return new UserActions.ChangedAction({
-            //   current : user,
-            // });
+          .map( user => {
+            if ( user ) {
+              // get latest
+              // TODO: use valid token
+              this._userService.token = 'admin-token';
+              this._currentSavedNotes = user.notes;
+              return new UserActions.RefreshUserAction( user.id );
+            } else {
+              // just ignore, no user
+              return new AppActions.NoopAction();
+            }
           } )
           .catch(
           err => Observable.of( new UserActions.ApiErrorAction( err ) ) ),
@@ -654,6 +774,8 @@ export class UserEffects extends Analytics {
 
   private _postingData: any; // used with create user chain
   private _currentBadgeId: string;
+  private _currentScanAttendee: UserState.IRegisteredUser;
+  private _currentSavedNotes: Array<UserState.IRegisteredUser>;
 
   constructor(
     public analytics: AnalyticsService,

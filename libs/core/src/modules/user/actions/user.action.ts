@@ -25,9 +25,13 @@ export namespace UserActions {
     CHECK_EMAIL: string;
     CREATE: string;
     CREATE_FINISH: string;
+    REFRESH_USER: string;
     FIND_USER: string;
+    CLAIM_USER: string;
+    UNCLAIM_USER: string;
     ADD_USER: string;
     REMOVE_SCANNED_USER: string;
+    UPDATE_NOTE: string;
     DELETE: string;
     EMAIL_CONNECT: string;
     FIREBASE_CONNECT: string;
@@ -55,9 +59,13 @@ export namespace UserActions {
     CHECK_EMAIL : type(`${CATEGORY} Check Email Availability`),
     CREATE : type(`${CATEGORY} Create`),
     CREATE_FINISH : type(`${CATEGORY} Create Finish`),
+    REFRESH_USER: type(`${CATEGORY} Refresh User`),
     FIND_USER: type(`${CATEGORY} Find User`),
+    CLAIM_USER: type(`${CATEGORY} Claim User`),
+    UNCLAIM_USER: type(`${CATEGORY} Unclaim User`),
     ADD_USER: type(`${CATEGORY} Add User`),
     REMOVE_SCANNED_USER: type(`${CATEGORY} Remove Scanned User`),
+    UPDATE_NOTE: type(`${CATEGORY} Update Note`),
     DELETE : type(`${CATEGORY} Delete`),
     EMAIL_CONNECT : type(`${CATEGORY} Email Connect`),
     FIREBASE_CONNECT : type(`${CATEGORY} Firebase Connect`),
@@ -246,6 +254,33 @@ export namespace UserActions {
     constructor(public payload: { badgeGuid: string, forceAdd?: boolean }) {}
   }
 
+  export class ClaimUserAction implements Action {
+    type = ActionTypes.CLAIM_USER;
+
+    /**
+     * @param payload badge reference guid
+     */
+    constructor(public payload: UserState.IClaimStatus) {}
+  }
+
+  export class UnclaimUserAction implements Action {
+    type = ActionTypes.UNCLAIM_USER;
+
+    /**
+     * @param payload badge guid
+     */
+    constructor(public payload: string) {}
+  }
+
+  export class RefreshUserAction implements Action {
+    type = ActionTypes.REFRESH_USER;
+
+    /**
+     * @param payload user id
+     */
+    constructor(public payload: string) {}
+  }
+
   export class AddUserAction implements Action {
     type = ActionTypes.ADD_USER;
 
@@ -262,6 +297,15 @@ export namespace UserActions {
      * @param payload user object
      */
     constructor(public payload: UserState.IRegisteredUser) {}
+  }
+
+  export class UpdateNoteAction implements Action {
+    type = ActionTypes.UPDATE_NOTE;
+
+    /**
+     * @param payload note
+     */
+    constructor(public payload: UserState.IConferenceAttendeeNote) {}
   }
 
   export class EmailConnectAction implements Action {

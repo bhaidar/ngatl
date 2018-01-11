@@ -1,14 +1,15 @@
-<ActionBar class="action-bar" [title]="title">
-  <StackLayout orientation="horizontal" horizontalAlignment="center" verticalAlignment="center" padding="2" *ngIf="!title">
-    <Image src="res://ngatl_top" class="action-image" [class.ready]="ready" [class.intro]="intro"></Image>
+<ActionBar class="action-bar">
+  <StackLayout orientation="horizontal" horizontalAlignment="center" verticalAlignment="center" padding="2">
+    <Image src="res://ngatl_top" class="action-image" [class.ready]="ready" [class.intro]="intro" *ngIf="!title" (tap)="refreshUser()"></Image>
+    <Label [text]="title" class="action-bar-title" *ngIf="title"></Label>
   </StackLayout>
   <ActionItem (tap)="toggleDrawer()">
     <Button [text]="'ion-navicon' | fonticon" class="ion action-item" [class.ready]="ready" [class.intro]="intro"></Button>
   </ActionItem>
-  <ActionItem (tap)="openProfile()" ios.position="right" *ngIf="currentUser">
-    <Button [text]="'ion-person' | fonticon" nsRouterLink="/profile" class="ion action-item" [class.ready]="ready" [class.intro]="intro"></Button>
+  <ActionItem (tap)="openProfileOrHelp()" ios.position="right">
+    <Button [text]="currentUser ? ('ion-person' | fonticon) : ('ion-ios-help' | fonticon)" class="ion action-item" [class.ready]="ready" [class.intro]="intro"></Button>
   </ActionItem>
-  <ActionItem (tap)="openHelp()" ios.position="right" *ngIf="!currentUser">
+  <!-- <ActionItem (tap)="openHelp()" ios.position="right" *ngIf="!currentUser">
     <Button [text]="'ion-ios-help' | fonticon" class="ion action-item help" [class.ready]="ready" [class.intro]="intro"></Button>
-  </ActionItem>
+  </ActionItem> -->
 </ActionBar>

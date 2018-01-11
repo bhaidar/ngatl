@@ -5,7 +5,6 @@ import { registerElement } from 'nativescript-angular/element-registry';
 import { topmost } from 'tns-core-modules/ui/frame';
 
 // register plugin components
-// registerElement('VideoPlayer', () => require('nativescript-videoplayer').Video);
 registerElement('Shimmer', () => require('nativescript-shimmer').Shimmer);
 
 // app

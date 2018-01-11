@@ -29,7 +29,7 @@ import * as utils from 'tns-core-modules/utils/utils';
 import { View } from 'tns-core-modules/ui/core/view';
 import { Animation, AnimationDefinition } from 'tns-core-modules/ui/animation';
 import { screen, isIOS, isAndroid } from 'tns-core-modules/platform';
-import { ListViewEventData } from 'nativescript-pro-ui/listview';
+import { ListViewEventData, RadListView } from 'nativescript-pro-ui/listview';
 
 // app
 import { IConferenceAppState } from '../../../ngrx';
@@ -159,10 +159,10 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   public showIntro = false;
   public swipeEnable = true;
   public showSwiper = false;
-  public showScans = false;
+  public showNotes = false;
   public badgeExit = false;
   public fontSize = 15;
-  public scans: Array<UserState.IRegisteredUser> = [];
+  public scans: Array<UserState.IConferenceAttendeeNote> = [];
   private _barcode: BarcodeScanner;
   private _swipeItemIndex: number;
   private _density: number;
@@ -251,8 +251,8 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
 
   public itemSwipeProgressChanged(args: ListViewEventData) {
     if (args && args.data) {
-      console.log('itemSwipeProgressChanged args.data.x:', args.data.x);
-      console.log('args.index:', args.index);
+      // console.log('itemSwipeProgressChanged args.data.x:', args.data.x);
+      // console.log('args.index:', args.index);
       if (typeof args.index === 'number' && args.index > -1 && this.scans && this.scans.length) {
         this._swipeItemIndex = args.index;
         const scan = this.scans[args.index];
@@ -279,7 +279,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
       const scan = this.scans[this._swipeItemIndex];
       if (scan) {
         const promptOptions: dialogs.ConfirmOptions = {
-          message: `${this._translate.instant(`dialogs.delete-scan`)} '${scan.name}'?`,
+          message: `${this._translate.instant(`dialogs.delete-scan`)} '${scan.peer.name}'?`,
           okButtonText: this._translate.instant('dialogs.yes-delete'),
           cancelButtonText: this._translate.instant('dialogs.cancel'),
         };
@@ -534,7 +534,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   private _retractBadge() {
     this.badgeExit = true;
     this._win.setTimeout(_ => {
-      this.showScans = true;
+      this.showNotes = true;
     }, 800);
     // const top = <View>this._page.getViewById('badge-top');
     // const bottom = <View>this._page.getViewById('badge-bottom');
@@ -555,7 +555,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     //     iterations: 1,
     //   }).then(_ => {
     //     this._ngZone.run(() => {
-    //       this.showScans = true;
+    //       this.showNotes = true;
     //     });
     //   }, _ => {
 
@@ -645,15 +645,15 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     this._store.select((s: IAppState) => s.user)
       .takeUntil(this.destroy$)
       .subscribe((s: UserState.IState) => {
-        if (s.scanned) {
-          this.scans = [...s.scanned];
+        if (s.current) {
+          this.scans = [...s.current.notes];
 
           if (!this.badgeExit && this.scans.length) {
             // first scan! retract the intro badge out of view
             this._retractBadge();
           } else if (this.badgeExit && this.scans.length === 0) {
             // replace badge drop
-            this.badgeExit = this.showScans = false;
+            this.badgeExit = this.showNotes = false;
           }
         }
       });
@@ -685,6 +685,18 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     // }
     // this._stopBeacon();
     this._retractBadge();
+  }
+
+  public getListView() {
+    return <RadListView>this._page.getViewById('scans-listview');
+  }
+
+  public tappedTop(e) {
+    // TODO: scroll notes list back to top
+    const listview = this.getListView();
+    if (listview) {
+      listview.scrollToIndex(0, true);
+    }
   }
 
   private _setupSwipe() {

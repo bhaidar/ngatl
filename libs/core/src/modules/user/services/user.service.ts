@@ -24,14 +24,17 @@ import { WindowService } from '../../core/services/window.service';
 import { UserState } from '../states/user.state';
 import {
   isNativeScript,
+  isObject,
   getYear,
 } from '../../helpers';
 import { IAppState } from '../../ngrx';
 
+const CryptoJS = require( 'crypto-js' );
+
 @Injectable()
 export class UserService extends Cache {
   // init helpers
-  private _userInitialized: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  private _userInitialized: BehaviorSubject<boolean> = new BehaviorSubject( false );
   // see getters below for docs
   private _unauthorizedRouteAttempt: Subject<string> = new Subject();
   // for quick access in other api calls
@@ -58,17 +61,17 @@ export class UserService extends Cache {
     private _translateService: TranslateService,
     private _systemUserApi: SystemUserApi,
   ) {
-    super(_storageService);
+    super( _storageService );
     this.isObjectCache = true;
     this.key = StorageKeys.USER;
 
     _store
-      .select('user')
-      .skip(1) // ignore the wiring, only listen to effect chain reaction
-      .subscribe((state: UserState.IState) => {
+      .select( 'user' )
+      .skip( 1 ) // ignore the wiring, only listen to effect chain reaction
+      .subscribe( ( state: UserState.IState ) => {
         // this.currentUserId = state.current && state.current.id ? state.current.id : null;
         this.currentUserId = state.current && state.current.id ? state.current.id : null;
-      });
+      } );
   }
 
   /**
@@ -83,16 +86,16 @@ export class UserService extends Cache {
     return this._currentUserId;
   }
 
-  public set currentUserId(id: any) {
+  public set currentUserId( id: any ) {
     if ( this._currentUserId !== id ) {
       this._currentUserId = id || null;
       // ensure user id is tracked with analytics all the time (mainly for gtm)
       this._analytics.userId = id;
       // fire user initialized anytime this changes (safely determines whether the user boot phase has fired yet or not)
-      this._userInitialized.next(true);
+      this._userInitialized.next( true );
       // only if actually changing (to new user or null)
       // preloadData
-      this.preloadData(id != null);
+      this.preloadData( id != null );
     }
   }
 
@@ -122,15 +125,15 @@ export class UserService extends Cache {
   //   return this._apiUsers.linkAuthFirebase({ firebaseToken });
   // }
 
-  public emailConnect(credentials: { email: string; password: string }) {
-    return this._systemUserApi.login(credentials);
+  public emailConnect( credentials: { email: string; password: string } ) {
+    return this._systemUserApi.login( credentials );
   }
 
-  public createUser(user: SystemUser) {
-    return this._systemUserApi.create(user);
+  public createUser( user: SystemUser ) {
+    return this._systemUserApi.create( user );
   }
 
-  public findUser(badgeId: string, scanned: Array<UserState.IRegisteredUser>) {
+  public findUser( badgeId: string, scanned: Array<UserState.IRegisteredUser> ) {
     // if (scanned) {
     //   const alreadyScanned = scanned.find(u => {
     //     return u.unique_ticket_url.indexOf(badgeId) > -1;
@@ -140,38 +143,46 @@ export class UserService extends Cache {
     //   }
     // }
     // return foundUser;
-    return this._http.get(`${NetworkCommonService.API_URL}ConferenceTickets/${badgeId}/claim`)
-      .map((claimStatus: UserState.IClaimStatus) => {
+    return this._http.get( `${NetworkCommonService.API_URL}ConferenceTickets/${badgeId}/claim` )
+      .map( ( claimStatus: UserState.IClaimStatus ) => {
         return claimStatus;
-      });
+      } );
 
   }
 
   public loadAll(): Observable<UserState.ILoadAllResult> {
     // return this._http.get(`${NetworkCommonService.API_URL}ConferenceAttendees`)//'/assets/users.json')
     //   .map((users) => {
-        // this._log.debug(typeof users);
-        // this._log.debug('isarray:', Array.isArray(users));
-        // this._log.debug(users);
-        let scanned = [];
-        const savedScans = this._storageService.getItem(StorageKeys.SCANNED);
-        if (savedScans) {
-          scanned = savedScans.map(u => new UserState.RegisteredUser(u))
-        }
-        if (scanned.length) {
-          // TODO: may want to query updates from colmena to get latest attendee profile updates
-          // will want to get new photo or other information if user had updated it
-        }
-        return Observable.of({
-          // all: (<Array<any>>users).map(u => new UserState.RegisteredUser(u)),
-          scanned
-        });
-      // });
+    // this._log.debug(typeof users);
+    // this._log.debug('isarray:', Array.isArray(users));
+    // this._log.debug(users);
+    let scanned = [];
+    const savedScans = this._storageService.getItem( StorageKeys.SCANNED );
+    if ( savedScans ) {
+      scanned = savedScans.map( u => new UserState.RegisteredUser( u ) )
+    }
+    if ( scanned.length ) {
+      // TODO: may want to query updates from colmena to get latest attendee profile updates
+      // will want to get new photo or other information if user had updated it
+    }
+    return Observable.of( {
+      // all: (<Array<any>>users).map(u => new UserState.RegisteredUser(u)),
+      scanned
+    } );
+    // });
   }
 
-  public saveScans(scanned: Array<UserState.IRegisteredUser>) {
-    if (scanned) {
-      this._storageService.setItem(StorageKeys.SCANNED, scanned);
+  public deleteAttendeeNote( id: string ) {
+    return this._http.delete( `${NetworkCommonService.API_URL}ConferenceAttendeeNotes/${id}` )
+      .map( ( result ) => {
+        // assume it worked
+        return true;
+      } );
+  }
+
+  public saveScans( scanned: Array<UserState.IRegisteredUser> ) {
+    if ( scanned ) {
+      this._storageService.setItem( StorageKeys.SCANNED, scanned );
     }
   }
 
@@ -196,7 +207,7 @@ export class UserService extends Cache {
     //   }
     // }
 
-    return Observable.of(storedUser ? new UserState.RegisteredUser(storedUser) : null);
+    return Observable.of( storedUser ? new UserState.RegisteredUser( storedUser ) : null );
   }
 
   public isAuthenticated(): boolean {
@@ -245,60 +256,92 @@ export class UserService extends Cache {
   //   return this._apiUsers.deleteUser(id);
   // }
 
-  public loadUser(id: string): Observable<UserState.IRegisteredUser> {
+  public loadUser( id: string ): Observable<UserState.IRegisteredUser> {
     // get user with all details in case reloading from a fresh login
-    return this._http.get(`${NetworkCommonService.API_URL}ConferenceAttendees/${id}?filter=%7B"include":%7B"relation":"notes","scope":%7B"include":"peer"%7D%7D%7D`)
-      .map((user: any) => {
-        return new UserState.RegisteredUser(user);
-      });
+    this._log.debug( 'loadUser:', id );
+    const url = `${NetworkCommonService.API_URL}ConferenceAttendees/${id}?filter=%7B%22include%22%3A%7B%22relation%22%3A%22notes%22%2C%22scope%22%3A%7B%22include%22%3A%22peer%22%7D%7D%7D`;
+    this._log.debug( url );
+    // let params = new HttpParams();
+
+    // // Begin assigning parameters
+    // params = params.append('filter', );
+    // params = params.append('secondParameter', parameters.valueTwo);
+    return this._http.get( url )
+      .map( ( user: any ) => {
+        this._log.debug( 'loaded user:', user );
+        return new UserState.RegisteredUser( user );
+      } );
   }
 
   /**
    * claim user badge and cache it (aka persist in browser/mobile device)
    * @param token authenticated token
    */
-  public claimUser(user: UserState.IClaimStatus, badgeId: string): Observable<UserState.IRegisteredUser> {
-    return this._http.get(`${NetworkCommonService.API_URL}ConferenceTickets/${badgeId}/claim?confirm=true`)
-      .map((user: any) => {
-        return new UserState.RegisteredUser(user.attendee);
-      });
-      // if ( typeof id !== 'undefined' ) {
-    //   return this._systemUserApi.getCurrent().map((user: any) => {
-    //     /**
-    //      * NOTE: Get user doesn't return the authenticationToken,
-    //      * so we need to add it manually.
-    //      */
-    //     if ( !user.authenticationToken ) {
-    //       const token = this.token;
-    //       if ( token ) {
-    //         user.authenticationToken = this.token;
-    //       }
-    //     }
-    //     return user;
-    //   });
-    // }
-    // // no token, no user
-    // return Observable.of(null);
+  public claimUser( user: UserState.IClaimStatus, badgeId: string ): Observable<UserState.IRegisteredUser> {
+    const confirmHash = CryptoJS.AES.encrypt( user.attendee.id, 'user' ).toString().replace( /\//ig, '+' ); // ensure slashes are replaced by '+'
+    this._log.debug( 'confirmHash:', confirmHash );
+    // TODO: do this when Bram is ready
+    // return this._http.get(`${NetworkCommonService.API_URL}ConferenceTickets/${badgeId}/claim?confirm=${confirmHash}`)
+    return this._http.get( `${NetworkCommonService.API_URL}ConferenceTickets/${badgeId}/claim?confirm=true` )
+      .map( ( user: any ) => {
+        this._log.debug( 'confirmed:', user );
+        this._log.debug( 'typeof user:', typeof user );
+        for ( const key in user ) {
+          this._log.debug( key, user[key] );
+        }
+        return new UserState.RegisteredUser( user.attendee );
+      } );
   }
 
-  public persistUser(user: UserState.IRegisteredUser) {// SystemUser) {
+  public unclaimUser( id: string ): Observable<boolean> {
+    return this._http.get( `${NetworkCommonService.API_URL}ConferenceTickets/${id}/unclaim` )
+      .map( ( user: any ) => {
+        return true;
+      } );
+  }
+
+  public createAttendeeNote( id: string ): Observable<UserState.IConferenceAttendeeNote> {
+    this._log.debug( 'createAttendeeNote for:', id );
+    // get user with all details in case reloading from a fresh login
+    return this._http.post( `${NetworkCommonService.API_URL}ConferenceAttendeeNotes`, {
+      conferenceAttendeeId: this.currentUserId,
+      peerAttendeeId: id
+    } )
+      .map( ( note: any ) => {
+        return new UserState.ConferenceAttendeeNote( note );
+      } );
+  }
+
+  public updateAttendeeNote( updates: UserState.IConferenceAttendeeNote ): Observable<UserState.IConferenceAttendeeNote> {
+    const id = updates.id;
+    for (const key of ['id', 'modified', 'created']) {
+      // disallow updating of these props
+      delete updates[key];
+    }
+    return this._http.put( `${NetworkCommonService.API_URL}ConferenceAttendeeNotes/${id}`, updates )
+      .map( ( note: any ) => {
+        return new UserState.ConferenceAttendeeNote( note );
+      } );
+  }
+
+  public persistUser( user: UserState.IRegisteredUser ) {// SystemUser) {
     // persist user
     this.cache = user;
   }
 
-  public set token(value: string) {
+  public set token( value: string ) {
     // persist token
     if ( value ) {
-      this._storageService.setItem(StorageKeys.TOKEN, { token : value });
+      this._storageService.setItem( StorageKeys.TOKEN, { token: value } );
     } else {
-      this._storageService.removeItem(StorageKeys.TOKEN);
+      this._storageService.removeItem( StorageKeys.TOKEN );
     }
     // used via http request to set auth token on request headers
     this._network.authToken = value;
   }
 
   public get token(): string {
-    const value = this._storageService.getItem(StorageKeys.TOKEN);
+    const value = this._storageService.getItem( StorageKeys.TOKEN );
     if ( value && value.token ) {
       return value.token;
     }
@@ -309,10 +352,42 @@ export class UserService extends Cache {
     this.token = null;
   }
 
+  public get claimId() {
+    const stored = this._storageService.getItem( StorageKeys.CLAIMED_ID );
+    if ( stored ) {
+      return stored.id;
+    }
+    return null;
+  }
+
+  public set claimId( id: string ) {
+    if ( id ) {
+      this._storageService.setItem( StorageKeys.CLAIMED_ID, { id } );
+    } else {
+      this._storageService.removeItem( StorageKeys.CLAIMED_ID );
+    }
+  }
+
+  public get badgeId() {
+    const stored = this._storageService.getItem( StorageKeys.BADGE_ID );
+    if ( stored ) {
+      return stored.id;
+    }
+    return null;
+  }
+
+  public set badgeId( id: string ) {
+    if ( id ) {
+      this._storageService.setItem( StorageKeys.BADGE_ID, { id } );
+    } else {
+      this._storageService.removeItem( StorageKeys.BADGE_ID );
+    }
+  }
+
   /**
    * Preload various user data to help boost performance
    */
-  public preloadData(isAuth?: boolean) {
+  public preloadData( isAuth?: boolean ) {
     // ** Preload data **
 
     // only for authenticated users

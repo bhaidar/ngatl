@@ -41,7 +41,9 @@
     "badge-claim": "Is this your badge",
     "confirm-sponsor-pin": "Please confirm the sponsor PIN:",
     "scan-action": "Scan a badge",
-    "already-scanned": "You have already scanned this delightful individual."
+    "already-scanned": "You have already scanned this delightful individual.",
+    "already-claimed": "This badge has already been claimed. If this is your badge, please send email to info@ng-atl.org and we will correct this for you.",
+    "scan-yourself": "Well this sure is fun isn't it?! You have already scanned yourself and claimed this badge silly pants."
   },
   "conduct": {
     "title": "Code of Conduct"

@@ -1,13 +1,13 @@
-<ngatl-ns-action-bar class="action-bar" [intro]="showIntro" [ready]="appService.shownIntro"> 
+<ngatl-ns-action-bar class="action-bar" [intro]="showIntro" [ready]="appService.shownIntro" (tappedTop)="tappedTop($event)"> 
 </ngatl-ns-action-bar>
 <GridLayout id="content-root" rows="*" columns="*">
-    <AbsoluteLayout (loaded)="startBadge($event)" class="w-full h-full home-bg" row="0" col="0" *ngIf="appService.shownIntro && !showScans"><!--(tap)="retractTest()"-->
+    <AbsoluteLayout (loaded)="startBadge($event)" class="w-full h-full home-bg" row="0" col="0" *ngIf="appService.shownIntro && !showNotes"><!--(tap)="retractTest()"-->
         <Image src="res://badge_bottom.png" id="badge-bottom" (tap)="openBarcode()" class="badge-bottom-intro" [class.exit]="badgeExit"></Image>
         <Image src="res://badge_top.png" id="badge-top" class="badge-top-intro" [class.exit]="badgeExit"></Image>
         <Label text="" id="beacon" class="beacon beacon-pulse" [class.exit]="badgeExit" (tap)="openBarcode()"></Label>  
     </AbsoluteLayout>
 
-    <GridLayout row="0" col="0" rows="auto,*" columns="*" class="c-bg-transparent" *ngIf="showScans">
+    <GridLayout row="0" col="0" rows="auto,*" columns="*" class="c-bg-transparent" *ngIf="showNotes">
       <GridLayout class="card badge-scan" rows="*" columns="*,auto" (tap)="openBarcode()" row="0" col="0" [touchColor]="'#151F2F,#273957'">
         <Label [text]="'user.scan-action' | translate" class="label c-white t-20" row="0" col="0"></Label>
         <Image src="~/assets/images/barcode.png" row="0" col="1" height="50"></Image>
@@ -29,9 +29,9 @@
             <Label [text]="'ion-social-angular-outline' | fonticon" class="ion t-30 c-ngatl-red" row="0" col="0"></Label>
             
             <!-- <StackLayout class="hr-light"></StackLayout> -->
-            <Label [text]="item.name" class="t-25 c-grey-darker font-weight-bold label" row="0" col="2"></Label>
+            <Label [text]="item.peer?.name" class="t-20 c-white font-weight-bold label" row="0" col="2"></Label>
             <Label [text]="'ion-ios-compose' | fonticon" class="ion t-40 c-light-blue label" row="0" col="3"></Label>
-            <Label [text]="item.notes && item.notes.length ? item.notes[0].note : 'Add notes...'" row="2" colSpan="4" class="t-20 c-light-blue label"></Label>
+            <Label [text]="item.note ? item.note : 'Add notes...'" row="2" colSpan="4" class="t-20 c-light-blue label"></Label>
             
           </GridLayout>
         </ng-template>

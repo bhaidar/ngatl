@@ -11,6 +11,7 @@ import {
   RequestOptions,
   HttpModule,
 } from '@angular/http';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 // libs
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -26,6 +27,7 @@ import { reducers } from '../ngrx';
 import { AudioModule } from '../audio/audio.module';
 import { AudioEffects } from '../audio/effects';
 import { HttpErrorService } from './services/http-error.service';
+import { ApiInterceptor } from './services/http-interceptor.service';
 import { UserModule } from '../user/user.module';
 import { UserEffects } from '../user/effects';
 
@@ -64,6 +66,11 @@ export const BASE_PROVIDERS: any[] = [
     // Factory creates PnpHttpService under the hood
     useFactory : httpFactory,
   },
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: ApiInterceptor,
+    multi: true
+  }
 ];
 
 @NgModule({

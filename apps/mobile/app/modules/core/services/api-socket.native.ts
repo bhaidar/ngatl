@@ -1,5 +1,5 @@
 /* tslint:disable */
-import * as SocketIO from 'nativescript-socket.io';
+// import * as SocketIO from 'nativescript-socket.io';
 /**
  * @author Jonathan Casarrubias <twitter:@johncasarrubias> <github:@mean-expert-official>
  * @module SocketNative
@@ -19,6 +19,10 @@ export class SocketNative {
    * This method will return a valid socket connection.
    **/
   connect(url: string, options: any): any {
-    return SocketIO.connect(url, options);
+    return (url, options) => {
+      // do nothing
+      console.log('bring back nativescript-socket.io plugin to integrate');
+    };
+    // return SocketIO.connect(url, options);
   }
 }

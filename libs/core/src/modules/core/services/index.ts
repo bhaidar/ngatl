@@ -14,6 +14,7 @@ import { LocaleService } from './locale.service';
 import { HttpErrorService } from './http-error.service';
 import { FilterService } from './filter.service';
 import { NetworkCommonService } from './network.service';
+import { ApiInterceptor } from './http-interceptor.service';
 
 export const CORE_PROVIDERS: any[] = [
   ApiService,
@@ -28,6 +29,7 @@ export const CORE_PROVIDERS: any[] = [
   HttpErrorService,
   FilterService,
   NetworkCommonService,
+  ApiInterceptor,
 ];
 
 export * from './api.service';

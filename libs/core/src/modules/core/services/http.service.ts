@@ -165,7 +165,7 @@ export class HttpService extends Http {
         const isOffline = !url && status === 0;
         this._networkService.cleanup(url, isOffline);
         // use platform specific error handling
-        if ( this._httpErrorService.errorHandler(response) ) {
+        if ( this._httpErrorService.errorHandler(<any>response) ) {
           console.log(
             'http error: HttpService errorHandler returned true, re-throwing response to allow downstream catch to handle. response:',
             response,

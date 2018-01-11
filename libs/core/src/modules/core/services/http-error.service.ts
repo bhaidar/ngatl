@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { TranslateService } from '@ngx-translate/core';
 
@@ -40,7 +40,7 @@ export class HttpErrorService {
       });
   }
 
-  public errorHandler(response: Response): boolean {
+  public errorHandler(response: HttpErrorResponse): boolean {
     // by default, allow error responses to flow further downstream
     // any implementation of this service can return false to prevent downstream catch from firing
     return true;

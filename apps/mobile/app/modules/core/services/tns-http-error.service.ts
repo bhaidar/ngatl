@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { RouterExtensions } from 'nativescript-angular/router';
@@ -25,7 +25,7 @@ export class TnsHttpErrorService extends HttpErrorService {
   }
 
   public errorHandler(
-    response: Response,
+    response: HttpErrorResponse,
   ) {
     // in all cases for safety, ensure spinner is turned off on errors
     this._progressService.toggleSpinner();
@@ -35,22 +35,22 @@ export class TnsHttpErrorService extends HttpErrorService {
       // allow this to go down to downstream catch
       this._log.debug('errorHandler:', response);
 
-    } else if ( response instanceof Response ) {
+    } else if ( response instanceof HttpErrorResponse ) {
       switch ( response.status ) {
         case 502:
         case 503:
           if ( !this.maintenanceActive ) {
             this.maintenanceActive = true;
             this.errorFromRoutePath = this._ngRouter.url;
-            this._win.setTimeout(() => {
-              this._router.navigate(['/maintenance'], {
-                // this causes a routeReuse stacktrace, may bring back when nativescript-angular fixes it
-                // clearHistory: true,
-                transition : {
-                  name : 'slide',
-                },
-              });
-            }, 100);
+            // this._win.setTimeout(() => {
+            //   this._router.navigate(['/maintenance'], {
+            //     // this causes a routeReuse stacktrace, may bring back when nativescript-angular fixes it
+            //     // clearHistory: true,
+            //     transition : {
+            //       name : 'slide',
+            //     },
+            //   });
+            // }, 100);
           }
           // stop all downstream catch
           return false;
@@ -68,9 +68,9 @@ export class TnsHttpErrorService extends HttpErrorService {
           || url.includes('api-rc')) {
 
             let bodyMessage;
-            if (response && response.json) {
+            if (response && response.message) {
               try {
-                bodyMessage = response.json().message;
+                bodyMessage = response.message;
               } catch ( e ) {
                 bodyMessage = 'Malformed response.';
               }

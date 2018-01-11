@@ -12,6 +12,8 @@ export interface IStorageKeys {
   LOCALE: string;
   TOKEN: string;
   USER: string;
+  BADGE_ID: string; // the actual unique badge guid which helps track in case they need to 'unclaim' later
+  CLAIMED_ID: string; // attendee.id (the id claimed by someone)
   SCANNED: string;
   // TODO: add more (refactor rest of codebase to use these)
 }
@@ -20,6 +22,8 @@ export const StorageKeys: IStorageKeys = {
   LOCALE : `${PREFIX_KEY}locale`,
   TOKEN : `${PREFIX_KEY}user-token`,
   USER : `${PREFIX_KEY}current-user`,
+  BADGE_ID: `${PREFIX_KEY}badge-id`,
+  CLAIMED_ID: `${PREFIX_KEY}claimed-id`,
   SCANNED : `${PREFIX_KEY}scanned`,
 };
 

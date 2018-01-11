@@ -29,10 +29,10 @@ ListView {
 
 @keyframes cell-bg-default {
     0% {
-        background-color: rgba(255,255,255,1);
+        background-color: rgba(21,31,47,.5);
     }
     100% {
-        background-color: rgba(255,255,255,.4);
+        background-color: rgba(21,31,47,.8);
     }
 }
 @keyframes cell-bg-touch {
@@ -93,9 +93,9 @@ ListView {
     padding:10;
     vertical-align:top;
     background-color: white;
-    border-width: 1;
-    border-radius: 3;
-    border-color: white;
+    // border-width: 1;
+    // border-radius: 3;
+    // border-color: white;
 
     &.speaker-card {
         background-color: $ngatl-red;
@@ -103,7 +103,7 @@ ListView {
 
     &.scanned {
         padding: 10 20 10 20;
-        // background-color: rgba(255,255,255,.2);
+        background-color: $ngatl-blue-translucent;
         animation-name: cell-bg-default;
         animation-duration: .3;
         animation-fill-mode: forwards;
@@ -287,6 +287,8 @@ ListView {
 
     .label {
         color: #696969;
+        vertical-align: center;
+        font-size: 12;
     }
 }
 

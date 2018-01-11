@@ -334,7 +334,7 @@ export class NSAppService {
 
   private _confirmClaim(user: UserState.IClaimStatus) {
     this._ngZone.run(() => {
-      this._store.dispatch(new UserActions.LoginAction(user));
+      this._store.dispatch(new UserActions.ClaimUserAction(user));
     });
   }
 

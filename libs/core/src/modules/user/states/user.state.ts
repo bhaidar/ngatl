@@ -2,6 +2,20 @@ import { SystemUser } from '@ngatl/api';
 
 export namespace UserState {
 
+  export interface IConferenceAttendeeNote {
+    id?: string;
+    name?: string;
+    peerAttendeeId?: string;
+    note?: string;
+    audioUrl?: string;
+    imageUrl?: string;
+    conferenceAttendeeId?: string;
+    created?: string;
+    modified?: string;
+    swiping?: boolean;
+    peer?: IRegisteredUser;
+  }
+
   export interface IRegisteredUser {
     id?:string;
     email?:string;
@@ -10,24 +24,13 @@ export namespace UserState {
     phone?:string;
     created?:string;
     modified?:string;
-    notes?: Array<any>;
-    swiping?: boolean;
+    notes?: Array<IConferenceAttendeeNote>;
   }
+  
   export interface IClaimStatus {
     claimed:boolean;
     attendee?: IRegisteredUser;
     newClaim:false;
-  }
-
-  export interface IConferenceAttendeeNote {
-    id?: string;
-    peerAttendeeId?: string;
-    note?: string;
-    audioUrl?: string;
-    imageUrl?: string;
-    conferenceAttendeeId?: string;
-    created?: string;
-    modified?: string;
   }
 
   export interface ILoadAllResult { 
@@ -36,6 +39,16 @@ export namespace UserState {
   }
 
   export class RegisteredUser implements IRegisteredUser {
+    constructor(model?: any) {
+      for (const key in model) {
+        const cleanKey = key.toLowerCase().replace(/ /ig, '_');
+        const isDate = false;//cleanKey.indexOf('date') > -1;
+        this[cleanKey] = isDate ? new Date(model[key]) : model[key];
+      }
+    }
+  }
+
+  export class ConferenceAttendeeNote implements IConferenceAttendeeNote {
     constructor(model?: any) {
       for (const key in model) {
         const cleanKey = key.toLowerCase().replace(/ /ig, '_');
