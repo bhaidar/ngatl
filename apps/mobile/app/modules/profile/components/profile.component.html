@@ -1,7 +1,36 @@
-<ngatl-ns-search-action-bar></ngatl-ns-search-action-bar>
-<StackLayout class="page">
-    <Label text="TODO" textWrap="true"></Label>
-    <Button text="Logout" (tap)="logout()"></Button>
-    <Button text="Unclaim" (tap)="unclaim()"></Button>
-    
-</StackLayout>
+<ngatl-ns-profile-action-bar></ngatl-ns-profile-action-bar>
+
+<GridLayout id="example-background" (loaded)="onBackgroundLoaded($event)">
+  <GridLayout id="form-content" class="form-content" rows="auto,*,auto" (loaded)="onContentLoaded($event)">
+    <StackLayout class="top-border" row="0"></StackLayout>
+    <ScrollView row="1" class="fields-section">
+      <StackLayout>
+        <!-- Name -->
+        <GridLayout ios:columns="auto,*" android:rows="auto, auto" verticalAlignment="top">
+          <Label text="Name" class="field-title"></Label>
+          <TextField id="name" [text]="currentUser.name" class="field" ios:col="1" android:row="1" (tap)="onTextInputTapped($event)"></TextField>
+        </GridLayout>
+        <StackLayout class="line"></StackLayout>
+        <!-- Email -->
+        <GridLayout ios:columns="auto,*" android:rows="auto, auto" verticalAlignment="top">
+          <Label text="Email" class="field-title"></Label>
+          <TextField id="email" [text]="currentUser.email" class="field" ios:col="1" android:row="1" (tap)="onTextInputTapped($event)"></TextField>
+        </GridLayout>
+        <StackLayout class="line"></StackLayout>
+        <!-- Notes -->
+        <StackLayout>
+          <Label text="Company" class="field-title" ios:visibility="collapse"></Label>
+          <TextView id="company" [text]="currentUser.company" android:hint="Company" ios:hint="Company" class="field-multiline" (tap)="onTextInputTapped($event)"></TextView>
+        </StackLayout>
+        <StackLayout class="line"></StackLayout>
+
+
+        <Button text="Logout" (tap)="logout()"></Button>
+        <Button text="Unclaim" (tap)="unclaim()"></Button>
+      </StackLayout>
+    </ScrollView>
+  </GridLayout>
+  <!-- Picture -->
+  <ns-picture [selectedImage]="currentUser.imageUrl"></ns-picture>
+  <!-- <Image id="image" src="res://user" class="profile-picture" (tap)="onProfilePictureTapped($event)"></Image> -->
+</GridLayout>

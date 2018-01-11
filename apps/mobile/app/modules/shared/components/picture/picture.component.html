@@ -1,16 +1,18 @@
 
-<GridLayout
+<!-- <GridLayout
   [class.picture-none]="!selectedImage"
   [class.picture-upload-box]="selectedImage"
   horizontalAlignment="left"
-  (tap)="choose()">
+  (tap)="choose()"> -->
 
   <Image
+    (tap)="choose()"
     stretch="aspectFit"
+    class="profile-picture"
     [class.placeholder]="!selectedImage"
     [class.profile-image]="selectedImage"
     verticalAlignment="center"
     horizontalAlignment="center"
     [src]="selectedImage || 'res://uploadpic'">
   </Image>
-</GridLayout>
+<!-- </GridLayout> -->

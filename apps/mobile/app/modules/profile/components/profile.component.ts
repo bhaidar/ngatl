@@ -1,4 +1,9 @@
-import { Component, AfterViewInit, OnInit, ViewContainerRef } from '@angular/core';
+import {
+  Component,
+  AfterViewInit,
+  OnInit,
+  ViewContainerRef
+} from '@angular/core';
 
 // libs
 import { Store } from '@ngrx/store';
@@ -10,21 +15,30 @@ import { RouterExtensions } from 'nativescript-angular/router';
 
 // app
 // import { LoggerService } from '@ngatl/api';
-import { LogService, IAppState, UserState, BaseComponent, UserActions, WindowService, UserService } from '@ngatl/core';
+import {
+  LogService,
+  IAppState,
+  UserState,
+  BaseComponent,
+  UserActions,
+  WindowService,
+  UserService
+} from '@ngatl/core';
 import { NSAppService } from '../../core/services/ns-app.service';
 
 @Component({
   moduleId: module.id,
   selector: 'ngatl-ns-profile',
-  templateUrl: 'profile.component.html'
+  templateUrl: 'profile.component.html',
+  styleUrls: ['profile.component.css']
 })
-export class ProfileComponent extends BaseComponent implements AfterViewInit, OnInit {
-
+export class ProfileComponent extends BaseComponent
+  implements AfterViewInit, OnInit {
   public currentUser: UserState.IRegisteredUser;
 
   constructor(
-    private store: Store<any>, 
-    private router: RouterExtensions, 
+    private store: Store<any>,
+    private router: RouterExtensions,
     private log: LogService,
     private win: WindowService,
     private vcRef: ViewContainerRef,
@@ -49,12 +63,27 @@ export class ProfileComponent extends BaseComponent implements AfterViewInit, On
     }, 300);
   }
 
+  public onBackgroundLoaded(e) {
+
+  }
+
+  public onContentLoaded(e) {
+
+  }
+
+  public onTextInputTapped(e) {
+    
+  }
+
   ngOnInit() {
-    this.store.select((s: IAppState) => s.user)
+    this.store
+      .select((s: IAppState) => s.user)
       .takeUntil(this.destroy$)
       .subscribe((s: UserState.IState) => {
         // clone so user can make editing changes to bindings
-        this.currentUser = new UserState.RegisteredUser(Object.assign({}, s.current));
+        this.currentUser = new UserState.RegisteredUser(
+          Object.assign({}, s.current)
+        );
       });
   }
 
