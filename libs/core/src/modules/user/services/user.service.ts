@@ -265,6 +265,15 @@ export class UserService extends Cache {
   public loadUser( id: string ): Observable<UserState.IRegisteredUser> {
     // get user with all details in case reloading from a fresh login
     this._log.debug( 'loadUser:', id );
+    /**
+     * {
+    "include": {
+        "relation":"notes",
+        "scope":{
+            "include":"peer"
+        }
+    }
+     */
     const url = `${NetworkCommonService.API_URL}ConferenceAttendees/${id}?filter=%7B%22include%22%3A%7B%22relation%22%3A%22notes%22%2C%22scope%22%3A%7B%22include%22%3A%22peer%22%7D%7D%7D`;
     this._log.debug( url );
     // let params = new HttpParams();
