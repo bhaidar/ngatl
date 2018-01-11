@@ -14,6 +14,12 @@ npm run start.ios
 npm run start.android
 ```
 
+Webpack build:
+
+```
+tns build ios --bundle --env.aot --env.uglify --release --for-device
+```
+
 ## Nrwl Extensions for Angular (Nx)
 
 <a href="https://nrwl.io/nx"><img src="https://preview.ibb.co/mW6sdw/nx_logo.png"></a>
