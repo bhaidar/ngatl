@@ -35,8 +35,7 @@ import { LinearGradient } from '../../../helpers';
 @Component({
   moduleId: module.id,
   selector: 'ngatl-ns-profile',
-  templateUrl: 'profile.component.html',
-  styleUrls: ['profile.component.css']
+  templateUrl: 'profile.component.html'
 })
 export class ProfileComponent extends BaseComponent
   implements AfterViewInit, OnInit {
