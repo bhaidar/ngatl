@@ -34,7 +34,7 @@ import { ListViewEventData, RadListView } from 'nativescript-pro-ui/listview';
 // app
 import { IConferenceAppState } from '../../../ngrx';
 import { NSAppService } from '../../../core/services/ns-app.service';
-import { BarcodeComponent } from '../../../shared/components/barcode/barcode.component';
+import { NoteEditComponent } from '../../../shared/components/note-edit/note-edit.component';
 
 @Component({
   moduleId: module.id,
@@ -155,7 +155,6 @@ import { BarcodeComponent } from '../../../shared/components/barcode/barcode.com
   `]
 })
 export class DashboardComponent extends BaseComponent implements AfterViewInit, OnInit, OnDestroy {
-  public user: any;
   public showIntro = false;
   public swipeEnable = true;
   public showSwiper = false;
@@ -207,7 +206,15 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   }
 
   public openItem(item) {
-
+    this._store.dispatch(new ModalActions.OpenAction({
+      cmpType: NoteEditComponent,
+      modalOptions: {
+        viewContainerRef: this._vcRef,
+        context: {
+          item
+        }
+      }
+    }));
   }
 
   public onItemTap(e) {
@@ -595,19 +602,6 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     }, 800 );
   }
 
-  public login() {
-    this._store.dispatch(new UserActions.LoginAction(this.user));
-  }
-
-  public create() {
-    // this._store.dispatch(new UserActions.CreateAction(this.user));
-    const user = new SystemUser( this.user );
-    for ( const key in user ) {
-      this._log.debug( key, user[key] );
-    }
-    this._store.dispatch(new UserActions.CreateFinishAction(user));
-  }
-
   public enter() {
     ['intro-background', 'intro-logo-n', 'intro-logo-ng', 'intro-logo-atl', 'intro-text-one', 'intro-text-two', 'intro-version', 'intro-swipe'].forEach(id => { //'intro-logo-bg', 
       const p = this._page.getViewById(id);
@@ -635,13 +629,6 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   // }
 
   ngOnInit() {
-    this.user = {
-      firstName: 'Any',
-      lastName: 'User',
-      username: 'user@ngatl.org',
-      email: 'user@ngatl.org',
-      password: '12341234'
-    };
     this._store.select((s: IAppState) => s.user)
       .takeUntil(this.destroy$)
       .subscribe((s: UserState.IState) => {
@@ -655,6 +642,9 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
             // replace badge drop
             this.badgeExit = this.showNotes = false;
           }
+        } else if (this.badgeExit) {
+          // replace badge drop
+          this.badgeExit = this.showNotes = false;
         }
       });
     if (!this.appService.shownIntro) {

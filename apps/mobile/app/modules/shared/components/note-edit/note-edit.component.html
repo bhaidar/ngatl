@@ -1,0 +1,11 @@
+<GridLayout rows="auto,*,auto" columns="*">
+  <ngatl-ns-modal-title-bar [title]="item.name" [params]="params" row="0" col="0"></ngatl-ns-modal-title-bar>
+  <StackLayout row="1" col="0" backgroundColor="#000" padding="10">
+    <TextView hint="Add notes..." [(ngModel)]="item.note" editable="true" class="w-full h-full"></TextView>
+    
+  </StackLayout>
+  <StackLayout row="2" col="0" padding="10">
+      <Button [text]="'general.save' | translate" (tap)="save()" class="btn btn-primary"></Button>
+      
+  </StackLayout>
+</GridLayout>

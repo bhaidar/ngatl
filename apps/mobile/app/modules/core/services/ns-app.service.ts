@@ -301,9 +301,10 @@ export class NSAppService {
                 this._confirmClaim(user); 
               }
             }, _ => {
-              this._ngZone.run(() => {
-                this._store.dispatch(new UserActions.AddUserAction(user));
-              });
+              // reject/cancel
+              // this._win.setTimeout(_ => {
+              //   this._win.alert(this._translate.instant(''));
+              // }, 300);
             });
           }, 500);
         });
