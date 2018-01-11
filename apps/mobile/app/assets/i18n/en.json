@@ -35,7 +35,9 @@
     "tweet-us": "Tweet at us",
     "error": "We're sorry an error occurred.",
     "photo-album-tle": "Photo Album",
-    "edit": "Edit"
+    "edit": "Edit",
+    "save": "Save",
+    "profile": "Profile"
   },
   "user": {
     "badge-claim": "Is this your badge",
@@ -43,7 +45,12 @@
     "scan-action": "Scan a badge",
     "already-scanned": "You have already scanned this delightful individual.",
     "already-claimed": "This badge has already been claimed. If this is your badge, please send email to info@ng-atl.org and we will correct this for you.",
-    "scan-yourself": "Well this sure is fun isn't it?! You have already scanned yourself and claimed this badge silly pants."
+    "scan-yourself": "Well this sure is fun isn't it?! You have already scanned yourself and claimed this badge silly pants.",
+    "unclaim-confirm": "Are you sure you would like to unclaim this badge? This will make it available for someone else to claim.",
+    "name": "Name",
+    "phone": "Phone",
+    "company": "Company",
+    "email": "Email"
   },
   "conduct": {
     "title": "Code of Conduct"

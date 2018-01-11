@@ -378,34 +378,28 @@ export class UserEffects extends Analytics {
   //         return new UserActions.UpdateAction(state.user.current);
   //       });
 
-  // @Effect()
-  // userUpdate$: Observable<Action> =
-  //   this._actions$
-  //       .ofType(UserActions.ActionTypes.UPDATE)
-  //       .switchMap((action: UserActions.UpdateAction) => {
-  //         this._progressService.toggleSpinner(true);
-  //         if ( this._legalVerifyUserToken ) {
-  //           // to properly use auth token on update user request
-  //           this._userService.token = this._legalVerifyUserToken;
-  //         }
-  //         return this._userService
-  //                    .updateUser(action.payload)
-  //                    .map(
-  //                      user => {
-  //                        this._legalVerifyUserToken = null; // no longer needed
-  //                        if ( user.authenticationToken ) {
-  //                          this._userService.token = user.authenticationToken;
-  //                        }
-  //                        this._userService.persistUser(user);
-  //                        return new UserActions.ChangedAction({
-  //                          current : user,
-  //                          needsLegal : false, // always reset after update
-  //                          errors : [],
-  //                        });
-  //                      })
-  //                    .catch(
-  //                      err => Observable.of(new UserActions.ApiErrorAction(err)));
-  //       });
+  @Effect()
+  userUpdate$: Observable<Action> =
+    this._actions$
+        .ofType(UserActions.ActionTypes.UPDATE)
+        .switchMap((action: UserActions.UpdateAction) => {
+          this._progressService.toggleSpinner(true);
+          return this._userService
+                     .updateUser(action.payload)
+                     .map(user => {
+                         return new UserActions.RefreshUserAction(user.id);
+                        //  if ( user.authenticationToken ) {
+                        //    this._userService.token = user.authenticationToken;
+                        //  }
+                        //  this._userService.persistUser(user);
+                        //  return new UserActions.ChangedAction({
+                        //    current : user,
+                        //    errors : [],
+                        //  });
+                       })
+                     .catch(
+                       err => Observable.of(new UserActions.ApiErrorAction(err)));
+        });
 
   // @Effect()
   // delete$: Observable<Action> =
@@ -690,7 +684,7 @@ export class UserEffects extends Analytics {
                   const savedNote = this._currentSavedNotes.find( n => n.id === result.notes[i].id );
                   if ( savedNote ) {
                     // ensure names are preserved
-                    result.notes[i].name = savedNote.name;
+                    result.notes[i].peer.name = savedNote.peer.name;
                   }
                 }
               }
@@ -775,7 +769,7 @@ export class UserEffects extends Analytics {
   private _postingData: any; // used with create user chain
   private _currentBadgeId: string;
   private _currentScanAttendee: UserState.IRegisteredUser;
-  private _currentSavedNotes: Array<UserState.IRegisteredUser>;
+  private _currentSavedNotes: Array<UserState.IConferenceAttendeeNote>;
 
   constructor(
     public analytics: AnalyticsService,

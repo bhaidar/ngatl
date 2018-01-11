@@ -39,6 +39,15 @@ export namespace UserState {
   }
 
   export class RegisteredUser implements IRegisteredUser {
+    public id: string;
+    public email:string;
+    public name:string;
+    public company:string;
+    public phone:string;
+    public created:string;
+    public modified:string;
+    public notes: Array<IConferenceAttendeeNote>;
+
     constructor(model?: any) {
       for (const key in model) {
         const cleanKey = key.toLowerCase().replace(/ /ig, '_');

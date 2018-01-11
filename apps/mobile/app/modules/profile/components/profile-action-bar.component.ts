@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 // libs
 import { Store } from '@ngrx/store';
@@ -18,6 +18,8 @@ import { LogService, IAppState } from '@ngatl/core';
   templateUrl: 'profile-action-bar.component.html'
 })
 export class ProfileActionBarComponent implements OnInit {
+  @Input() public title: string;
+  @Output() public save: EventEmitter<boolean> = new EventEmitter();
   public searchInput: string;
   public backIcon: string;
   public moreIcon: string;

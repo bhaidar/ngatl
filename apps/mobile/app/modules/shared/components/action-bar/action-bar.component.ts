@@ -50,15 +50,15 @@ export class ActionBarComponent {
   }
 
   public openProfileOrHelp() {
-    if (this.currentUser) {
+    // if (this.currentUser) {
       this.router.navigate( ['/profile'] );
-    } else {
-      this.store.dispatch(new ModalActions.OpenAction({
-        cmpType: HelpComponent,
-        modalOptions: {
-          viewContainerRef: this.appService.currentVcRef,
-        }
-      }));
-    }
+    // } else {
+    //   this.store.dispatch(new ModalActions.OpenAction({
+    //     cmpType: HelpComponent,
+    //     modalOptions: {
+    //       viewContainerRef: this.appService.currentVcRef,
+    //     }
+    //   }));
+    // }
   }
 }

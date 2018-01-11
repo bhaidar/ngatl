@@ -106,7 +106,7 @@ export class PictureComponent extends BaseComponent implements OnInit {
   public ngOnInit() {
 
     this._uploadErrorMessage = this._translateService.instant('error.upload-photo-lbl');
-    this.photoAlbumLabel = this._translateService.instant('generic.photo-album-tle');
+    this.photoAlbumLabel = this._translateService.instant('general.photo-album-tle');
     this.cameraLabel = this._translateService.instant('dialogs.camera');
     this.editLabel = this._translateService.instant('general.edit');
     this.deleteLabel = this._translateService.instant('item.delete-lbl');

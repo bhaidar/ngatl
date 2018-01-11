@@ -2,6 +2,7 @@
   <NavigationButton visibility="collapsed"></NavigationButton>
   <GridLayout rows="auto" columns="50,*,50">
     <Button [text]="backIcon | fonticon" (tap)="back()" class="ion btn-transparent" row="0" col="0" width="50"></Button>
-    <Button [text]="moreIcon | fonticon" (tap)="more()" class="ion btn-transparent" row="0" col="2" width="50"></Button>
+    <Label [text]="title || ''" class="action-bar-title text-center" row="0" col="1"></Label>
+    <Button [text]="'general.save' | translate" (tap)="save.next(true)" class="ion btn-transparent" row="0" col="2" width="50"></Button>
   </GridLayout>
 </ActionBar>

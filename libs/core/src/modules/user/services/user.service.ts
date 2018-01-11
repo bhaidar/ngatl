@@ -248,9 +248,15 @@ export class UserService extends Cache {
   //   return this._apiResetting.pnpUpdatePassword(forgotRequest);
   // }
 
-  // public updateUser(user: any) {
-  //   return this._systemUserApi.updateUser(user.id.toString(), user);
-  // }
+  public updateUser(user: UserState.IRegisteredUser) {
+    const url = `${NetworkCommonService.API_URL}ConferenceAttendees/${user.id}`;
+    this._serializeUpdates(user);
+    return this._http.put( url, user )
+      .map( ( user: any ) => {
+        this._log.debug( 'updated user:', user );
+        return new UserState.RegisteredUser( user );
+      } );
+  }
 
   // public deleteUser(id: string) {
   //   return this._apiUsers.deleteUser(id);
@@ -314,14 +320,18 @@ export class UserService extends Cache {
 
   public updateAttendeeNote( updates: UserState.IConferenceAttendeeNote ): Observable<UserState.IConferenceAttendeeNote> {
     const id = updates.id;
-    for (const key of ['id', 'modified', 'created']) {
-      // disallow updating of these props
-      delete updates[key];
-    }
+    this._serializeUpdates(updates);
     return this._http.put( `${NetworkCommonService.API_URL}ConferenceAttendeeNotes/${id}`, updates )
       .map( ( note: any ) => {
         return new UserState.ConferenceAttendeeNote( note );
       } );
+  }
+
+  private _serializeUpdates(updates: any) {
+    for (const key of ['id', 'modified', 'created']) {
+      // disallow updating of these props
+      delete updates[key];
+    }
   }
 
   public persistUser( user: UserState.IRegisteredUser ) {// SystemUser) {

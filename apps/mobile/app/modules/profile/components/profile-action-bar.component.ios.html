@@ -1,11 +1,11 @@
-<ActionBar class="action-bar">
+<ActionBar class="action-bar" [title]="title">
   <NavigationButton visibility="collapsed"></NavigationButton>
   <!--<StackLayout orientation="horizontal" ios:horizontalAlignment="center" android:horizontalAlignment="left">-->
   <!--</StackLayout>-->
   <ActionItem (tap)="back()">
     <Button [text]="backIcon | fonticon" class="ion action-item"></Button>
   </ActionItem>
-  <ActionItem (tap)="more()" ios.position="right">
-    <Button [text]="moreIcon | fonticon" class="ion action-item"></Button>
+  <ActionItem (tap)="save.next(true)" ios.position="right">
+    <Button [text]="'general.save' | translate" class="action-item"></Button>
   </ActionItem>
 </ActionBar>

@@ -103,7 +103,7 @@ export namespace UserActions {
   export class UpdateAction implements Action {
     type = ActionTypes.UPDATE;
 
-    constructor(public payload: SystemUser) {}
+    constructor(public payload: UserState.IRegisteredUser) {}
   }
 
   export class LoginAction implements Action {

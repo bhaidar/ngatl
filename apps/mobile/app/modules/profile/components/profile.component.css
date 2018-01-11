@@ -1,4 +1,4 @@
-.profile-picture {
+.profile-picture-box {
   width: 80;
   height: 80;
   border-radius: 40;
@@ -11,6 +11,12 @@
   opacity: 0;
   animation-delay: 0.7;
   animation-fill-mode: forwards;
+  background-color: #fff;
+}
+.profile-picture {
+  width: 80;
+  height: 80;
+  border-radius: 40;
 }
 
 @keyframes picture {

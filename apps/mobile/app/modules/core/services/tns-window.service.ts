@@ -150,6 +150,7 @@ export class MobileWindowPlatformService {
           dialogs.confirm(options).then(ok => {
             this._dialogOpened = false;
             if (ok) {
+              action();
               resolve();
             } else {
               reject();

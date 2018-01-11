@@ -1,5 +1,4 @@
-<ngatl-ns-profile-action-bar></ngatl-ns-profile-action-bar>
-
+<ngatl-ns-profile-action-bar [title]="'general.profile' | translate" (save)="save()"></ngatl-ns-profile-action-bar>
 <GridLayout id="example-background" (loaded)="onBackgroundLoaded($event)">
   <GridLayout id="form-content" class="form-content" rows="auto,*,auto" (loaded)="onContentLoaded($event)">
     <StackLayout class="top-border" row="0"></StackLayout>
@@ -7,30 +6,50 @@
       <StackLayout>
         <!-- Name -->
         <GridLayout ios:columns="auto,*" android:rows="auto, auto" verticalAlignment="top">
-          <Label text="Name" class="field-title"></Label>
-          <TextField id="name" [text]="currentUser.name" class="field" ios:col="1" android:row="1" (tap)="onTextInputTapped($event)"></TextField>
+          <Label [text]="'user.name' | translate" class="field-title"></Label>
+          <TextField id="name" [(ngModel)]="currentUser.name" class="field" ios:col="1" android:row="1" (tap)="onTextInputTapped($event)"></TextField>
         </GridLayout>
         <StackLayout class="line"></StackLayout>
         <!-- Email -->
         <GridLayout ios:columns="auto,*" android:rows="auto, auto" verticalAlignment="top">
-          <Label text="Email" class="field-title"></Label>
-          <TextField id="email" [text]="currentUser.email" class="field" ios:col="1" android:row="1" (tap)="onTextInputTapped($event)"></TextField>
+          <Label [text]="'user.email' | translate" class="field-title"></Label>
+          <TextField id="email" [(ngModel)]="currentUser.email" class="field" ios:col="1" android:row="1" (tap)="onTextInputTapped($event)"></TextField>
         </GridLayout>
         <StackLayout class="line"></StackLayout>
-        <!-- Notes -->
-        <StackLayout>
-          <Label text="Company" class="field-title" ios:visibility="collapse"></Label>
-          <TextView id="company" [text]="currentUser.company" android:hint="Company" ios:hint="Company" class="field-multiline" (tap)="onTextInputTapped($event)"></TextView>
-        </StackLayout>
+        <!-- Phone -->
+        <GridLayout ios:columns="auto,*" android:rows="auto, auto" verticalAlignment="top">
+          <Label [text]="'user.phone' | translate" class="field-title"></Label>
+          <TextField id="phone" [(ngModel)]="currentUser.phone" class="field" ios:col="1" android:row="1" (tap)="onTextInputTapped($event)"></TextField>
+        </GridLayout>
         <StackLayout class="line"></StackLayout>
+        <!-- Company -->
+        <GridLayout ios:columns="auto,*" android:rows="auto, auto" verticalAlignment="top">
+          <Label [text]="'user.company' | translate" class="field-title"></Label>
+          <TextField id="phone" [(ngModel)]="currentUser.company" class="field" ios:col="1" android:row="1" (tap)="onTextInputTapped($event)"></TextField>
+        </GridLayout>
+        <StackLayout class="line"></StackLayout>
+        <!-- Company -->
+        <!-- <StackLayout>
+          <Label text="Company" class="field-title" ios:visibility="collapse"></Label>
+          <TextView id="company" [(ngModel)]="currentUser.company" android:hint="Company" ios:hint="Company" class="field-multiline" (tap)="onTextInputTapped($event)"></TextView>
+        </StackLayout>
+        <StackLayout class="line"></StackLayout> -->
 
 
-        <Button text="Logout" (tap)="logout()"></Button>
-        <Button text="Unclaim" (tap)="unclaim()"></Button>
+        <Button text="Logout" (tap)="logout()" class="btn btn-primary"></Button>
+        <StackLayout class="line"></StackLayout>
+       
       </StackLayout>
     </ScrollView>
+    <Button text="Unclaim Badge" (tap)="unclaim()" class="btn btn-primary" row="2" col="0"></Button>
   </GridLayout>
   <!-- Picture -->
-  <ns-picture [selectedImage]="currentUser.imageUrl"></ns-picture>
+  <!-- <Image
+    class="profile-picture"
+    src="res://uploadpic">
+  </Image> -->
+  <StackLayout class="profile-picture-box">
+    <ns-picture [selectedImage]="currentUser.imageUrl"></ns-picture>
+  </StackLayout>
   <!-- <Image id="image" src="res://user" class="profile-picture" (tap)="onProfilePictureTapped($event)"></Image> -->
 </GridLayout>
