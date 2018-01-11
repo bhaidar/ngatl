@@ -10,36 +10,47 @@ import './vendor-platform';
 import 'reflect-metadata';
 
 // ng
-import '@angular/platform-browser';
 import '@angular/core';
 import '@angular/common';
 import '@angular/forms';
 import '@angular/http';
+import '@angular/platform-browser';
 import '@angular/router';
 
 // ng libs
 import '@ngrx/effects';
-import '@ngrx/store';
 import '@ngrx/router-store';
+import '@ngrx/store';
+import '@ngx-translate/core';
 
 // ns-ng
 import 'nativescript-angular/platform-static';
 import 'nativescript-angular/common';
+import 'nativescript-angular/router';
 import 'nativescript-angular/forms';
 import 'nativescript-angular/http';
-import 'nativescript-angular/router';
 
 // shared libs across all apps in Nx workspace
 // TODO: import any shared libs here
+import '@ngatl/api';
+import '@ngatl/core';
 
 // ns plugins
+import 'nativescript-audio';
+import 'nativescript-camera-plus';
+import 'nativescript-checkbox';
+import 'nativescript-fancyalert';
+import 'nativescript-imagecropper';
+import 'nativescript-imagepicker';
+import 'nativescript-loading-indicator';
 import 'nativescript-ngx-fonticon';
+import 'nativescript-permissions';
 import 'nativescript-pro-ui/listview';
-import 'nativescript-pro-ui/sidedrawer';
 
 /**
  * app shared code
  * this list will be barrels of code imported in many different modules
  * local to the {N} app here only
  */
+import './helpers';
 import './modules/shared';

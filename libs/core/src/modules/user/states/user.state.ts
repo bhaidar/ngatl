@@ -22,6 +22,7 @@ export namespace UserState {
     name?:string;
     company?:string;
     phone?:string;
+    imageUrl?:string;
     created?:string;
     modified?:string;
     notes?: Array<IConferenceAttendeeNote>;
@@ -44,6 +45,7 @@ export namespace UserState {
     public name:string;
     public company:string;
     public phone:string;
+    public imageUrl:string;
     public created:string;
     public modified:string;
     public notes: Array<IConferenceAttendeeNote>;

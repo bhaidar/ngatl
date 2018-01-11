@@ -21,18 +21,26 @@ const routes: Routes = [
       {
         path: 'speakers',
         loadChildren: './modules/speakers/speaker.module#SpeakerModule'
+        // NOTE for webpack: comment out above and uncomment below 
+        // loadChildren: '../speakers/speaker.module#SpeakerModule'
       },
       {
         path: 'sponsors',
         loadChildren: './modules/sponsors/sponsor.module#SponsorModule'
+        // NOTE for webpack: comment out above and uncomment below 
+        // loadChildren: '../sponsors/sponsor.module#SponsorModule'
       },
       {
         path: 'events',
         loadChildren: './modules/events/events.module#EventsModule'
+        // NOTE for webpack: comment out above and uncomment below 
+        // loadChildren: '../events/events.module#EventsModule'
       },
       {
         path: 'misc',
         loadChildren: './modules/misc/misc.module#MiscModule'
+        // NOTE for webpack: comment out above and uncomment below 
+        // loadChildren: '../misc/misc.module#MiscModule'
       },
     ]
   }

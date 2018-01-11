@@ -7,6 +7,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const { NativeScriptWorkerPlugin } = require('nativescript-worker-loader/NativeScriptWorkerPlugin');
+const ClosureCompilerPlugin = require('webpack-closure-compiler');
 
 const os = require('os');
 const ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin');
@@ -48,7 +49,7 @@ module.exports = env => {
         '~': resolve('./app')
       },
       // don't resolve symlinks to symlinked modules
-      // symlinks: false
+      symlinks: false
     },
     resolveLoader: {
       // don't resolve symlinks to symlinked loaders
@@ -77,8 +78,8 @@ module.exports = env => {
         {
           test: /.ts$/, use: [
             'nativescript-dev-webpack/moduleid-compat-loader',
-            { loader: '@ngtools/webpack', options: ngToolsWebpackOptions },
-            { loader: 'angular-router-loader?aot=true' }
+            { loader: '@ngtools/webpack', options: ngToolsWebpackOptions }
+            // { loader: 'angular-router-loader?aot=true' }
           ]
         },
         { test: /\.json$/, use: [{ loader: 'json-loader' }] }
@@ -153,19 +154,35 @@ module.exports = env => {
     }));
   }
   if ( uglify ) {
-    // config.plugins.push(new webpack.LoaderOptionsPlugin({ minimize: true }));
+    config.plugins.push(new webpack.LoaderOptionsPlugin({ minimize: true }));
+    // Work around an Android issue by setting compress = false
+    // const compress = platform !== "android";
+    // config.plugins.push(new webpack.optimize.UglifyJsPlugin({
+    //     mangle: { except: nsWebpack.uglifyMangleExcludes },
+    //     compress,
+    // }));
+
     config.plugins.push(new ParallelUglifyPlugin({
       workerCount: os.cpus().length,
       uglifyES: {
         compress: platform !== 'android',
-        // mangle: {
-        //   reserved: nsWebpack.uglifyMangleExcludes.concat(dropDownMangleExcludes)
-        // },
+        mangle: {
+          reserved: nsWebpack.uglifyMangleExcludes
+        },
         ecma: 6,
         safari10: platform !== 'android',
-        warnings: 'verbose',
+        warnings: 'verbose'
       }
     }));
+    // config.plugins.push(new ClosureCompilerPlugin({
+    //   compiler: {
+    //     language_in: 'ES6',
+    //     language_out: 'ES5',
+    //     compilation_level: 'SIMPLE'
+    //   },
+    // // jsCompiler: true,
+    //   concurrency: 3,
+    // }))
   }
   return config;
 };

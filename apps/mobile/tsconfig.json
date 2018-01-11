@@ -13,8 +13,7 @@
         "skipLibCheck": true,
         "lib": [
             "es2017",
-            "dom",
-            "es6"
+            "dom"
         ],
         "baseUrl": ".",
         "paths": {
@@ -32,6 +31,7 @@
         "app/main.ts",
         "app/**/*.module.ts",
         "app/helpers/index.ts",
+        "../../libs/api/index.ts",
         "../../libs/core/index.ts"
     ]
 }
