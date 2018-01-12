@@ -32,9 +32,14 @@ import { screen, isIOS, isAndroid } from 'tns-core-modules/platform';
 import { ListViewEventData, RadListView } from 'nativescript-pro-ui/listview';
 
 // app
+import { getResolution } from '../../../../helpers';
 import { IConferenceAppState } from '../../../ngrx';
 import { NSAppService } from '../../../core/services/ns-app.service';
 import { NoteEditComponent } from '../../../shared/components/note-edit/note-edit.component';
+
+// const reso = getResolution();
+// console.log('getResolution:', reso.width, reso.height, reso.widthPixels, reso.heightPixels);
+//screen.mainScreen.widthDIPs
 
 @Component({
   moduleId: module.id,

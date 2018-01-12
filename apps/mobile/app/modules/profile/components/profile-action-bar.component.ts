@@ -19,7 +19,7 @@ import { LogService, IAppState } from '@ngatl/core';
 })
 export class ProfileActionBarComponent implements OnInit {
   @Input() public title: string;
-  @Output() public save: EventEmitter<boolean> = new EventEmitter();
+  @Output() public logout: EventEmitter<boolean> = new EventEmitter();
   public searchInput: string;
   public backIcon: string;
   public moreIcon: string;

@@ -6,6 +6,7 @@ import { topmost } from 'tns-core-modules/ui/frame';
 
 // register plugin components
 registerElement('Shimmer', () => require('nativescript-shimmer').Shimmer);
+registerElement('CameraPlus', () => require('nativescript-camera-plus').CameraPlus);
 
 // app
 import { NSAppService } from './modules/core/services/ns-app.service';

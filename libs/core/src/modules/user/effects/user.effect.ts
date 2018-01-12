@@ -271,6 +271,9 @@ export class UserEffects extends Analytics {
           this._userService.claimId = user.attendee.id;
           // TODO: use real/secure token
           this._userService.token = 'admin-token';
+          this._win.setTimeout(_ => {
+            this._win.alert(`${this._translate.instant('user.logged-in')} ${user.attendee.name}`);
+          }, 300);
           return new UserActions.RefreshUserAction( user.attendee.id );
         } else {
           return new UserActions.LoginFailedAction( 'login failed' );
@@ -608,7 +611,7 @@ export class UserEffects extends Analytics {
             } else {
               // assume user has already been scanned
               this._win.setTimeout( _ => {
-                this._win.alert( this._translate.instant( 'user.already-scanned' ) );
+                this._win.alert( `${this._translate.instant( 'user.already-scanned' )} ${this._translate.instant( 'user.person' )}`);
               }, 300 );
               return new AppActions.NoopAction();
             }
@@ -630,7 +633,7 @@ export class UserEffects extends Analytics {
           this._currentScanAttendee = action.payload.attendee;
           if ( alreadyScanned ) {
             this._win.setTimeout( _ => {
-              this._win.alert( this._translate.instant( 'user.already-scanned' ) );
+              this._win.alert( `${this._translate.instant( 'user.already-scanned' )} ${alreadyScanned.peer.name}.` );
             }, 300 );
             return Observable.of( new AppActions.NoopAction() );
           } else {
@@ -712,7 +715,7 @@ export class UserEffects extends Analytics {
         const index = currentUser.notes.findIndex( u => u.id === action.payload.id );
         if ( index > -1 ) {
           const note = currentUser.notes[index];
-          this._userService.deleteAttendeeNote( note.id )
+          return this._userService.deleteAttendeeNote( note.id )
             .map( ( result: any ) => {
               currentUser.notes.splice( index, 1 );
               return new UserActions.ChangedAction( {

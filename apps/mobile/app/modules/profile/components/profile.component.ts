@@ -107,13 +107,14 @@ export class ProfileComponent extends BaseComponent
   }
 
   public save() {
-    for (const key in this.currentUser) {
-      this.log.debug(key, this.currentUser[key]);
-    }
+    // for (const key in this.currentUser) {
+    //   this.log.debug(key, this.currentUser[key]);
+    // }
     this.progress.toggleSpinner(true);
     this.store.dispatch(new UserActions.UpdateAction(this.currentUser));
     this.win.setTimeout(_ => {
       this.progress.toggleSpinner(false);
+      this.win.alert(this.translate.instant('user.updated'));
     }, 1500);
   }
 

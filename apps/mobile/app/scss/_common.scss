@@ -135,6 +135,9 @@ ListView {
 .social-controls{
     padding-top: 10;
 }
+.note-area {
+    background-color:rgba(21,31,47,.8);
+}
 
 .checkbox-layout {
     padding: 5 0 5 12;
@@ -197,6 +200,9 @@ ListView {
         animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
     }
 }
+.action-image {
+    width: 50;
+}
 
 // modal action bar override
 .action-bar {
@@ -240,6 +246,9 @@ ListView {
 }
 .c-bg-light-blue {
     background-color: $blue-light;
+}
+.c-bg-sky {
+    background-color: $sky;
 }
 .c-grey-darker {
     color: $grey-darker;

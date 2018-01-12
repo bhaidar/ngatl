@@ -88,7 +88,7 @@ export class MobileWindowPlatformService {
           ],
           SCLAlertViewStyleKit.imageOfWarning(),
             '#fff',
-            '_______________',
+            '---',
             msg,
           );
         } else {
@@ -142,7 +142,7 @@ export class MobileWindowPlatformService {
           ],
             SCLAlertViewStyleKit.imageOfQuestion(),
             '#fff',
-            options.title || '_______________',
+            options.title || '---',
             options.message,  
             options.cancelButtonText, 
           );

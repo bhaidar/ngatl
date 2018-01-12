@@ -1,4 +1,4 @@
-<ngatl-ns-profile-action-bar [title]="'general.profile' | translate" (save)="save()"></ngatl-ns-profile-action-bar>
+<ngatl-ns-profile-action-bar [title]="'general.profile' | translate" (logout)="logout()"></ngatl-ns-profile-action-bar>
 <GridLayout id="example-background" (loaded)="onBackgroundLoaded($event)">
   <GridLayout id="form-content" class="form-content" rows="auto,*,auto" (loaded)="onContentLoaded($event)">
     <StackLayout class="top-border" row="0"></StackLayout>
@@ -36,12 +36,12 @@
         <StackLayout class="line"></StackLayout> -->
 
 
-        <Button text="Logout" (tap)="logout()" class="btn btn-primary"></Button>
-        <StackLayout class="line"></StackLayout>
+        <Label [text]="'general.update' | translate" (tap)="save()" class="btn btn-primary btn-sky m-y-20 text-center" [touchColor]="'#30bcff,#288ab8'"></Label>
+        <!-- <StackLayout class="line"></StackLayout> -->
        
       </StackLayout>
     </ScrollView>
-    <Button text="Unclaim Badge" (tap)="unclaim()" class="btn btn-primary" row="2" col="0"></Button>
+    <Label [text]="'user.unclaim' | translate" (tap)="unclaim()" class="btn btn-primary c-bg-ngatl-red text-center m-b-5" row="2" col="0" [touchColor]="'#7c1f21,#571618'"></Label>
   </GridLayout>
   <!-- Picture -->
   <!-- <Image

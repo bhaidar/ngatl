@@ -1,8 +1,8 @@
 <ActionBar class="action-bar">
-  <StackLayout orientation="horizontal" horizontalAlignment="center" verticalAlignment="center" padding="2">
-    <Image src="res://ngatl_top" class="action-image" [class.ready]="ready" [class.intro]="intro" [visibility]="title ? 'collapsed' : 'visible'" (tap)="refreshUser()"></Image>
-    <Label [text]="title" class="action-bar-title" [visibility]="title ? 'visible' : 'collapsed'"></Label>
-  </StackLayout>
+  <GridLayout horizontalAlignment="center" verticalAlignment="center" padding="2" rows="*" columns="50,*,50">
+    <Image src="res://ngatl_top" class="action-image" [class.ready]="ready" [class.intro]="intro" *ngIf="!title" (tap)="refreshUser()" horizontalAlignment="center" verticalAlignment="center" row="0" col="1"></Image>
+    <Label [text]="title" class="action-bar-title" *ngIf="title" horizontalAlignment="center" verticalAlignment="center" row="0" col="1"></Label>
+  </GridLayout>
   <ActionItem (tap)="toggleDrawer()">
     <Button [text]="'ion-navicon' | fonticon" class="ion action-item" [class.ready]="ready" [class.intro]="intro"></Button>
   </ActionItem>

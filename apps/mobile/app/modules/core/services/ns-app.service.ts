@@ -274,13 +274,9 @@ export class NSAppService {
     this._store.select( ( s: IAppState ) => s.user )
       .subscribe( (user: UserState.IState) => {
         this._log.debug( 'current user:', user.current );
-        if ( user.current ) {
-          this._log.debug( 'name:', user.current.name );
-        }
-
-        if (user.scanned) {
-          this._log.debug('scanned user count:', user.scanned.length);
-        }
+        // if ( user.current ) {
+        //   this._log.debug( 'name:', user.current.name );
+        // }
       });
 
       this._userService.promptUserClaim$

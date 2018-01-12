@@ -33,7 +33,7 @@
 
 .top-border {
   height: 2;
-  background-color: #899bfe;
+  background-color: $dark-blue;
   margin-bottom: 40;
 }
 
@@ -74,7 +74,7 @@
 .field-title,
 .field-switch-title {
   horizontal-align: left;
-  font-size: 14;
+  font-size: 18;
   color: #737373;
   padding: 10 0;
 }
@@ -82,15 +82,15 @@
 .field {
   horizontal-align: stretch;
   text-align: right;
-  font-size: 14;
-  color: #1e2d7e;
+  font-size: 18;
+  color: $dark-blue;
   padding: 10 0;
 }
 
 .field-multiline {
   min-height: 60;
   font-size: 14;
-  color: #1e2d7e;
+  color: $dark-blue;
   margin: 10 0;
 }
 
