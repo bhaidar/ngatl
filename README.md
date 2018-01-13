@@ -14,9 +14,10 @@ npm run start.ios
 npm run start.android
 ```
 
-Webpack build:
+For mobile production webpack build:
 
 ```
+cd apps/mobile
 tns build ios --bundle --env.aot --env.uglify --release --for-device
 ```
 

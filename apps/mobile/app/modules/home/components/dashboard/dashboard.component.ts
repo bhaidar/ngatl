@@ -573,51 +573,12 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     //   this.showNotes = true;
     // }, 800);
 
-    if (this._beaconView) {
-      this._stopBeacon();
-      this._beaconAnime = this._beaconView.createAnimation({
-        translate: {
-          x: (screen.mainScreen.widthDIPs/2) - 46,
-          y: 260
-        },
-        scale: {
-          x: .5,
-          y: .5,
-        },
-        opacity:0,
-        duration: 200,
-        iterations: 1
-      });
-      this._beaconAnime.play().then(_ => {
-
-      });
-    }
+    this._hideBeacon(1);
 
     const top = <View>this._page.getViewById('badge-top');
     const bottom = <View>this._page.getViewById('badge-bottom');
     if (bottom && top) {
-  
-      bottom.animate({
-        translate: {
-          x: (screen.mainScreen.widthDIPs/2) - 275,
-          y: -600
-        },
-        scale: {
-          x: .6,
-          y: .6,
-        },
-        opacity:0,
-        rotate:0,
-        duration: 600,
-        iterations: 1,
-      }).then(_ => {
-        this._ngZone.run(() => {
-          this.showNotes = true;
-        });
-      }, _ => {
 
-      });
-  
       top.animate({
         translate: {
           x: (screen.mainScreen.widthDIPs/2) - 42,
@@ -633,6 +594,49 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
       }).then(_ => {
 
       }, _ => {
+
+      });
+  
+      bottom.animate({
+        translate: {
+          x: (screen.mainScreen.widthDIPs/2) - 275,
+          y: -600
+        },
+        scale: {
+          x: .6,
+          y: .6,
+        },
+        opacity:0,
+        rotate:0,
+        duration: 620,
+        iterations: 1,
+      }).then(_ => {
+        this._ngZone.run(() => {
+          this.showNotes = true;
+        });
+      }, _ => {
+
+      });
+    }
+  }
+
+  private _hideBeacon(duration: number = 100) {
+    if (this._beaconView) {
+      this._stopBeacon();
+      this._beaconAnime = this._beaconView.createAnimation({
+        translate: {
+          x: (screen.mainScreen.widthDIPs/2) - 46,
+          y: 260
+        },
+        scale: {
+          x: .5,
+          y: .5,
+        },
+        opacity:0,
+        duration,
+        iterations: 1
+      });
+      this._beaconAnime.play().then(_ => {
 
       });
     }
@@ -721,7 +725,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
           if (s.modal.open) {
             this._modalStoppedBeacon = true;
             // always stop beacon
-            this._stopBeacon();
+            this._hideBeacon(0);
           } else if (this._modalStoppedBeacon && !this.showNotes) {
             this._modalStoppedBeacon = false;
             // restart beacon
@@ -811,11 +815,12 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     if (!this._ngOnDestroyFired) {
       this._ngOnDestroyFired = true;
       this._ngOnInitFired = false;
+      this._authStateChecked = false;
       console.log('dashboard ngOnDestroy!');
       super.ngOnDestroy();
       // app.off(app.suspendEvent, this._stopAnime);
       app.off(app.resumeEvent, this._restartAnime);
-      this._stopBeacon();
+      this._hideBeacon(0);
     }
   }
 
