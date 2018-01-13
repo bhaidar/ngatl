@@ -55,6 +55,8 @@
 	<string>To upload profile pictures</string>
 	<key>NSCalendarsUsageDescription</key>
   <string>To schedule events</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Note recordings to text</string>
 	<key>NSAppTransportSecurity</key>
   <dict>
     <key>NSAllowsArbitraryLoads</key>

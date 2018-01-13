@@ -49,6 +49,7 @@
     "already-claimed": "This badge has already been claimed. If this is your badge, please send email to info@ng-atl.org and we will correct this for you.",
     "scan-yourself": "Well this sure is fun isn't it :) You have already claimed this badge silly pants.",
     "unclaim-confirm": "Are you sure you would like to unclaim this badge? This will make it available for someone else to claim.",
+    "unsaved": "You have unsaved changes. Are you sure you want to exit without saving?",
     "person": "individual standing before you.",
     "name": "Name",
     "phone": "Phone",
@@ -61,5 +62,9 @@
   },
   "conduct": {
     "title": "Code of Conduct"
+  },
+  "audio": {
+    "disabled": "This device cannot record audio.",
+    "no-file": "There is no recording to play."
   }
 }

@@ -15,6 +15,10 @@ ListView {
 .ion {
     font-family: Ionicons, ionicons;
     font-size: 30;
+
+    &.disabled {
+        color:$grey-slate;
+    }
 }
 //override for action-bar colored fonticons
 // .action-bar Button {
@@ -135,8 +139,13 @@ ListView {
 .social-controls{
     padding-top: 10;
 }
+.note-section {
+    background-color: $black;
+    padding: 10 10 0 10;
+}
 .note-area {
     background-color:rgba(21,31,47,.8);
+    padding: 5;
 }
 
 .checkbox-layout {
