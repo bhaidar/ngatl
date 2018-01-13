@@ -15,7 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { SystemUser } from '@ngatl/api';
-import { BaseComponent, UserActions, LogService, ModalActions, WindowService, ProgressService, UserState, IAppState } from '@ngatl/core';
+import { BaseComponent, UserActions, LogService, ModalActions, WindowService, ProgressService, UserState, IAppState, UIState, UserService } from '@ngatl/core';
 
 // nativescript
 import { BarcodeScanner } from 'nativescript-barcodescanner';
@@ -45,119 +45,119 @@ import { NoteEditComponent } from '../../../shared/components/note-edit/note-edi
   moduleId: module.id,
   selector: 'ngatl-ns-dashboard',
   templateUrl: 'dashboard.component.html',
-  styles: [`
-  @keyframes badge-bottom-intro {
-      0% {
-          transform: rotate(0) scale(0.6, 0.6) translate(${(screen.mainScreen.widthDIPs/2) - 275}, -600);
-      }
-      100% {
-          transform: rotate(-8) scale(0.6, 0.6) translate(${(screen.mainScreen.widthDIPs/2) - 275}, -80);
-      }
-    }
-    @keyframes badge-bottom-exit {
-      0% {
-        transform: rotate(-8) scale(0.6, 0.6) translate(${(screen.mainScreen.widthDIPs/2) - 275}, -80);
-        opacity:1;
-      }
-      100% {
-        transform: rotate(0) scale(0.6, 0.6) translate(${(screen.mainScreen.widthDIPs/2) - 275}, -600);
-        opacity:0;
-      }
-    }
+  // styles: [`
+  // @keyframes badge-bottom-intro {
+  //     0% {
+  //         transform: rotate(0) scale(0.6, 0.6) translate(${(screen.mainScreen.widthDIPs/2) - 275}, -600);
+  //     }
+  //     100% {
+  //         transform: rotate(-8) scale(0.6, 0.6) translate(${(screen.mainScreen.widthDIPs/2) - 275}, -80);
+  //     }
+  //   }
+  //   @keyframes badge-bottom-exit {
+  //     0% {
+  //       transform: rotate(-8) scale(0.6, 0.6) translate(${(screen.mainScreen.widthDIPs/2) - 275}, -80);
+  //       opacity:1;
+  //     }
+  //     100% {
+  //       transform: rotate(0) scale(0.6, 0.6) translate(${(screen.mainScreen.widthDIPs/2) - 275}, -600);
+  //       opacity:0;
+  //     }
+  //   }
 
-  .badge-bottom-intro {
-    animation-name: badge-bottom-intro;
-    animation-duration: .8;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-    animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
-  }
-  .badge-bottom-intro.exit {
-    animation-name: badge-bottom-exit;
-    animation-duration: .5;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-    animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
-  }
+  // .badge-bottom-intro {
+  //   animation-name: badge-bottom-intro;
+  //   animation-duration: .8;
+  //   animation-fill-mode: forwards;
+  //   animation-iteration-count: 1;
+  //   animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  // }
+  // .badge-bottom-intro.exit {
+  //   animation-name: badge-bottom-exit;
+  //   animation-duration: .5;
+  //   animation-fill-mode: forwards;
+  //   animation-iteration-count: 1;
+  //   animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  // }
 
-  @keyframes badge-top-intro {
-      0% {
-          transform: rotate(0) scale(0.4, 0.4) translate(${(screen.mainScreen.widthDIPs/2) - 42}, -600);
-      }
-      100% {
-          transform: rotate(18) scale(0.4, 0.4) translate(${(screen.mainScreen.widthDIPs/2) - 42}, -180);
-      }
-    }
-    @keyframes badge-top-exit {
-      0% {
-        transform: rotate(18) scale(0.4, 0.4) translate(${(screen.mainScreen.widthDIPs/2) - 42}, -180);
-        opacity:1;
-      }
-      100% {
-        transform: rotate(0) scale(0.4, 0.4) translate(${(screen.mainScreen.widthDIPs/2) - 42}, -600);
-        opacity:0;
-      }
-    }
+  // @keyframes badge-top-intro {
+  //     0% {
+  //         transform: rotate(0) scale(0.4, 0.4) translate(${(screen.mainScreen.widthDIPs/2) - 42}, -600);
+  //     }
+  //     100% {
+  //         transform: rotate(18) scale(0.4, 0.4) translate(${(screen.mainScreen.widthDIPs/2) - 42}, -180);
+  //     }
+  //   }
+  //   @keyframes badge-top-exit {
+  //     0% {
+  //       transform: rotate(18) scale(0.4, 0.4) translate(${(screen.mainScreen.widthDIPs/2) - 42}, -180);
+  //       opacity:1;
+  //     }
+  //     100% {
+  //       transform: rotate(0) scale(0.4, 0.4) translate(${(screen.mainScreen.widthDIPs/2) - 42}, -600);
+  //       opacity:0;
+  //     }
+  //   }
 
-  .badge-top-intro {
-    animation-name: badge-top-intro;
-    animation-duration: .8;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-    animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
-  }
-  .badge-top-intro.exit {
-    animation-name: badge-top-exit;
-    animation-duration: .5;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-    animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
-  }
+  // .badge-top-intro {
+  //   animation-name: badge-top-intro;
+  //   animation-duration: .8;
+  //   animation-fill-mode: forwards;
+  //   animation-iteration-count: 1;
+  //   animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  // }
+  // .badge-top-intro.exit {
+  //   animation-name: badge-top-exit;
+  //   animation-duration: .5;
+  //   animation-fill-mode: forwards;
+  //   animation-iteration-count: 1;
+  //   animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  // }
 
-  @keyframes beacon-pulse {
-    0% {
-      transform: scale(.5, .5) translate(${(screen.mainScreen.widthDIPs/2) - 46}, 260);
-      opacity:0;
-    }
-    25% {
-      transform: scale(1.5, 1.5) translate(${(screen.mainScreen.widthDIPs/2) - 46}, 260);
-      opacity:.8;
-    }
-    50% {
-      transform: scale(3, 3) translate(${(screen.mainScreen.widthDIPs/2) - 46}, 260);
-        opacity:0;
-    }
-    100% {
-      transform: scale(.5, .5) translate(${(screen.mainScreen.widthDIPs/2) - 46}, 260);
-        opacity:0;
-    }
-  }
+  // @keyframes beacon-pulse {
+  //   0% {
+  //     transform: scale(.5, .5) translate(${(screen.mainScreen.widthDIPs/2) - 46}, 260);
+  //     opacity:0;
+  //   }
+  //   25% {
+  //     transform: scale(1.5, 1.5) translate(${(screen.mainScreen.widthDIPs/2) - 46}, 260);
+  //     opacity:.8;
+  //   }
+  //   50% {
+  //     transform: scale(3, 3) translate(${(screen.mainScreen.widthDIPs/2) - 46}, 260);
+  //       opacity:0;
+  //   }
+  //   100% {
+  //     transform: scale(.5, .5) translate(${(screen.mainScreen.widthDIPs/2) - 46}, 260);
+  //       opacity:0;
+  //   }
+  // }
 
-  @keyframes beacon-pulse-exit {
-    0% {
-      opacity:0;
-    }
-    100% {
-        opacity:0;
-    }
-  }
-  .beacon-pulse {
-    transform: scale(0.5, 0.5) translate(${(screen.mainScreen.widthDIPs/2) - 46}, 260);
-    opacity:0;
-    animation-name: beacon-pulse;
-    animation-duration: 2;
-    animation-delay: .8;
-    animation-fill-mode: forwards;
-    animation-iteration-count: infinite;
-    animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
-  }
-  .beacon-pulse.exit {
-    animation-name: beacon-pulse-exit;
-    animation-duration: .5;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-  }
-  `]
+  // @keyframes beacon-pulse-exit {
+  //   0% {
+  //     opacity:0;
+  //   }
+  //   100% {
+  //       opacity:0;
+  //   }
+  // }
+  // .beacon-pulse {
+  //   transform: scale(0.5, 0.5) translate(${(screen.mainScreen.widthDIPs/2) - 46}, 260);
+  //   opacity:0;
+  //   animation-name: beacon-pulse;
+  //   animation-duration: 2;
+  //   animation-delay: .8;
+  //   animation-fill-mode: forwards;
+  //   animation-iteration-count: infinite;
+  //   animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  // }
+  // .beacon-pulse.exit {
+  //   animation-name: beacon-pulse-exit;
+  //   animation-duration: .5;
+  //   animation-fill-mode: forwards;
+  //   animation-iteration-count: 1;
+  // }
+  // `]
 })
 export class DashboardComponent extends BaseComponent implements AfterViewInit, OnInit, OnDestroy {
   public showIntro = false;
@@ -174,8 +174,13 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   private _beaconView: View;
   private _beaconAnime: Animation;
   private _scanResultTimeout: number;
+  private _modalStoppedBeacon = false;
+  private _authStateChecked = false;
+  private _badgeViewAvail = false;
+  private _ngOnInitFired = false;
+  private _ngOnDestroyFired = false;
   // private _stopAnime: () => void;
-  // private _restartAnime: () => void;
+  private _restartAnime: () => void;
   private _swipeHandler: (args: SwipeGestureEventData) => void;
 
   constructor(
@@ -187,27 +192,22 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     private _translate: TranslateService,
     private _progressService: ProgressService,
     private _page: Page,
+    private _userService: UserService,
     public appService: NSAppService,
   ) {
     super();
     this._page.backgroundImage = 'res://home-bg';
-    this.appService.currentVcRef = this._vcRef;
-    this._density = utils.layout.getDisplayDensity();
-    // this._stopAnime = this._stopAnimeFn.bind(this);
-    // this._restartAnime = this._restartAnimeFn.bind(this);
-    this._swipeHandler = this._swipeHandlerFn.bind(this);
 
-    // test
-    // this.scans = [
-    //   {
-    //     ticket_full_name: 'Mike Ryan',
-    //     note: 'Ngrx core contributor who has an incredible understanding of TypeScript and Redux methodologies.'
-    //   },
-    //   {
-    //     ticket_full_name: 'Richard Smith',
-    //     note: 'A fantastically talented mobile developer who brings a diverse set of skills to any working environment.'
-    //   }
-    // ];
+    this._page.on('navigatedFrom', () => {
+      this._ngZone.run(() => {
+        this.ngOnDestroy();
+      });
+    });
+    this._page.on('navigatingTo', () => {
+      this._ngZone.run(() => {
+        this.ngOnInit();
+      });
+    });
   }
 
   public openItem(item) {
@@ -223,12 +223,12 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   }
 
   public onItemTap(e) {
-    if (e && isAndroid) {
+    if (e && isAndroid && e.index > -1) {
       // android does not respond to tap events on items so use this
-      // const persoItem = this.activeItems[e.index];
-      // if (persoItem) {
-      //   this.viewDetail(persoItem);
-      // }
+      const item = this.scans[e.index];
+      if (item) {
+        this.openItem(item);
+      }
     }
   }
 
@@ -314,6 +314,36 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     }
   }
 
+  public onPullRefreshInitiated(e) {
+    const listview = e.object;
+    if (listview) {
+      this._progressService.toggleSpinner(true);
+      this.refreshUser();
+      this._win.setTimeout(_ => {
+        listview.notifyPullToRefreshFinished();
+        this._progressService.toggleSpinner(false);
+      }, 1500);
+    }
+  }
+
+  public refreshUser() {
+    if (this._userService.currentUserId) {   
+      this._store.dispatch(new UserActions.RefreshUserAction(this._userService.currentUserId));
+    }
+  }
+
+  public listviewLoaded(e) {
+    if (isIOS && e) {
+      const listview = e.object;
+      if (listview && listview.ios && listview.ios.pullToRefreshView) {
+        listview.ios.pullToRefreshView.backgroundColor = new Color('#151F2F').ios;
+        // for (const key in listview.ios.pullToRefreshView) {
+        //   console.log(key);
+        // }
+      }
+    }
+  }
+
   public disableRowColor(e) {
     if ( isIOS && e ) {
       const cell = e.ios;
@@ -326,14 +356,17 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     }
   }
 
-  public startBadge(e) {
+  public startBadge(e?: any) {
     this._log.debug('startBadge:');
     this._log.debug(screen.mainScreen.widthDIPs + 'x' + screen.mainScreen.heightDIPs);
-    // this._initBeacon();
-    // this._showBadge();
-    // this._win.setTimeout(() => {
-    //   this._startBeacon();
-    // }, 900);
+    this._initBeacon();
+    // only initiate badge sequence if auth state has been checked
+    if (this._authStateChecked && this.scans.length === 0) {
+      this._showBadge();
+      // this._win.setTimeout(() => {
+      //   this._startBeacon();
+      // }, 900);
+    }
   }
 
   private _initBeacon() {
@@ -362,235 +395,247 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     });
   }
 
-  // private _showBadge() {
-  //   const top = <View>this._page.getViewById('badge-top');
-  //   const bottom = <View>this._page.getViewById('badge-bottom');
-  //   if (bottom && top) {
+  private _showBadge() {
+    const top = <View>this._page.getViewById('badge-top');
+    const bottom = <View>this._page.getViewById('badge-bottom');
+    if (bottom && top) {
   
-  //     bottom.animate({
-  //       translate: {
-  //         x: (screen.mainScreen.widthDIPs/2) - 275,
-  //         y: -600
-  //       },
-  //       scale: {
-  //         x: .6,
-  //         y: .6,
-  //       },
-  //       rotate:3,
-  //       duration: 1,
-  //       iterations: 1,
-  //     }).then(_ => {
-  //       bottom.animate({
-  //         translate: {
-  //           x: (screen.mainScreen.widthDIPs/2) - 275,
-  //           y: -80
-  //         },
-  //         scale: {
-  //           x: .6,
-  //           y: .6,
-  //         },
-  //         rotate: -8,
-  //         duration: 800,
-  //         iterations: 1,
-  //         curve: AnimationCurve.easeIn// AnimationCurve.spring
-  //       });
-  //     }, _ => {
+      bottom.animate({
+        translate: {
+          x: (screen.mainScreen.widthDIPs/2) - 275,
+          y: -600
+        },
+        scale: {
+          x: .6,
+          y: .6,
+        },
+        opacity:.6,
+        rotate:3,
+        duration: 1,
+        iterations: 1,
+      }).then(_ => {
+        bottom.animate({
+          translate: {
+            x: (screen.mainScreen.widthDIPs/2) - 275,
+            y: -80
+          },
+          scale: {
+            x: .6,
+            y: .6,
+          },
+          opacity: 1,
+          rotate: -8,
+          duration: 800,
+          iterations: 1,
+          curve: AnimationCurve.easeIn// AnimationCurve.spring
+        });
+      }, _ => {
 
-  //     });
+      });
   
-  //     top.animate({
-  //       translate: {
-  //         x: (screen.mainScreen.widthDIPs/2) - 42,
-  //         y: -600
-  //       },
-  //       scale: {
-  //         x: .4,
-  //         y: .4,
-  //       },
-  //       rotate: 0,
-  //       duration: 1,
-  //       iterations: 1,
-  //     }).then(_ => {
-  //       top.animate({
-  //         translate: {
-  //           x: (screen.mainScreen.widthDIPs/2) - 42,
-  //           y: -180
-  //         },
-  //         scale: {
-  //           x: .4,
-  //           y: .4,
-  //         },
-  //         rotate: 18,
-  //         duration: 800,
-  //         iterations: 1,
-  //         curve: AnimationCurve.easeIn,
-  //       }).then(_ => {
-  //         this._startBeacon();
-  //       }, _ => {
+      top.animate({
+        translate: {
+          x: (screen.mainScreen.widthDIPs/2) - 42,
+          y: -600
+        },
+        scale: {
+          x: .4,
+          y: .4,
+        },
+        opacity:.6,
+        rotate: 0,
+        duration: 1,
+        iterations: 1,
+      }).then(_ => {
+        top.animate({
+          translate: {
+            x: (screen.mainScreen.widthDIPs/2) - 42,
+            y: -180
+          },
+          scale: {
+            x: .4,
+            y: .4,
+          },
+          opacity: 1,
+          rotate: 18,
+          duration: 800,
+          iterations: 1,
+          curve: AnimationCurve.easeIn,
+        }).then(_ => {
+          this._startBeacon();
+        }, _ => {
 
-  //       });
-  //     }, _ => {
+        });
+      }, _ => {
 
-  //     });
-  //   }
-  // }
+      });
+    }
+  }
 
-  // private _startBeacon() {
-  //   app.on(app.suspendEvent, this._stopAnime);
-  //   app.on(app.resumeEvent, this._restartAnime);
-  //   this._playBeacon();
-  // }
+  private _startBeacon() {
+    // app.on(app.suspendEvent, this._stopAnime);
+    app.on(app.resumeEvent, this._restartAnime);
+    this._playBeacon();
+  }
 
-  // private _restartAnimeFn() {
-  //   this._log.debug('_restartAnimeFn!');
-  //   this._log.debug(this._beaconAnime);
-  //   if (this._beaconAnime) {
-  //     this._log.debug(this._beaconAnime.isPlaying);
-  //     if (this._beaconAnime.isPlaying !== true) {
-  //       this._initBeacon().then(_ => {
-  //         this._startBeacon();
-  //       });
-  //     }
-  //   }
-  // }
+  private _restartAnimeFn() {
+    // this._log.debug('_restartAnimeFn!');
+    // this._log.debug(this._beaconAnime);
+    if (this._beaconAnime) {
+      // this._log.debug(this._beaconAnime.isPlaying);
+      if (this._beaconAnime.isPlaying !== true) {
+        this._initBeacon().then(_ => {
+          this._playBeacon();
+        });
+      }
+    }
+  }
 
   // private _stopAnimeFn() {
   //   this._log.debug('_stopAnimeFn!');
   //   this._log.debug(this._beaconAnime);
   // }
 
-  // private _stopBeacon() {
-  //   if (this._beaconAnime) {
-  //     // this._log.debug(this._beaconAnime.isPlaying);
-  //     if (this._beaconAnime.isPlaying === true) {
-  //       this._beaconAnime.cancel();
-  //     }
-  //   }
-  // }
+  private _stopBeacon() {
+    if (this._beaconAnime) {
+      // this._log.debug(this._beaconAnime.isPlaying);
+      if (this._beaconAnime.isPlaying === true) {
+        this._beaconAnime.cancel();
+      }
+    }
+  }
 
-  // private _playBeacon(delay: number = 1000) {
-  //   if (this._page) {
-  //     if (this._beaconView) {
-  //       this._beaconAnime = this._beaconView.createAnimation({
-  //         translate: {
-  //           x: (screen.mainScreen.widthDIPs/2) - 46,
-  //           y: 260
-  //         },
-  //         scale: {
-  //           x: .5,
-  //           y: .5,
-  //         },
-  //         opacity:0,
-  //         duration: 1,
-  //         iterations: 1
-  //       });
-  //       this._beaconAnime.play().then(_ => {
-  //         this._beaconAnime = this._beaconView.createAnimation({
-  //           translate: {
-  //             x: (screen.mainScreen.widthDIPs/2) - 46,
-  //             y: 260
-  //           },
-  //           scale: {
-  //             x: 1.5,
-  //             y: 1.5,
-  //           },
-  //           delay,
-  //           opacity:.8,
-  //           duration: 500,
-  //           iterations: 1,
-  //           curve: AnimationCurve.easeIn
-  //         });
-  //         this._beaconAnime.play().then(_ => {
-  //           this._beaconAnime = this._beaconView.createAnimation({
-  //             translate: {
-  //               x: (screen.mainScreen.widthDIPs/2) - 46,
-  //               y: 260
-  //             },
-  //             scale: {
-  //               x: 3,
-  //               y: 3,
-  //             },
-  //             opacity:0,
-  //             duration: 500,
-  //             iterations: 1,
-  //             curve: AnimationCurve.easeOut
-  //           });
-  //           this._beaconAnime.play().then(_ => {
-  //             this._playBeacon(800);
-  //           }, _ => {
+  private _playBeacon(delay: number = 1000) {
+    if (this._page) {
+      if (this._beaconView) {
+        this._beaconAnime = this._beaconView.createAnimation({
+          translate: {
+            x: (screen.mainScreen.widthDIPs/2) - 46,
+            y: 260
+          },
+          scale: {
+            x: .5,
+            y: .5,
+          },
+          opacity:0,
+          duration: 1,
+          iterations: 1
+        });
+        this._beaconAnime.play().then(_ => {
+          this._beaconAnime = this._beaconView.createAnimation({
+            translate: {
+              x: (screen.mainScreen.widthDIPs/2) - 46,
+              y: 260
+            },
+            scale: {
+              x: 1.5,
+              y: 1.5,
+            },
+            delay,
+            opacity:.8,
+            duration: 500,
+            iterations: 1,
+            curve: AnimationCurve.cubicBezier(0.25, 0.1, 0.25, 1)
+          });
+          this._beaconAnime.play().then(_ => {
+            this._beaconAnime = this._beaconView.createAnimation({
+              translate: {
+                x: (screen.mainScreen.widthDIPs/2) - 46,
+                y: 260
+              },
+              scale: {
+                x: 3,
+                y: 3,
+              },
+              opacity:0,
+              duration: 500,
+              iterations: 1,
+              curve: AnimationCurve.cubicBezier(0.25, 0.1, 0.25, 1)
+            });
+            this._beaconAnime.play().then(_ => {
+              this._playBeacon(800);
+            }, _ => {
 
-  //           });
-  //         }, _ => {
+            });
+          }, _ => {
 
-  //         });
-  //       }, _ => {
+          });
+        }, _ => {
 
-  //       });
-  //       // beacon.animate().then(_ => {
-  //       //   beacon.animate().then(_ => {
-  //       //     beacon.animate().then(_ => {
-  //       //       this._playBeacon(800);
-  //       //     }, _ => {
-
-  //       //     });
-  //       //   }, _ => {
-
-  //       //   });
-  //       // }, _ => {
-
-  //       // });
-  //     }
-  //   }
-  // }
+        });
+      }
+    }
+  }
 
   private _retractBadge() {
     this.badgeExit = true;
-    this._win.setTimeout(_ => {
-      this.showNotes = true;
-    }, 800);
-    // const top = <View>this._page.getViewById('badge-top');
-    // const bottom = <View>this._page.getViewById('badge-bottom');
-    // if (bottom && top) {
+    // this._win.setTimeout(_ => {
+    //   this.showNotes = true;
+    // }, 800);
+
+    if (this._beaconView) {
+      this._stopBeacon();
+      this._beaconAnime = this._beaconView.createAnimation({
+        translate: {
+          x: (screen.mainScreen.widthDIPs/2) - 46,
+          y: 260
+        },
+        scale: {
+          x: .5,
+          y: .5,
+        },
+        opacity:0,
+        duration: 200,
+        iterations: 1
+      });
+      this._beaconAnime.play().then(_ => {
+
+      });
+    }
+
+    const top = <View>this._page.getViewById('badge-top');
+    const bottom = <View>this._page.getViewById('badge-bottom');
+    if (bottom && top) {
   
-    //   bottom.animate({
-    //     translate: {
-    //       x: (screen.mainScreen.widthDIPs/2) - 275,
-    //       y: -600
-    //     },
-    //     scale: {
-    //       x: .6,
-    //       y: .6,
-    //     },
-    //     opacity:0,
-    //     rotate:0,
-    //     duration: 600,
-    //     iterations: 1,
-    //   }).then(_ => {
-    //     this._ngZone.run(() => {
-    //       this.showNotes = true;
-    //     });
-    //   }, _ => {
+      bottom.animate({
+        translate: {
+          x: (screen.mainScreen.widthDIPs/2) - 275,
+          y: -600
+        },
+        scale: {
+          x: .6,
+          y: .6,
+        },
+        opacity:0,
+        rotate:0,
+        duration: 600,
+        iterations: 1,
+      }).then(_ => {
+        this._ngZone.run(() => {
+          this.showNotes = true;
+        });
+      }, _ => {
 
-    //   });
+      });
   
-    //   top.animate({
-    //     translate: {
-    //       x: (screen.mainScreen.widthDIPs/2) - 42,
-    //       y: -600
-    //     },
-    //     scale: {
-    //       x: .4,
-    //       y: .4,
-    //     },
-    //     rotate: 0,
-    //     duration: 600,
-    //     iterations: 1,
-    //   }).then(_ => {
+      top.animate({
+        translate: {
+          x: (screen.mainScreen.widthDIPs/2) - 42,
+          y: -600
+        },
+        scale: {
+          x: .4,
+          y: .4,
+        },
+        rotate: 0,
+        duration: 600,
+        iterations: 1,
+      }).then(_ => {
 
-    //   }, _ => {
+      }, _ => {
 
-    //   });
-    // }
+      });
+    }
   }
 
   public openBarcode() {
@@ -634,30 +679,72 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   // }
 
   ngOnInit() {
-    this._store.select((s: IAppState) => s.user)
-      .takeUntil(this.destroy$)
-      .subscribe((s: UserState.IState) => {
-        if (s.current) {
-          this.scans = [...s.current.notes];
+    if (!this._ngOnInitFired) {
+      this._ngOnInitFired = true;
+      this._ngOnDestroyFired = false;
+      console.log('dashboard ngOnInit!');
+      this.appService.currentVcRef = this._vcRef;
+      this._density = utils.layout.getDisplayDensity();
+      // this._stopAnime = this._stopAnimeFn.bind(this);
+      this._restartAnime = this._restartAnimeFn.bind(this);
+      this._swipeHandler = this._swipeHandlerFn.bind(this);
 
-          if (!this.badgeExit && this.scans.length) {
-            // first scan! retract the intro badge out of view
-            this._retractBadge();
-          } else if (this.badgeExit && this.scans.length === 0) {
-            // replace badge drop
-            this.badgeExit = this.showNotes = false;
+      this._store.select((s: IAppState) => s.user)
+        .takeUntil(this.destroy$)
+        .subscribe((s: UserState.IState) => {
+          if (s.current) {
+            this.scans = [...s.current.notes];
+
+            if (!this.badgeExit && this.scans.length) {
+              console.log('scans available, this.appService.shownIntro:', this.appService.shownIntro);
+              console.log('this._badgeViewAvail:', this._badgeViewAvail);
+              if (this.appService.shownIntro && this._badgeViewAvail) {
+                // first scan! retract the intro badge out of view
+                this._retractBadge();
+              } else {
+                // just show the notes since view hasn't even initialized yet 
+                this.badgeExit = this.showNotes = true;
+              }
+            } else if (this.badgeExit && this.scans.length === 0) {
+              this._showBadgeAgain();
+            }
+          } else if (this.badgeExit) {
+            // user logged out or just no user
+            this.scans = [];
+            this._showBadgeAgain();
           }
-        } else if (this.badgeExit) {
-          // replace badge drop
-          this.badgeExit = this.showNotes = false;
-        }
-      });
-    if (!this.appService.shownIntro) {
-      this.showSwiper = true;
+          this._authStateChecked = true;
+        });
+      this._store.select((s: IAppState) => s.ui)
+        .takeUntil(this.destroy$)
+        .subscribe((s: UIState.IState) => {
+          if (s.modal.open) {
+            this._modalStoppedBeacon = true;
+            // always stop beacon
+            this._stopBeacon();
+          } else if (this._modalStoppedBeacon && !this.showNotes) {
+            this._modalStoppedBeacon = false;
+            // restart beacon
+            this._playBeacon();
+          }
+        });
+      if (!this.appService.shownIntro) {
+        this.showSwiper = true;
+      }
     }
   }
 
+  private _showBadgeAgain() {
+    // replace badge drop
+    this.badgeExit = this.showNotes = false;
+    // show badge again
+    this.startBadge();
+  }
+
   ngAfterViewInit() {
+    console.log('dashboard ngAfterViewInit!');
+    this._badgeViewAvail = true;
+
     this._setupSwipe();
   }
 
@@ -721,9 +808,15 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   }
 
   ngOnDestroy() { 
-    super.ngOnDestroy();
-    // app.off(app.suspendEvent, this._stopAnime);
-    // app.off(app.resumeEvent, this._restartAnime);
+    if (!this._ngOnDestroyFired) {
+      this._ngOnDestroyFired = true;
+      this._ngOnInitFired = false;
+      console.log('dashboard ngOnDestroy!');
+      super.ngOnDestroy();
+      // app.off(app.suspendEvent, this._stopAnime);
+      app.off(app.resumeEvent, this._restartAnime);
+      this._stopBeacon();
+    }
   }
 
   private _openScanner(requestPerm: boolean = true) {

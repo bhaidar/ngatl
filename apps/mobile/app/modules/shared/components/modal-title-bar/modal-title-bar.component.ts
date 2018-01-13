@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 // libs
 import { Store } from '@ngrx/store';
+import { TranslateService } from '@ngx-translate/core';
 import { ModalActions } from '@ngatl/core';
 
 // nativescript
@@ -25,11 +26,14 @@ export class ModalTitleBarComponent implements OnInit {
 
   public moreIcon: string;
 
-  constructor(private _store: Store<any>) {}
+  constructor(
+    private _store: Store<any>,
+    private _translate: TranslateService,
+  ) {}
 
   ngOnInit() {
     if (!this.closeText) {
-      this.closeText = 'Close'; // default
+      this.closeText = this._translate.instant('dialogs.close'); // default
     }
 
     this.moreIcon = moreIcon();

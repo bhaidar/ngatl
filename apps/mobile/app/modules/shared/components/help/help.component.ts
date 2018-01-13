@@ -22,6 +22,10 @@ export class HelpComponent extends BaseModalComponent {
     public translate: TranslateService,
   ) {
     super(store, page, params);
+    
+  }
+
+  ngOnInit() {
     this.title = this.translate.instant('general.help');
   }
 }

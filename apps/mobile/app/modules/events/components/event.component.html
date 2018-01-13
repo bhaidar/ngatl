@@ -10,7 +10,7 @@
     <!-- <RadCalendar [locale]="locale" [viewMode]="viewMode" [transitionMode]="transitionMode" [eventSource]="eventSource" [eventsViewMode]="eventsViewMode" (dateSelected)="onDateSelected($event)"></RadCalendar> -->
 
 
-    <GridLayout rows="auto, *" columns="*" class="schedule-main-content" id="main-content">
+    <GridLayout rows="auto, *" columns="*" class="schedule-main-content" id="main-content" *ngIf="renderView">
       <!-- Segmented Bar -->
       <SegmentedBar row="0" [selectedIndex]="selectedDay" (selectedIndexChange)="onDayChange($event)"
               ios:selectedBackgroundColor="white"

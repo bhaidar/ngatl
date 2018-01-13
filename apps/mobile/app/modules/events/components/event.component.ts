@@ -33,6 +33,7 @@ import { ConferenceViewModel, Session } from './conference.model';
 export class EventComponent extends BaseComponent implements AfterViewInit, OnInit {
   public conferenceModel: ConferenceViewModel;
   public days: Array<SegmentedBarItem> = [];
+  public renderView = false;
   public selectedDay = 0;
   public search$: Subject<string> = new Subject();
 
@@ -124,6 +125,8 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
         }
         this.conferenceModel.search = lowercaseValue;
       } );
+
+    this.renderView = true;
   }
 
   public onDayChange( args ) {

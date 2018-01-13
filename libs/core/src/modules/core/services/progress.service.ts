@@ -89,7 +89,7 @@ export class ProgressService {
           options.ios = {
             dimBackground: true,
             hideBezel: true,
-            color: '#1b286c'
+            color: '#fff'
           };
 
           this._loader.show(options);

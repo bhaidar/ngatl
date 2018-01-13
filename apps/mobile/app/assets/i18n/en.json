@@ -23,7 +23,8 @@
     "delete-scan": "Are you sure want to remove the badge scan for",
     "pin-number": "Pin number",
     "camera": "Camera",
-    "confirm-photo-delete": "Are you sure you want to remove this photo?"
+    "confirm-photo-delete": "Are you sure you want to remove this photo?",
+    "close": "Close"
   },
   "item": {
     "delete-lbl": "Delete"

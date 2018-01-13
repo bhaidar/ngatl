@@ -25,6 +25,7 @@ import { NSAppService } from '../../core/services/ns-app.service';
   templateUrl: 'speaker.component.html'
 } )
 export class SpeakerComponent extends BaseComponent implements AfterViewInit, OnInit {
+  public renderView = false;
   public speakerState$: BehaviorSubject<any> = new BehaviorSubject( [] );
   public search$: Subject<string> = new Subject();
   private _all: Array<any>;
@@ -53,6 +54,8 @@ export class SpeakerComponent extends BaseComponent implements AfterViewInit, On
       .debounceTime( 500 )
       .takeUntil( this.destroy$ )
       .subscribe( this._searchSpeakers );
+
+    this.renderView = true;
   }
 
   private _searchSpeakersFn( value: string ) {

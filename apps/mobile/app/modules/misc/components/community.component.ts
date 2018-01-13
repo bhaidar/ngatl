@@ -19,6 +19,7 @@ import { NSAppService } from '../../core/services/ns-app.service';
 })
 export class CommunityComponent {
 
+  public renderView = false;
   public communityState$: Observable<any>;
   private _community = [
     {
@@ -83,6 +84,10 @@ export class CommunityComponent {
   ) {
     this.appService.currentVcRef = this.vcRef;
     this.communityState$ = Observable.of(this._community);
+  }
+
+  ngOnInit() {
+    this.renderView = true;
   }
 
   public viewSite(url: string, title: string) {

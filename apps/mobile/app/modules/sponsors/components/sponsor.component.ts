@@ -17,6 +17,7 @@ import { NSAppService } from '../../core/services/ns-app.service';
 })
 export class SponsorComponent implements AfterViewInit, OnInit {
   public sponsorState$: Observable<any>;
+  public renderView = false;
 
   constructor(
     private store: Store<any>, 
@@ -39,6 +40,7 @@ export class SponsorComponent implements AfterViewInit, OnInit {
 
   ngOnInit() {
     this.sponsorState$ = this.store.select(s => s.conference.sponsors);
+    this.renderView = true;
   }
 
   ngAfterViewInit() {}

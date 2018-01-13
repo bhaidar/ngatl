@@ -14,6 +14,7 @@ import { NSAppService } from '../../core/services/ns-app.service';
   templateUrl: 'about.component.html'
 } )
 export class AboutComponent {
+  public renderView = false;
 
   constructor(
     private store: Store<any>,
@@ -24,6 +25,10 @@ export class AboutComponent {
     this.appService.currentVcRef = this.vcRef;
   }
 
+  ngOnInit() {
+    this.renderView = true;
+  }
+  
   public viewGH() {
     utils.openUrl( 'http://nstudio.io' );
   }

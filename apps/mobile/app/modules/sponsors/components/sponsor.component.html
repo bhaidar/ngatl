@@ -1,5 +1,5 @@
 <ngatl-ns-action-bar [title]="'menu.sponsors' | translate"></ngatl-ns-action-bar>
-<StackLayout class="page h-full p-b-20">
+<StackLayout class="page h-full p-b-20" *ngIf="renderView">
   <ListView [items]="(sponsorState$ | async)?.list" class="list-group h-full">
     <ng-template let-item="item" let-odd="odd" let-even="even">
       <StackLayout class="card sponsor-card" (tap)="viewSite(item)" [ngClass]="item.level[0].styleClass">

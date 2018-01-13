@@ -1,5 +1,5 @@
 <ngatl-ns-action-bar [title]="'menu.speakers' | translate"></ngatl-ns-action-bar>
-<StackLayout class="page h-full p-b-20" (loaded)="onBackgroundLoaded($event)">
+<StackLayout class="page h-full p-b-20" (loaded)="onBackgroundLoaded($event)" *ngIf="renderView">
   <!-- Search -->
   <SearchBar id="search" #search hint="Search" text="" (clear)="clear($event)" (submit)="search$.next(search.text)"
    (loaded)="doNotShowAndroidKeyboard($event)" android:height="40"></SearchBar>

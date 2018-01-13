@@ -1,5 +1,5 @@
 <ngatl-ns-action-bar [title]="'menu.about' | translate"></ngatl-ns-action-bar>
-<ScrollView>
+<ScrollView *ngIf="renderView">
     <GridLayout rows="auto,auto,*" columns="*" class="page">
       <StackLayout class="about-bg p-t-10" row="0" col="0">
           <Label text="Built w/ NativeScript for Angular" (tap)="viewPage()" textWrap="true" class="c-black text-center"></Label>

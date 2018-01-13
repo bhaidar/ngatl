@@ -18,6 +18,8 @@ import { NSAppService } from '../../core/services/ns-app.service';
 })
 export class ConductComponent {
 
+  public renderView = false;
+
   constructor(
     private store: Store<any>, 
     private log: LogService,
@@ -27,6 +29,10 @@ export class ConductComponent {
     private appService: NSAppService,
   ) {
     this.appService.currentVcRef = this.vcRef;
+  }
+
+  ngOnInit() {
+    this.renderView = true;
   }
 
   public emailUs() {

@@ -19,6 +19,7 @@ import { NSAppService } from '../../core/services/ns-app.service';
 })
 export class MediaComponent {
 
+  public renderView = false;
   public mediaState$: Observable<any>;
   private _media = [
     {
@@ -43,6 +44,10 @@ export class MediaComponent {
   ) {
     this.appService.currentVcRef = this.vcRef;
     this.mediaState$ = Observable.of(this._media);
+  }
+
+  ngOnInit() {
+    this.renderView = true;
   }
 
   public emailUs() {

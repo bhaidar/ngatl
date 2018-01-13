@@ -1,5 +1,5 @@
 <ngatl-ns-action-bar [title]="'conduct.title' | translate"></ngatl-ns-action-bar>
-<ScrollView>
+<ScrollView *ngIf="renderView">
     <GridLayout rows="auto,*" columns="*" class="w-full h-full">
         <StackLayout row="0" col="0" class="c-bg-charcoal p-10">
             <Label [text]="'general.need-help' | translate" class="h2 text-center"></Label>
