@@ -4,6 +4,7 @@ import { TNSStorageService } from './tns-storage.service';
 import { MobileWindowPlatformService } from './tns-window.service';
 import { DrawerService } from './drawer.service';
 import { TnsHttpErrorService } from './tns-http-error.service';
+import { RecordService } from './record.service';
 
 export const CORE_PROVIDERS: any[] = [
   TNSModalService,
@@ -11,7 +12,8 @@ export const CORE_PROVIDERS: any[] = [
   NSAppService,
   TNSStorageService,
   TnsHttpErrorService,
-  MobileWindowPlatformService
+  MobileWindowPlatformService,
+  RecordService
 ];
 
 export * from './drawer.service';
