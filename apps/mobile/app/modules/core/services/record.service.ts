@@ -2,10 +2,12 @@ import {
   Injectable,
   NgZone,
 } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 // libs
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
 import { TNSRecorder, TNSPlayer, AudioRecorderOptions, AudioPlayerOptions } from 'nativescript-audio';
 import { isIOS, isAndroid } from 'tns-core-modules/platform';
 import { knownFolders, Folder, File, path } from 'tns-core-modules/file-system';
@@ -13,6 +15,7 @@ import {
   AudioActions,
   IAudioPlatformPlayer,
   ProgressService,
+  NetworkCommonService,
   IAppState,
   LogService,
   WindowService,
@@ -22,29 +25,40 @@ import {
 export class RecordService {
   public audioMeter = '0';
   public duration$: BehaviorSubject<string> = new BehaviorSubject( '00:00' );
+  public transcription$: Subject<string> = new Subject();
   private _isPlaying = false;
   private _isRecording = false;
   private _recorder: TNSRecorder;
   private _player: TNSPlayer;
   private _audioSessionId;
   private _meterInterval: any;
-  private _fileState: { path?: string; saved?: boolean } = {};
+  private _fileState: { path?: string; saved?: boolean; isRemote?: boolean } = {};
   private _recordDuration: number;
   private _durationInterval: number;
+  private _autoTranscribe = true;
 
   constructor(
     public store: Store<IAppState>,
     public progressService: ProgressService,
     public ngZone: NgZone,
+    private _http: HttpClient,
     private _log: LogService,
     private _win: WindowService,
     private _translate: TranslateService,
   ) {
 
     this._player = new TNSPlayer();
-    this._player.debug = true; // set true for tns_player logs
+    // this._player.debug = true; // set true for tns_player logs
     this._recorder = new TNSRecorder();
-    this._recorder.debug = true; // set true for tns_recorder logs
+    // this._recorder.debug = true; // set true for tns_recorder logs
+  }
+
+  public set autoTranscribe(value: boolean) {
+    this._autoTranscribe = value;
+  }
+
+  public get autoTranscribe() {
+    return this._autoTranscribe;
   }
 
   public get isPlaying() {
@@ -63,12 +77,21 @@ export class RecordService {
     this._isRecording = value;
   }
 
+  public get isFileRemote() {
+    return this._fileState.isRemote;
+  }
+
   public get filepath() {
     return this._fileState.path;
   }
 
   public set filepath(value: string) {
     this._fileState.path = value;
+    if (value && value.indexOf('http') > -1) {
+      this._fileState.isRemote = true;
+    } else {
+      this._fileState.isRemote = false;
+    }
   }
 
   public startRecord() {
@@ -80,6 +103,7 @@ export class RecordService {
 
       const filename = `recording-${Date.now()}.${this.platformExtension()}`;
       this._fileState.path = path.join( knownFolders.documents().path, filename );
+      this._fileState.isRemote = false;
 
       let androidFormat;
       let androidEncoder;
@@ -145,6 +169,38 @@ export class RecordService {
     this._resetMeter();
     this._stopDurationTracking();
     this._recorder.stop();
+    if (this.autoTranscribe) {
+      this._transcribe();
+    }
+  }
+
+  public reTranscribe() {
+    if (this.filepath) {
+      this._transcribe();
+    }
+  }
+
+  private _transcribe() {
+    if (isIOS) {
+      const speechRecongiser = SFSpeechRecognizer.alloc().init();
+      let url;
+      if (this._fileState.isRemote) {
+        url = NSURL.URLWithString(this.filepath);
+      } else {
+        url = NSURL.fileURLWithPath(this.filepath);
+      }
+      const request = SFSpeechURLRecognitionRequest.alloc().initWithURL(url);
+
+      speechRecongiser.recognitionTaskWithRequestResultHandler(request, (result: SFSpeechRecognitionResult, error) => {
+        if (error) {
+          this._win.alert(this._translate.instant('audio.transcribe-error'));
+          return;
+        }
+        this.ngZone.run(() => {
+          this.transcription$.next(result.bestTranscription.formattedString);
+        });
+      });
+    }
   }
 
   private _initMeter() {
@@ -169,29 +225,47 @@ export class RecordService {
       audioFile: this._fileState.path,
       loop: false,
       completeCallback: () => {
-        this.isPlaying = false;
+        this._togglePlayingStateOff();
       },
 
       errorCallback: errorObject => {
-        console.log( JSON.stringify( errorObject ) );
-        this.isPlaying = false;
+        // console.log( JSON.stringify( errorObject ) );
+        this._togglePlayingStateOff();
       },
 
       infoCallback: infoObject => {
-        console.log( JSON.stringify( infoObject ) );
+        // console.log( JSON.stringify( infoObject ) );
       }
     };
 
-    this._player.playFromFile( playerOptions ).then( () => {
-      this._startPlayTracking(this._player.duration);
-    }, err => {
-      console.log( "error playFromFile" );
-      this.ngZone.run( () => {
-        this.isPlaying = false;
-      } );
-    } );
+    this.progressService.toggleSpinner(true);
+    if (this._fileState.isRemote) {
+      this._player.playFromUrl( playerOptions ).then(this._playStarted.bind(this), this._playError.bind(this) );
+    } else {
+      this._player.playFromFile( playerOptions ).then(this._playStarted.bind(this), this._playError.bind(this) );
+    }
 
     this.isPlaying = true;
+  }
+
+  private _togglePlayingStateOff() {
+    this.ngZone.run(() => {
+      this.isPlaying = false;
+      this._stopDurationTracking();
+    });
+  }
+
+  private _playStarted() {
+    this.progressService.toggleSpinner(false);
+    this._startPlayTracking(this._player.duration);
+  }
+
+  private _playError(err) {
+    console.log( "error playFromFile" );
+    this.ngZone.run( () => {
+      this.progressService.toggleSpinner(false);
+      this.isPlaying = false;
+    } );
   }
 
   public stopPlaying() {
@@ -202,9 +276,19 @@ export class RecordService {
 
   public saveRecording() {
     return new Promise((resolve, reject) => {
-      if (this.filepath) {
+      if (!this._fileState.isRemote) { // needs saving
         // TODO dispatch action to upload and create cdn url
         // wire up subscription or do manual api to resolve directly the url 
+        // this.progressService.toggleSpinner(true, { message: this._translate.instant('audio.saving')});
+        // this._http.post(`${NetworkCommonService.API_URL}ConferenceAttendeeNotes`)
+        //   .map()
+        //   .subscribe((result) => {
+        //     resolve(result);
+        //   });
+        resolve(this.filepath); // remove this line when ready
+      } else if (this._fileState.isRemote) {
+        // already saved remotely
+        resolve(this.filepath);
       } else {
         reject();
       }

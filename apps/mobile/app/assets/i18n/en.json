@@ -58,13 +58,17 @@
     "updated": "Your profile was successfully updated!",
     "logout": "Logout",
     "logged-in": "You are now logged in",
-    "unclaim": "Unclaim Badge"
+    "unclaim": "Unclaim Badge",
+    "toggle-fav": "Toggle Favorites",
+    "auto-transcribe": "Auto-Transcribe"
   },
   "conduct": {
     "title": "Code of Conduct"
   },
   "audio": {
     "disabled": "This device cannot record audio.",
-    "no-file": "There is no recording to play."
+    "no-file": "There is no recording to play.",
+    "saving": "Saving notes...",
+    "transcribe-error": "We're sorry, transcription failed. That was either some wacky conversation or somehow crypto currencies are involved in bringing down the entire web."
   }
 }

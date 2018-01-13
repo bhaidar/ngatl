@@ -35,7 +35,7 @@
               onTintColor="#fed03d"
               ios:fillColor="#fed03d">
             </CheckBox>
-            <Label text="Toggle Favorites" class="label" (tap)="toggleFavoritesOnly()"></Label>
+            <Label [text]="'user.toggle-fav' | translate" class="label" (tap)="toggleFavoritesOnly()"></Label>
           </StackLayout>
           <!-- List -->
           <ListView row="2" [items]="conferenceModel.sessions" id="sessions-list" separatorColor="#000000" (itemLoading)="changeCellBackground($event)">

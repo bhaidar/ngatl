@@ -3,10 +3,28 @@
   <StackLayout row="1" col="0" class="note-section">
     <TextView hint="Add notes..." [(ngModel)]="item.note" editable="true" class="w-full h-full t-20 note-area c-white"></TextView>
   </StackLayout>
-  <GridLayout row="2" col="0" padding="10" rows="auto" columns="auto,75,auto,*,auto">
-      <Button [text]="recordService.isPlaying ? ('ion-stop' | fonticon) : ('ion-ios-play' | fonticon)" (tap)="togglePlay()" class="ion c-white t-40" [class.disabled]="recordService.isRecording" row="0" col="0"></Button> 
+  <GridLayout row="2" col="0" padding="10" rows="auto" columns="auto,*,auto">
+    <GridLayout rows="auto,auto" columns="auto,75,auto" row="0" col="0">
+      <Button [text]="recordService.isPlaying ? ('ion-stop' | fonticon) : ('ion-ios-play' | fonticon)" (tap)="togglePlay()" class="ion c-white t-40" [class.disabled]="recordService.isRecording || !recordService.filepath" row="0" col="0"></Button> 
       <Label [text]="recordService.duration$ | async" class="c-white t-14 m-x-5 text-center" row="0" col="1"></Label>
       <Button [text]="recordService.isRecording ? ('ion-stop' | fonticon) : ('ion-record' | fonticon)" (tap)="toggleRecord()" class="ion c-white t-40" [class.c-ngatl-red]="!recordService.isRecording" [class.disabled]="recordService.isPlaying" row="0" col="2"></Button> 
-      <Button [text]="'general.save' | translate" (tap)="save()" class="btn btn-primary" row="0" col="4"></Button>   
+      <StackLayout *ngIf="ios"
+        row="1" colSpan="3"
+        orientation="horizontal"
+        class="checkbox-layout">
+        <CheckBox
+          verticalAlignment="top"
+          class="checkbox-item"
+          [checked]="recordService.autoTranscribe"
+          (loaded)="checkboxLoaded($event)"
+          (checkedChange)="checkedChange($event)"
+          fontSize="20"
+          onTintColor="#fed03d"
+          ios:fillColor="#fed03d">
+        </CheckBox>
+        <Label [text]="'user.auto-transcribe' | translate" class="label" (tap)="toggleAutoTranscribe()"></Label>
+      </StackLayout>
+    </GridLayout>
+    <Button [text]="'general.save' | translate" (tap)="save()" class="btn btn-primary" row="0" col="2"></Button>   
   </GridLayout>
 </GridLayout>
