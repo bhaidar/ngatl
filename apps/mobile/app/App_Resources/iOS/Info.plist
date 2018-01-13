@@ -53,6 +53,8 @@
 	<string>To upload profile pictures</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To upload profile pictures</string>
+	<key>NSCalendarsUsageDescription</key>
+  <string>To schedule events</string>
 	<key>NSAppTransportSecurity</key>
   <dict>
     <key>NSAllowsArbitraryLoads</key>
