@@ -64,11 +64,23 @@
   animation-name: play;
   animation-fill-mode: forwards;
   animation-duration: 0.6;
+
+  &.static {
+    margin-bottom: 0;
+    margin-top: 10;
+    background-color: $black;
+  }
 }
 
 .fields-section {
   margin-left: 12;
   margin-right: 12;
+
+  &.static {
+    margin-left:0;
+    margin-right:0;
+    padding:5;
+  }
 }
 
 .field-title,
@@ -85,6 +97,13 @@
   font-size: 18;
   color: $dark-blue;
   padding: 10 0;
+
+  &.static {
+    color: $blue-light;
+  }
+  &.static-white {
+    color: $white;
+  }
 }
 
 .field-multiline {
@@ -104,6 +123,10 @@
   background-color: #dbdbdb;
   height: 1;
   margin: 0;
+
+  &.static {
+    background-color: $black;
+  }
 }
 
 .checkbox {

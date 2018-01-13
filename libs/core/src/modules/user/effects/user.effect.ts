@@ -616,7 +616,12 @@ export class UserEffects extends Analytics {
               return new AppActions.NoopAction();
             }
           } )
-          .catch( ( err ) => Observable.of( new UserActions.LoginFailedAction( err ) ) );
+          .catch( ( err ) => {
+            this._win.setTimeout( _ => {
+              this._win.alert(this._translate.instant( 'user.not-found' ));
+            }, 300 );
+            return Observable.of( new UserActions.LoginFailedAction( err ) ) 
+          });
 
       } );
 

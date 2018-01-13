@@ -53,6 +53,13 @@ export class RecordService {
     // this._recorder.debug = true; // set true for tns_recorder logs
   }
 
+  public reset() {
+    this._fileState = {};
+    this.isPlaying = false;
+    this.isRecording = false;
+    this._stopDurationTracking();
+  }
+
   public set autoTranscribe(value: boolean) {
     this._autoTranscribe = value;
   }
@@ -88,9 +95,9 @@ export class RecordService {
   public set filepath(value: string) {
     this._fileState.path = value;
     if (value && value.indexOf('http') > -1) {
-      this._fileState.isRemote = true;
+      this._fileState.isRemote = this._fileState.saved = true;
     } else {
-      this._fileState.isRemote = false;
+      this._fileState.isRemote = this._fileState.saved = false;
     }
   }
 

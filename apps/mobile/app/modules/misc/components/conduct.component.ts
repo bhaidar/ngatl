@@ -36,17 +36,7 @@ export class ConductComponent {
   }
 
   public emailUs() {
-    emailAvailable().then((avail) => {
-      if (avail) {
-        composeEmail({
-          to: ['info@ng-atl.org'],
-        }).then(_ => {
-          
-        }, (err) => {
-          this.win.alert(this.translate.instant('general.error'));
-        });
-      }
-    });
+    this.appService.email('info@ng-atl.org');
   }
 
   public openWeb(url: string) {

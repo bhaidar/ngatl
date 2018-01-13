@@ -27,4 +27,33 @@
     </GridLayout>
     <Button [text]="'general.save' | translate" (tap)="save()" class="btn btn-primary" row="0" col="2"></Button>   
   </GridLayout>
+  <GridLayout rows="auto,auto" columns="*,*" row="3" col="0">
+      
+  </GridLayout>
+  <GridLayout class="form-content static" rows="*" row="3" col="0">
+      <ScrollView row="0" class="fields-section static">
+        <StackLayout>
+          <!-- Email -->
+          <GridLayout ios:columns="auto,*" android:rows="auto, auto" verticalAlignment="top">
+            <!-- <Label [text]="'user.email' | translate" class="field-title"></Label> -->
+            <Label [text]="item?.peer?.email" class="field static text-center" ios:col="1" android:row="1" (tap)="email()"></Label>
+          </GridLayout>
+          <StackLayout class="line static"></StackLayout>
+          <!-- Phone -->
+          <GridLayout ios:columns="auto,*" android:rows="auto, auto" verticalAlignment="top" *ngIf="item?.peer?.phone">
+            <!-- <Label [text]="'user.phone' | translate" class="field-title"></Label> -->
+            <Label [text]="item?.peer?.phone" class="field static text-center" ios:col="1" android:row="1" (tap)="phone()"></Label>
+          </GridLayout>
+          <StackLayout class="line static"></StackLayout>
+          <!-- Company -->
+          <GridLayout ios:columns="auto,*" android:rows="auto, auto" verticalAlignment="top">
+            <Label [text]="'user.company' | translate" class="field-title"></Label>
+            <Label [text]="item?.peer?.company" class="field static-white" ios:col="1" android:row="1"></Label>
+          </GridLayout>
+          <StackLayout class="line static"></StackLayout>
+          <Image [src]="item?.peer?.imageUrl" class="profile-picture" horizontalAlignment="center" *ngIf="item?.peer?.imageUrl"></Image>
+          
+        </StackLayout>
+      </ScrollView>
+    </GridLayout>
 </GridLayout>

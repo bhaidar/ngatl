@@ -13,6 +13,7 @@ import { ModalDialogParams } from 'nativescript-angular/directives/dialogs';
 import { CheckBox } from 'nativescript-checkbox';
 
 // app
+import { NSAppService } from '../../../core/services/ns-app.service';
 import { RecordService } from '../../../core/services/record.service';
 import { BaseModalComponent } from '../../abstract/base-modal-component';
 
@@ -36,6 +37,7 @@ export class NoteEditComponent extends BaseModalComponent {
     public progress: ProgressService, 
     public win: WindowService,
     public recordService: RecordService,
+    private _appService: NSAppService,
     private _ngZone: NgZone,
     private _translate: TranslateService,
   ) {
@@ -54,6 +56,33 @@ export class NoteEditComponent extends BaseModalComponent {
       .subscribe((text) => {
         this.item.note = text;
       });
+
+    if (this.item && this.item.audioUrl) {
+      this.recordService.filepath = this.item.audioUrl;
+    }
+  }
+
+  ngOnDestroy() {
+    super.ngOnDestroy();
+    this.recordService.reset();
+  }
+
+  public email() {
+    if (this.item.peer.email) {
+      this._appService.email(this.item.peer.email, true).then(_ => {
+        // close modal with result
+        this._customCloseFn({email: this.item.peer.email});
+      }, _ => {});
+    }
+  }
+
+  public phone() {
+    if (this.item.peer.phone) {
+      this._appService.phone(this.item.peer.phone, true).then(_ => {
+        // close modal with result
+        this._customCloseFn({phone: this.item.peer.phone});
+      }, _ => {});
+    }
   }
 
   public togglePlay() {
@@ -118,16 +147,16 @@ export class NoteEditComponent extends BaseModalComponent {
     }, 1500); // reasonable amount of time to update (quick/dirty setup)
   }
 
-  public _customCloseFn() {
+  public _customCloseFn(value?: any) {
     if (this.item.note !== this._origItem.note || this.item.audioUrl !== this._origItem.audioUrl) {
       this._dirty = true;
     }
     if (this._dirty) {
       this.win.confirm(this._translate.instant('user.unsaved'), () => {
-        super.close();
+        super.close(value);
       });
     } else {
-      super.close();
+      super.close(value);
     }
   }
 }

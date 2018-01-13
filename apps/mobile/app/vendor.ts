@@ -45,6 +45,7 @@ import 'nativescript-imagepicker';
 import 'nativescript-loading-indicator';
 import 'nativescript-ngx-fonticon';
 import 'nativescript-permissions';
+import 'nativescript-phone';
 import 'nativescript-pro-ui/listview';
 
 /**

@@ -23,9 +23,10 @@ export abstract class BaseModalComponent extends BaseComponent {
     page.backgroundColor = new Color('#000');
   }
 
-  public close() {
+  public close(value?: any) {
     this.store.dispatch(new ModalActions.CloseAction({
       params : this.params,
+      value
     }));
   }
 }

@@ -6,7 +6,6 @@ import { Observable } from 'rxjs/Observable';
 import { TranslateService } from '@ngx-translate/core';
 import * as utils from 'tns-core-modules/utils/utils';
 import * as socialShare from 'nativescript-social-share';
-import { compose as composeEmail, available as emailAvailable } from 'nativescript-email';
 
 // app
 import { ModalActions, LogService, WindowService } from '@ngatl/core';
@@ -48,20 +47,6 @@ export class MediaComponent {
 
   ngOnInit() {
     this.renderView = true;
-  }
-
-  public emailUs() {
-    emailAvailable().then((avail) => {
-      if (avail) {
-        composeEmail({
-          to: ['info@ng-atl.org'],
-        }).then(_ => {
-          
-        }, (err) => {
-          this.win.alert(this.translate.instant('general.error'));
-        });
-      }
-    });
   }
 
   public openWeb(url: string) {

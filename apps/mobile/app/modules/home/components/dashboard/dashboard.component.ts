@@ -15,7 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { SystemUser } from '@ngatl/api';
-import { BaseComponent, UserActions, LogService, ModalActions, WindowService, ProgressService, UserState, IAppState, UIState, UserService } from '@ngatl/core';
+import { BaseComponent, UserActions, LogService, ModalActions, WindowService, ProgressService, UserState, IAppState, UIState, UserService, ModalState, isObject } from '@ngatl/core';
 
 // nativescript
 import { BarcodeScanner } from 'nativescript-barcodescanner';
@@ -730,6 +730,26 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
             this._modalStoppedBeacon = false;
             // restart beacon
             this._playBeacon();
+          }
+        });
+
+      this._store.select((s: IAppState) => s.ui.modal)
+        .takeUntil(this.destroy$)
+        .skip(1) // only react
+        .subscribe((modal: ModalState.IState) => {
+          if (modal.latestResult && isObject(modal.latestResult)) {
+            if (modal.latestResult.email || modal.latestResult.phone) {
+              this._win.setTimeout(_ => {
+                // open compose window
+                if (modal.latestResult.email) {
+                  this.appService.email(modal.latestResult.email);
+                } else if (modal.latestResult.phone) {
+                  this.appService.phone(modal.latestResult.phone);
+                }
+                // reset
+                this.appService.resetModal();
+              }, 500);
+            }
           }
         });
       if (!this.appService.shownIntro) {

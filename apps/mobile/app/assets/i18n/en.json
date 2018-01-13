@@ -24,7 +24,8 @@
     "pin-number": "Pin number",
     "camera": "Camera",
     "confirm-photo-delete": "Are you sure you want to remove this photo?",
-    "close": "Close"
+    "close": "Close",
+    "sms": "Text message"
   },
   "item": {
     "delete-lbl": "Delete"
@@ -39,7 +40,8 @@
     "edit": "Edit",
     "save": "Save",
     "update": "Update",
-    "profile": "Profile"
+    "profile": "Profile",
+    "ngatl-text-msg": "Hi, this ngAtl conference is awesome! I wanted to reach out and say hello."
   },
   "user": {
     "badge-claim": "Is this your badge",
@@ -60,7 +62,10 @@
     "logged-in": "You are now logged in",
     "unclaim": "Unclaim Badge",
     "toggle-fav": "Toggle Favorites",
-    "auto-transcribe": "Auto-Transcribe"
+    "auto-transcribe": "Auto-Transcribe",
+    "not-found": "A badge was not found in our database for this barcode.",
+    "email-confirm-compose": "Would you like to compose an email to them now? This will close this modal to open the compose view.",
+    "sms-confirm-compose": "Would you like to compose a text message to them now? This will close this modal to open the compose view."
   },
   "conduct": {
     "title": "Code of Conduct"
