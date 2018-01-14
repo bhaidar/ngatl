@@ -301,7 +301,7 @@ ListView {
     &.level-gold {
         background-color: #ffb720;
     }
-    
+
 }
 
 .about-bg {
@@ -339,3 +339,9 @@ ListView {
 //     background-color: $black;
 //     margin-bottom:    20;
 //   }
+.search-bar{
+    background-color:rgba(21,31,47,.8);
+}
+.first-item{
+    padding-top: 50;
+}
