@@ -202,7 +202,7 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
     item.toggleFavourite();
     this.win.setTimeout(_ => {
       this.getListView().refresh();
-    }, 2000);
+    }, 500);
   }
 
   public changeCellBackground( args: ItemEventData ) {
