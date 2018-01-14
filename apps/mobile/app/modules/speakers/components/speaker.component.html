@@ -16,7 +16,7 @@
         <Label [text]="char" *ngFor="let char of alphabet" textWrap="true"></Label>
       </StackLayout>
     </GridLayout>
-    <StackLayout top="0" left="0" [collapse]="speakerList" class="search-bar" width="100%">
+    <StackLayout top="0" left="0" [collapse]="speakerList" [watch]="quickScroll$" class="search-bar" width="100%">
       <SearchBar id="search" #search hint="Search" text="" (clear)="clear($event)" (submit)="search$.next(search.text)" (loaded)="doNotShowAndroidKeyboard($event)"
         android:height="40"></SearchBar>
     </StackLayout>

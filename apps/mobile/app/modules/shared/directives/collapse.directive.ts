@@ -8,18 +8,20 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import { fromPromise } from 'rxjs/observable/fromPromise';
+import { Subject } from 'rxjs/Subject';
 
-@Directive({
+@Directive( {
 	selector: '[collapse]'
-})
+} )
 export class CollapseDirective implements AfterViewInit {
 
 	private subscription: Subscription;
 
-    /**
-     * listview view to watch scrolling events on.
-     */
+	/**
+	 * listview view to watch scrolling events on.
+	 */
 	@Input() collapse: ElementRef;
+	@Input() watch: Subject<number>;
 
 	private get view(): View {
 		return this.element.nativeElement;
@@ -29,44 +31,45 @@ export class CollapseDirective implements AfterViewInit {
 		return this.collapse.nativeElement;
 	}
 
-	constructor(private element: ElementRef) {
+	constructor( private element: ElementRef ) {
 	}
 
 	ngAfterViewInit() {
-		const panEvent$ = fromEvent(this.listView, 'pan')
-			.map((event: PanGestureEventData) => event.deltaY);
+		const panEvent$ = fromEvent( this.listView, 'pan' )
+			.map( ( event: PanGestureEventData ) => event.deltaY );
 
 		this.subscription = panEvent$
-			.filter(deltaY => {
+			.filter( deltaY => {
 				// filter out out events that are just starting
-				if (deltaY < -10) {
+				if ( deltaY < -10 ) {
 					return true;
 				}
-				if (deltaY > 10) {
+				if ( deltaY > 10 ) {
 					return true;
 				}
 				return false;
-			})
-            .map( deltaY => {
-                // determine if we are moving up or not.
+			} )
+			.map( deltaY => {
+				// determine if we are moving up or not.
 				return deltaY > 0 ? 1 : 0;
-			})
+			} )
+			.merge(this.watch)
 			.distinctUntilChanged()
-			.switchMap((up) => {
+			.switchMap( ( up ) => {
 				const itemHeight = this.view.getMeasuredHeight();
-				if (up) {
-					return fromPromise(this.view.animate({
+				if ( up ) {
+					return fromPromise( this.view.animate( {
 						translate: { x: 0, y: 0 },
 						duration: 600
-					}));
+					} ) );
 
 				} else {
-					return fromPromise(this.view.animate({
+					return fromPromise( this.view.animate( {
 						translate: { x: 0, y: -itemHeight },
 						duration: 600
-					}));
+					} ) );
 				}
-			}).subscribe();
+			} ).subscribe();
 	}
 
 	ngOnDestroy() {

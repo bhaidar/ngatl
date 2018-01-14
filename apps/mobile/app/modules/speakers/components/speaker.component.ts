@@ -41,6 +41,7 @@ export class SpeakerComponent extends BaseComponent implements AfterViewInit, On
     return this._speakerList.nativeElement as ListView;
   }
 
+  quickScroll$ = new Subject<number>();
   constructor(
     private store: Store<any>,
     private log: LoggerService,
@@ -150,6 +151,7 @@ export class SpeakerComponent extends BaseComponent implements AfterViewInit, On
 
     if ( char == 'a' ) {
       this.speakerList.scrollToIndex( 0 );
+      this.quickScroll$.next( 1 );
       return;
     }
     const firstArtistThatStartsWith = this._all.find( speaker => speaker.name.toLowerCase()
@@ -158,6 +160,7 @@ export class SpeakerComponent extends BaseComponent implements AfterViewInit, On
     const itemToScrollToIndex = this._all.indexOf( firstArtistThatStartsWith );
     if ( firstArtistThatStartsWith && itemToScrollToIndex ) {
       this.speakerList.scrollToIndex( itemToScrollToIndex );
+      this.quickScroll$.next( 0 );
     }
 
   }
