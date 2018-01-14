@@ -14,7 +14,7 @@
       <!-- Segmented Bar -->
       <SegmentedBar row="0" [selectedIndex]="selectedDay" (selectedIndexChange)="onDayChange($event)"
               ios:selectedBackgroundColor="white"
-              android:selectedBackgroundColor="#FAC950" 
+              android:selectedBackgroundColor="#FAC950"
               class="conf-segmented-bar" [items]="days">
       </SegmentedBar>
       <GridLayout row="1" rows="auto, auto, *" (loaded)="onBackgroundLoaded($event)">
@@ -40,11 +40,11 @@
           <!-- List -->
           <ListView row="2" [items]="conferenceModel.sessions" id="sessions-list" separatorColor="#000000" (itemLoading)="changeCellBackground($event)">
               <ng-template let-item="item">
-                  <GridLayout columns="auto, auto, *" rows="auto, auto" (tap)="item.toggleFavourite()" class="session-container" [class.favorite]="item.isFavourite">
+                  <GridLayout columns="auto, auto, *" rows="auto, auto" (tap)="toggleItemFav(item)" class="session-container" [class.favorite]="item.isFavourite">
                       <Image row="0" rowSpan="2" col="0" [src]="item.isFavourite ? 'res://add_to_fav_1' : 'res://add_to_fav'" [ngClass]="item.cssClass"></Image>
                       <Label row="0" col="1" [text]="item.range" class="session-time"></Label>
-                      
-                      <Label row="0" col="2" [text]="item.room" class="session-room"></Label>                    
+
+                      <Label row="0" col="2" [text]="item.room" class="session-room"></Label>
                       <Label row="1" col="1" colSpan="2" [text]="item.title" textWrap="true" class="session-title"></Label>
                   </GridLayout>
               </ng-template>
