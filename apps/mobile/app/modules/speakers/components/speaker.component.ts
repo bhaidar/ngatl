@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, AfterViewInit, OnInit, ViewContainerRef, ViewChild, ElementRef } from '@angular/core';
 
 // libs
 import { Store } from '@ngrx/store';
@@ -18,6 +18,11 @@ import { SpeakerActions } from '../actions';
 import { SpeakerState } from '../states';
 import { LinearGradient } from '../../../helpers';
 import { NSAppService } from '../../core/services/ns-app.service';
+import { TouchGestureEventData, PanGestureEventData, TouchAction } from 'ui/gestures';
+import { layout } from 'utils/utils';
+import { StackLayout } from 'tns-core-modules/ui/layouts/stack-layout/stack-layout';
+import { Label } from 'tns-core-modules/ui/label';
+import { ListView } from 'tns-core-modules/ui/list-view/list-view';
 
 @Component( {
   moduleId: module.id,
@@ -29,7 +34,12 @@ export class SpeakerComponent extends BaseComponent implements AfterViewInit, On
   public speakerState$: BehaviorSubject<any> = new BehaviorSubject( [] );
   public search$: Subject<string> = new Subject();
   private _all: Array<any>;
-  private _searchSpeakers: (value: string) => void;
+  private _searchSpeakers: ( value: string ) => void;
+
+  @ViewChild( 'speakerList' ) _speakerList: ElementRef;
+  private get speakerList() {
+    return this._speakerList.nativeElement as ListView;
+  }
 
   constructor(
     private store: Store<any>,
@@ -112,6 +122,44 @@ export class SpeakerComponent extends BaseComponent implements AfterViewInit, On
         searchBar.android.clearFocus();
       }
     }
+  }
+  alphabet = 'abcdejkmnpqrstw'.split( '' );
+  previousCharacterToJumpTo: string;
+  slide( $event: TouchGestureEventData ) {
+    const yCoordinate = $event.getY();
+    const stackWrapper = $event.view as StackLayout;
+    const firstLabel = stackWrapper.getChildAt( 1 ) as Label;
+    const letterHeight = layout.toDeviceIndependentPixels( firstLabel.getMeasuredHeight() );
+    const indexRaw = yCoordinate / letterHeight;
+    if ( indexRaw >= 0 && indexRaw <= this.alphabet.length ) {
+      const indexToGoTo = Math.floor( indexRaw );
+      const char = this.alphabet[indexToGoTo];
+
+      if ( this.previousCharacterToJumpTo != char ) {
+        this.jumpToSpeakerThatStartsWith( char )
+        this.previousCharacterToJumpTo = char;
+      }
+
+    }
+
+  }
+  jumpToSpeakerThatStartsWith( char ) {
+    if ( !char ) {
+      return;
+    }
+
+    if ( char == 'a' ) {
+      this.speakerList.scrollToIndex( 0 );
+      return;
+    }
+    const firstArtistThatStartsWith = this._all.find( speaker => speaker.name.toLowerCase()
+      .trim()
+      .startsWith( char ) );
+    const itemToScrollToIndex = this._all.indexOf( firstArtistThatStartsWith );
+    if ( firstArtistThatStartsWith && itemToScrollToIndex ) {
+      this.speakerList.scrollToIndex( itemToScrollToIndex );
+    }
+
   }
 
   ngAfterViewInit() { }
