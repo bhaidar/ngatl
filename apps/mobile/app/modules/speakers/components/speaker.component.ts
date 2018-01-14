@@ -123,7 +123,7 @@ export class SpeakerComponent extends BaseComponent implements AfterViewInit, On
       }
     }
   }
-  alphabet = 'abcdejkmnpqrstw'.split( '' );
+  alphabet = 'abcdejkmnprstw'.split( '' );
   previousCharacterToJumpTo: string;
   slide( $event: TouchGestureEventData ) {
     const yCoordinate = $event.getY();
