@@ -18,7 +18,7 @@ For mobile production webpack build:
 
 ```
 cd apps/mobile
-tns build ios --bundle --env.aot --env.uglify --release --for-device
+tns build ios --bundle --env.aot --env.uglify --release
 ```
 
 ## Nrwl Extensions for Angular (Nx)
