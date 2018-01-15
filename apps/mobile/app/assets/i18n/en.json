@@ -22,7 +22,7 @@
     "cancel": "Cancel",
     "no": "No",
     "delete-scan": "Are you sure want to remove the badge scan for",
-    "pin-number": "Pin number",
+    "pin-number": "PIN number",
     "camera": "Camera",
     "confirm-photo-delete": "Are you sure you want to remove this photo?",
     "close": "Close",
@@ -42,17 +42,22 @@
     "save": "Save",
     "update": "Update",
     "profile": "Profile",
-    "ngatl-text-msg": "Hi, this ngAtl conference is awesome! I wanted to reach out and say hello."
+    "ngatl-text-msg":
+      "Hi, this ngAtl conference is awesome! I wanted to reach out and say hello."
   },
   "user": {
     "badge-claim": "Is this your badge",
     "confirm-sponsor-pin": "Please confirm the sponsor PIN:",
     "scan-action": "Scan a badge",
     "already-scanned": "You have already scanned the wonderfully delightful",
-    "already-claimed": "This badge has already been claimed. If this is your badge, please send email to info@ng-atl.org and we will correct this for you.",
-    "scan-yourself": "Well this sure is fun isn't it :) You have already claimed this badge silly pants.",
-    "unclaim-confirm": "Are you sure you would like to unclaim this badge? This will make it available for someone else to claim.",
-    "unsaved": "You have unsaved changes. Are you sure you want to exit without saving?",
+    "already-claimed":
+      "This badge has already been claimed. If this is your badge, please send email to info@ng-atl.org and we will correct this for you.",
+    "scan-yourself":
+      "Well this sure is fun isn't it :) You have already claimed this badge silly pants.",
+    "unclaim-confirm":
+      "Are you sure you would like to unclaim this badge? This will make it available for someone else to claim.",
+    "unsaved":
+      "You have unsaved changes. Are you sure you want to exit without saving?",
     "person": "individual standing before you.",
     "name": "Name",
     "phone": "Phone",
@@ -65,8 +70,10 @@
     "toggle-fav": "Toggle Favorites",
     "auto-transcribe": "Auto-Transcribe",
     "not-found": "A badge was not found in our database for this barcode.",
-    "email-confirm-compose": "Would you like to compose an email to them now? This will close this modal to open the compose view.",
-    "sms-confirm-compose": "Would you like to compose a text message to them now? This will close this modal to open the compose view."
+    "email-confirm-compose":
+      "Would you like to compose an email to them now? This will close this modal to open the compose view.",
+    "sms-confirm-compose":
+      "Would you like to compose a text message to them now? This will close this modal to open the compose view."
   },
   "conduct": {
     "title": "Code of Conduct"
@@ -75,6 +82,7 @@
     "disabled": "This device cannot record audio.",
     "no-file": "There is no recording to play.",
     "saving": "Saving notes...",
-    "transcribe-error": "We're sorry, transcription failed. That was either some wacky conversation or somehow crypto currencies are involved in bringing down the entire web."
+    "transcribe-error":
+      "We're sorry, transcription failed. That was either some wacky conversation or somehow crypto currencies are involved in bringing down the entire web."
   }
 }
