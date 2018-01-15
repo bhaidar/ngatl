@@ -275,7 +275,9 @@ ListView {
 .t-40 {
     font-size: 40;
 }
-
+.list-background{
+    background-color:  #EDEDF4;
+}
 .listing {
     background-color:  $dark-blue;
 
@@ -344,4 +346,16 @@ ListView {
 }
 .first-item{
     padding-top: 50;
+}
+.letter-wrap{
+	margin-top: 160;
+	font-size: 13px;
+}
+
+.letter-wrap Label{
+	height: 14;
+	font-weight: bold;
+	color: $dark-blue;
+	text-transform: uppercase;
+	text-align: center
 }
