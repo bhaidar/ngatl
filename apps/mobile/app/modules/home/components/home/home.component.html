@@ -61,6 +61,13 @@
               <Label [text]="'ion-ios-help-outline' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
               <Label [text]="'menu.about' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
           </GridLayout>
+
+          <!-- Credits -->
+          <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'misc', 'credits']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
+          pageTransition="slideleft" class="sidedrawer-item">
+              <Label [text]="'ion-ios-information' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
+              <Label [text]="'menu.credits' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
+          </GridLayout>
         </StackLayout>
       </GridLayout>
     </ScrollView>

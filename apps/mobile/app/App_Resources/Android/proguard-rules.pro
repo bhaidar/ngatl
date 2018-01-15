@@ -86,6 +86,9 @@
 -keep,includedescriptorclasses class org.nativescript.** { !private *; }
 -keep,includedescriptorclasses public interface org.nativescript.** { *; }
 
+-keep,includedescriptorclasses public class com.facebook.shimmer.** { public *; }
+-keep,includedescriptorclasses public interface com.facebook.shimmer.** { *; }
+
 
 -keep public class * extends java.lang.Exception
 

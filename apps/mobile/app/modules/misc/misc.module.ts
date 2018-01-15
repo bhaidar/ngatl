@@ -3,7 +3,7 @@ import { NativeScriptRouterModule } from 'nativescript-angular/router';
 import { Routes } from '@angular/router';
 
 import { SharedModule } from '../shared/shared.module';
-import { MISC_COMPONENTS, AboutComponent, ConductComponent, CommunityComponent, MediaComponent } from './components';
+import { MISC_COMPONENTS, AboutComponent, ConductComponent, CommunityComponent, MediaComponent, CreditsComponent } from './components';
 
 const routes: Routes = [
   {
@@ -21,6 +21,10 @@ const routes: Routes = [
   {
     path: 'media',
     component: MediaComponent
+  },
+  {
+    path: 'credits',
+    component: CreditsComponent
   }
 ];
 
