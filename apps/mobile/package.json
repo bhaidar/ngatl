@@ -54,7 +54,6 @@
     "reflect-metadata": "~0.1.8",
     "rxjs": "file:../../node_modules/rxjs",
     "tns-core-modules": "~3.4.0",
-    "tns-ios": "3.4.0",
     "zone.js": "file:../../node_modules/zone.js"
   },
   "devDependencies": {
