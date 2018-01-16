@@ -52,7 +52,7 @@
       </RadListView>
     </GridLayout>
 
-    <GridLayout id="intro-elements" row="0" col="0" *ngIf="!appService.shownIntro">
+    <GridLayout id="intro-elements" row="0" col="0" *ngIf="!appService.shownIntro"  (swipe)="swipeHandler($event)">
         <GridLayout id="intro-background" class="intro-background-intro" originY="0"></GridLayout>
         
         <GridLayout id="intro-logo-bg" class="intro-logo-bg-intro" backgroundColor="#fff" width="93" height="93" horizontalAlignment="center" verticalAlignment="center" borderRadius="100" ></GridLayout>
@@ -83,20 +83,21 @@
                 color="#8DA1AB"
                 textAlignment="center"></Label>
 
+                
+        <Label id="intro-version"
+            class="intro-version-intro"
+            text="Enjoy the time of your life."
+            fontSize="14"
+            horizontalAlignment="center"
+            verticalAlignment="center"
+            color="white"
+            textAlignment="center"></Label>
+
         <GridLayout class="intro-swipe-intro" *ngIf="showSwiper" id="intro-swipe" padding="10">
           <Shimmer [enabled]="swipeEnable">
-              <Label text="Swipe for fun" class="swipe-text c-white w-full text-center"></Label>     
+              <Label text="Swipe for fun" class="swipe-text c-white w-full text-center" (swipe)="swipeHandler($event)"></Label>     
           </Shimmer>
         </GridLayout>
-
-        <Label id="intro-version"
-                class="intro-version-intro"
-                text="Enjoy the time of your life."
-                fontSize="14"
-                horizontalAlignment="center"
-                verticalAlignment="center"
-                color="white"
-                textAlignment="center"></Label>
     </GridLayout>
 </GridLayout>
 
