@@ -67,7 +67,7 @@
 		<true/>
 		<key>NSExceptionDomains</key>
     <dict>
-        <key>v0id.nl</key>
+        <key>beeman.nl</key>
         <dict>
             <key>NSExceptionAllowsInsecureHTTPLoads</key>
             <true/>
