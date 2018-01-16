@@ -11,16 +11,35 @@ Button {
   text-transform: lowercase;
 }
 
+// Intro Override
+
+@keyframes intro-swipe-intro {
+  0% {
+      opacity: 0;
+      transform: translate(0, 200);
+  }
+  88.25% {
+      opacity: 0;
+      transform: translate(0, 200);
+  }
+  100% {
+      opacity: .9;
+      transform: translate(0, 420);
+  }
+}
+
+// End Intro Override
+
 @keyframes session-favorite-selected {
   from { transform: scale(1, 1) rotate(-120); opacity: 0; animation-timing-function: linear; }
   50% { transform: scale(2, 2) rotate(-60); opacity: 0.3; animation-timint-function: ease-in; }
-  to { transform: scale(1, 1) rotate(0); opacity: 1; }    
+  to { transform: scale(1, 1) rotate(0); opacity: 1; }
 }
 
 @keyframes session-favorite-unselected {
   from { transform: scale(1, 1) rotate(120); opacity: 0; animation-timing-function: linear; }
   60% { transform: scale(2, 2) rotate(60); opacity: 0.3; animation-timint-function: ease-in; }
-  to { transform: scale(1, 1) rotate(0); opacity: 1; }    
+  to { transform: scale(1, 1) rotate(0); opacity: 1; }
 }
 
 .schedule-main-content {
@@ -28,18 +47,18 @@ Button {
       background-color: #4ac1fa;
       color: white;
     }
-    
+
     SearchBar {
       background-color: white;
       margin: 16;
     }
-    
+
     .session-favorite {
       vertical-align: center;
       horizontal-align: center;
       margin: 0 26 0 16;
     }
-    
+
     .session-favorite-selected {
       animation-name: session-favorite-selected;
       animation-duration: 0.4;
@@ -47,7 +66,7 @@ Button {
       horizontal-align: center;
       margin: 0 26 0 16;
     }
-    
+
     .session-favorite-unselected {
       animation-name: session-favorite-unselected;
       animation-duration: 0.2;
@@ -55,7 +74,7 @@ Button {
       horizontal-align: center;
       margin: 0 26 0 16;
     }
-    
+
     .session-time {
       font-family: "sans-serif";
       /*font-weight: 700;*/
@@ -63,7 +82,7 @@ Button {
       color: #4ac1fa;
       margin-top: 16;
     }
-    
+
     .session-room {
       font-family: "sans-serif";
       /*font-weight: 700;*/
@@ -72,7 +91,7 @@ Button {
       text-transform: uppercase;
       margin: 16 0 0 4;
     }
-    
+
     .session-title {
       font-family: "sans-serif";
       /*font-weight: 300;*/
