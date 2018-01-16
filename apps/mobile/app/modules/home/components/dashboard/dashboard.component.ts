@@ -196,7 +196,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     public appService: NSAppService,
   ) {
     super();
-    this._page.backgroundImage = 'res://home-bg';
+    this._page.backgroundImage = 'res://homebg';
 
     this._page.on('navigatedFrom', () => {
       this._ngZone.run(() => {

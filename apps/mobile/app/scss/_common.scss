@@ -284,10 +284,12 @@ ListView {
     Label {
         margin: 12 0 12 0;
         text-align: center;
+        color: $sky;
 
         &.mention {
             color: $grey-light;
             font-style: italic;
+            margin-bottom: 6; 
         }
 
     }

@@ -30,7 +30,7 @@
     "@ngx-translate/core": "file:../../node_modules/@ngx-translate/core",
     "@nrwl/nx": "file:../../node_modules/@nrwl/nx",
     "crypto-js": "^3.1.9-1",
-    "nativescript-angular": "next",
+    "nativescript-angular": "~5.1.0",
     "nativescript-audio": "~4.3.1",
     "nativescript-barcodescanner": "^2.7.4",
     "nativescript-camera-plus": "file:../../libs/mobile/nativescript-camera-plus-2.2.8.tgz",

@@ -51,6 +51,12 @@ export class CreditsComponent {
       case 4:
         utils.openUrl( 'https://github.com/NathanWalker' );
         break;
+      case 5:
+        utils.openUrl( 'https://github.com/theoriginaljosh');
+        break;
+      case 6:
+        utils.openUrl( 'https://github.com/sis0k0');
+        break;
     }
   }
 
