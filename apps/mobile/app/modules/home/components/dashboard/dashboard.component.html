@@ -2,8 +2,8 @@
 </ngatl-ns-action-bar>
 <GridLayout id="content-root" rows="*" columns="*">
     <AbsoluteLayout (loaded)="startBadge($event)" class="w-full h-full home-bg" row="0" col="0" *ngIf="appService.shownIntro && !showNotes"><!--(tap)="retractTest()"-->
-        <Image src="~/assets/images/badge_bottom.png" id="badge-bottom" (tap)="openBarcode()" class="badge-bottom-intro"></Image><!--[class.exit]="badgeExit"-->
-        <Image src="~/assets/images/badge_top.png" id="badge-top" class="badge-top-intro"></Image><!--[class.exit]="badgeExit"-->
+        <Image src="~/assets/images/badge_bottom.png" id="badge-bottom" (tap)="openBarcode()" class="badge-bottom-intro" width="549" height="865"></Image><!--[class.exit]="badgeExit"-->
+        <Image src="~/assets/images/badge_top.png" id="badge-top" class="badge-top-intro" width="83" height="465"></Image><!--[class.exit]="badgeExit"-->
         <Label text="" id="beacon" class="beacon beacon-pulse" (tap)="openBarcode()"></Label> <!--[class.exit]="badgeExit"--> 
     </AbsoluteLayout>
 
@@ -52,14 +52,17 @@
       </RadListView>
     </GridLayout>
 
-    <GridLayout id="intro-elements" row="0" col="0" *ngIf="!appService.shownIntro">
+    <GridLayout id="intro-elements" row="0" col="0" *ngIf="!appService.shownIntro"  (swipe)="swipeHandler($event)">
         <GridLayout id="intro-background" class="intro-background-intro" originY="0"></GridLayout>
         
         <GridLayout id="intro-logo-bg" class="intro-logo-bg-intro" backgroundColor="#fff" width="93" height="93" horizontalAlignment="center" verticalAlignment="center" borderRadius="100" ></GridLayout>
-        <GridLayout id="intro-logo-n" class="intro-logo-n-intro" backgroundImage="res://ngatlsplash" width="331" height="354" horizontalAlignment="center" verticalAlignment="center" ></GridLayout>
+        <Image id="intro-logo-n" class="intro-logo-n-intro" src="res://ngatlsplash" width="341" height="366" stetch="aspectFit" horizontalAlignment="center" verticalAlignment="center" ></Image>
+        <!-- <GridLayout id="intro-logo-n" class="intro-logo-n-intro" backgroundImage="res://ngatlsplash" width="341" height="366" stetch="aspectFit" horizontalAlignment="center" verticalAlignment="center" ></GridLayout> -->
 
-        <GridLayout id="intro-logo-ng" class="intro-logo-ng-intro" backgroundImage="res://ng" width="118" height="134" horizontalAlignment="center" verticalAlignment="center"></GridLayout>
-        <GridLayout id="intro-logo-atl" class="intro-logo-atl-intro" backgroundImage="res://atl" width="171" height="131" horizontalAlignment="center" verticalAlignment="center"></GridLayout>
+        <Image id="intro-logo-ng" class="intro-logo-ng-intro" src="res://ng" width="118" height="134" stetch="aspectFit" horizontalAlignment="center" verticalAlignment="center"></Image>
+        <!-- <GridLayout id="intro-logo-ng" class="intro-logo-ng-intro" backgroundImage="res://ng" width="118" height="134" stetch="aspectFit" horizontalAlignment="center" verticalAlignment="center"></GridLayout> -->
+        <Image id="intro-logo-atl" class="intro-logo-atl-intro" src="res://atl" width="171" height="131" stetch="aspectFit" horizontalAlignment="center" verticalAlignment="center"></Image>
+        <!-- <GridLayout id="intro-logo-atl" class="intro-logo-atl-intro" backgroundImage="res://atl" width="171" height="131" stetch="aspectFit" horizontalAlignment="center" verticalAlignment="center"></GridLayout> -->
 
         <Label id="intro-text-one"
                 class="intro-text-one-intro"
@@ -80,20 +83,21 @@
                 color="#8DA1AB"
                 textAlignment="center"></Label>
 
+                
+        <Label id="intro-version"
+            class="intro-version-intro"
+            text="Enjoy the time of your life."
+            fontSize="14"
+            horizontalAlignment="center"
+            verticalAlignment="center"
+            color="white"
+            textAlignment="center"></Label>
+
         <GridLayout class="intro-swipe-intro" *ngIf="showSwiper" id="intro-swipe" padding="10">
           <Shimmer [enabled]="swipeEnable">
-              <Label text="Swipe for fun" class="swipe-text c-white w-full text-center"></Label>     
+              <Label text="Swipe for fun" class="swipe-text c-white w-full text-center" (swipe)="swipeHandler($event)"></Label>     
           </Shimmer>
         </GridLayout>
-
-        <Label id="intro-version"
-                class="intro-version-intro"
-                text="Enjoy the time of your life."
-                fontSize="14"
-                horizontalAlignment="center"
-                verticalAlignment="center"
-                color="white"
-                textAlignment="center"></Label>
     </GridLayout>
 </GridLayout>
 

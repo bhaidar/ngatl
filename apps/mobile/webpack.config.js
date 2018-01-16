@@ -162,18 +162,29 @@ module.exports = env => {
     //     compress,
     // }));
 
+
+    const nativescriptProUIMangleExcludes = [
+        "PushTransition",
+        "FadeTransition",
+        "SlideInOnTopTransition",
+    ];
+
     config.plugins.push(new ParallelUglifyPlugin({
       workerCount: os.cpus().length,
       uglifyES: {
         compress: platform !== 'android',
         mangle: {
-          reserved: nsWebpack.uglifyMangleExcludes
+            reserved: [
+                ...nsWebpack.uglifyMangleExcludes,
+                ...nativescriptProUIMangleExcludes,
+            ]
         },
         ecma: 6,
         safari10: platform !== 'android',
         warnings: 'verbose'
       }
     }));
+
     // config.plugins.push(new ClosureCompilerPlugin({
     //   compiler: {
     //     language_in: 'ES6',

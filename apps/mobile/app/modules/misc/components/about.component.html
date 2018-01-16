@@ -1,7 +1,6 @@
-<ngatl-ns-action-bar [title]="'menu.about' | translate"></ngatl-ns-action-bar>
+<ngatl-ns-action-bar [title]="'menu.story' | translate"></ngatl-ns-action-bar>
 <ScrollView *ngIf="renderView">
-    <GridLayout rows="auto,auto,*" columns="*" class="page">
-      <Label text="Story of Zack here..." textWrap="true"></Label>
-      
-    </GridLayout>
-  </ScrollView>
+      <StackLayout class="p-10 c-bg-white w-full h-full">
+        <WebView src="~/assets/story.html" class="w-full h-full"></WebView>
+    </StackLayout>
+</ScrollView>

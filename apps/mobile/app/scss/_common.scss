@@ -231,11 +231,11 @@ ListView {
 }
 
 .badge-bottom-intro {
-    // transform: rotate(0) scale(0.6, 0.6) translate(100, -600);
+    transform: rotate(0) scale(0.6, 0.6) translate(100, -600);
     opacity:0;
 }
 .badge-top-intro {
-    // transform: rotate(0) scale(0.4, 0.4) translate(150, -600);
+    transform: rotate(0) scale(0.4, 0.4) translate(150, -600);
     opacity:0;
 }
 
@@ -284,10 +284,12 @@ ListView {
     Label {
         margin: 12 0 12 0;
         text-align: center;
+        color: $sky;
 
         &.mention {
             color: $grey-light;
             font-style: italic;
+            margin-bottom: 6; 
         }
 
     }

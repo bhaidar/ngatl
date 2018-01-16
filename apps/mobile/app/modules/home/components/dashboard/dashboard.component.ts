@@ -179,9 +179,9 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   private _badgeViewAvail = false;
   private _ngOnInitFired = false;
   private _ngOnDestroyFired = false;
+  private _swipeStarted = false;
   // private _stopAnime: () => void;
   private _restartAnime: () => void;
-  private _swipeHandler: (args: SwipeGestureEventData) => void;
 
   constructor(
     private _store: Store<any>,
@@ -196,7 +196,10 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     public appService: NSAppService,
   ) {
     super();
-    this._page.backgroundImage = 'res://home-bg';
+    this._page.backgroundImage = 'res://homebg';
+    this._density = utils.layout.getDisplayDensity();
+    // this._stopAnime = this._stopAnimeFn.bind(this);
+    this._restartAnime = this._restartAnimeFn.bind(this);
 
     this._page.on('navigatedFrom', () => {
       this._ngZone.run(() => {
@@ -688,10 +691,6 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
       this._ngOnDestroyFired = false;
       console.log('dashboard ngOnInit!');
       this.appService.currentVcRef = this._vcRef;
-      this._density = utils.layout.getDisplayDensity();
-      // this._stopAnime = this._stopAnimeFn.bind(this);
-      this._restartAnime = this._restartAnimeFn.bind(this);
-      this._swipeHandler = this._swipeHandlerFn.bind(this);
 
       this._store.select((s: IAppState) => s.user)
         .takeUntil(this.destroy$)
@@ -752,9 +751,6 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
             }
           }
         });
-      if (!this.appService.shownIntro) {
-        this.showSwiper = true;
-      }
     }
   }
 
@@ -808,26 +804,17 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   private _setupSwipe() {
     if (!this.appService.shownIntro) {
       // console.log('ngAfterViewInit...');
-
       this._win.setTimeout(_ => {
-
-        const mainScreen = <View>this._page.getViewById('intro-elements'); 
-        if (mainScreen) {
-          mainScreen.on(GestureTypes.swipe, this._swipeHandler);
-        }
-      }, 5000);
+        this.showSwiper = true;
+      }, 4100);
     }
   }
 
-  private _swipeHandlerFn(args: SwipeGestureEventData) {
+  public swipeHandler(args: SwipeGestureEventData) {
     console.log('mainScreen swipe:', args.direction);
-    if (args.direction) {
+    if (args.direction && !this._swipeStarted) {
+      this._swipeStarted = true;
       this.enter();
-      // also turn swipe off to prevent further swipes
-      const mainScreen = <View>this._page.getViewById('intro-elements'); 
-        if (mainScreen) {
-          mainScreen.off(GestureTypes.swipe, this._swipeHandler);
-        }
     }
   }
 

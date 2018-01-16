@@ -1,7 +1,7 @@
 <RadSideDrawer tkToggleNavButton showOverNavigation="true" [drawerTransition]="sideDrawerTransition" selectionBehavior="None" width="100%">
   <GridLayout tkDrawerContent class="sidedrawer-left" rows="auto,*,auto" columns="*">
     <FlexBoxLayout class="sidedrawer-header" paddingTop="20" height="168" row="0" col="0">
-        <Image src="res://ng_atl" [nsRouterLink]="['/landing/home']" class="sidedrawer-header-image"></Image>
+        <Image src="res://ngatl" [nsRouterLink]="['/landing/home']" class="sidedrawer-header-image"></Image>
         <!-- <Label text="ngATL" textWrap="true" class="sidedrawer-header-brand"></Label> -->
     </FlexBoxLayout>
     <ScrollView row="1" col="0">
@@ -58,8 +58,8 @@
           <!-- About -->
           <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'misc', 'about']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
           pageTransition="slideleft" class="sidedrawer-item">
-              <Label [text]="'ion-ios-help-outline' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
-              <Label [text]="'menu.about' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
+              <Label [text]="'ion-ios-book-outline' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
+              <Label [text]="'menu.story' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
           </GridLayout>
 
           <!-- Credits -->
@@ -72,7 +72,7 @@
       </GridLayout>
     </ScrollView>
     <StackLayout row="2" col="0" class="copyright p-10">
-        <Label [text]="'menu.copyright' | translate" class="label" (tap)="openWeb('http://nstudio.io', 'nStudio')"></Label> 
+        <Label [text]="'menu.copyright' | translate" class="label"></Label> 
     </StackLayout>
   </GridLayout>
   <StackLayout tkMainContent class="page-bg">

@@ -5,13 +5,13 @@
     <GridLayout rows="*" top="0" left="0" height="100%" width="100%" columns="15,*,15" class="list-background ">
       <ListView row="0" col="1" #speakerList height="100%" width="100%" [items]="speakerState$ | async" class="list-group h-full">
         <ng-template let-item="item" let-odd="odd" let-even="even" let-index="index">
-          <StackLayout shadow="5">
+          <!-- <StackLayout shadow="5"> -->
             <StackLayout [class.first-item]="index == 0" class="card" (tap)="openDetail(item)">
               <Image [src]="item.image" horizontalAlignment="center" class="w-full" backgroundColor="#fff"></Image>
               <!-- <StackLayout class="hr-light"></StackLayout> -->
               <Label [text]="item.name" class="text-center t-30 c-grey-dark font-weight-bold m-t-5"></Label>
             </StackLayout>
-          </StackLayout>
+          <!-- </StackLayout> -->
         </ng-template>
       </ListView>
       <StackLayout (touch)="slide($event)" row="0" col="2" class="letter-wrap">

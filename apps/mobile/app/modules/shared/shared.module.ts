@@ -13,7 +13,7 @@ import { NativeScriptUISideDrawerModule } from 'nativescript-pro-ui/sidedrawer/a
 import { NativeScriptUIListViewModule } from 'nativescript-pro-ui/listview/angular';
 import { TNSFontIconModule } from 'nativescript-ngx-fonticon';
 import { TNSCheckBoxModule } from 'nativescript-checkbox/angular';
-import { NgShadowModule } from 'nativescript-ng-shadow';
+// import { NgShadowModule } from 'nativescript-ng-shadow';
 
 // app
 import { SHARED_COMPONENTS, SHARED_ENTRY_COMPONENTS } from './components';
@@ -30,7 +30,7 @@ const SHARED_MODULES: any[] = [
   TranslateModule,
   TNSFontIconModule,
   TNSCheckBoxModule,
-  NgShadowModule,
+  // NgShadowModule,
 ];
 
 @NgModule({

@@ -14,6 +14,7 @@ import { BaseModalComponent } from '../../abstract/base-modal-component';
 })
 export class HelpComponent extends BaseModalComponent {
   public title: string;
+  public helpText = `You `;
 
   constructor(
     public store: Store<any>,
