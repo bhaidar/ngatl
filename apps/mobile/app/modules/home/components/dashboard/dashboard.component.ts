@@ -752,9 +752,6 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
             }
           }
         });
-      if (!this.appService.shownIntro) {
-        this.showSwiper = true;
-      }
     }
   }
 
@@ -808,8 +805,9 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   private _setupSwipe() {
     if (!this.appService.shownIntro) {
       // console.log('ngAfterViewInit...');
-
+      
       this._win.setTimeout(_ => {
+        this.showSwiper = true;
 
         const mainScreen = <View>this._page.getViewById('intro-elements'); 
         if (mainScreen) {

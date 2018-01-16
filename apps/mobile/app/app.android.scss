@@ -1,2 +1,47 @@
 @import 'scss/common';
 @import 'scss/android-overrides';
+
+@keyframes intro-swipe-intro {
+  0% {
+      opacity: 0;
+      transform: translate(0, 200);
+  }
+  88.25% {
+      opacity: 0;
+      transform: translate(0, 200);
+  }
+  100% {
+      opacity: .9;
+      transform: translate(0, 170);
+  }
+}
+@keyframes intro-swipe-enter {
+  0% {
+      opacity: .9;
+      transform: translate(0, 170);
+  }
+  12% {
+      opacity: .5;
+      transform: translate(0, 200);
+  }
+  100% {
+      opacity: 0;
+      transform: translate(0, 250);
+  }
+}
+
+.intro-swipe-intro {
+  animation-name: intro-swipe-intro;
+  animation-duration: 4;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.intro-swipe-enter {
+  animation-name: intro-swipe-enter;
+  animation-duration: 1.25;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
