@@ -19,7 +19,7 @@ import { CheckBox } from 'nativescript-checkbox';
 
 // app
 import { LoggerService } from '@ngatl/api';
-import { LocaleState, IAppState, BaseComponent, LogService, WindowService } from '@ngatl/core';
+import { LocaleState, IAppState, BaseComponent, LogService, WindowService, ProgressService } from '@ngatl/core';
 import { LinearGradient } from '../../../helpers';
 import { NSAppService } from '../../core/services/ns-app.service';
 import { EventActions } from '../actions';
@@ -54,6 +54,7 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
     private vcRef: ViewContainerRef,
     private appService: NSAppService,
     private win: WindowService,
+    private progressService: ProgressService,
     private page: Page,
   ) {
     super();
@@ -127,6 +128,18 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
       } );
 
     this.renderView = true;
+  }
+
+  public onPullRefreshInitiated(e) {
+    const listview = e.object;
+    if (listview) {
+      this.progressService.toggleSpinner(true);
+      this.store.dispatch(new EventActions.FetchAction(true));
+      this.win.setTimeout(_ => {
+        listview.notifyPullToRefreshFinished();
+        this.progressService.toggleSpinner(false);
+      }, 1500);
+    }
   }
 
   public onDayChange( args ) {

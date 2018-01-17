@@ -239,6 +239,29 @@ ListView {
     opacity:0;
 }
 
+.selectable-row {
+    border-width: 0 0 1 0;
+    border-color: #ccc;
+    padding: 8 8 8 16;
+  
+    .select-btn {
+      font-size: 17;
+      color: $black;
+      width: 100%;
+      text-align: left;
+      vertical-align: center;
+      white-space: normal;
+  
+    }
+    &.selected {
+      background-color:  $primary;
+  
+      .select-btn {
+        color: $white;
+      }
+    }
+  }
+
 .c-dark-blue {
     color:  $dark-blue;
 }

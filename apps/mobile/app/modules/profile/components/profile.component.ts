@@ -23,6 +23,8 @@ import {
   LogService,
   IAppState,
   UserState,
+  ModalActions,
+  ModalState,
   BaseComponent,
   UserActions,
   WindowService,
@@ -31,6 +33,7 @@ import {
 } from '@ngatl/core';
 import { NSAppService } from '../../core/services/ns-app.service';
 import { LinearGradient } from '../../../helpers';
+import { SelectModalComponent } from '../../shared/components/select/select.component';
 
 @Component({
   moduleId: module.id,
@@ -54,6 +57,39 @@ export class ProfileComponent extends BaseComponent
   ) {
     super();
     this.appService.currentVcRef = this.vcRef;
+  }
+
+  public openLang() {
+    const currentLang = this.currentUser.language || 'en';
+    const langItems = [
+      {
+        name: 'English',
+        selected: currentLang === 'en'
+      },
+      {
+        name: 'Spanish',
+        selected: currentLang === 'es'
+      },
+      {
+        name: 'Russian',
+        selected: currentLang === 'ru'
+      },
+      {
+        name: 'Chinese',
+        selected: currentLang === 'zh'
+      },
+    ];
+    this.store.dispatch(new ModalActions.OpenAction({
+      cmpType: SelectModalComponent,
+      modalOptions: {
+        viewContainerRef: this.vcRef,
+        context: {
+          title: this.translate.instant('user.language'),
+          name: 'profile',
+          items: langItems
+        }
+      }
+    }))
   }
 
   public logout() {
@@ -134,6 +170,20 @@ export class ProfileComponent extends BaseComponent
           Object.assign({}, s.current)
         );
       });
+
+    this.store.select( ( s: IAppState ) => s.ui.modal )
+      .takeUntil( this.destroy$ )
+      .subscribe( ( state: ModalState.IState ) => {
+        if (state.latestResult && state.latestResult.name === 'profile') {
+          this.currentUser.language = state.latestResult.value;
+
+          // reset
+          this.store.dispatch( new ModalActions.ClosedAction( {
+            open: false,
+            latestResult: null,
+          } ) );
+        }
+      } );
   }
 
   ngAfterViewInit() {}

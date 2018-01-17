@@ -3,7 +3,9 @@
   <!-- Search -->
   <AbsoluteLayout>
     <GridLayout rows="*" top="0" left="0" height="100%" width="100%" columns="15,*,15" class="list-background ">
-      <ListView row="0" col="1" #speakerList height="100%" width="100%" [items]="speakerState$ | async" class="list-group h-full">
+      <RadListView row="0" col="1" #speakerList height="100%" width="100%" [items]="speakerState$ | async" class="list-group h-full"
+      pullToRefresh="true" 
+      (pullToRefreshInitiated)="onPullRefreshInitiated($event)">
         <ng-template let-item="item" let-odd="odd" let-even="even" let-index="index">
           <!-- <StackLayout shadow="5"> -->
             <StackLayout [class.first-item]="index == 0" class="card" (tap)="openDetail(item)">
@@ -13,7 +15,7 @@
             </StackLayout>
           <!-- </StackLayout> -->
         </ng-template>
-      </ListView>
+      </RadListView>
       <StackLayout (touch)="slide($event)" row="0" col="2" class="letter-wrap">
         <Label [text]="char" *ngFor="let char of alphabet" textWrap="true"></Label>
       </StackLayout>

@@ -25,15 +25,15 @@
         <!-- Company -->
         <GridLayout ios:columns="auto,*" android:rows="auto, auto" verticalAlignment="top">
           <Label [text]="'user.company' | translate" class="field-title"></Label>
-          <TextField id="phone" [(ngModel)]="currentUser.company" class="field" ios:col="1" android:row="1" (tap)="onTextInputTapped($event)"></TextField>
+          <TextField id="company" [(ngModel)]="currentUser.company" class="field" ios:col="1" android:row="1" (tap)="onTextInputTapped($event)"></TextField>
         </GridLayout>
         <StackLayout class="line"></StackLayout>
-        <!-- Company -->
-        <!-- <StackLayout>
-          <Label text="Company" class="field-title" ios:visibility="collapse"></Label>
-          <TextView id="company" [(ngModel)]="currentUser.company" android:hint="Company" ios:hint="Company" class="field-multiline" (tap)="onTextInputTapped($event)"></TextView>
-        </StackLayout>
-        <StackLayout class="line"></StackLayout> -->
+
+        <GridLayout ios:columns="auto,*" android:rows="auto, auto" verticalAlignment="top">
+          <Label [text]="'user.language' | translate" class="field-title"></Label>
+          <Label id="language" class="field" ios:col="1" android:row="1" (tap)="openLang()"></Label>
+        </GridLayout>
+        <StackLayout class="line"></StackLayout>
 
 
         <Label [text]="'general.update' | translate" (tap)="save()" class="btn btn-primary btn-sky m-y-20 text-center" [touchColor]="'#30bcff,#288ab8'"></Label>

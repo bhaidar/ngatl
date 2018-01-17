@@ -35,7 +35,7 @@ export namespace EventActions {
 
   export class FetchAction implements Action {
     type = ActionTypes.FETCH;
-    constructor(public payload?: any) {}
+    constructor(public payload?: boolean /* force refresh */) {}
   }
 
   export class SelectAction implements Action {

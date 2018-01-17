@@ -13,7 +13,7 @@ import { View } from 'tns-core-modules/ui/core/view';
 
 // app
 import { LoggerService } from '@ngatl/api';
-import { BaseComponent } from '@ngatl/core';
+import { BaseComponent, ProgressService, WindowService } from '@ngatl/core';
 import { SpeakerActions } from '../actions';
 import { SpeakerState } from '../states';
 import { LinearGradient } from '../../../helpers';
@@ -47,6 +47,8 @@ export class SpeakerComponent extends BaseComponent implements AfterViewInit, On
     private log: LoggerService,
     private vcRef: ViewContainerRef,
     private appService: NSAppService,
+    private _progressService: ProgressService,
+    private _win: WindowService,
   ) {
     super();
     this.appService.currentVcRef = this.vcRef;
@@ -67,6 +69,18 @@ export class SpeakerComponent extends BaseComponent implements AfterViewInit, On
       .subscribe( this._searchSpeakers );
 
     this.renderView = true;
+  }
+
+  public onPullRefreshInitiated(e) {
+    const listview = e.object;
+    if (listview) {
+      this._progressService.toggleSpinner(true);
+      this.store.dispatch(new SpeakerActions.FetchAction(true));
+      this._win.setTimeout(_ => {
+        listview.notifyPullToRefreshFinished();
+        this._progressService.toggleSpinner(false);
+      }, 1500);
+    }
   }
 
   private _searchSpeakersFn( value: string ) {

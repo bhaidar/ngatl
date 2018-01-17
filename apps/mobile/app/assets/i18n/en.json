@@ -47,6 +47,7 @@
       "Hi, this ngAtl conference is awesome! I wanted to reach out and say hello."
   },
   "user": {
+    "language": "Language",
     "badge-claim": "Is this your badge",
     "confirm-sponsor-pin": "Please confirm the sponsor PIN:",
     "scan-action": "Scan a badge",

@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 
 // app
-import { LogService } from '@ngatl/core';
+import { LogService, ProgressService, WindowService } from '@ngatl/core';
 import { SponsorActions } from '../actions';
 import { NSAppService } from '../../core/services/ns-app.service';
 
@@ -24,6 +24,8 @@ export class SponsorComponent implements AfterViewInit, OnInit {
     private log: LogService,
     private vcRef: ViewContainerRef,
     private appService: NSAppService,
+    private _progressService: ProgressService,
+    private _win: WindowService,
   ) {
     this.appService.currentVcRef = this.vcRef;
   }
@@ -36,6 +38,18 @@ export class SponsorComponent implements AfterViewInit, OnInit {
         title: sponsor.name
       }
     })
+  }
+
+  public onPullRefreshInitiated(e) {
+    const listview = e.object;
+    if (listview) {
+      this._progressService.toggleSpinner(true);
+      this.store.dispatch(new SponsorActions.FetchAction(true));
+      this._win.setTimeout(_ => {
+        listview.notifyPullToRefreshFinished();
+        this._progressService.toggleSpinner(false);
+      }, 1500);
+    }
   }
 
   ngOnInit() {

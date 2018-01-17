@@ -5,6 +5,7 @@ import { Http } from '@angular/http';
 // lib
 import { Observable } from 'rxjs/Observable';
 import { ConferenceSponsorApi } from '@ngatl/api';
+import { Cache, StorageKeys, StorageService } from '@ngatl/core';
 import { sortAlpha } from '../../../helpers';
 
 export interface ILevels {
@@ -15,7 +16,7 @@ export interface ILevels {
   attendee: string;
 }
 @Injectable()
-export class SponsorService {
+export class SponsorService extends Cache {
 
   public levels: ILevels = {
     gold: 'Gold',
@@ -86,7 +87,13 @@ export class SponsorService {
       url: 'https://oasisdigital.com'
     }
   ];
-  constructor(private sponsors: ConferenceSponsorApi) {}
+  constructor(
+    public storage: StorageService,
+    private sponsors: ConferenceSponsorApi
+  ) {
+    super(storage);
+    this.key = StorageKeys.SPONSORS;
+  }
 
   public get sponsorList() {
     return this._sponsorList;
@@ -97,17 +104,28 @@ export class SponsorService {
     return Observable.of(this._sponsorList.length);
   }
 
-  public fetch() {
-    console.log('fetch sponsors!');
-    // return this.sponsors.find();
-    const sortedList = this._sponsorList.sort(sortAlpha);
-    for (const sponsor of sortedList) {
-      for (const level of sponsor.level) {
-          level.styleClass = `level-${level.name.toLowerCase().replace(/ /ig, '-')}`; 
-          // console.log(level.styleClass);
+  public fetch(forceRefresh?: boolean) {
+    const stored = this.cache;
+    if (!forceRefresh && stored) {
+      console.log('using cached sponsors.');
+      return Observable.of(stored.sort(sortAlpha));
+    } else {
+      console.log('fetch sponsors fresh!');
+      // return this.sponsors.find();
+      const sortedList = this._sponsorList.sort(sortAlpha);
+      for (const sponsor of sortedList) {
+        for (const level of sponsor.level) {
+            level.styleClass = `level-${level.name.toLowerCase().replace(/ /ig, '-')}`; 
+            // console.log(level.styleClass);
+        }
       }
+      return Observable.of(sortedList)
+        .map(sponsors => {
+          // cache list
+          this.cache = sponsors;
+          return sponsors;
+        });
     }
-    return Observable.of(sortedList);
   }
 
   public loadDetail(id) {

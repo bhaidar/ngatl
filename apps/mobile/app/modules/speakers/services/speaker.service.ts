@@ -5,10 +5,11 @@ import { Http } from '@angular/http';
 // lib
 import { Observable } from 'rxjs/Observable';
 import { ConferenceSpeakerApi } from '@ngatl/api';
+import { Cache, StorageKeys, StorageService } from '@ngatl/core';
 import { sortAlpha } from '../../../helpers';
 
 @Injectable()
-export class SpeakerService {
+export class SpeakerService extends Cache {
 
   private _speakerList = [
     {
@@ -356,7 +357,13 @@ export class SpeakerService {
     }
   ];
 
-  constructor(private speakers: ConferenceSpeakerApi) {}
+  constructor(
+    public storageService: StorageService,
+    private speakers: ConferenceSpeakerApi
+  ) {
+    super(storageService);
+    this.key = StorageKeys.SPEAKERS;
+  }
 
   public count() {
     // return this.speakers.count().map(value => value.count);
@@ -367,10 +374,21 @@ export class SpeakerService {
     return this._speakerList;
   }
 
-  public fetch() {
-    console.log('fetch speakers!');
-    // return this.speakers.find();
-    return Observable.of(this._speakerList.sort(sortAlpha));
+  public fetch(forceRefresh?: boolean) {
+    const stored = this.cache;
+    if (!forceRefresh && stored) {
+      console.log('using cached speakers.');
+      return Observable.of(stored.sort(sortAlpha));
+    } else {
+      console.log('fetch speakers fresh!');
+      // return this.speakers.find();
+      return Observable.of(this._speakerList.sort(sortAlpha))
+        .map(speakers => {
+          // cache list
+          this.cache = speakers;
+          return speakers;
+        });
+    }
   }
 
   public loadDetail(id) {

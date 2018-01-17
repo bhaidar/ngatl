@@ -27,7 +27,7 @@ export class SponsorEffects {
   @Effect()
   fetch$ = this.actions$
     .ofType(SponsorActions.ActionTypes.FETCH)
-    .switchMap(action => this.sponsorService.fetch())
+    .switchMap((action:SponsorActions.FetchAction) => this.sponsorService.fetch(action.payload))
     .map(value => {
       // console.log('fetched sponsors:', value);
       // console.log(JSON.stringify(value));

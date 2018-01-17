@@ -1,6 +1,8 @@
 <ngatl-ns-action-bar [title]="'menu.sponsors' | translate"></ngatl-ns-action-bar>
 <StackLayout class="page h-full p-b-20" *ngIf="renderView">
-  <ListView [items]="(sponsorState$ | async)?.list" class="list-group h-full">
+  <RadListView [items]="(sponsorState$ | async)?.list" class="list-group h-full"
+    pullToRefresh="true" 
+    (pullToRefreshInitiated)="onPullRefreshInitiated($event)">
     <ng-template let-item="item" let-odd="odd" let-even="even">
       <!-- <StackLayout shadow="5"> -->
         <StackLayout class="card sponsor-card" (tap)="viewSite(item)" [ngClass]="item.level[0].styleClass">
@@ -13,5 +15,5 @@
         </StackLayout>
       <!-- </StackLayout> -->
     </ng-template>
-  </ListView>
+  </RadListView>
 </StackLayout>

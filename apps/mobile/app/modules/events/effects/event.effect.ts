@@ -27,7 +27,7 @@ export class EventEffects {
   @Effect()
   fetch$ = this.actions$
     .ofType(EventActions.ActionTypes.FETCH)
-    .switchMap(action => this.eventService.fetch())
+    .switchMap((action: EventActions.FetchAction) => this.eventService.fetch(action.payload))
     .map((value: Array<any>) => {
       console.log('fetched events result:', value);
       // console.log(JSON.stringify(value));

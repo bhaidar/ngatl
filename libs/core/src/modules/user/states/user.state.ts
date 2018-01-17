@@ -23,6 +23,7 @@ export namespace UserState {
     company?:string;
     phone?:string;
     imageUrl?:string;
+    language?: string;
     created?:string;
     modified?:string;
     notes?: Array<IConferenceAttendeeNote>;

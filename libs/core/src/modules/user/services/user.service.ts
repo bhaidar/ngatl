@@ -293,11 +293,10 @@ export class UserService extends Cache {
    * @param token authenticated token
    */
   public claimUser( user: UserState.IClaimStatus, badgeId: string ): Observable<UserState.IRegisteredUser> {
-    const confirmHash = CryptoJS.AES.encrypt( user.attendee.id, 'user' ).toString().replace( /\//ig, '+' ); // ensure slashes are replaced by '+'
+    const confirmHash = CryptoJS.SHA256(`${user.attendee.id}this-is-our-salt`).toString();//CryptoJS.AES.encrypt( user.attendee.id, 'user' ).toString().replace( /\//ig, '+' ); // ensure slashes are replaced by '+'
     this._log.debug( 'confirmHash:', confirmHash );
-    // TODO: do this when Bram is ready
-    // return this._http.get(`${NetworkCommonService.API_URL}ConferenceTickets/${badgeId}/claim?confirm=${confirmHash}`)
-    return this._http.get( `${NetworkCommonService.API_URL}ConferenceTickets/${badgeId}/claim?confirm=true` )
+    return this._http.get(`${NetworkCommonService.API_URL}ConferenceTickets/${badgeId}/claim?confirm=${confirmHash}`)
+    // return this._http.get( `${NetworkCommonService.API_URL}ConferenceTickets/${badgeId}/claim?confirm=true` )
       .map( ( user: any ) => {
         this._log.debug( 'confirmed:', user );
         this._log.debug( 'typeof user:', typeof user );
