@@ -57,14 +57,15 @@ export class ApiInterceptor implements HttpInterceptor {
     headers['X-Client-Platform'] = this._platform;
     if (this._network.authToken) {
       console.log('using authToken:', this._network.authToken);
-      if (this._network.authToken === 'admin-token') {
-        headers['Authorization'] = this._network.authToken;
-        const params = new HttpParams();
-        params.set('access_token', this._network.authToken);
-        options.setParams = params;
-      } else {
-        headers['Authorization'] = `Bearer ${this._network.authToken}`;
-      }
+
+      headers['Authorization'] = this._network.authToken;
+      const params = new HttpParams();
+      params.set('access_token', this._network.authToken);
+      options.setParams = params;
+      // if (this._network.authToken === 'admin-token') {
+      // } else {
+      //   headers['Authorization'] = `Bearer ${this._network.authToken}`;
+      // }
     }
     options.setHeaders = headers;
     request = request.clone(options);

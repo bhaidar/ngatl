@@ -25,6 +25,7 @@ import { BaseModalComponent } from '../../abstract/base-modal-component';
 export interface ISelectItem {
   name: string,
   selected?: boolean;
+  value?: any;
 }
 
 @Component( {
@@ -60,12 +61,12 @@ export class SelectModalComponent extends BaseModalComponent {
     this.items$.next([...this._fullList]);
   }
 
-  public select( value: any ) {
+  public select( value: ISelectItem ) {
     this.store.dispatch(new ModalActions.CloseAction({
       params : this.params,
       value: {
         name: this._contextName,
-        value,
+        selection: value,
       }
     }));
   }

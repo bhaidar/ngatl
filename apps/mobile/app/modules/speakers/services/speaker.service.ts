@@ -1,11 +1,11 @@
 // angular
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 // lib
 import { Observable } from 'rxjs/Observable';
 import { ConferenceSpeakerApi } from '@ngatl/api';
-import { Cache, StorageKeys, StorageService } from '@ngatl/core';
+import { Cache, StorageKeys, StorageService, NetworkCommonService } from '@ngatl/core';
 import { sortAlpha } from '../../../helpers';
 
 @Injectable()
@@ -359,6 +359,7 @@ export class SpeakerService extends Cache {
 
   constructor(
     public storageService: StorageService,
+    private http: HttpClient,
     private speakers: ConferenceSpeakerApi
   ) {
     super(storageService);
@@ -382,10 +383,10 @@ export class SpeakerService extends Cache {
     } else {
       console.log('fetch speakers fresh!');
       // return this.speakers.find();
-      return Observable.of(this._speakerList.sort(sortAlpha))
-        .map(speakers => {
+      return this.http.get(`${NetworkCommonService.API_URL}ConferenceSpeakers`)
+        .map((speakers: Array<any>) => {
           // cache list
-          this.cache = speakers;
+          this.cache = speakers.sort(sortAlpha);
           return speakers;
         });
     }

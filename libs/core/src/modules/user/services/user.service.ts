@@ -74,6 +74,10 @@ export class UserService extends Cache {
       } );
   }
 
+  public getTokenHash(id: string) {
+    return CryptoJS.SHA256(`${id}this-is-our-salt`).toString();
+  }
+
   /**
    * Get specificity on the crucial boot init phase of the user
    * Helpful for deep linking on several data resolvers for routes
@@ -293,7 +297,7 @@ export class UserService extends Cache {
    * @param token authenticated token
    */
   public claimUser( user: UserState.IClaimStatus, badgeId: string ): Observable<UserState.IRegisteredUser> {
-    const confirmHash = CryptoJS.SHA256(`${user.attendee.id}this-is-our-salt`).toString();//CryptoJS.AES.encrypt( user.attendee.id, 'user' ).toString().replace( /\//ig, '+' ); // ensure slashes are replaced by '+'
+    const confirmHash = this.getTokenHash(user.attendee.id);//CryptoJS.AES.encrypt( user.attendee.id, 'user' ).toString().replace( /\//ig, '+' ); // ensure slashes are replaced by '+'
     this._log.debug( 'confirmHash:', confirmHash );
     return this._http.get(`${NetworkCommonService.API_URL}ConferenceTickets/${badgeId}/claim?confirm=${confirmHash}`)
     // return this._http.get( `${NetworkCommonService.API_URL}ConferenceTickets/${badgeId}/claim?confirm=true` )

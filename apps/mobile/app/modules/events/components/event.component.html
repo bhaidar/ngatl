@@ -1,14 +1,4 @@
 <ngatl-ns-action-bar [title]="'menu.schedule' | translate"></ngatl-ns-action-bar>
-<!-- <StackLayout class="page h-full"> -->
-    <!-- <ListView [items]="(eventState$ | async)?.list" class="list-group h-full">
-      <ng-template let-item="item" let-odd="odd" let-even="even">
-        <StackLayout [nsRouterLink]="['/detail/event', item.id]">
-          <Label [text]="item.name" class="list-group-item"></Label>
-        </StackLayout>
-      </ng-template>
-    </ListView> -->
-    <!-- <RadCalendar [locale]="locale" [viewMode]="viewMode" [transitionMode]="transitionMode" [eventSource]="eventSource" [eventsViewMode]="eventsViewMode" (dateSelected)="onDateSelected($event)"></RadCalendar> -->
-
 
     <GridLayout rows="auto, *" columns="*" class="schedule-main-content" id="main-content" *ngIf="renderView">
       <!-- Segmented Bar -->
@@ -53,5 +43,3 @@
           </RadListView>
       </GridLayout>
   </GridLayout>
-
-<!-- </StackLayout> -->

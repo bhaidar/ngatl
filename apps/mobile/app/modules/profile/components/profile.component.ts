@@ -30,10 +30,12 @@ import {
   WindowService,
   UserService,
   ProgressService,
+  LocaleActions,
+  LocaleState,
 } from '@ngatl/core';
 import { NSAppService } from '../../core/services/ns-app.service';
 import { LinearGradient } from '../../../helpers';
-import { SelectModalComponent } from '../../shared/components/select/select.component';
+import { SelectModalComponent, ISelectItem } from '../../shared/components/select/select.component';
 
 @Component({
   moduleId: module.id,
@@ -43,6 +45,25 @@ import { SelectModalComponent } from '../../shared/components/select/select.comp
 export class ProfileComponent extends BaseComponent
   implements AfterViewInit, OnInit {
   public currentUser: UserState.IRegisteredUser;
+  public userLanguage: string;
+  private _langItems = [
+    {
+      name: 'English',
+      value: 'en'
+    },
+    {
+      name: 'Spanish',
+      value: 'es'
+    },
+    {
+      name: 'Russian',
+      value: 'ru'
+    },
+    {
+      name: 'Chinese',
+      value: 'zh'
+    },
+  ];
 
   constructor(
     private store: Store<any>,
@@ -60,25 +81,11 @@ export class ProfileComponent extends BaseComponent
   }
 
   public openLang() {
+    const langItems: Array<ISelectItem> = [...this._langItems];
     const currentLang = this.currentUser.language || 'en';
-    const langItems = [
-      {
-        name: 'English',
-        selected: currentLang === 'en'
-      },
-      {
-        name: 'Spanish',
-        selected: currentLang === 'es'
-      },
-      {
-        name: 'Russian',
-        selected: currentLang === 'ru'
-      },
-      {
-        name: 'Chinese',
-        selected: currentLang === 'zh'
-      },
-    ];
+    for (const item of langItems) {
+      item.selected = currentLang === item.value;
+    }
     this.store.dispatch(new ModalActions.OpenAction({
       cmpType: SelectModalComponent,
       modalOptions: {
@@ -169,13 +176,19 @@ export class ProfileComponent extends BaseComponent
         this.currentUser = new UserState.RegisteredUser(
           Object.assign({}, s.current)
         );
+        if (!this.currentUser.language) {
+          this.currentUser.language = 'en';
+        }
+        this._updateLangLabel();
       });
 
     this.store.select( ( s: IAppState ) => s.ui.modal )
       .takeUntil( this.destroy$ )
       .subscribe( ( state: ModalState.IState ) => {
         if (state.latestResult && state.latestResult.name === 'profile') {
-          this.currentUser.language = state.latestResult.value;
+          this.currentUser.language = <LocaleState.Locale>state.latestResult.selection.value;
+          this.store.dispatch(new LocaleActions.SetAction(this.currentUser.language));
+          this._updateLangLabel();
 
           // reset
           this.store.dispatch( new ModalActions.ClosedAction( {
@@ -184,6 +197,15 @@ export class ProfileComponent extends BaseComponent
           } ) );
         }
       } );
+  }
+
+  private _updateLangLabel() {
+    for (const item of this._langItems) {
+      if (this.currentUser.language === item.value) {
+        this.userLanguage = item.name;
+        break;
+      }
+    }
   }
 
   ngAfterViewInit() {}

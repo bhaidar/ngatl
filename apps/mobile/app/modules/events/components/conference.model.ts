@@ -120,7 +120,15 @@ var allSessions: Array<Session> = [
 
 export class ConferenceViewModel extends observable.Observable {
     public sessions: Array<Session>;
+    private _schedule: Array<Session>;
 
+    public get schedule() {
+        return this._schedule;
+    }
+
+    public set schedule(value: Array<Session>) {
+        this._schedule = value;
+    }
     private _selectedDay: number;
     public get selectedDay(): number {
         return this._selectedDay;

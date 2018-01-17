@@ -23,6 +23,7 @@ import { LocaleState, IAppState, BaseComponent, LogService, WindowService, Progr
 import { LinearGradient } from '../../../helpers';
 import { NSAppService } from '../../core/services/ns-app.service';
 import { EventActions } from '../actions';
+import { EventState } from '../states';
 import { ConferenceViewModel, Session } from './conference.model';
 
 @Component( {
@@ -37,11 +38,9 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
   public selectedDay = 0;
   public search$: Subject<string> = new Subject();
 
-  public eventState$: Observable<any>;
   public locale = 'en-US';
   // public viewMode = CalendarViewMode.Month;
   // public transitionMode = CalendarTransitionMode.Stack;
-  public eventSource = [];
   // public eventsViewMode = CalendarEventsViewMode.Inline;
   public checkboxValue = false;
   private _checkbox: CheckBox;
@@ -97,8 +96,12 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
   }
 
   ngOnInit() {
-    this.eventSource = this.getCalendarEvents();
-    this.eventState$ = this.store.select( s => s.conference.events );
+    this.store.select( s => s.conference.events )
+      .takeUntil(this.destroy$) 
+      .subscribe((s: EventState.IState) => {
+        this.conferenceModel.schedule = s.list;
+      });
+
     this.store.select( ( s: IAppState ) => s.ui.locale )
       .takeUntil( this.destroy$ )
       .subscribe( ( locale: LocaleState.Locale ) => {
@@ -254,44 +257,6 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
         }
         break;
     }
-  }
-
-  public getCalendarEvents(): Array<any> {//<CalendarEvent> {
-    let now = new Date();
-    let startDate: Date,
-      endDate: Date,
-      event: any;// CalendarEvent;
-    let colors: Array<Color> = [new Color( 200, 188, 26, 214 ), new Color( 220, 255, 109, 130 ), new Color( 255, 55, 45, 255 ), new Color( 199, 17, 227, 10 ), new Color( 255, 255, 54, 3 )];
-    let events: Array<any> = [];//<CalendarEvent> = [];
-    for ( let i = 0; i < 4; i++ ) {
-      let day;
-      let month = 0;
-      switch ( i ) {
-        case 0:
-          day = 30;
-          break;
-        case 1:
-          day = 31;
-          break;
-        case 2:
-          day = 1;
-          month = 1;
-          break;
-        case 3:
-          day = 2;
-          month = 1;
-          break;
-      }
-      startDate = new Date( 2018, month, day - 1, 1 );
-      endDate = new Date( 2018, month, day - 1, 3 );
-      // event = new CalendarEvent( "event " + i, startDate, endDate, false, colors[i * 10 % ( colors.length - 1 )] );
-      // events.push( event );
-      // if ( i % 3 == 0 ) {
-      //   event = new CalendarEvent( "second " + i, startDate, endDate, true, colors[i * 5 % ( colors.length - 1 )] );
-      //   events.push( event );
-      // }
-    }
-    return events;
   }
 
   ngAfterViewInit() { }

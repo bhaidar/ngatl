@@ -1,11 +1,11 @@
-<StackLayout>
-  <modal-title-bar
+<GridLayout rows="auto,*" columns="*">
+  <ngatl-ns-modal-title-bar
     [title]="title"
     [params]="params"
-    [closeText]="'dialogs.cancel' | translate">
-  </modal-title-bar>
+    [closeText]="'dialogs.cancel' | translate" row="0" col="0">
+  </ngatl-ns-modal-title-bar>
 
-  <RadListView
+  <RadListView row="1" col="0"
     class="list-group"
     [items]="items$ | async"
     (itemLoading)="disableRowColor($event)"
@@ -17,4 +17,4 @@
       </StackLayout>
     </ng-template>
   </RadListView>
-</StackLayout>
+</GridLayout>

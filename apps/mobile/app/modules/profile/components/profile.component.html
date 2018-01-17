@@ -31,7 +31,7 @@
 
         <GridLayout ios:columns="auto,*" android:rows="auto, auto" verticalAlignment="top">
           <Label [text]="'user.language' | translate" class="field-title"></Label>
-          <Label id="language" class="field" ios:col="1" android:row="1" (tap)="openLang()"></Label>
+          <Label id="language" [text]="userLanguage" class="field clickable" ios:col="1" android:row="1" (tap)="openLang()"></Label>
         </GridLayout>
         <StackLayout class="line"></StackLayout>
 

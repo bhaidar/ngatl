@@ -104,6 +104,9 @@
   &.static-white {
     color: $white;
   }
+  &.clickable {
+    color: $sky;
+  }
 }
 
 .field-multiline {

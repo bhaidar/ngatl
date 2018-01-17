@@ -1,4 +1,5 @@
 import { SystemUser } from '@ngatl/api';
+import { LocaleState } from '../../core/states/locale.state';
 
 export namespace UserState {
 
@@ -23,7 +24,7 @@ export namespace UserState {
     company?:string;
     phone?:string;
     imageUrl?:string;
-    language?: string;
+    language?: LocaleState.Locale;
     created?:string;
     modified?:string;
     notes?: Array<IConferenceAttendeeNote>;

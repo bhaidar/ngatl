@@ -45,6 +45,7 @@
     "ngatl-text-msg": "嗨，這個ngAtl會議真棒！ 我想伸手打個招呼。"
   },
   "user": {
+    "language": "语言",
     "badge-claim": "這是你的徽章嗎？",
     "confirm-sponsor-pin": "請確認贊助商PIN碼：",
     "scan-action": "掃描一個徽章",

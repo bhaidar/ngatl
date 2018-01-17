@@ -1,11 +1,11 @@
 // angular
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 // lib
 import { Observable } from 'rxjs/Observable';
 import { ConferenceSponsorApi } from '@ngatl/api';
-import { Cache, StorageKeys, StorageService } from '@ngatl/core';
+import { Cache, StorageKeys, StorageService, NetworkCommonService } from '@ngatl/core';
 import { sortAlpha } from '../../../helpers';
 
 export interface ILevels {
@@ -89,6 +89,7 @@ export class SponsorService extends Cache {
   ];
   constructor(
     public storage: StorageService,
+    private http: HttpClient,
     private sponsors: ConferenceSponsorApi
   ) {
     super(storage);
@@ -119,7 +120,7 @@ export class SponsorService extends Cache {
             // console.log(level.styleClass);
         }
       }
-      return Observable.of(sortedList)
+      return this.http.get(`${NetworkCommonService.API_URL}ConferenceSponsors`)
         .map(sponsors => {
           // cache list
           this.cache = sponsors;

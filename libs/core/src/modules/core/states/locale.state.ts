@@ -2,8 +2,8 @@ export namespace LocaleState {
   export const Locale = Object.freeze({
     en : 'en',
     es : 'es',
-    fr : 'fr,',
-    it : 'it',
+    fr : 'ru,',
+    it : 'zh',
   });
 
   export type Locale = keyof typeof Locale;
