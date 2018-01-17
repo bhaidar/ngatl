@@ -4,7 +4,7 @@
     pullToRefresh="true" 
     (pullToRefreshInitiated)="onPullRefreshInitiated($event)">
     <ng-template let-item="item" let-odd="odd" let-even="even">
-      <!-- <StackLayout shadow="5"> -->
+      <StackLayout>
         <StackLayout class="card sponsor-card" (tap)="viewSite(item)" [ngClass]="item.level[0].styleClass">
           <Image [src]="item.image" height="120" horizontalAlignment="center" verticalAlignment="center" class="w-full p-5 c-bg-white"></Image>
 
@@ -13,7 +13,7 @@
           <Label [text]="level.name" class="level text-center h3 c-white p-2 w-full font-weight-bold" [ngClass]="level.styleClass"
             *ngFor="let level of item.level"></Label>
         </StackLayout>
-      <!-- </StackLayout> -->
+      </StackLayout>
     </ng-template>
   </RadListView>
 </StackLayout>
