@@ -30,7 +30,7 @@ export interface ISelectItem {
 @Component( {
   moduleId: module.id,
   selector: 'app-select-modal',
-  templateUrl: './select-modal.component.html'
+  templateUrl: './select.component.html'
 } )
 export class SelectModalComponent extends BaseModalComponent {
 

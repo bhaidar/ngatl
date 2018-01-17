@@ -806,7 +806,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
       // console.log('ngAfterViewInit...');
       this._win.setTimeout(_ => {
         this.showSwiper = true;
-      }, 4100);
+      }, 4005);
     }
   }
 
