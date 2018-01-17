@@ -1,33 +1,33 @@
 <ngatl-ns-action-bar [title]="'menu.about' | translate"></ngatl-ns-action-bar>
-<ScrollView *ngIf="renderView">
-    <GridLayout rows="auto,auto,*" columns="*" class="page">
-      <StackLayout class="about-bg p-t-10" row="0" col="0">
-          <Label text="Built w/ NativeScript for Angular" (tap)="viewPage()" textWrap="true" class="c-black text-center"></Label>
-          <Image src="~/assets/nng.png" padding="20" (tap)="viewPage()" horizontalAlignment="center" height="150" class="text-center"></Image>
-          <Label text="by nStudio" textWrap="true" class="c-sky text-center p-10 w-full c-bg-dark-blue" (tap)="viewGH()"></Label>
-      </StackLayout>
-      <StackLayout class="listing p-y-10" row="1" col="0">
-          <Label text="Credits:" textWrap="true" class="c-white mention"></Label>
-          <Label text="Ionicons are awesome." textWrap="true" (tap)="viewCredit(1)"></Label>
-          <Label text="Zack Chapple is amazing." textWrap="true" (tap)="viewCredit(2)"></Label>
-          <Label text="Josh Sommer has skills." textWrap="true" (tap)="viewCredit(5)"></Label>
-          <Label text="Stanimira Vlaeva is fantastic." textWrap="true" (tap)="viewCredit(6)"></Label>
-          <Label text="Nitish Dayal is talented." textWrap="true" (tap)="viewCredit(3)"></Label>
-          <Label text="Nathan Walker loves you." textWrap="true" (tap)="viewCredit(4)"></Label>  
-        </StackLayout>
-      <StackLayout class="listing p-y-10" row="2" col="0">
-        <Label text="Community plugins used:" textWrap="true" class="c-white mention"></Label>
-        <Label text="nativescript-audio" textWrap="true" (tap)="viewPlugin(13)"></Label>
-        <Label text="nativescript-email" textWrap="true" (tap)="viewPlugin(19)"></Label>
-        <Label text="nativescript-gif" textWrap="true" (tap)="viewPlugin(4)"></Label>
-        <Label text="nativescript-loading-indicator" textWrap="true" (tap)="viewPlugin(5)"></Label>
-        <Label text="nativescript-ngx-fonticon" textWrap="true" (tap)="viewPlugin(6)"></Label>
-        <Label text="nativescript-social-share" textWrap="true" (tap)="viewPlugin(17)"></Label>
-        <Label text="nativescript-splashscreen" textWrap="true" (tap)="viewPlugin(9)"></Label>
-        <Label text="nativescript-pro-ui" textWrap="true" (tap)="viewPlugin(10)"></Label>
-        <Label text="nativescript-themes" textWrap="true" (tap)="viewPlugin(11)"></Label>
-        <Label text="nativescript-permissions" textWrap="true" (tap)="viewPlugin(14)"></Label>
-        <Label text="nativescript-dev-sass" textWrap="true" (tap)="viewPlugin(16)"></Label>   
-      </StackLayout>
-    </GridLayout>
-  </ScrollView>
+<ScrollView *ngIf="renderView" #scrollView (scroll)="onScroll($event, scrollView, topView)">
+  <GridLayout rows="auto,auto,*"  columns="*" class="page">
+    <AbsoluteLayout #topView height="200" class="about-bg p-t-10" row="0" col="0">
+      <Label text="Built w/ NativeScript for Angular" (tap)="viewPage()" width="100%" top="10" textWrap="true" class="c-black text-center"></Label>
+      <Image src="~/assets/nng.png" padding="20" (tap)="viewPage()" top="30" [left]="imgLeftOffset" horizontalAlignment="center" height="150" width="170" class="text-center"></Image>
+    </AbsoluteLayout>
+    <StackLayout class="listing p-y-10" row="1" col="0">
+        <Label text="by nStudio" textWrap="true" class="c-sky text-center p-10 w-full c-bg-dark-blue" (tap)="viewGH()"></Label>
+      <Label text="Credits:" textWrap="true" class="c-white mention"></Label>
+      <Label text="Ionicons are awesome." textWrap="true" (tap)="viewCredit(1)"></Label>
+      <Label text="Zack Chapple is amazing." textWrap="true" (tap)="viewCredit(2)"></Label>
+      <Label text="Josh Sommer has skills." textWrap="true" (tap)="viewCredit(5)"></Label>
+      <Label text="Stanimira Vlaeva is fantastic." textWrap="true" (tap)="viewCredit(6)"></Label>
+      <Label text="Nitish Dayal is talented." textWrap="true" (tap)="viewCredit(3)"></Label>
+      <Label text="Nathan Walker loves you." textWrap="true" (tap)="viewCredit(4)"></Label>
+    </StackLayout>
+    <StackLayout class="listing p-y-10" row="2" col="0">
+      <Label text="Community plugins used:" textWrap="true" class="c-white mention"></Label>
+      <Label text="nativescript-audio" textWrap="true" (tap)="viewPlugin(13)"></Label>
+      <Label text="nativescript-email" textWrap="true" (tap)="viewPlugin(19)"></Label>
+      <Label text="nativescript-gif" textWrap="true" (tap)="viewPlugin(4)"></Label>
+      <Label text="nativescript-loading-indicator" textWrap="true" (tap)="viewPlugin(5)"></Label>
+      <Label text="nativescript-ngx-fonticon" textWrap="true" (tap)="viewPlugin(6)"></Label>
+      <Label text="nativescript-social-share" textWrap="true" (tap)="viewPlugin(17)"></Label>
+      <Label text="nativescript-splashscreen" textWrap="true" (tap)="viewPlugin(9)"></Label>
+      <Label text="nativescript-pro-ui" textWrap="true" (tap)="viewPlugin(10)"></Label>
+      <Label text="nativescript-themes" textWrap="true" (tap)="viewPlugin(11)"></Label>
+      <Label text="nativescript-permissions" textWrap="true" (tap)="viewPlugin(14)"></Label>
+      <Label text="nativescript-dev-sass" textWrap="true" (tap)="viewPlugin(16)"></Label>
+    </StackLayout>
+  </GridLayout>
+</ScrollView>

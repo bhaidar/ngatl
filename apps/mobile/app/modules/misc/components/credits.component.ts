@@ -1,19 +1,25 @@
-import { Component, ViewContainerRef } from '@angular/core';
+import { Component, ViewContainerRef, OnInit } from '@angular/core';
 
 // libs
 import { Store } from '@ngrx/store';
 import * as utils from 'tns-core-modules/utils/utils';
+import { ScrollView, ScrollEventData } from 'tns-core-modules/ui/scroll-view';
+import { Image } from 'tns-core-modules/ui/image';
+import { screen } from 'platform';
 
 // app
 import { LoggerService } from '@ngatl/api';
 import { NSAppService } from '../../core/services/ns-app.service';
+import { View } from 'tns-core-modules/ui/core/view/view';
 
 @Component( {
   moduleId: module.id,
   selector: 'ngatl-ns-credits',
   templateUrl: 'credits.component.html'
 } )
-export class CreditsComponent {
+export class CreditsComponent implements OnInit {
+  imgLeftOffset: number;
+  prevOffset = -10;
   public renderView = false;
 
   constructor(
@@ -28,7 +34,7 @@ export class CreditsComponent {
   ngOnInit() {
     this.renderView = true;
   }
-  
+
   public viewGH() {
     utils.openUrl( 'http://nstudio.io' );
   }
@@ -122,5 +128,31 @@ export class CreditsComponent {
     }
   }
 
+  ngAfterViewInit() {
+    this.imgLeftOffset = ( screen.mainScreen.widthDIPs / 2 ) - ( 170 / 2 );
+  }
 
+  onScroll( event: ScrollEventData, scrollView: ScrollView, topView: View ) {
+    const topViewHeight = 200;
+    if ( this.prevOffset <= scrollView.verticalOffset ) {
+      if ( topView.height >= 0 ) {
+        topView.height = this.getTopViewHeight( topViewHeight, scrollView.verticalOffset );
+      }
+    } else {
+      if ( topView.height <= topViewHeight ) {
+        topView.height = this.getTopViewHeight( topViewHeight, scrollView.verticalOffset );
+      }
+    }
+    this.prevOffset = scrollView.verticalOffset;
+  }
+
+  getTopViewHeight( topHeight: number, offset: number ): number {
+    let newHeight;
+    if ( ( topHeight - offset ) >= 0 ) {
+      newHeight = topHeight - offset;
+    } else {
+      newHeight = 0;
+    }
+    return newHeight;
+  }
 }
