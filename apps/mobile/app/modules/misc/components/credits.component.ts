@@ -5,7 +5,6 @@ import { Store } from '@ngrx/store';
 import * as utils from 'tns-core-modules/utils/utils';
 import { ScrollView, ScrollEventData } from 'tns-core-modules/ui/scroll-view';
 import { Image } from 'tns-core-modules/ui/image';
-import { screen } from 'platform';
 
 // app
 import { LoggerService } from '@ngatl/api';
@@ -18,7 +17,6 @@ import { View } from 'tns-core-modules/ui/core/view/view';
   templateUrl: 'credits.component.html'
 } )
 export class CreditsComponent implements OnInit {
-  imgLeftOffset: number;
   prevOffset = -10;
   public renderView = false;
 
@@ -126,10 +124,6 @@ export class CreditsComponent implements OnInit {
         utils.openUrl( 'https://github.com/EddyVerbruggen/nativescript-email' );
         break;
     }
-  }
-
-  ngAfterViewInit() {
-    this.imgLeftOffset = ( screen.mainScreen.widthDIPs / 2 ) - ( 170 / 2 );
   }
 
   onScroll( event: ScrollEventData, scrollView: ScrollView, topView: View ) {
