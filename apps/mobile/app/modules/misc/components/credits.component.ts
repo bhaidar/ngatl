@@ -5,7 +5,6 @@ import { Store } from '@ngrx/store';
 import * as utils from 'tns-core-modules/utils/utils';
 import { ScrollView, ScrollEventData } from 'tns-core-modules/ui/scroll-view';
 import { Image } from 'tns-core-modules/ui/image';
-import { screen } from 'platform';
 
 // app
 import { LoggerService } from '@ngatl/api';
@@ -18,7 +17,6 @@ import { View } from 'tns-core-modules/ui/core/view/view';
   templateUrl: 'credits.component.html'
 } )
 export class CreditsComponent implements OnInit {
-  imgLeftOffset: number;
   prevOffset = -10;
   public renderView = false;
 
@@ -128,31 +126,29 @@ export class CreditsComponent implements OnInit {
     }
   }
 
-  ngAfterViewInit() {
-    this.imgLeftOffset = ( screen.mainScreen.widthDIPs / 2 ) - ( 170 / 2 );
-  }
-
   onScroll( event: ScrollEventData, scrollView: ScrollView, topView: View ) {
     const topViewHeight = 200;
     if ( this.prevOffset <= scrollView.verticalOffset ) {
-      if ( topView.height >= 0 ) {
-        topView.height = this.getTopViewHeight( topViewHeight, scrollView.verticalOffset );
+      if ( scrollView.verticalOffset < topViewHeight ) {
+        const offset = scrollView.verticalOffset / 2;
+        if ( scrollView.ios ) {
+          topView.animate( { translate: { x: 0, y: offset } } ).then( () => { }, () => { } );
+        } else {
+          topView.translateY = Math.floor( offset );
+        }
       }
     } else {
-      if ( topView.height <= topViewHeight ) {
-        topView.height = this.getTopViewHeight( topViewHeight, scrollView.verticalOffset );
+      if ( scrollView.verticalOffset < topViewHeight ) {
+        const offset = scrollView.verticalOffset / 2;
+        if ( scrollView.ios ) {
+          topView.animate( { translate: { x: 0, y: offset } } ).then( () => { }, () => { } );
+        } else {
+          topView.translateY = Math.floor( offset );
+      }
+
       }
     }
     this.prevOffset = scrollView.verticalOffset;
   }
 
-  getTopViewHeight( topHeight: number, offset: number ): number {
-    let newHeight;
-    if ( ( topHeight - offset ) >= 0 ) {
-      newHeight = topHeight - offset;
-    } else {
-      newHeight = 0;
-    }
-    return newHeight;
-  }
 }
