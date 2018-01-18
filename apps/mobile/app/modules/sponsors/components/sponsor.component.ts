@@ -43,11 +43,11 @@ export class SponsorComponent implements AfterViewInit, OnInit {
   public onPullRefreshInitiated(e) {
     const listview = e.object;
     if (listview) {
-      this._progressService.toggleSpinner(true);
+      // this._progressService.toggleSpinner(true);
       this.store.dispatch(new SponsorActions.FetchAction(true));
       this._win.setTimeout(_ => {
         listview.notifyPullToRefreshFinished();
-        this._progressService.toggleSpinner(false);
+        // this._progressService.toggleSpinner(false);
       }, 1500);
     }
   }

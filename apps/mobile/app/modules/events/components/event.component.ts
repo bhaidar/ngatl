@@ -145,16 +145,16 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
   public onPullRefreshInitiated(e) {
     const listview = e.object;
     if (listview) {
-      this.progressService.toggleSpinner(true);
+      // this.progressService.toggleSpinner(true);
       this.store.dispatch(new EventActions.FetchAction(true));
       this.win.setTimeout(_ => {
         listview.notifyPullToRefreshFinished();
-        this.progressService.toggleSpinner(false);
+        // this.progressService.toggleSpinner(false);
       }, 1500);
     }
   }
 
-  public tweetDetails(item: EventState.IEvent) {
+  public shareDetails(item: EventState.IEvent) {
     shareText(`Enjoying #ngAtlanta session '${item.name}' by ${item.speaker} #angular http://ng-atl.org`);
   }
 

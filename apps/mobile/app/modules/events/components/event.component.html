@@ -42,7 +42,7 @@
                       <Label row="0" col="2" [text]="item.room" class="session-room"></Label>
                       <Label row="1" col="1" colSpan="2" [text]="item.name" textWrap="true" class="session-title" (tap)="toggleItemFav(item)"></Label>
                       <Label row="2" col="1" colSpan="4" [text]="item.speaker" textWrap="true" class="session-speaker"></Label>
-                      <Label [text]="'ion-social-twitter-outline' | fonticon" class="ion t-15 c-light-blue label" row="1" col="3" (tap)="tweetDetails(item)"></Label>
+                      <Label [text]="'ion-ios-upload-outline' | fonticon" class="ion t-15 c-light-blue label" row="1" col="3" (tap)="shareDetails(item)"></Label>
                   </GridLayout>
               </ng-template>
           </RadListView>
