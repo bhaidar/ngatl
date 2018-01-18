@@ -1,4 +1,5 @@
 import * as observable from "tns-core-modules/data/observable";
+import { EventState } from '../states';
 function formatTime(time: Date) {
     var hour: number = time.getHours();
     var min: string = time.getMinutes() + "";
@@ -11,7 +12,7 @@ export class Session extends observable.Observable {
         public start: Date,
         public end: Date,
         public room: string,
-        public isFavourite: boolean,
+        public isFavorite: boolean,
         public cssClass?: string) {
         super();
         this.cssClass = "session-favorite";
@@ -21,10 +22,10 @@ export class Session extends observable.Observable {
         return formatTime(this.start) + " - " + formatTime(this.end);
     }
 
-    public toggleFavourite() {
-        let favourite = this.get("isFavourite");
-        this.set("isFavourite", !favourite);
-        this.set("cssClass", !favourite ? "session-favorite-selected" : "session-favorite-unselected");
+    public toggleFavorite() {
+        let favorite = this.get("isFavorite");
+        this.set("isFavorite", !favorite);
+        this.set("cssClass", !favorite ? "session-favorite-selected" : "session-favorite-unselected");
         setTimeout(() => { this.set("cssClass", "session-favorite"); }, 600);
     }
 }
@@ -120,13 +121,13 @@ var allSessions: Array<Session> = [
 
 export class ConferenceViewModel extends observable.Observable {
     public sessions: Array<Session>;
-    private _schedule: Array<Session>;
+    private _schedule: Array<EventState.IEvent>;
 
     public get schedule() {
         return this._schedule;
     }
 
-    public set schedule(value: Array<Session>) {
+    public set schedule(value: Array<EventState.IEvent>) {
         this._schedule = value;
     }
     private _selectedDay: number;
@@ -164,12 +165,12 @@ export class ConferenceViewModel extends observable.Observable {
         let day = this.selectedDay;
         let textFilter = this.search ? this.search.toLocaleLowerCase() : this.search;
 
-        let filteredSessions = allSessions.filter((session) => {
-          const isDay = session.start.getDate() === day;
-          const isMatch = !textFilter || session.title.toLocaleLowerCase().indexOf(textFilter) >= 0;
+        let filteredSessions = this._schedule.filter((session) => {
+          const isDay = session.startDate.getDate() === day;
+          const isMatch = !textFilter || session.name.toLocaleLowerCase().indexOf(textFilter) >= 0;
             let include = false;
             if (this._favoritesOnly) {
-              include = isDay && session.isFavourite && isMatch;
+              include = isDay && session.isFavorite && isMatch;
             } else {
               include = isDay && isMatch;
             }

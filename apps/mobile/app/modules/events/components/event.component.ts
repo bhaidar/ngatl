@@ -215,7 +215,7 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
   }
 
   public toggleItemFav(item: Session) {
-    item.toggleFavourite();
+    item.toggleFavorite();
     this.win.setTimeout(_ => {
       this.getListView().refresh();
     }, 500);

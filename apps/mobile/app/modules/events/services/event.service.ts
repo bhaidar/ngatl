@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import { ConferenceEventApi } from '@ngatl/api';
 import { Cache, StorageKeys, StorageService, NetworkCommonService } from '@ngatl/core';
 import { sortAlpha } from '../../../helpers';
+import { EventState } from '../states';
 
 @Injectable()
 export class EventService extends Cache {
@@ -27,15 +28,24 @@ export class EventService extends Cache {
     const stored = this.cache;
     if (!forceRefresh && stored) {
       console.log('using cached events.');
-      return Observable.of(stored);
+      return Observable.of(this._parseDates(stored));
     } else {
       console.log('fetch events fresh!');
       return this.http.get(`${NetworkCommonService.API_URL}ConferenceEvents`)
-        .map(events => {
+        .map((events: Array<EventState.IEvent>) => {
+
           // cache list
           this.cache = events;
-          return events;
+          const eventList = [...events];
+          return this._parseDates(eventList);
         });
+    }
+  }
+
+  private _parseDates(list: Array<EventState.IEvent>) {
+    for (const ev of list) {
+      ev.startDate = new Date(ev.startTime);
+      ev.endDate = new Date(ev.endTime);
     }
   }
 

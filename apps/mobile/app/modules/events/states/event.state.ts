@@ -1,8 +1,25 @@
 export namespace EventState {
+  export interface IEvent {
+    id?:string;
+    name?:string;
+    created?:string;
+    modified?:string;
+    duration?:string;
+    startTime?:string;
+    startDate?: Date;
+    endTime?:string;
+    endDate?: Date;
+    type?:string;
+    room?:string;
+    speaker?:string;
+    isFavorite?: boolean;
+    cssClass?: string;
+  }
+  
   export interface IState {
-    list?: Array<any>;
+    list?: Array<IEvent>;
     count?: number;
-    selected?: any;
+    selected?: IEvent;
     errors?: Array<any>;
   }
 
