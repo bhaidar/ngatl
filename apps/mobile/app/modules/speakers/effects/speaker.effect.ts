@@ -14,15 +14,6 @@ import { SpeakerActions } from '../actions/speaker.action';
 
 @Injectable()
 export class SpeakerEffects {
-  @Effect()
-  count$ = this.actions$.ofType(SpeakerActions.ActionTypes.COUNT).switchMap(action =>
-    this.speakerService.count().map(
-      count =>
-        new SpeakerActions.ChangedAction({
-          count
-        })
-    )
-  );
 
   @Effect()
   fetch$ = this.actions$

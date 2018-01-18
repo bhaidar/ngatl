@@ -28,6 +28,7 @@ export namespace UserState {
     created?:string;
     modified?:string;
     notes?: Array<IConferenceAttendeeNote>;
+    favs?: Array<string>;
   }
   
   export interface IClaimStatus {

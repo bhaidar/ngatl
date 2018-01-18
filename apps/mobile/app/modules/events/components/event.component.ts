@@ -2,6 +2,7 @@ import { Component, AfterViewInit, OnInit, NgZone, ViewContainerRef } from '@ang
 
 // libs
 import { Store } from '@ngrx/store';
+import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -16,15 +17,17 @@ import { ListView, ItemEventData } from 'tns-core-modules/ui/list-view';
 import { SegmentedBarItem, SegmentedBar } from 'tns-core-modules/ui/segmented-bar';
 import * as utils from "tns-core-modules/utils/utils";
 import { CheckBox } from 'nativescript-checkbox';
+import { shareText } from 'nativescript-social-share';
 
 // app
 import { LoggerService } from '@ngatl/api';
-import { LocaleState, IAppState, BaseComponent, LogService, WindowService, ProgressService } from '@ngatl/core';
+import { LocaleState, IAppState, BaseComponent, LogService, WindowService, ProgressService, UserService } from '@ngatl/core';
 import { LinearGradient } from '../../../helpers';
 import { NSAppService } from '../../core/services/ns-app.service';
+import { ConferenceViewModel, Session } from '../models/conference.model';
 import { EventActions } from '../actions';
 import { EventState } from '../states';
-import { ConferenceViewModel, Session } from './conference.model';
+import { EventService } from '../services/event.service';
 
 @Component( {
   moduleId: module.id,
@@ -32,19 +35,19 @@ import { ConferenceViewModel, Session } from './conference.model';
   templateUrl: 'event.component.html'
 } )
 export class EventComponent extends BaseComponent implements AfterViewInit, OnInit {
-  public conferenceModel: ConferenceViewModel;
   public days: Array<SegmentedBarItem> = [];
   public renderView = false;
   public selectedDay = 0;
   public search$: Subject<string> = new Subject();
 
-  public locale = 'en-US';
+  // public locale = 'en-US';
   // public viewMode = CalendarViewMode.Month;
   // public transitionMode = CalendarTransitionMode.Stack;
   // public eventsViewMode = CalendarEventsViewMode.Inline;
   public checkboxValue = false;
   private _checkbox: CheckBox;
   private _listview: ListView;
+  private _toggleFavTimeout: number;
 
   constructor(
     private store: Store<any>,
@@ -55,10 +58,12 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
     private win: WindowService,
     private progressService: ProgressService,
     private page: Page,
+    private userService: UserService,
+    private translate: TranslateService,
+    private eventService: EventService,
   ) {
     super();
     this.appService.currentVcRef = this.vcRef;
-    this.conferenceModel = new ConferenceViewModel();
     const day1 = new SegmentedBarItem();
     day1.title = 'Jan 30';
     this.days.push( day1 );
@@ -96,28 +101,23 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
   }
 
   ngOnInit() {
-    this.store.select( s => s.conference.events )
-      .takeUntil(this.destroy$) 
-      .subscribe((s: EventState.IState) => {
-        this.conferenceModel.schedule = s.list;
-      });
 
-    this.store.select( ( s: IAppState ) => s.ui.locale )
-      .takeUntil( this.destroy$ )
-      .subscribe( ( locale: LocaleState.Locale ) => {
-        let suffix = 'US';
-        switch ( locale ) {
-          case 'es':
-            suffix = '419';
-            break;
-          case 'it':
-          case 'fr':
-            suffix = 'CH';
-            break;
-        }
-        this.locale = `${locale}-${suffix}`;
-        console.log( 'setting locale for calendar:', this.locale )
-      } );
+    // this.store.select( ( s: IAppState ) => s.ui.locale )
+    //   .takeUntil( this.destroy$ )
+    //   .subscribe( ( locale: LocaleState.Locale ) => {
+    //     let suffix = 'US';
+    //     switch ( locale ) {
+    //       case 'es':
+    //         suffix = '419';
+    //         break;
+    //       case 'it':
+    //       case 'fr':
+    //         suffix = 'CH';
+    //         break;
+    //     }
+    //     this.locale = `${locale}-${suffix}`;
+    //     console.log( 'setting locale for calendar:', this.locale )
+    //   } );
 
     this.search$
       .debounceTime( 500 )
@@ -127,10 +127,19 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
         if ( value ) {
           lowercaseValue = value.toLowerCase();
         }
-        this.conferenceModel.search = lowercaseValue;
+        this.eventService.conferenceModel.search = lowercaseValue;
       } );
 
     this.renderView = true;
+  }
+
+  public listviewLoaded(e) {
+    if (isIOS && e) {
+      const listview = e.object;
+      if (listview && listview.ios && listview.ios.pullToRefreshView) {
+        listview.ios.pullToRefreshView.backgroundColor = new Color('#000').ios;
+      }
+    }
   }
 
   public onPullRefreshInitiated(e) {
@@ -145,22 +154,26 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
     }
   }
 
+  public tweetDetails(item: EventState.IEvent) {
+    shareText(`Enjoying #ngAtlanta session '${item.name}' by ${item.speaker} #angular http://ng-atl.org`);
+  }
+
   public onDayChange( args ) {
     let segmetedBar = <SegmentedBar>args.object;
 
     this.log.debug( "Item:", segmetedBar.selectedIndex );
     switch ( segmetedBar.selectedIndex ) {
       case 0:
-        this.conferenceModel.selectedDay = 30;
+        this.eventService.conferenceModel.selectedDay = 30;
         break;
       case 1:
-        this.conferenceModel.selectedDay = 31;
+        this.eventService.conferenceModel.selectedDay = 31;
         break;
       case 2:
-        this.conferenceModel.selectedDay = 1;
+        this.eventService.conferenceModel.selectedDay = 1;
         break;
       case 3:
-        this.conferenceModel.selectedDay = 2;
+        this.eventService.conferenceModel.selectedDay = 2;
         break;
     }
   }
@@ -169,7 +182,7 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
     if ( this._checkbox ) {
 
       this.ngZone.run( () => {
-        this.conferenceModel.favoritesOnly = this._checkbox.checked;
+        this.eventService.conferenceModel.favoritesOnly = this._checkbox.checked;
         console.log('this.checkboxValue:', this.checkboxValue);
       } );
     }
@@ -183,12 +196,12 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
   }
 
   public toggleFavoritesOnly() {
-    this.conferenceModel.favoritesOnly = !this.conferenceModel.favoritesOnly;
-    this.checkboxValue = this.conferenceModel.favoritesOnly;
+    this.eventService.conferenceModel.favoritesOnly = !this.eventService.conferenceModel.favoritesOnly;
+    this.checkboxValue = this.eventService.conferenceModel.favoritesOnly;
   }
 
   public clear( e ) {
-    this.conferenceModel.search = '';
+    this.eventService.conferenceModel.search = '';
   }
 
   public changeView( type: 'day' | 'week' ) {
@@ -215,10 +228,26 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
   }
 
   public toggleItemFav(item: Session) {
-    item.toggleFavorite();
-    this.win.setTimeout(_ => {
-      this.getListView().refresh();
-    }, 500);
+    if (this.userService.isAuthenticated()) {
+      item.toggleFavorite();
+      this.win.setTimeout(_ => {
+        this.getListView().refresh();
+      }, 500);
+
+      // TODO: PERSIST fav details
+      // this._toggleFavTimeout = this.win.setTimeout(_ => {
+
+      // });
+    } else {
+      this.win.alert(this.translate.instant('user.require-auth'));
+    }
+  }
+
+  private _resetToggleTimeout() {
+    if (typeof this._toggleFavTimeout !== 'undefined') {
+      this.win.clearTimeout(this._toggleFavTimeout);
+      this._toggleFavTimeout = undefined;
+    }
   }
 
   public changeCellBackground( args: ItemEventData ) {

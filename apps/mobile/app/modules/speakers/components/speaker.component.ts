@@ -120,8 +120,8 @@ export class SpeakerComponent extends BaseComponent implements AfterViewInit, On
     this.appService.openWebView( {
       vcRef: this.vcRef,
       context: {
-        url: `https://twitter.com/${speaker.social.twitter}`,
-        title: `@${speaker.social.twitter}`
+        url: `https://twitter.com/${speaker.twitter}`,
+        title: `@${speaker.twitter}`
       }
     } )
   }

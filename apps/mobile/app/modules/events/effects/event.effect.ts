@@ -11,24 +11,17 @@ import { LoggerService } from '@ngatl/api';
 import { AppActions, WindowService } from '@ngatl/core';
 import { EventService } from '../services/event.service';
 import { EventActions } from '../actions/event.action';
+import { EventState } from '../states/event.state';
+import { Session } from '../models/conference.model';
 
 @Injectable()
 export class EventEffects {
-  @Effect()
-  count$ = this.actions$.ofType(EventActions.ActionTypes.COUNT).switchMap(action =>
-    this.eventService.count().map(
-      count =>
-        new EventActions.ChangedAction({
-          count
-        })
-    )
-  );
 
   @Effect()
   fetch$ = this.actions$
     .ofType(EventActions.ActionTypes.FETCH)
     .switchMap((action: EventActions.FetchAction) => this.eventService.fetch(action.payload))
-    .map((value: Array<any>) => {
+    .map((value: Array<Session>) => {
       console.log('fetched events result:', value);
       // console.log(JSON.stringify(value));
 
@@ -38,16 +31,16 @@ export class EventEffects {
     })
     .catch(err => Observable.of(new EventActions.ApiErrorAction()));
 
-  @Effect()
-  select$ = this.actions$
-    .ofType(EventActions.ActionTypes.SELECT)
-    .switchMap((action: EventActions.SelectAction) => this.eventService.loadDetail(action.payload))
-    .map(result => {
-      this.log.info(EventActions.ActionTypes.SELECT);
-      return new EventActions.ChangedAction({
-        selected: result
-      });
-    });
+  // @Effect()
+  // select$ = this.actions$
+  //   .ofType(EventActions.ActionTypes.SELECT)
+  //   .switchMap((action: EventActions.SelectAction) => this.eventService.loadDetail(action.payload))
+  //   .map(result => {
+  //     this.log.info(EventActions.ActionTypes.SELECT);
+  //     return new EventActions.ChangedAction({
+  //       selected: result
+  //     });
+  //   });
 
   @Effect()
   apiError$ = this.actions$

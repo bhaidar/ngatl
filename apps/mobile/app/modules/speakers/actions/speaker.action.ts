@@ -7,7 +7,6 @@ export namespace SpeakerActions {
 
   export interface IActions {
     INIT: string;
-    COUNT: string;
     FETCH: string;
     SELECT: string;
     API_ERROR: string;
@@ -16,7 +15,6 @@ export namespace SpeakerActions {
 
   export const ActionTypes: IActions = {
     INIT: type(`${CATEGORY} Init`),
-    COUNT: type(`${CATEGORY} Count`),
     FETCH: type(`${CATEGORY} Fetch`),
     SELECT: type(`${CATEGORY} Select`),
     API_ERROR: type(`${CATEGORY} Api Error`),
@@ -25,11 +23,6 @@ export namespace SpeakerActions {
 
   export class InitAction implements Action {
     type = ActionTypes.INIT;
-    payload = null;
-  }
-
-  export class CountAction implements Action {
-    type = ActionTypes.COUNT;
     payload = null;
   }
 
@@ -53,5 +46,5 @@ export namespace SpeakerActions {
     constructor(public payload?: SpeakerState.IState) {}
   }
 
-  export type Actions = InitAction | CountAction | FetchAction | ApiErrorAction | ChangedAction;
+  export type Actions = InitAction | FetchAction | ApiErrorAction | ChangedAction;
 }

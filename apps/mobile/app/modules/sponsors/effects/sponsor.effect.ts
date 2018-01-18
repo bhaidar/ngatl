@@ -14,15 +14,6 @@ import { SponsorActions } from '../actions/sponsor.action';
 
 @Injectable()
 export class SponsorEffects {
-  @Effect()
-  count$ = this.actions$.ofType(SponsorActions.ActionTypes.COUNT).switchMap(action =>
-    this.sponsorService.count().map(
-      count =>
-        new SponsorActions.ChangedAction({
-          count
-        })
-    )
-  );
 
   @Effect()
   fetch$ = this.actions$

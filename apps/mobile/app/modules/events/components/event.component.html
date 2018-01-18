@@ -28,16 +28,21 @@
             <Label [text]="'user.toggle-fav' | translate" class="label" (tap)="toggleFavoritesOnly()"></Label>
           </StackLayout>
           <!-- List -->
-          <RadListView row="2" [items]="conferenceModel.sessions" id="sessions-list" separatorColor="#000000" (itemLoading)="changeCellBackground($event)"
+          <RadListView row="2" [items]="eventService.conferenceModel.schedule$ | async" id="sessions-list" separatorColor="#000000" 
+          class="c-bg-black"
+          (loaded)="listviewLoaded($event)"
+          (itemLoading)="changeCellBackground($event)"
           pullToRefresh="true" 
           (pullToRefreshInitiated)="onPullRefreshInitiated($event)">
               <ng-template let-item="item">
-                  <GridLayout columns="auto, auto, *" rows="auto, auto" (tap)="toggleItemFav(item)" class="session-container" [class.favorite]="item.isFavorite">
-                      <Image row="0" rowSpan="2" col="0" [src]="item.isFavorite ? 'res://add_to_fav_1' : 'res://add_to_fav'" [ngClass]="item.cssClass"></Image>
-                      <Label row="0" col="1" [text]="item.range" class="session-time"></Label>
+                  <GridLayout columns="auto, auto, *, auto" rows="auto, auto, auto" class="session-container" [class.favorite]="item.isFavorite">
+                      <Image row="0" rowSpan="3" col="0" [src]="item.isFavorite ? 'res://add_to_fav_1' : 'res://add_to_fav'" [ngClass]="item.cssClass" (tap)="toggleItemFav(item)"></Image>
+                      <Label row="0" col="1" [text]="item.startTime" class="session-time"></Label>
 
                       <Label row="0" col="2" [text]="item.room" class="session-room"></Label>
-                      <Label row="1" col="1" colSpan="2" [text]="item.title" textWrap="true" class="session-title"></Label>
+                      <Label row="1" col="1" colSpan="2" [text]="item.name" textWrap="true" class="session-title" (tap)="toggleItemFav(item)"></Label>
+                      <Label row="2" col="1" colSpan="4" [text]="item.speaker" textWrap="true" class="session-speaker"></Label>
+                      <Label [text]="'ion-social-twitter-outline' | fonticon" class="ion t-15 c-light-blue label" row="1" col="3" (tap)="tweetDetails(item)"></Label>
                   </GridLayout>
               </ng-template>
           </RadListView>

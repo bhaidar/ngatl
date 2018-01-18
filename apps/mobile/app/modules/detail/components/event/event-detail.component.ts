@@ -42,12 +42,12 @@ export class EventDetailComponent extends BaseComponent implements OnInit {
         }
       } );
 
-    this._route.params
-      .takeUntil( this.destroy$ )
-      .subscribe( params => {
-        this._id = params['id'];
-        this._log.info( 'load detail for:', this._id );
-        this._store.dispatch( new EventActions.SelectAction( this._id ) );
-      } );
+    // this._route.params
+    //   .takeUntil( this.destroy$ )
+    //   .subscribe( params => {
+    //     this._id = params['id'];
+    //     this._log.info( 'load detail for:', this._id );
+    //     this._store.dispatch( new EventActions.SelectAction( this._id ) );
+    //   } );
   }
 }

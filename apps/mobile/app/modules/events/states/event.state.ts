@@ -14,6 +14,7 @@ export namespace EventState {
     speaker?:string;
     isFavorite?: boolean;
     cssClass?: string;
+    toggleFavorite: () => void;
   }
   
   export interface IState {
