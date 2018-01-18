@@ -1,6 +1,6 @@
 <ngatl-ns-action-bar [title]="'menu.about' | translate"></ngatl-ns-action-bar>
 <ScrollView *ngIf="renderView" #scrollView (scroll)="onScroll($event, scrollView, topView)">
-  <GridLayout rows="auto,auto,*"  columns="*" class="page">
+  <GridLayout rows="auto,auto,*"  columns="*" class="page parallax-bg">
     <AbsoluteLayout #topView height="200" class="about-bg p-t-10" row="0" col="0">
       <Label text="Built w/ NativeScript for Angular" (tap)="viewPage()" width="100%" top="10" textWrap="true" class="c-black text-center"></Label>
       <Image src="~/assets/nng.png" padding="20" (tap)="viewPage()" top="30" [left]="imgLeftOffset" horizontalAlignment="center" height="150" width="170" class="text-center"></Image>

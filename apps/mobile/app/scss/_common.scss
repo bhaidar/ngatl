@@ -289,7 +289,7 @@ ListView {
         &.mention {
             color: $grey-light;
             font-style: italic;
-            margin-bottom: 6; 
+            margin-bottom: 6;
         }
 
     }
@@ -360,4 +360,8 @@ ListView {
 	color: $dark-blue;
 	text-transform: uppercase;
 	text-align: center
+}
+
+.parallax-bg{
+    background-color: $dark-blue;
 }
