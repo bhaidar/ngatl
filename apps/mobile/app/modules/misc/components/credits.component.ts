@@ -135,24 +135,26 @@ export class CreditsComponent implements OnInit {
   onScroll( event: ScrollEventData, scrollView: ScrollView, topView: View ) {
     const topViewHeight = 200;
     if ( this.prevOffset <= scrollView.verticalOffset ) {
-      if ( topView.height >= 0 ) {
-        topView.height = this.getTopViewHeight( topViewHeight, scrollView.verticalOffset );
+      if ( scrollView.verticalOffset < topViewHeight ) {
+        const offset = scrollView.verticalOffset / 2;
+        if ( scrollView.ios ) {
+          topView.animate( { translate: { x: 0, y: offset } } ).then( () => { }, () => { } );
+        } else {
+          topView.translateY = Math.floor( offset );
+        }
       }
     } else {
-      if ( topView.height <= topViewHeight ) {
-        topView.height = this.getTopViewHeight( topViewHeight, scrollView.verticalOffset );
+      if ( scrollView.verticalOffset < topViewHeight ) {
+        const offset = scrollView.verticalOffset / 2;
+        if ( scrollView.ios ) {
+          topView.animate( { translate: { x: 0, y: offset } } ).then( () => { }, () => { } );
+        } else {
+          topView.translateY = Math.floor( offset );
+      }
+
       }
     }
     this.prevOffset = scrollView.verticalOffset;
   }
 
-  getTopViewHeight( topHeight: number, offset: number ): number {
-    let newHeight;
-    if ( ( topHeight - offset ) >= 0 ) {
-      newHeight = topHeight - offset;
-    } else {
-      newHeight = 0;
-    }
-    return newHeight;
-  }
 }
