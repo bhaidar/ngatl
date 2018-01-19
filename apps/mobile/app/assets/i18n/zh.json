@@ -9,6 +9,7 @@
     "conduct": "行為守則",
     "about": "關於",
     "credits": "積分",
+    "story": "起源的故事",
     "copyright": "2018 ngATL 由__建造 nStudio"
   },
   "error": {
@@ -32,6 +33,7 @@
     "delete-lbl": "刪除"
   },
   "general": {
+    "picture": "图片",
     "back": "背部",
     "need-help": "需要幫忙？",
     "help": "幫幫我",

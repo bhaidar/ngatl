@@ -17,6 +17,7 @@ export class ActionBarBackComponent {
   @Input() backIcon: string;
   @Input() showMoreIcon: boolean;
   @Input() backGuard: Function;
+  @Input() rightButtonLabel: string;
   @Output() rightButtonTap: EventEmitter<any> = new EventEmitter();
 
   public moreIcon: string;

@@ -1,10 +1,10 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 // libs
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
-import { ProgressIndicatorActions, UserActions, UserState, ProgressService, WindowService, LogService, BaseComponent } from '@ngatl/core';
+import { ProgressIndicatorActions, UserActions, UserState, ProgressService, WindowService, LogService, BaseComponent, ModalActions } from '@ngatl/core';
 import { isIOS } from 'tns-core-modules/platform';
 import { WebView } from 'tns-core-modules/ui/web-view';
 import { Page } from 'tns-core-modules/ui/page';
@@ -17,6 +17,7 @@ import { RouterExtensions } from 'nativescript-angular/router';
 // app
 import { NSAppService } from '../../../core/services/ns-app.service';
 import { RecordService } from '../../../core/services/record.service';
+import { ViewPhotoComponent } from '../../../shared/components/view-photo/view-photo.component';
 // import { BaseModalComponent } from '../../abstract/base-modal-component';
 
 @Component({
@@ -30,6 +31,7 @@ export class NoteEditComponent extends BaseComponent {//BaseModalComponent {
   public customClose: () => void;
   public images: Array<string> = [];
   public backGuard: Function;
+  public renderView = false;
   private _origItem: UserState.IConferenceAttendeeNote;
   private _dirty = false;
   private _checkbox: CheckBox;
@@ -47,6 +49,7 @@ export class NoteEditComponent extends BaseComponent {//BaseModalComponent {
     private _ngZone: NgZone,
     private _log: LogService,
     private _translate: TranslateService,
+    private _vcRef: ViewContainerRef,
   ) {
     // super(store, page, params);
     super();
@@ -70,8 +73,11 @@ export class NoteEditComponent extends BaseComponent {//BaseModalComponent {
                 this.item = <UserState.IConferenceAttendeeNote>Object.assign({}, item);
                 this._origItem = <UserState.IConferenceAttendeeNote>Object.assign({}, item);
             }
-            if (this.item && this.item.audioUrl) {
-              this.recordService.filepath = this.item.audioUrl;
+            if (this.item) {
+              this.item.photos = this.item.photos || []; // default to blank array
+              if (this.item.audioUrl) {
+                this.recordService.filepath = this.item.audioUrl;
+              }
             }
           });
 
@@ -84,6 +90,20 @@ export class NoteEditComponent extends BaseComponent {//BaseModalComponent {
     // if (this.item && this.item.audioUrl) {
     //   this.recordService.filepath = this.item.audioUrl;
     // }
+    this.renderView = true;
+  }
+
+  public viewPhoto(url: string) {
+    this.store.dispatch(new ModalActions.OpenAction({
+      cmpType: ViewPhotoComponent,
+      modalOptions: {
+        viewContainerRef: this._vcRef,
+        context: {
+          url,
+          item: this.item
+        }
+      }
+    }))
   }
 
   ngOnDestroy() {
@@ -140,7 +160,15 @@ export class NoteEditComponent extends BaseComponent {//BaseModalComponent {
 
   public uploadedImage(e) {
     this._log.debug('uploaded image:', e);
-    this.images = [e, ...this.images];
+    this.item.photos = this.item.photos || [];
+    this.item.photos = [e, ...this.item.photos];
+    this.progress.toggleSpinner(true);
+    this.store.dispatch(new UserActions.UpdateNoteAction(this.item));
+    this.win.setTimeout(_ => {
+      this._dirty = false;
+      this._origItem = this.item;
+      this.progress.toggleSpinner(false);
+    }, 800); // reasonable amount of time to update (quick/dirty setup)
   }
 
   public save() {

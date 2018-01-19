@@ -13,6 +13,7 @@ import { CameraModalComponent } from './camera-modal/camera-modal.component';
 import { PictureComponent } from './picture/picture.component';
 // import { NoteEditComponent } from './note-edit/note-edit.component';
 import { SelectModalComponent } from './select/select.component';
+import { ViewPhotoComponent } from './view-photo/view-photo.component';
 
 export const SHARED_COMPONENTS: any[] = [
   ActionBarBackComponent, 
@@ -27,6 +28,7 @@ export const SHARED_COMPONENTS: any[] = [
   PictureComponent,
   // NoteEditComponent,
   SelectModalComponent,
+  ViewPhotoComponent,
 ];
 
-export const SHARED_ENTRY_COMPONENTS: any[] = [NSWebViewComponent, BarcodeComponent, HelpComponent, CameraModalComponent, SelectModalComponent];//NoteEditComponent
+export const SHARED_ENTRY_COMPONENTS: any[] = [NSWebViewComponent, BarcodeComponent, HelpComponent, CameraModalComponent, SelectModalComponent, ViewPhotoComponent];//NoteEditComponent

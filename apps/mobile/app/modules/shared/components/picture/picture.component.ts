@@ -65,6 +65,8 @@ export class PictureComponent extends BaseComponent implements OnInit {
 
   @Input()
   public selectedImage: ImageAsset | ImageSource | string;
+  @Input()
+  public addOnly: boolean;
   @Output()
   public uploadedImage: EventEmitter<string> = new EventEmitter();
   @Output()
@@ -216,14 +218,12 @@ export class PictureComponent extends BaseComponent implements OnInit {
           okButtonText : this.okButtonText,
           cancelButtonText : this.cancelButtonText,
         };
-        (<any>this._win.confirm(<any>confirmOptions)).then((r: boolean) => {
-          if ( r ) {
-            this._ngZone.run(() => {
-              this._cropSelected = false;
-              this.selectedImage = null;
-              this.deleteImage.next(true);
-            });
-          }
+        this._win.confirm(<any>confirmOptions, (r: boolean) => {
+          this._ngZone.run(() => {
+            this._cropSelected = false;
+            this.selectedImage = null;
+            this.deleteImage.next(true);
+          });   
         });
         break;
     }
@@ -450,8 +450,8 @@ export class PictureComponent extends BaseComponent implements OnInit {
       this._win.setTimeout(() => {
         try {
           this._cropper.show(asset, {
-            maxWidth,
-            maxHeight,
+            maxWidth: longest,
+            maxHeight: longest, // cropping to square 
             origWidth: imageSource.width,
             origHeight: imageSource.height,
             lockAspect: true,
@@ -461,7 +461,10 @@ export class PictureComponent extends BaseComponent implements OnInit {
               this.log.debug(result.image);
               const imgSrc = result.image;
               this._cropSelected = true; // prevents binding flash
-              this.selectedImage = imgSrc;
+
+              if (!this.addOnly) {
+                this.selectedImage = imgSrc;
+              }
 
               let properFormat: any = 'jpeg';
               switch (format) {

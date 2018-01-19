@@ -61,6 +61,9 @@ export class CreditsComponent implements OnInit {
       case 6:
         utils.openUrl( 'https://github.com/sis0k0');
         break;
+      case 8:
+        utils.openUrl( 'https://github.com/EddyVerbruggen');
+        break;
     }
   }
 
@@ -103,7 +106,7 @@ export class CreditsComponent implements OnInit {
         utils.openUrl( 'https://github.com/NathanaelA/nativescript-master-technology' );
         break;
       case 13:
-        utils.openUrl( 'https://github.com/bradmartin/nativescript-audio' );
+        utils.openUrl( 'https://github.com/nstudio/nativescript-audio' );
         break;
       case 14:
         utils.openUrl( 'https://github.com/NathanaelA/nativescript-permissions' );
@@ -123,6 +126,40 @@ export class CreditsComponent implements OnInit {
       case 19:
         utils.openUrl( 'https://github.com/EddyVerbruggen/nativescript-email' );
         break;
+      case 20:
+        utils.openUrl( 'https://github.com/NativeScript/nativescript-background-http' );
+        break;
+      case 21:
+        utils.openUrl( 'https://github.com/EddyVerbruggen/nativescript-barcodescanner' );
+        break;
+      case 22:
+        utils.openUrl( 'http://nativescript.tools/product/25' );
+        break;
+      case 23:
+        utils.openUrl( 'https://github.com/nstudio/nativescript-checkbox' );
+        break;
+      case 24:
+        utils.openUrl( 'https://github.com/bthurlow/nativescript-imagecropper' );
+        break;
+      case 25:
+        utils.openUrl( 'https://github.com/NativeScript/nativescript-imagepicker' );
+        break;
+      case 26:
+        utils.openUrl( 'https://github.com/tjvantoll/nativescript-IQKeyboardManager' );
+        break;
+      case 27:
+        utils.openUrl( 'https://github.com/EddyVerbruggen/nativescript-local-notifications' );
+        break;
+      case 28:
+        utils.openUrl( 'https://github.com/msywensky/nativescript-phone' );
+        break;
+      case 29:
+        utils.openUrl( 'https://github.com/NathanWalker/nativescript-shimmer' );
+        break;
+      case 30:
+        utils.openUrl( 'https://docs.nativescript.org/ui/theme' );
+        break;
+        
     }
   }
 

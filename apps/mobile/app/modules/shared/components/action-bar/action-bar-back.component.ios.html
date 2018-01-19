@@ -16,13 +16,15 @@
     class="action-item"
     *ngIf="backGuard">
   </ActionItem>
-  <!-- <ActionItem
-    (tap)="rightButtonTap.emit(true)"
+  <ActionItem
+    [text]="rightButtonLabel"
+    (tap)="rightButtonTap.next(true)"
     ios.position="right"
+    class="action-item"
     *ngIf="rightButtonLabel">
-    <Button
-      [text]="rightButtonLabel | translate"
-      class="action-item">
-    </Button>
-  </ActionItem> -->
+    <!-- <Button
+      [text]="rightButtonLabel"
+      class="action-item text-right">
+    </Button> -->
+  </ActionItem>
 </ActionBar>

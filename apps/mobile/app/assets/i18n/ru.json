@@ -9,6 +9,7 @@
     "conduct": "Нормы поведения",
     "about": "Около",
     "credits": "кредиты",
+    "story": "История происхождения",
     "copyright": "2018 ngATL, построен nStudio"
   },
   "error": {
@@ -33,6 +34,7 @@
     "delete-lbl": "Удалить"
   },
   "general": {
+    "picture": "Картина",
     "back": "назад",
     "need-help": "Нужна помощь?",
     "help": "Помогите",

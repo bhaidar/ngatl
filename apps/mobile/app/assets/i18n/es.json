@@ -9,6 +9,7 @@
     "conduct": "Código de Conducta",
     "about": "Acerca de",
     "credits": "Créditos",
+    "story": "Historia de origen",
     "copyright": "2018 ngATL, construido por nStudio"
   },
   "error": {
@@ -32,6 +33,7 @@
     "delete-lbl": "Borrar"
   },
   "general": {
+    "picture": "Imagen",
     "back": "Espalda",
     "need-help": "¿Necesitas ayuda?",
     "help": "Ayuda",

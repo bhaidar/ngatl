@@ -1,5 +1,5 @@
 <ngatl-ns-profile-action-bar [title]="'general.profile' | translate" (logout)="logout()"></ngatl-ns-profile-action-bar>
-<GridLayout id="example-background" (loaded)="onBackgroundLoaded($event)">
+<GridLayout id="example-background" (loaded)="onBackgroundLoaded($event)" *ngIf="renderView">
   <GridLayout id="form-content" class="form-content" rows="auto,*,auto" (loaded)="onContentLoaded($event)">
     <StackLayout class="top-border" row="0"></StackLayout>
     <ScrollView row="1" class="fields-section">
@@ -49,7 +49,7 @@
     src="res://uploadpic">
   </Image> -->
   <StackLayout class="profile-picture-box">
-    <ns-picture [selectedImage]="currentUser.imageUrl" (uploadedImage)="uploadedImage($event)"></ns-picture>
+    <ns-picture [selectedImage]="currentUser.imageUrl" (uploadedImage)="uploadedImage($event)" (deleteImage)="removeImage()"></ns-picture>
   </StackLayout>
   <!-- <Image id="image" src="res://user" class="profile-picture" (tap)="onProfilePictureTapped($event)"></Image> -->
 </GridLayout>
