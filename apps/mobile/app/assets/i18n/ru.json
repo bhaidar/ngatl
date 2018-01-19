@@ -33,6 +33,7 @@
     "delete-lbl": "Удалить"
   },
   "general": {
+    "back": "назад",
     "need-help": "Нужна помощь?",
     "help": "Помогите",
     "email-us": "Напишите нам на info@ng-atl.org",

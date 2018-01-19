@@ -1,5 +1,7 @@
+<ngatl-ns-action-bar-back [title]="item?.peer?.name || 'Unknown'" [backGuard]="backGuard"></ngatl-ns-action-bar-back>
+
 <GridLayout rows="auto,200,auto,*" columns="*" class="w-full h-full">
-  <ngatl-ns-modal-title-bar [title]="item?.peer?.name || 'Unknown'" [params]="params" [customClose]="customClose" row="0" col="0"></ngatl-ns-modal-title-bar>
+  <!-- <ngatl-ns-modal-title-bar [title]="item?.peer?.name || 'Unknown'" [params]="params" [customClose]="customClose" row="0" col="0"></ngatl-ns-modal-title-bar> -->
   <StackLayout row="1" col="0" class="note-section">
     <TextView hint="Add notes..." [(ngModel)]="item.note" editable="true" class="w-full h-full t-20 note-area c-white"></TextView>
   </StackLayout>

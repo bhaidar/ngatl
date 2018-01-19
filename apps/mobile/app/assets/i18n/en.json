@@ -33,6 +33,7 @@
     "delete-lbl": "Delete"
   },
   "general": {
+    "back": "Back",
     "need-help": "Need Help?",
     "help": "Help",
     "email-us": "Email us at info@ng-atl.org",

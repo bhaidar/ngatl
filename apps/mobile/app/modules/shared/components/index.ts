@@ -11,7 +11,7 @@ import {
 } from './inline-html/inline-html.component';
 import { CameraModalComponent } from './camera-modal/camera-modal.component';
 import { PictureComponent } from './picture/picture.component';
-import { NoteEditComponent } from './note-edit/note-edit.component';
+// import { NoteEditComponent } from './note-edit/note-edit.component';
 import { SelectModalComponent } from './select/select.component';
 
 export const SHARED_COMPONENTS: any[] = [
@@ -25,8 +25,8 @@ export const SHARED_COMPONENTS: any[] = [
   HelpComponent,
   CameraModalComponent,
   PictureComponent,
-  NoteEditComponent,
+  // NoteEditComponent,
   SelectModalComponent,
 ];
 
-export const SHARED_ENTRY_COMPONENTS: any[] = [NSWebViewComponent, BarcodeComponent, HelpComponent, CameraModalComponent, NoteEditComponent, SelectModalComponent];
+export const SHARED_ENTRY_COMPONENTS: any[] = [NSWebViewComponent, BarcodeComponent, HelpComponent, CameraModalComponent, SelectModalComponent];//NoteEditComponent

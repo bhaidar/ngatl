@@ -16,11 +16,12 @@ export class ActionBarBackComponent {
   @Input() title: string;
   @Input() backIcon: string;
   @Input() showMoreIcon: boolean;
+  @Input() backGuard: Function;
   @Output() rightButtonTap: EventEmitter<any> = new EventEmitter();
 
   public moreIcon: string;
 
-  constructor(private router: RouterExtensions) {}
+  constructor(private _router: RouterExtensions) {}
 
   ngOnInit() {
     if (!this.backIcon) {
@@ -30,6 +31,13 @@ export class ActionBarBackComponent {
   }
 
   public back() {
-    this.router.back();
+    if ( this.backGuard ) {
+      if ( this.backGuard() ) {
+        // only nav back if guard allows
+        this._router.back();
+      }
+    } else {
+      this._router.back();
+    }
   }
 }

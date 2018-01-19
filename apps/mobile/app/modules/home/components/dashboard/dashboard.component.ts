@@ -31,13 +31,14 @@ import { Animation, AnimationDefinition } from 'tns-core-modules/ui/animation';
 import { screen, isIOS, isAndroid } from 'tns-core-modules/platform';
 import { File, path, knownFolders } from 'tns-core-modules/file-system';
 import { ListViewEventData, RadListView } from 'nativescript-pro-ui/listview';
+import { RouterExtensions } from 'nativescript-angular/router';
 
 // app
 import { getResolution } from '../../../../helpers';
 import { IConferenceAppState } from '../../../ngrx';
 import { AWSService } from '../../../core/services/aws.service';
 import { NSAppService } from '../../../core/services/ns-app.service';
-import { NoteEditComponent } from '../../../shared/components/note-edit/note-edit.component';
+// import { NoteEditComponent } from '../../../shared/components/note-edit/note-edit.component';
 
 // const reso = getResolution();
 // console.log('getResolution:', reso.width, reso.height, reso.widthPixels, reso.heightPixels);
@@ -195,6 +196,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     private _translate: TranslateService,
     private _progressService: ProgressService,
     private _page: Page,
+    private _router: RouterExtensions,
     private _userService: UserService,
     private _aws: AWSService,
     public appService: NSAppService,
@@ -220,15 +222,16 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
 
   public openItem(item) {
     this._log.debug('openitem:', item);
-    this._store.dispatch(new ModalActions.OpenAction({
-      cmpType: NoteEditComponent,
-      modalOptions: {
-        viewContainerRef: this._dashVcRef,
-        context: {
-          item
-        }
-      }
-    }));
+    this._router.navigate(['/landing/home', 'note', item.id]);
+    // this._store.dispatch(new ModalActions.OpenAction({
+    //   cmpType: NoteEditComponent,
+    //   modalOptions: {
+    //     viewContainerRef: this._dashVcRef,
+    //     context: {
+    //       item
+    //     }
+    //   }
+    // }));
   }
 
   public onItemTap(e) {

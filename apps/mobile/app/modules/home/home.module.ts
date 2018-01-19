@@ -3,7 +3,7 @@ import { NativeScriptRouterModule } from 'nativescript-angular/router';
 import { Routes } from '@angular/router';
 
 import { SharedModule } from '../shared/shared.module';
-import { HOME_COMPONENTS, HomeComponent, DashboardComponent, SampleComponent } from './components';
+import { HOME_COMPONENTS, HomeComponent, DashboardComponent, NoteEditComponent } from './components';
 
 const routes: Routes = [
   {
@@ -15,8 +15,8 @@ const routes: Routes = [
         component: DashboardComponent
       },
       {
-        path: 'sample',
-        component: SampleComponent
+        path: 'note/:id',
+        component: NoteEditComponent
       },
       {
         path: 'speakers',
