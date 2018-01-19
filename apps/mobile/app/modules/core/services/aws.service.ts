@@ -165,11 +165,18 @@ export class AWSService {
   }
 
   private _getESTDate(dt: Date) {
-    dt.setTime(dt.getTime()+dt.getTimezoneOffset()*60*1000);
+    dt = this._convertDateToUTC(dt);
+    // WTF to do here?
+    // currently amazon complains: "The difference between the request time and the current time is too large."
+    // dt.setTime(dt.getTime()+dt.getTimezoneOffset()*60*1000);
 
-    var offset = -300; //Timezone offset for EST in minutes.
+    // var offset = -300; //Timezone offset for EST in minutes.
 
-    return this._formatDate(new Date(dt.getTime() + offset*60*1000));
+    return this._formatDate(dt);// this._formatDate(new Date(dt.getTime() + offset*60*1000));
+  }
+
+  private _convertDateToUTC(date) { 
+    return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()); 
   }
 
   private _formatDate(date: Date) {
