@@ -47,6 +47,7 @@
       "Hi, this ngAtl conference is awesome! I wanted to reach out and say hello."
   },
   "user": {
+    "save-favs": "Saving favorites...",
     "add-notes": "Add notes...",
     "require-auth": "Please claim your badge to login and use this feature!",
     "language": "Language",

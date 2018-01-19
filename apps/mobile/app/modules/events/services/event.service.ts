@@ -6,12 +6,16 @@ import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { ConferenceEventApi } from '@ngatl/api';
-import { Cache, StorageKeys, StorageService, NetworkCommonService, UserService, UserState, LogService } from '@ngatl/core';
+import { Cache, StorageKeys, StorageService, NetworkCommonService, UserService, UserState, LogService, WindowService } from '@ngatl/core';
+import * as localNotifications from "nativescript-local-notifications";
+
+// app
 import { IConferenceAppState, IConferenceState } from '../../ngrx';
 import { sortAlpha } from '../../../helpers';
 import { EventActions } from '../actions';
 import { ConferenceViewModel, Session } from '../models/conference.model';
 import { EventState } from '../states';
+import { NSAppService } from '../../core/services/ns-app.service';
 
 @Injectable()
 export class EventService extends Cache {
@@ -27,6 +31,7 @@ export class EventService extends Cache {
     private http: HttpClient,
     private userService: UserService,
     private log: LogService,
+    private win: WindowService,
     private events: ConferenceEventApi
   ) {
     super(storage);
@@ -58,6 +63,17 @@ export class EventService extends Cache {
         //   this._updateFavs(this._currentUser);
         // }
       });
+
+    localNotifications.addOnMessageReceivedCallback((notification) => {
+      this.log.debug("ID: " + notification.id);
+      this.log.debug("Title: " + notification.title);
+      this.log.debug("Body: " + notification.body);
+      this.win.setTimeout(_ => {
+        this.win.alert(`id: ${notification.id}, title: ${notification.title}, body: ${notification.body}`);
+      }, 400);
+    }).then(() => {
+      this.log.debug("localNotifications addOnMessageReceivedCallback added");
+    });
   }
 
   public get conferenceModel() {
@@ -66,6 +82,10 @@ export class EventService extends Cache {
 
   public set origFavs(value: Array<string>) {
     this._origFavs = value;
+  }
+
+  public get origFavs() {
+    return this._origFavs;
   }
 
   public get currentUser() {

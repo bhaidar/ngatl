@@ -18,6 +18,8 @@ import { SegmentedBarItem, SegmentedBar } from 'tns-core-modules/ui/segmented-ba
 import * as utils from "tns-core-modules/utils/utils";
 import { CheckBox } from 'nativescript-checkbox';
 import { shareText } from 'nativescript-social-share';
+import * as localNotifications from "nativescript-local-notifications";
+import { addSeconds, subMinutes } from 'date-fns';
 
 // app
 import { LoggerService } from '@ngatl/api';
@@ -48,6 +50,7 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
   private _checkbox: CheckBox;
   private _listview: ListView;
   private _toggleFavTimeout: number;
+  private _scheduledIds: Array<string> = [];
 
   constructor(
     private store: Store<any>,
@@ -101,6 +104,12 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
   }
 
   ngOnInit() {
+
+    localNotifications.getScheduledIds().then(ids => {
+      if (ids) {
+        this._scheduledIds = ids;
+      }
+    });
 
     // this.store.select( ( s: IAppState ) => s.ui.locale )
     //   .takeUntil( this.destroy$ )
@@ -222,7 +231,7 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
   }
 
   // binding scope
-  public toggleItemFav = (item: Session) => {
+  public toggleItemFav(item: Session) {
     if (this.userService.isAuthenticated()) {
       item.toggleFavorite();
       const index = this.eventService.conferenceModel.fullSchedule.findIndex(e => e.id === item.id);
@@ -233,8 +242,28 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
       this.win.setTimeout(_ => {
         this.getListView().refresh();
       }, 601);
+      this._updateLocalNotify(item);
     } else {
       this.win.alert(this.translate.instant('user.require-auth'));
+    }
+  }
+
+  private _updateLocalNotify(item: Session) {
+    if (item) {
+      if (item.isFavorite) {
+        if (!this._scheduledIds.includes(item.id)) {
+          this._scheduledIds.push(item.id);
+        }
+        localNotifications.schedule([{
+          id: <any>item.id,
+          title: item.name,
+          body: item.speaker ? `by ${item.speaker}` : 'ngAtl Workshop happening in 15 mins!',
+          at: addSeconds(new Date(), 10),
+          badge: 1
+        }]);
+      } else if (this._scheduledIds.includes(item.id)) {
+        localNotifications.cancel(<any>item.id);
+      }
     }
   }
 

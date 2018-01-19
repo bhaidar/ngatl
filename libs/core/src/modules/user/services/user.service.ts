@@ -254,7 +254,7 @@ export class UserService extends Cache {
 
   public updateUser(user: UserState.IRegisteredUser) {
     const url = `${NetworkCommonService.API_URL}ConferenceAttendees/${user.id}`;
-    this._serializeUpdates(user);
+    // this._serializeUpdates(user);
     return this._http.put( url, user )
       .map( ( user: any ) => {
         this._log.debug( 'updated user:', user );

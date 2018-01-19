@@ -706,19 +706,19 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     if (!this._ngOnInitFired) {
       this._ngOnInitFired = true;
       this._ngOnDestroyFired = false;
-      console.log('dashboard ngOnInit!');
+      this._log.debug('dashboard ngOnInit!');
       this.appService.currentVcRef = this._dashVcRef;
 
       this._store.select((s: IAppState) => s.user)
         .takeUntil(this.destroy$)
         .subscribe((s: UserState.IState) => {
-          this._log.debug('DashboardComponent s.user fired! s.current:', s.current);
+          // this._log.debug('DashboardComponent s.user fired! s.current:', s.current);
           if (s.current) {
             this.scans = [...(s.current.notes || [])];
 
             if (!this.badgeExit && this.scans.length) {
-              console.log('scans available, this.appService.shownIntro:', this.appService.shownIntro);
-              console.log('this._badgeViewAvail:', this._badgeViewAvail);
+              // console.log('scans available, this.appService.shownIntro:', this.appService.shownIntro);
+              // console.log('this._badgeViewAvail:', this._badgeViewAvail);
               if (this.appService.shownIntro && this._badgeViewAvail) {
                 // first scan! retract the intro badge out of view
                 this._retractBadge();

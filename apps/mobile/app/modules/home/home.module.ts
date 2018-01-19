@@ -28,7 +28,7 @@ const routes: Routes = [
       },
       {
         path: 'events',
-        loadChildren: '~/modules/events/events.module#EventsModule'
+        loadChildren: '~/modules/events/events.module#EventsModule',
       },
       {
         path: 'misc',

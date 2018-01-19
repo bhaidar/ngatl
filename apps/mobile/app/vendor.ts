@@ -46,6 +46,7 @@ import 'nativescript-fancyalert';
 import 'nativescript-imagecropper';
 import 'nativescript-imagepicker';
 import 'nativescript-loading-indicator';
+import 'nativescript-local-notifications';
 import 'nativescript-ngx-fonticon';
 import 'nativescript-permissions';
 import 'nativescript-phone';

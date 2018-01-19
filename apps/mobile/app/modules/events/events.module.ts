@@ -17,6 +17,7 @@ const routes: Routes = [
 @NgModule({
   imports: [SharedModule, NativeScriptRouterModule.forChild(routes)],
   declarations: [...EVENT_COMPONENTS],
+  providers: [EventDeactivateGuard],
   schemas: [NO_ERRORS_SCHEMA]
 })
 export class EventsModule {}

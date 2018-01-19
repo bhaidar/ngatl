@@ -18,6 +18,7 @@ export class EventDeactivateGuard implements CanDeactivate<EventComponent> {
   ) {}
 
   canDeactivate(component: EventComponent): Promise<boolean> {
+    this._log.debug('EventDeactivateGuard canDeactivate');
     return new Promise((resolve) => {
       // simple check first
       if (this._eventService.origFavs && this._eventService.currentUser && this._eventService.conferenceModel) {
@@ -36,7 +37,7 @@ export class EventDeactivateGuard implements CanDeactivate<EventComponent> {
             .take(1)
             .subscribe((s: UserState.IState) => {
               if (s.current) {
-                this._log.debug('user.current fired:', s.current.favs);
+                // this._log.debug('user.current fired:', s.current.favs);
                 this._progressService.toggleSpinner();
                 // this._eventService.updateFullScheduleFavs(s.current.favs);
                 resolve(true);
@@ -48,6 +49,7 @@ export class EventDeactivateGuard implements CanDeactivate<EventComponent> {
           this._store.dispatch(new UserActions.UpdateAction(user));
         }
       } else {
+        this._log.debug('EventDeactivateGuard canDeactivate resolve immediately true');
         resolve(true);
       }
     });
