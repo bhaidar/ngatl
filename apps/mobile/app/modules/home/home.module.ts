@@ -15,10 +15,6 @@ const routes: Routes = [
         component: DashboardComponent
       },
       {
-        path: 'notes',
-        loadChildren: '~/modules/notes/notes.module#NotesModule'
-      },
-      {
         path: 'speakers',
         loadChildren: '~/modules/speakers/speaker.module#SpeakerModule'
       },

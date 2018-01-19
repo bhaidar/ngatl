@@ -222,12 +222,13 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
 
   public openItem(item) {
     this._log.debug('openitem:', item);
-    this._router.navigate(['/landing/home', 'notes', item.id], {
-      animated: true,
-      transition : {
-        name : 'slide',
-      },
-    });
+    this._router.navigate(['/notes', item.id]);
+    // , {
+    //   animated: true,
+    //   transition : {
+    //     name : 'slide',
+    //   },
+    // });
     // this._store.dispatch(new ModalActions.OpenAction({
     //   cmpType: NoteEditComponent,
     //   modalOptions: {

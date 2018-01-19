@@ -14,6 +14,10 @@ const routes: Routes = [
   },
   // push/pop navigation pages
   {
+    path: 'notes',
+    loadChildren: './modules/notes/notes.module#NotesModule'
+  },
+  {
     path: 'profile',
     loadChildren: './modules/profile/profile.module#ProfileModule'
   },
