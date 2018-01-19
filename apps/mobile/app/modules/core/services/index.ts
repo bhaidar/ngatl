@@ -17,10 +17,3 @@ export const CORE_PROVIDERS: any[] = [
   RecordService,
   AWSService,
 ];
-
-export * from './drawer.service';
-export * from './ns-app.service';
-export * from './tns-modal.service';
-export * from './tns-storage.service';
-export * from './tns-http-error.service';
-export * from './tns-window.service';

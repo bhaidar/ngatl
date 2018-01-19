@@ -58,7 +58,7 @@
     "zone.js": "file:../../node_modules/zone.js"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "file:../../node_modules/@angular/core",
+    "@angular/compiler-cli": "file:../../node_modules/@angular/compiler-cli",
     "@ngtools/webpack": "~1.9.3",
     "angular-router-loader": "~0.8.1",
     "babel-traverse": "6.26.0",

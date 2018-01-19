@@ -4,11 +4,13 @@ import { Routes } from '@angular/router';
 
 import { SharedModule } from '../shared/shared.module';
 import { EVENT_COMPONENTS, EventComponent } from './components';
+import { EventDeactivateGuard } from './services/event-deactivate.guard';
 
 const routes: Routes = [
   {
     path: '',
-    component: EventComponent
+    component: EventComponent,
+    canDeactivate: [EventDeactivateGuard]
   }
 ];
 

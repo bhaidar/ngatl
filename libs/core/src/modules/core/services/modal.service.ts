@@ -39,8 +39,6 @@ export class ModalService {
 
   private _modalRef: any;
   private _routed: boolean;
-  // convenient for easy access to when a modal closes along with it's result
-  private _closed$: Subject<any> = new Subject();
 
   // these apply for the web
   private _defaultOptions: any = {
@@ -54,25 +52,21 @@ export class ModalService {
     private _router: Router,
     private _log: LogService,
   ) {
-    _router.events
-           .filter(
-             e => e instanceof NavigationStart)
-           .throttleTime(600)
-           .subscribe(
-             e => {
-               // ignore first app launch
-               if ( this._routed ) {
-                 if ( e instanceof NavigationStart ) {
-                   this._store.dispatch(new ModalActions.CloseAction());
-                 }
-               } else {
-                 this._routed = true;
-               }
-             });
-  }
-
-  public get closed$() {
-    return this._closed$;
+    // _router.events
+    //        .filter(
+    //          e => e instanceof NavigationStart)
+    //        .throttleTime(600)
+    //        .subscribe(
+    //          e => {
+    //            // ignore first app launch
+    //            if ( this._routed ) {
+    //              if ( e instanceof NavigationStart ) {
+    //                this._store.dispatch(new ModalActions.CloseAction());
+    //              }
+    //            } else {
+    //              this._routed = true;
+    //            }
+    //          });
   }
 
   public open(options: ModalState.IOptions): IOpenReturn {
@@ -89,6 +83,7 @@ export class ModalService {
       typeof options.cmpType !== 'string'
         ? this._platformModalService.open(options.cmpType, options.modalOptions)
         : null;
+    this._log.debug('modalref:', this._modalRef);
 
     if ( options.props ) {
       // web can copy props onto passed in modal instances
@@ -103,28 +98,11 @@ export class ModalService {
     if ( this._modalRef ) {
       if ( this._modalRef.result ) {
         // likely ng-bootstrap (web)
-        if ( typeof $ !== 'undefined' ) {
-          const modalWindows = $('ngb-modal-window');
-          if ( modalWindows && modalWindows.length ) {
-            Observable.fromEvent(modalWindows, 'scroll')
-              .takeUntil(this._closed$)
-              .throttleTime(500)
-              .subscribe(x => {
-                 const a = document.activeElement;
-                 if (a instanceof HTMLElement) {
-                   a.blur();
-                   a.focus();
-                 }
-              });
-          }
-        }
 
         this._modalRef.result.then(
           (result: any) => {
-            this._closeWithResult(result);
             this._log.debug('Modal closed with:', result);
           }, (reason: any) => {
-            this._closeWithResult();
             this._log.debug('Modal closed reason:', reason);
           },
         );
@@ -132,7 +110,6 @@ export class ModalService {
         // like {N} (mobile)
         this._modalRef.then(
           result => {
-            this._closeWithResult(result);
             this._log.debug('Native modal closed with:', result);
           });
       }
@@ -192,20 +169,5 @@ export class ModalService {
 
   public get modalRef(): any {
     return this._modalRef;
-  }
-
-  private _closeWithResult(result?: any) {
-    if (this._closed$) {
-      if (typeof result !== 'undefined') {
-        this._closed$.next(result);
-      } else {
-        // just emit true when canceling or for any other reason
-        this._closed$.next(true);
-      }
-      if (this._closed$.observers && this._closed$.observers.length) {
-        // ensure cleanup
-        this._closed$.unsubscribe();
-      }
-    }
   }
 }

@@ -20,6 +20,7 @@ import { dial as phoneDial, sms as phoneSms } from 'nativescript-phone';
 // libs
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 import { WindowService, ProgressIndicatorActions, LogService, ProgressService, IAppState, UserState, UserService, UserActions, IPromptOptions, ModalActions } from '@ngatl/core';
@@ -63,6 +64,8 @@ export class NSAppService {
   private _shownIntro = false;
 
   // Auth helpers
+  private _currentUser: UserState.IRegisteredUser;
+  private _currentUser$: BehaviorSubject<UserState.IRegisteredUser> = new BehaviorSubject(null);
   private _isPasswordLogin: boolean;
   private _unauthorizedRouteAttempt: string;
   private _authGuardSub: Subscription;
@@ -106,6 +109,14 @@ export class NSAppService {
           vcRef: this.currentVcRef,
         } );
       } )
+  }
+
+  public get currentUser() {
+    return this._currentUser;
+  }
+
+  public get currentUser$() {
+    return this._currentUser$;
   }
 
   public set shownIntro( value: boolean ) {
@@ -363,9 +374,8 @@ export class NSAppService {
     this._store.select( ( s: IAppState ) => s.user )
       .subscribe( ( user: UserState.IState ) => {
         this._log.debug( 'current user:', user.current );
-        // if ( user.current ) {
-        //   this._log.debug( 'name:', user.current.name );
-        // }
+        this._currentUser = user.current;
+        this._currentUser$.next(this._currentUser);
       } );
 
     this._userService.promptUserClaim$
@@ -458,13 +468,13 @@ export class NSAppService {
     this.orientation = getOrientation();
 
     // handle orientation changes
-    TNSApplication.on( TNSApplication.orientationChangedEvent, e => {
-      this._log.debug( `Old: ${this.orientation}; New: ${e.newValue}` );
-      this._ngZone.run( () => {
-        this.orientation = getOrientation();
-        // this.cdRef.detectChanges();
-      } );
-    } );
+    // TNSApplication.on( TNSApplication.orientationChangedEvent, e => {
+    //   this._log.debug( `Old: ${this.orientation}; New: ${e.newValue}` );
+    //   this._ngZone.run( () => {
+    //     this.orientation = getOrientation();
+    //     // this.cdRef.detectChanges();
+    //   } );
+    // } );
   }
 }
 

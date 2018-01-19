@@ -6,8 +6,8 @@ import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { ConferenceEventApi } from '@ngatl/api';
-import { Cache, StorageKeys, StorageService, NetworkCommonService, UserService, UserState } from '@ngatl/core';
-import { IConferenceAppState } from '../../ngrx';
+import { Cache, StorageKeys, StorageService, NetworkCommonService, UserService, UserState, LogService } from '@ngatl/core';
+import { IConferenceAppState, IConferenceState } from '../../ngrx';
 import { sortAlpha } from '../../../helpers';
 import { EventActions } from '../actions';
 import { ConferenceViewModel, Session } from '../models/conference.model';
@@ -19,60 +19,84 @@ export class EventService extends Cache {
   private _conferenceModel: ConferenceViewModel;
   private _currentUser: UserState.IRegisteredUser;
   private _updatedFavs = false;
+  private _origFavs: Array<string> = [];
 
   constructor(
     public storage: StorageService,
     private store: Store<IConferenceAppState>,
     private http: HttpClient,
     private userService: UserService,
+    private log: LogService,
     private events: ConferenceEventApi
   ) {
     super(storage);
     this.key = StorageKeys.SCHEDULE;
     this._conferenceModel = new ConferenceViewModel();
 
-    Observable.combineLatest(
-      this.store.select( (s: IConferenceAppState) => s.conference.events ),
-      this.store.select((s: IConferenceAppState) => s.user )
-    )
-      .subscribe(([eventState, userState]: [EventState.IState, UserState.IState]) => {
-        this._conferenceModel.fullSchedule = [...eventState.list];
+    this.store.select( 'conference' )
+      .subscribe((confState: IConferenceState) => {
+        if (confState.events && confState.events.list) {
+          this._conferenceModel.fullSchedule = [...confState.events.list];
+          // if (this._currentUser) {
+          //   // update event listing state with what user had favorited (if any)
+          //   this._updateFavs(this._currentUser);
+          // }
+        }
+      });
+
+    this.store.select((s: IConferenceAppState) => s.user )
+      .subscribe((userState: UserState.IState) => {
         if (this._currentUser && !userState.current) {
           // user had been logged in and is now logging out, reset fav update flag
           this._updatedFavs = false;
         }
         this._currentUser = userState.current;
+        this.log.debug('event.service currentUser:', this._currentUser);
 
-        if (this._currentUser) {
-          // update event listing state with what user had favorited (if any)
-          this._updateFavs(this._currentUser);
-        }
+        // if (this._currentUser) {
+        //   // update event listing state with what user had favorited (if any)
+        //   this._updateFavs(this._currentUser);
+        // }
       });
-  }
-
-  private _updateFavs(currentUser: UserState.IRegisteredUser) {
-    if (!this._updatedFavs && this._conferenceModel.fullSchedule.length) {
-      this._updatedFavs = true;
-      if (currentUser.favs) {
-        for (let i = 0; i < this._conferenceModel.fullSchedule.length; i++) {
-          if (currentUser.favs.includes(this._conferenceModel.fullSchedule[i].id)) {
-            this._conferenceModel.fullSchedule[i].isFavorite = true;
-          }
-        }
-        this.store.dispatch(new EventActions.ChangedAction({
-          list: [...this._conferenceModel.fullSchedule]
-        }));
-      }
-    }
   }
 
   public get conferenceModel() {
     return this._conferenceModel;
   }
 
-  public count() {
-    return this.events.count().map(value => value.count);
+  public set origFavs(value: Array<string>) {
+    this._origFavs = value;
   }
+
+  public get currentUser() {
+    return this._currentUser;
+  }
+
+  // public updateFullScheduleFavs(favs: Array<string>) {
+  //   if (favs && this._conferenceModel.fullSchedule) {
+  //     for (const ev of this._conferenceModel.fullSchedule) {
+  //       if (favs.includes(ev.id)) {
+  //         ev.isFavorite = true;
+  //       }
+  //     }
+  //   }
+  // }
+
+  // private _updateFavs(currentUser: UserState.IRegisteredUser) {
+  //   if (!this._updatedFavs && this._conferenceModel && this._conferenceModel.fullSchedule && this._conferenceModel.fullSchedule.length) {
+  //     this._updatedFavs = true;
+  //     if (currentUser.favs) {
+  //       for (let i = 0; i < this._conferenceModel.fullSchedule.length; i++) {
+  //         if (currentUser.favs.includes(this._conferenceModel.fullSchedule[i].id)) {
+  //           this._conferenceModel.fullSchedule[i].isFavorite = true;
+  //         }
+  //       }
+  //       this.store.dispatch(new EventActions.ChangedAction({
+  //         list: [...this._conferenceModel.fullSchedule]
+  //       }));
+  //     }
+  //   }
+  // }
 
   public fetch(forceRefresh?: boolean): Observable<Array<Session>> {
     const stored = this.cache;

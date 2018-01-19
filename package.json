@@ -20,6 +20,7 @@
     "reset": "npx rimraf -- package-lock.json node_modules && npm i",
     "reset.mobile": "cd apps/mobile && npm run reset",
     "reset.api": "cd backend && node bin/clean",
+    "reset.libs": "npx rimraf -- libs/core/**/*.js && npx rimraf -- libs/core/**/*.map && npx rimraf -- libs/core/**/*.d.ts && npx rimraf -- libs/core/**/*.ngfactory.ts && npx rimraf -- libs/core/**/*.ngsummary.json && npx rimraf -- libs/core/**/*.metadata.json",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",

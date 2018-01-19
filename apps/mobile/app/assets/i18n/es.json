@@ -46,6 +46,7 @@
       "Hola, esta conferencia ngAtl es increíble! Quería acercarme y decir hola."
   },
   "user": {
+    "add-notes": "Agregar notas...",
     "require-auth": "¡Solicite su credencial para iniciar sesión y use esta función!",
     "language": "Idioma",
     "badge-claim": "¿Es esta tu insignia?",

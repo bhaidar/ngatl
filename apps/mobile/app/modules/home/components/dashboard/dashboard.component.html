@@ -1,7 +1,7 @@
 <ngatl-ns-action-bar class="action-bar" [intro]="showIntro" [ready]="appService.shownIntro" (tappedTop)="tappedTop($event)"> 
 </ngatl-ns-action-bar>
 <GridLayout id="content-root" rows="*" columns="*">
-    <AbsoluteLayout (loaded)="startBadge($event)" class="w-full h-full home-bg" row="0" col="0" *ngIf="appService.shownIntro && !showNotes"><!--(tap)="retractTest()"-->
+    <AbsoluteLayout (loaded)="startBadge()" class="w-full h-full home-bg" row="0" col="0" *ngIf="appService.shownIntro && !showNotes"><!--(tap)="retractTest()"-->
         <Image src="~/assets/images/badge_bottom.png" id="badge-bottom" (tap)="openBarcode()" class="badge-bottom-intro" width="549" height="865"></Image><!--[class.exit]="badgeExit"-->
         <Image src="~/assets/images/badge_top.png" id="badge-top" class="badge-top-intro" width="83" height="465"></Image><!--[class.exit]="badgeExit"-->
         <Label text="" id="beacon" class="beacon beacon-pulse" (tap)="openBarcode()"></Label> <!--[class.exit]="badgeExit"--> 
@@ -34,7 +34,7 @@
             <!-- <StackLayout class="hr-light"></StackLayout> -->
             <Label [text]="item.peer?.name" class="t-20 c-white font-weight-bold label" row="0" col="2"></Label>
             <Label [text]="'ion-edit' | fonticon" class="ion t-30 c-light-blue label" row="0" col="3"></Label>
-            <Label [text]="item.note ? item.note : 'Add notes...'" row="2" colSpan="4" class="t-20 c-light-blue label"></Label>
+            <Label [text]="item.note ? item.note : ('user.add-notes' | translate)" row="2" colSpan="4" class="t-20 c-light-blue label"></Label>
             
           </GridLayout>
         </ng-template>

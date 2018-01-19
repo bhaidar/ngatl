@@ -131,12 +131,16 @@ export class Session extends observable.Observable implements EventState.IEvent 
 // ];
 
 export class ConferenceViewModel extends observable.Observable {
-    public sessions: Array<Session>;
     public schedule$: BehaviorSubject<Array<EventState.IEvent>> = new BehaviorSubject([]);
     private _fullSchedule: Array<EventState.IEvent> = [];
 
     public set fullSchedule(value: Array<EventState.IEvent>) {
         this._fullSchedule = value;
+        this.filter();
+    }
+
+    public get fullSchedule() {
+        return this._fullSchedule;
     }
     
     private _selectedDay: number;
@@ -174,23 +178,24 @@ export class ConferenceViewModel extends observable.Observable {
         let day = this.selectedDay;
         let textFilter = this.search ? this.search.toLocaleLowerCase() : this.search;
 
-        let filteredSessions = this._fullSchedule.filter((session) => {
-          const isDay = session.startDate.getDate() === day;
-          const isMatch = !textFilter || session.name.toLocaleLowerCase().indexOf(textFilter) >= 0;
-            let include = false;
-            if (this._favoritesOnly) {
-              include = isDay && session.isFavorite && isMatch;
-            } else {
-              include = isDay && isMatch;
-            }
-            if (include) {
-                session.cssClass = "session-favorite";
-            }
-            return include;
-        });
-
-        this.schedule$.next(filteredSessions);
-        // this.set("sessions", filteredSessions)
+        if (this._fullSchedule) {
+            let filteredSessions = this._fullSchedule.filter((session) => {
+              const isDay = session.startDate.getDate() === day;
+              const isMatch = !textFilter || session.name.toLocaleLowerCase().indexOf(textFilter) >= 0;
+                let include = false;
+                if (this._favoritesOnly) {
+                  include = isDay && session.isFavorite && isMatch;
+                } else {
+                  include = isDay && isMatch;
+                }
+                if (include) {
+                    session.cssClass = "session-favorite";
+                }
+                return include;
+            });
+    
+            this.schedule$.next(filteredSessions);
+        }
     }
 
     constructor() {

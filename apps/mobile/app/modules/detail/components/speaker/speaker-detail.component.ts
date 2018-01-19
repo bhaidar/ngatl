@@ -34,23 +34,23 @@ export class SpeakerDetailComponent extends BaseComponent implements OnInit {
 
   ngOnInit() {
 
-    this._store.select( s => s.conference.speakers )
-      .takeUntil( this.destroy$ )
-      .subscribe( ( state: SpeakerState.IState ) => {
-        this.detail = state.selected;
-        for ( const key in this.detail ) {
-          console.log( key, this.detail[key] );
-        }
-      } );
+    // this._store.select( s => s.conference.speakers )
+    //   .takeUntil( this.destroy$ )
+    //   .subscribe( ( state: SpeakerState.IState ) => {
+    //     this.detail = state.selected;
+    //     for ( const key in this.detail ) {
+    //       console.log( key, this.detail[key] );
+    //     }
+    //   } );
 
 
-    this._route.params
-      .takeUntil( this.destroy$ )
-      .subscribe( params => {
-        this._id = params['id'];
-        this._log.info( 'load detail for:', this._id );
-        this._store.dispatch( new SpeakerActions.SelectAction( this._id ) );
-      } );
+    // this._route.params
+    //   .takeUntil( this.destroy$ )
+    //   .subscribe( params => {
+    //     this._id = params['id'];
+    //     this._log.info( 'load detail for:', this._id );
+    //     this._store.dispatch( new SpeakerActions.SelectAction( this._id ) );
+    //   } );
   }
 
   public openInfo(data, type) {

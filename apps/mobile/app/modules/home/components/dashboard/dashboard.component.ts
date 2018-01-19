@@ -182,11 +182,12 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   private _ngOnInitFired = false;
   private _ngOnDestroyFired = false;
   private _swipeStarted = false;
+  private _dashVcRef: ViewContainerRef;
   // private _stopAnime: () => void;
   private _restartAnime: () => void;
 
   constructor(
-    private _store: Store<any>,
+    private _store: Store<IConferenceAppState>,
     private _log: LogService,
     private _ngZone: NgZone,
     private _vcRef: ViewContainerRef,
@@ -203,6 +204,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     this._density = utils.layout.getDisplayDensity();
     // this._stopAnime = this._stopAnimeFn.bind(this);
     this._restartAnime = this._restartAnimeFn.bind(this);
+    this._dashVcRef = this._vcRef;
 
     this._page.on('navigatedFrom', () => {
       this._ngZone.run(() => {
@@ -221,7 +223,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     this._store.dispatch(new ModalActions.OpenAction({
       cmpType: NoteEditComponent,
       modalOptions: {
-        viewContainerRef: this._vcRef,
+        viewContainerRef: this._dashVcRef,
         context: {
           item
         }
@@ -364,21 +366,28 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     }
   }
 
-  public startBadge(e?: any) {
+  public startBadge() {
     this._log.debug('startBadge:');
     this._log.debug(screen.mainScreen.widthDIPs + 'x' + screen.mainScreen.heightDIPs);
-    this._initBeacon();
-    // only initiate badge sequence if auth state has been checked
-    if (this._authStateChecked && this.scans.length === 0) {
-      this._showBadge();
-      // this._win.setTimeout(() => {
-      //   this._startBeacon();
-      // }, 900);
-    }
+    this._initBeacon().then(_ => {
+      this._userService.userInitialized$
+        .takeUntil(this.destroy$)
+        .subscribe((init) => {
+          if (init) {
+            // only initiate badge sequence if auth state has been checked
+            if (this._authStateChecked && this.scans.length === 0) {
+              this._showBadge();
+              // this._win.setTimeout(() => {
+              //   this._startBeacon();
+              // }, 900);
+            }
+          }
+        });
+    });
   }
 
   private _initBeacon() {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       this._beaconView = <View>this._page.getViewById('beacon');
       if (this._beaconView) {
         this._beaconAnime = this._beaconView.createAnimation({
@@ -397,7 +406,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
         this._beaconAnime.play().then(_ => {
           resolve();
         }, _ => {
-
+          resolve();
         });
       }
     });
@@ -436,7 +445,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
           duration: 800,
           iterations: 1,
           curve: AnimationCurve.easeIn// AnimationCurve.spring
-        });
+        }).then(_ => {}, _ => {})
       }, _ => {
 
       });
@@ -651,10 +660,11 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   }
 
   public openBarcode() {
-    const filepath = path.join(knownFolders.currentApp().path, 'assets', 'nng.png');
-    this._aws.upload(filepath);
-    // this._barcode = new BarcodeScanner();
-    // this._openScanner();
+    // for testing amazon uploads
+    // const filepath = path.join(knownFolders.currentApp().path, 'assets', 'nng.png');
+    // this._aws.upload(filepath);
+    this._barcode = new BarcodeScanner();
+    this._openScanner();
   }
 
   public toggleSpinner() {
@@ -697,13 +707,14 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
       this._ngOnInitFired = true;
       this._ngOnDestroyFired = false;
       console.log('dashboard ngOnInit!');
-      this.appService.currentVcRef = this._vcRef;
+      this.appService.currentVcRef = this._dashVcRef;
 
       this._store.select((s: IAppState) => s.user)
         .takeUntil(this.destroy$)
         .subscribe((s: UserState.IState) => {
+          this._log.debug('DashboardComponent s.user fired! s.current:', s.current);
           if (s.current) {
-            this.scans = [...s.current.notes];
+            this.scans = [...(s.current.notes || [])];
 
             if (!this.badgeExit && this.scans.length) {
               console.log('scans available, this.appService.shownIntro:', this.appService.shownIntro);
@@ -760,7 +771,9 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     // replace badge drop
     this.badgeExit = this.showNotes = false;
     // show badge again
-    this.startBadge();
+    this._initBeacon().then(_ => {
+      this._showBadge();
+    });
   }
 
   ngAfterViewInit() {
@@ -825,11 +838,11 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
       this._ngOnDestroyFired = true;
       this._ngOnInitFired = false;
       this._authStateChecked = false;
+      this._stopBeacon();
       console.log('dashboard ngOnDestroy!');
       super.ngOnDestroy();
       // app.off(app.suspendEvent, this._stopAnime);
       app.off(app.resumeEvent, this._restartAnime);
-      this._hideBeacon(0);
     }
   }
 

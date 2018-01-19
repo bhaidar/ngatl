@@ -33,14 +33,14 @@ export class EventDetailComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._store.select( s => s.conference.events )
-      .takeUntil( this.destroy$ )
-      .subscribe( ( state: EventState.IState ) => {
-        for ( let key in this.detail ) {
-          this.detail = state.selected;
-          console.log( key, this.detail[key] );
-        }
-      } );
+    // this._store.select( s => s.conference.events )
+    //   .takeUntil( this.destroy$ )
+    //   .subscribe( ( state: EventState.IState ) => {
+    //     for ( let key in this.detail ) {
+    //       this.detail = state.selected;
+    //       console.log( key, this.detail[key] );
+    //     }
+    //   } );
 
     // this._route.params
     //   .takeUntil( this.destroy$ )

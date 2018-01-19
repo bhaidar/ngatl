@@ -21,7 +21,7 @@ import { shareText } from 'nativescript-social-share';
 
 // app
 import { LoggerService } from '@ngatl/api';
-import { LocaleState, IAppState, BaseComponent, LogService, WindowService, ProgressService, UserService } from '@ngatl/core';
+import { LocaleState, IAppState, BaseComponent, LogService, WindowService, ProgressService, UserService, UserState } from '@ngatl/core';
 import { LinearGradient } from '../../../helpers';
 import { NSAppService } from '../../core/services/ns-app.service';
 import { ConferenceViewModel, Session } from '../models/conference.model';
@@ -118,6 +118,10 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
     //     this.locale = `${locale}-${suffix}`;
     //     console.log( 'setting locale for calendar:', this.locale )
     //   } );
+
+    if (this.appService.currentUser && this.appService.currentUser.favs && this.appService.currentUser.favs.length) {
+      this.eventService.origFavs = [...this.appService.currentUser.favs];
+    }
 
     this.search$
       .debounceTime( 500 )
@@ -217,36 +221,20 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
     this._checkbox = e.object;
   }
 
-  public onDateSelected( e ) {
-    console.log( 'onDateSelected:' );
-    console.log( e );
-    if ( e ) {
-      for ( const key in e ) {
-        console.log( key, e[key] );
-      }
-    }
-  }
-
-  public toggleItemFav(item: Session) {
+  // binding scope
+  public toggleItemFav = (item: Session) => {
     if (this.userService.isAuthenticated()) {
       item.toggleFavorite();
+      const index = this.eventService.conferenceModel.fullSchedule.findIndex(e => e.id === item.id);
+      if (index > -1) {
+        // keep full schedule up to date
+        this.eventService.conferenceModel.fullSchedule[index].isFavorite = item.isFavorite;
+      }
       this.win.setTimeout(_ => {
         this.getListView().refresh();
-      }, 500);
-
-      // TODO: PERSIST fav details
-      // this._toggleFavTimeout = this.win.setTimeout(_ => {
-
-      // });
+      }, 601);
     } else {
       this.win.alert(this.translate.instant('user.require-auth'));
-    }
-  }
-
-  private _resetToggleTimeout() {
-    if (typeof this._toggleFavTimeout !== 'undefined') {
-      this.win.clearTimeout(this._toggleFavTimeout);
-      this._toggleFavTimeout = undefined;
     }
   }
 
