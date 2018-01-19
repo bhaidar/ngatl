@@ -29,6 +29,14 @@
   <GridLayout class="form-content static" rows="*" row="3" col="0">
     <ScrollView row="0" class="fields-section static">
       <StackLayout>
+        <ScrollView orientation="horizontal">
+          <StackLayout orientation="horizontal">
+            <Image [src]="url" *ngFor="let url of images" height="75" width="75" marginRight="5"></Image>
+            
+            <ns-picture (uploadedImage)="uploadedImage($event)"></ns-picture>
+          </StackLayout>
+        </ScrollView>
+        <StackLayout class="line static"></StackLayout>
         <!-- Email -->
         <GridLayout ios:columns="auto,*" android:rows="auto, auto" verticalAlignment="top">
           <!-- <Label [text]="'user.email' | translate" class="field-title"></Label> -->

@@ -370,10 +370,13 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     this._log.debug('startBadge:');
     this._log.debug(screen.mainScreen.widthDIPs + 'x' + screen.mainScreen.heightDIPs);
     this._initBeacon().then(_ => {
+      this._log.debug('beacon initialized');
       this._userService.userInitialized$
         .takeUntil(this.destroy$)
         .subscribe((init) => {
+          this._log.debug('userInitialized$:', init);
           if (init) {
+            this._log.debug('this._authStateChecked:', this._authStateChecked);
             // only initiate badge sequence if auth state has been checked
             if (this._authStateChecked && this.scans.length === 0) {
               this._showBadge();
@@ -415,6 +418,8 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   private _showBadge() {
     const top = <View>this._page.getViewById('badge-top');
     const bottom = <View>this._page.getViewById('badge-bottom');
+    this._log.debug('showbadge top:', top);
+    this._log.debug('showbadge bottom:', bottom);
     if (bottom && top) {
   
       bottom.animate({
@@ -733,7 +738,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
             // user logged out or just no user
             this.scans = [];
             this._showBadgeAgain();
-          }
+          } 
           this._authStateChecked = true;
         });
       this._store.select((s: IAppState) => s.ui)

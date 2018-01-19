@@ -3,7 +3,7 @@ import { Component, NgZone } from '@angular/core';
 // libs
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
-import { ProgressIndicatorActions, UserActions, UserState, ProgressService, WindowService } from '@ngatl/core';
+import { ProgressIndicatorActions, UserActions, UserState, ProgressService, WindowService, LogService } from '@ngatl/core';
 import { isIOS } from 'tns-core-modules/platform';
 import { WebView } from 'tns-core-modules/ui/web-view';
 import { Page } from 'tns-core-modules/ui/page';
@@ -26,6 +26,7 @@ export class NoteEditComponent extends BaseModalComponent {
   public item: UserState.IConferenceAttendeeNote;
   public ios: boolean;
   public customClose: () => void;
+  public images: Array<string> = [];
   private _origItem: UserState.IConferenceAttendeeNote;
   private _dirty = false;
   private _checkbox: CheckBox;
@@ -39,6 +40,7 @@ export class NoteEditComponent extends BaseModalComponent {
     public recordService: RecordService,
     private _appService: NSAppService,
     private _ngZone: NgZone,
+    private _log: LogService,
     private _translate: TranslateService,
   ) {
     super(store, page, params);
@@ -106,6 +108,11 @@ export class NoteEditComponent extends BaseModalComponent {
     } else {
       this.recordService.startRecord();
     }
+  }
+
+  public uploadedImage(e) {
+    this._log.debug('uploaded image:', e);
+    this.images = [e, ...this.images];
   }
 
   public save() {

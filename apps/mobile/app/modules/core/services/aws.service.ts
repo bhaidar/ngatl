@@ -38,17 +38,16 @@ export class AWSService {
 
   }
 
-  public upload( filePath: any ) {
+  public upload( file: File ): Promise<string> {
     return new Promise( ( resolve, reject ) => {
-      this._progressService.toggleSpinner( true );
       this._getCredentials().then( ( cred: IAWSCred ) => {
-        const file = File.fromPath( filePath );
+        // const file = File.fromPath( filePath );
         this._log.debug('file path:', file.path);
         const ext = file.extension.slice(1);
         this._log.debug( 'file ext:', ext );
         // const data = file.readSync();
         // this._log.debug( 'typeof data:', typeof data );
-        const keyPath = `${this._userService.currentUserId ? this._userService.currentUserId : ''}${Date.now()}-${file.name}`;
+        const keyPath = file.name;
         this._log.debug( 'keyPath:', keyPath );
         const params: any = {
           Bucket: 'ng-atl',
@@ -74,15 +73,13 @@ export class AWSService {
             break;
         }
 
-
-        let url = "http://s3.amazonaws.com/" + params.Bucket + "/" + keyPath;
+        const url = "http://s3.amazonaws.com/" + params.Bucket + "/" + keyPath;
 
         // let payloadHash = this.getPayloadHash(payload);
         let payloadHash = "UNSIGNED-PAYLOAD";
-        const date = new Date();
+        const amzDate = this._getAmzDate(new Date().toISOString());
 
-        const formattedDate = this._getESTDate(date);
-        this._log.debug( 'formattedDate:', formattedDate );
+        this._log.debug( 'amzDate:', amzDate );
         let options: any = {
           method: "PUT",
           headers: new HttpHeaders( {
@@ -90,7 +87,7 @@ export class AWSService {
             "Content-Type": params.ContentType,                   // Mandatory
             //"Content-Length": "10000",                // Mandatory: This header is required for PUTs
             // When you specify the Authorization header, you must specify either the x-amz-date or the Date header
-            "x-amz-date": formattedDate,
+            "x-amz-date": amzDate,
             "x-amz-content-sha256": payloadHash,        // Mandatory: It provides a hash of the request payload.
             "x-amz-acl": "public-read"                // Optional: By default, all objects are private: only the owner has full control.
             //"Authorization"   // Will be added by addAuthorizationHeader
@@ -100,7 +97,7 @@ export class AWSService {
         // Adding the authorization header
         let authorization = this.getAuthorizationHeader( options,
           cred.access_key, cred.secret,
-          cred.region, cred.bucket, keyPath, date, payloadHash );
+          cred.region, cred.bucket, keyPath, amzDate, payloadHash );
         options.headers.append( "Authorization", authorization );
         this._log.debug('authorization:', authorization);
 
@@ -113,7 +110,7 @@ export class AWSService {
             "Content-Type": params.ContentType,                   // Mandatory
             //"Content-Length": "10000",                // Mandatory: This header is required for PUTs
             // When you specify the Authorization header, you must specify either the x-amz-date or the Date header
-            "x-amz-date": formattedDate,
+            "x-amz-date": amzDate,
             "x-amz-content-sha256": payloadHash,        // Mandatory: It provides a hash of the request payload.
             "x-amz-acl": "public-read",              // Optional: By default, all objects are private: only the owner has full control.
             //"Authorization"   // Will be added by addAuthorizationHeader
@@ -125,36 +122,33 @@ export class AWSService {
 
         const task = session.uploadFile( file.path, request );
         task.on( "progress", ( e ) => {
-          console.log( 'progress:', e );
-          if (isObject(e)) {
-            for (const key in e) {
-              this._log.debug(key, e[key]);
-            }
-          }
+          // console.log( 'progress:', e );
+          // if (isObject(e)) {
+          //   for (const key in e) {
+          //     this._log.debug(key, e[key]);
+          //   }
+          // }
         });
         task.on( "error", ( e ) => {
           console.log( 'error:', e );
-          if (isObject(e)) {
-            for (const key in e) {
-              this._log.debug(key, e[key]);
-            }
-          }
+          // if (isObject(e)) {
+          //   for (const key in e) {
+          //     this._log.debug(key, e[key]);
+          //   }
+          // }
+          reject(e);
         });
         task.on( "complete", ( e ) => {
-          console.log( 'complete:', e );
-          console.log( 'typeof e:', typeof e );
-          if (isObject(e)) {
-            for (const key in e) {
-              this._log.debug(key, e[key]);
-            }
-          }
-          this._ngZone.run(() => {
-            this._progressService.toggleSpinner();
-          })
+          // console.log( 'complete:', e );
+          // if (isObject(e)) {
+          //   for (const key in e) {
+          //     this._log.debug(key, e[key]);
+          //   }
+          // }
+          resolve(url);
         });
 
       }, ( err ) => {
-        this._progressService.toggleSpinner();
         this._log.debug( 'could not upload to aws.' );
         this._win.setTimeout( _ => {
           this._win.alert( this._translate.instant( 'general.error' ) );
@@ -163,24 +157,17 @@ export class AWSService {
 
     } );
   }
-
-  private _getESTDate(dt: Date) {
-    dt = this._convertDateToUTC(dt);
-    // WTF to do here?
-    // currently amazon complains: "The difference between the request time and the current time is too large."
-    // dt.setTime(dt.getTime()+dt.getTimezoneOffset()*60*1000);
-
-    // var offset = -300; //Timezone offset for EST in minutes.
-
-    return this._formatDate(dt);// this._formatDate(new Date(dt.getTime() + offset*60*1000));
-  }
-
-  private _convertDateToUTC(date) { 
-    return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()); 
-  }
-
-  private _formatDate(date: Date) {
-    return format(date, "YYYYMMDDTHHMMSS")+'Z';
+ 
+  // this function converts the generic JS ISO8601 date format to the specific format the AWS API wants
+  private _getAmzDate(dateStr): string {
+    var chars = [":","-"];
+    for (var i=0;i<chars.length;i++) {
+      while (dateStr.indexOf(chars[i]) != -1) {
+        dateStr = dateStr.replace(chars[i],"");
+      }
+    }
+    dateStr = dateStr.split(".")[0] + "Z";
+    return dateStr;
   }
 
   protected getAuthorizationHeader( options: any, s3Key: string, s3Secret: string,
@@ -213,7 +200,7 @@ export class AWSService {
   protected getCredential( s3Key: string, s3Region: string, date ) {
     // Credential=AKIAIOSFODNN7EXAMPLE/20130524/us-east-1/s3/aws4_request, 
     // Your access key ID and the scope information, which includes the date, region, and service that were used to calculate the signature.
-    return s3Key + "/" + format( date, "YYYYMMDD" ) + "/" + s3Region + "/s3/aws4_request";
+    return s3Key + "/" + date.split("T")[0] + "/" + s3Region + "/s3/aws4_request";
   }
 
   protected getStrToSign( options: any, date, s3Region: string, s3Bucket: string, s3Path: string, payloadHash: string ) {
@@ -226,12 +213,12 @@ export class AWSService {
     let strToSign = "AWS4-HMAC-SHA256\n";
 
     //timeStampISO8601Format
-    strToSign += this._getESTDate(date) + '\n'; //format( date, "YYYYMMDD[T]HHmmss[Z]" ) + "\n";
+    strToSign += date + '\n'; //format( date, "YYYYMMDD[T]HHmmss[Z]" ) + "\n";
 
     // Scope binds the resulting signature to a specific date, an AWS region, and a service.
     // Thus, your resulting signature will work only in the specific region and for a specific service.
     // The signature is valid for seven days after the specified date.
-    strToSign += format( date, "YYYYMMDD" ) + "/" + s3Region + "/s3/aws4_request" + "\n";
+    strToSign += date.split("T")[0] + "/" + s3Region + "/s3/aws4_request" + "\n";
 
     //Hex(SHA256Hash(cannonicalRequest))
     //SHA256Hash(): Secure Hash Algorithm (SHA) cryptographic hash function.
@@ -284,7 +271,11 @@ export class AWSService {
     // - The x-amz-content-sha256 header is required for all AWS Signature Version 4 requests. It provides a hash of the request payload.
     let headers = options.headers.keys()
       .map( function ( v, k ) { return v.toLowerCase() + ":" + options.headers.get( v ).trim(); } )
-      // .sort( function ( v, k ) { return v.split( ":" )[0]; } )
+      .sort( function ( v, k ) { 
+        let a = v.split( ":" )[0];
+        let b = k.split( ":" )[0];
+        if (a < b) return -1; if (a > b) return 1; return 0;
+      } )
       // .value()
       .join( "\n" );
     cannonicalRequest += headers + "\n";
@@ -295,6 +286,7 @@ export class AWSService {
     // SignedHeaders is an alphabetically sorted, semicolon-separated list of lowercase request header names.
     let signedHeaders = options.headers.keys()
       .map( function ( hdr ) { return hdr.toLowerCase(); } )
+      .sort(function(a,b) { if (a < b) return -1; if (a > b) return 1; return 0; })
       .join( ";" );
     cannonicalRequest += signedHeaders + "\n";
 
@@ -317,7 +309,7 @@ export class AWSService {
 
     // WARNING: The way amazon presents the key/phrase is the oposite to the method signature
     // DateKey              = HMAC-SHA256("AWS4"+"<SecretAccessKey>", "<YYYYMMDD>")
-    let dateKey = CryptoJS.HmacSHA256( format( date, "YYYYMMDD" ), "AWS4" + s3Secret );
+    let dateKey = CryptoJS.HmacSHA256( date.split("T")[0], "AWS4" + s3Secret );
     // DateRegionKey        = HMAC-SHA256(<DateKey>, "<aws-region>")
     let dateRegionKey = CryptoJS.HmacSHA256( s3Region, dateKey );
     // DateRegionServiceKey = HMAC-SHA256(<DateRegionKey>, "<aws-service>")

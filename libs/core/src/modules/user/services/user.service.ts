@@ -38,7 +38,7 @@ export class UserService extends Cache {
   // see getters below for docs
   private _unauthorizedRouteAttempt: Subject<string> = new Subject();
   // for quick access in other api calls
-  private _currentUserId: number;
+  private _currentUserId: string;
   // allow various effect chain to prevent the default loaderOff$ handling in user.effect
   private _preventDefaultSpinner: boolean;
   private _preventDefaultSpinnerTimeout: number;
@@ -66,8 +66,7 @@ export class UserService extends Cache {
     this.key = StorageKeys.USER;
 
     _store
-      .select( 'user' )
-      .skip( 1 ) // ignore the wiring, only listen to effect chain reaction
+      .select( (s:IAppState) => s.user )
       .subscribe( ( state: UserState.IState ) => {
         // this.currentUserId = state.current && state.current.id ? state.current.id : null;
         this.currentUserId = state.current && state.current.id ? state.current.id : null;

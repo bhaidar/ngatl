@@ -161,6 +161,11 @@ export class ProfileComponent extends BaseComponent
     }, 1500);
   }
 
+  public uploadedImage(e) {
+    this.currentUser.imageUrl = e;
+    this.save();
+  }
+
   ngOnInit() {
     // this.currentUser = new UserState.RegisteredUser(
     //   {
