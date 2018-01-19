@@ -34,7 +34,7 @@ export class ActionBarComponent {
     this.store.select( ( s: IAppState ) => s.user )
       .subscribe( ( s: UserState.IState ) => {
         this.currentUser = s.current;
-      } )
+      } );
   }
 
   public toggleDrawer() {

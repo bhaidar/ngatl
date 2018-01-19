@@ -5,6 +5,7 @@ import { MobileWindowPlatformService } from './tns-window.service';
 import { DrawerService } from './drawer.service';
 import { TnsHttpErrorService } from './tns-http-error.service';
 import { RecordService } from './record.service';
+import { AWSService } from './aws.service';
 
 export const CORE_PROVIDERS: any[] = [
   TNSModalService,
@@ -13,7 +14,8 @@ export const CORE_PROVIDERS: any[] = [
   TNSStorageService,
   TnsHttpErrorService,
   MobileWindowPlatformService,
-  RecordService
+  RecordService,
+  AWSService,
 ];
 
 export * from './drawer.service';

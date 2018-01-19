@@ -54,6 +54,7 @@
     "@nrwl/nx": "0.6.0",
     "bootstrap": "^4.0.0-beta",
     "core-js": "^2.4.1",
+    "date-fns": "2.0.0-alpha.4",
     "font-awesome": "^4.7.0",
     "ngx-bootstrap": "~2.0.0-rc.0",
     "rxjs": "^5.5.2",

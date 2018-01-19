@@ -29,11 +29,13 @@ import * as utils from 'tns-core-modules/utils/utils';
 import { View } from 'tns-core-modules/ui/core/view';
 import { Animation, AnimationDefinition } from 'tns-core-modules/ui/animation';
 import { screen, isIOS, isAndroid } from 'tns-core-modules/platform';
+import { File, path, knownFolders } from 'tns-core-modules/file-system';
 import { ListViewEventData, RadListView } from 'nativescript-pro-ui/listview';
 
 // app
 import { getResolution } from '../../../../helpers';
 import { IConferenceAppState } from '../../../ngrx';
+import { AWSService } from '../../../core/services/aws.service';
 import { NSAppService } from '../../../core/services/ns-app.service';
 import { NoteEditComponent } from '../../../shared/components/note-edit/note-edit.component';
 
@@ -193,6 +195,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     private _progressService: ProgressService,
     private _page: Page,
     private _userService: UserService,
+    private _aws: AWSService,
     public appService: NSAppService,
   ) {
     super();
@@ -214,6 +217,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   }
 
   public openItem(item) {
+    this._log.debug('openitem:', item);
     this._store.dispatch(new ModalActions.OpenAction({
       cmpType: NoteEditComponent,
       modalOptions: {
@@ -226,6 +230,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   }
 
   public onItemTap(e) {
+    this._log.debug('onItemTap');
     if (e && isAndroid && e.index > -1) {
       // android does not respond to tap events on items so use this
       const item = this.scans[e.index];
@@ -646,8 +651,10 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   }
 
   public openBarcode() {
-    this._barcode = new BarcodeScanner();
-    this._openScanner();
+    const filepath = path.join(knownFolders.currentApp().path, 'assets', 'nng.png');
+    this._aws.upload(filepath);
+    // this._barcode = new BarcodeScanner();
+    // this._openScanner();
   }
 
   public toggleSpinner() {
@@ -730,20 +737,15 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
             // restart beacon
             this._playBeacon();
           }
-        });
 
-      this._store.select((s: IAppState) => s.ui.modal)
-        .takeUntil(this.destroy$)
-        .skip(1) // only react
-        .subscribe((modal: ModalState.IState) => {
-          if (modal.latestResult && isObject(modal.latestResult)) {
-            if (modal.latestResult.email || modal.latestResult.phone) {
+          if (s.modal.latestResult && isObject(s.modal.latestResult)) {
+            if (s.modal.latestResult.email || s.modal.latestResult.phone) {
               this._win.setTimeout(_ => {
                 // open compose window
-                if (modal.latestResult.email) {
-                  this.appService.email(modal.latestResult.email);
-                } else if (modal.latestResult.phone) {
-                  this.appService.phone(modal.latestResult.phone);
+                if (s.modal.latestResult.email) {
+                  this.appService.email(s.modal.latestResult.email);
+                } else if (s.modal.latestResult.phone) {
+                  this.appService.phone(s.modal.latestResult.phone);
                 }
                 // reset
                 this.appService.resetModal();

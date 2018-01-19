@@ -27,13 +27,13 @@
         pullToRefresh="true" 
         (pullToRefreshInitiated)="onPullRefreshInitiated($event)">
         <ng-template tkListItemTemplate let-item="item">
-          <GridLayout class="card scanned" rows="auto,10,auto" columns="auto,10,*,auto" [class.swiping]="item.swiping" (tap)="openItem(item)">
+          <GridLayout class="card scanned" rows="auto,10,auto" columns="auto,10,*,auto" (tap)="openItem(item)">
             <!-- <Image [src]="item.image" horizontalAlignment="center" class="w-full" backgroundColor="#fff"></Image> -->
             <Label [text]="'ion-social-angular-outline' | fonticon" class="ion t-30 c-ngatl-red" row="0" col="0"></Label>
             
             <!-- <StackLayout class="hr-light"></StackLayout> -->
             <Label [text]="item.peer?.name" class="t-20 c-white font-weight-bold label" row="0" col="2"></Label>
-            <Label [text]="'ion-edit' | fonticon" class="ion t-40 c-light-blue label" row="0" col="3"></Label>
+            <Label [text]="'ion-edit' | fonticon" class="ion t-30 c-light-blue label" row="0" col="3"></Label>
             <Label [text]="item.note ? item.note : 'Add notes...'" row="2" colSpan="4" class="t-20 c-light-blue label"></Label>
             
           </GridLayout>

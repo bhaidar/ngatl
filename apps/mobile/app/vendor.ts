@@ -30,6 +30,8 @@ import 'nativescript-angular/router';
 import 'nativescript-angular/forms';
 import 'nativescript-angular/http';
 
+import 'date-fns';
+
 // shared libs across all apps in Nx workspace
 // TODO: import any shared libs here
 import '@ngatl/api';
@@ -37,6 +39,7 @@ import '@ngatl/core';
 
 // ns plugins
 import 'nativescript-audio';
+import 'nativescript-background-http';
 import 'nativescript-camera-plus';
 import 'nativescript-checkbox';
 import 'nativescript-fancyalert';

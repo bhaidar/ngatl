@@ -5,6 +5,7 @@ export namespace EventState {
     created?:string;
     modified?:string;
     duration?:string;
+    date?: Date;
     startTime?:string;
     startDate?: Date;
     endTime?:string;

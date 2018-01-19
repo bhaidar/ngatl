@@ -79,18 +79,18 @@ export class EventService extends Cache {
     if (!forceRefresh && stored) {
       console.log('using cached events.');
       // this._parseDates(stored);
-      this._fakeDates(stored);
+      this._fixDates(stored);
       return Observable.of(this._createSessions(stored));
     } else {
       console.log('fetch events fresh!');
-      return this.http.get(`${NetworkCommonService.API_URL}ConferenceEvents`)
+      return this.http.get(`${NetworkCommonService.API_URL}ConferenceEvents`) //?filter%5Bwhere%5D%5Btype%5D=Workshop
         .map((events: Array<EventState.IEvent>) => {
 
           // cache list
           this.cache = events;
           const eventList = [...events];
           this._updatedFavs = false; // reset when getting fresh list
-          this._fakeDates(eventList);
+          this._fixDates(eventList);
           return this._createSessions(eventList);
           // return this._parseDates(eventList);
         });
@@ -101,31 +101,45 @@ export class EventService extends Cache {
     return list.map(i => new Session(i));
   }
 
-  private _fakeDates(list: Array<EventState.IEvent>) {
-    let dateCnt = 0;
+  private _fixDates(list: Array<EventState.IEvent>) {
     for (const ev of list) {
-      let { hour, min, sec } = this._parseTime(ev.startTime);
-      const month = dateCnt > 26 ? 1 : 0;
-      let day = 30;
-      if (dateCnt < 14) {
-        day = 30;
-      } else if (dateCnt < 27) {
-        day = 31;
-      } else if (dateCnt < 39) {
-        day = 1;
-      } else {
-        day = 2;
-      }
-      ev.startDate = new Date(2018,month,day,hour,min,sec,0);
-      const end = this._parseTime(ev.endTime);
-      ev.endDate = new Date(2018,month,day,end.hour,end.min,end.sec,0);
+      this._parseTimes(ev);
       ev.cssClass = 'session-favorite';
       if (this._currentUser && this._currentUser.favs) {
         const isFav = this._currentUser.favs.find(id => id === ev.id);
         ev.isFavorite = !!isFav;
       }
-      dateCnt++;
     }
+  }
+
+  private _parseTimes(ev: EventState.IEvent) {
+    const currentDate = new Date(ev.date);
+    let month = currentDate.getMonth();
+    let day = currentDate.getDate();
+    switch( day) {
+      case 29:
+        month = 0;
+        day = 30;
+        break;
+      case 30:
+        month = 0;
+        day = 31;
+        break;
+      case 31:
+        month = 1;
+        day = 1;
+        break;
+      case 1:
+        month = 1;
+        day = 2;
+        break;  
+    }
+    let {hour, min, sec, ampm} = this._parseTime(ev.startTime);
+    ev.startDate = new Date(2018,month,day,hour,min);
+    ev.startTime = `${hour}:${min < 10 ? ('0'+min) : min} ${ampm}`;
+    const end = this._parseTime(ev.endTime);
+    ev.endDate = new Date(2018,month,day,end.hour,end.min);
+    ev.endTime = `${end.hour}:${end.min < 10 ? ('0'+end.min) : min} ${end.ampm}`;
   }
 
   private _parseTime(time: string) {
@@ -134,10 +148,15 @@ export class EventService extends Cache {
     if (parts.length === 3) {
       hour = parseInt(parts[0]);
       min = parseInt(parts[1]);
-      sec = parseInt(parts[2].split(' ')[0]);
-      return { hour, min, sec };
+      const secParts = parts[2].split(' ');
+      let ampm = 'am';
+      sec = parseInt(secParts[0]);
+      if (secParts.length > 1) {
+        ampm = secParts[1];
+      } 
+      return { hour, min, sec, ampm };
     } else {
-      return { hour: 0, min: 0, sec: 0};
+      return { hour: 0, min: 0, sec: 0, ampm: 'am'};
     }
   }
 
