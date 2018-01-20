@@ -137,11 +137,11 @@ export class RecordService {
         // metering: true,
 
         infoCallback: infoObject => {
-          console.log( JSON.stringify( infoObject ) );
+          // this._log.debug( JSON.stringify( infoObject ) );
         },
 
         errorCallback: errorObject => {
-          console.log( JSON.stringify( errorObject ) );
+          // this._log.debug( JSON.stringify( errorObject ) );
         }
       };
 
@@ -218,7 +218,7 @@ export class RecordService {
     this._resetMeter();
     this._meterInterval = this._win.setInterval( () => {
       this.audioMeter = this._recorder.getMeters();
-      console.log( this.audioMeter );
+      // console.log( this.audioMeter );
     }, 300 );
   }
 
@@ -272,7 +272,7 @@ export class RecordService {
   }
 
   private _playError(err) {
-    console.log( "error playFromFile" );
+    // console.log( "error playFromFile" );
     this.ngZone.run( () => {
       this.progressService.toggleSpinner(false);
       this.isPlaying = false;

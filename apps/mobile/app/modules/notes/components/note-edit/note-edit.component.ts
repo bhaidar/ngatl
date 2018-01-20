@@ -54,6 +54,7 @@ export class NoteEditComponent extends BaseComponent {//BaseModalComponent {
     // super(store, page, params);
     super();
     this.ios = isIOS;
+    this._appService.currentVcRef = this._vcRef;
     // this.customClose = this._customCloseFn.bind(this);
     // if (this.params && this.params.context) {
     //   this.item = <UserState.IConferenceAttendeeNote>Object.assign({}, this.params.context.item);

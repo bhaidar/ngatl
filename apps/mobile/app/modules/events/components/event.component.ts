@@ -255,7 +255,7 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
           this._scheduledIds.push(item.id);
         }
         const speaker = item.type !== item.speaker && item.speaker ? ' by ' + item.speaker : '';
-        const title = `15 mins! ${item.type}${speaker}`
+        const title = `In 15 mins: ${item.type}${speaker}`
         localNotifications.schedule([{
           id: <any>item.id,
           title,

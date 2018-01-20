@@ -27,7 +27,7 @@
         pullToRefresh="true" 
         (pullToRefreshInitiated)="onPullRefreshInitiated($event)">
         <ng-template tkListItemTemplate let-item="item">
-          <GridLayout class="card scanned" rows="auto,10,auto" columns="auto,10,*,auto" (tap)="openItem(item)">
+          <GridLayout class="card scanned" rows="auto,10,auto" columns="auto,10,*,auto" (tap)="openItem(item)" [touchColor]="'#151F2F,#273957'">
             <!-- <Image [src]="item.image" horizontalAlignment="center" class="w-full" backgroundColor="#fff"></Image> -->
             <Label [text]="'ion-social-angular-outline' | fonticon" class="ion t-30 c-ngatl-red" row="0" col="0"></Label>
             
