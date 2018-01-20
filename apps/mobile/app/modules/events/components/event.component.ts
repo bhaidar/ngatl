@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnInit, NgZone, ViewContainerRef } from '@angular/core';
+import { Component, AfterViewInit, OnInit, NgZone, ViewContainerRef, ChangeDetectorRef } from '@angular/core';
 
 // libs
 import { Store } from '@ngrx/store';
@@ -51,11 +51,14 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
   private _listview: ListView;
   private _toggleFavTimeout: number;
   private _scheduledIds: Array<string> = [];
+  // used for share text messaging
+  private _conferenceInProgress = false;
 
   constructor(
     private store: Store<any>,
     private log: LogService,
     private ngZone: NgZone,
+    private cdRef: ChangeDetectorRef,
     private vcRef: ViewContainerRef,
     private appService: NSAppService,
     private win: WindowService,
@@ -84,7 +87,11 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
     const month = today.getMonth();
     console.log( 'month:', month );
     if ( month === 0 || month === 1 ) {
-      switch ( today.getDate() ) {
+      const day = today.getDate();
+      if ([30,31,1,2].includes(day)) {
+        this._conferenceInProgress = true;
+      }
+      switch ( day ) {
         case 30:
           this.selectedDay = 0;
           break;
@@ -146,6 +153,11 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
     this.renderView = true;
   }
 
+  public ngAfterViewChecked() {
+    // helps solves ExpressionChangedAfterItHasBeenCheckedError exception with angular
+    this.cdRef.detectChanges();
+  }
+
   public listviewLoaded(e) {
     if (isIOS && e) {
       const listview = e.object;
@@ -168,7 +180,8 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
   }
 
   public shareDetails(item: EventState.IEvent) {
-    shareText(`Enjoying #ngAtlanta session '${item.name}' by ${item.speaker} #angular http://ng-atl.org`);
+    const startText = this._conferenceInProgress ? 'Enjoying' : 'Enjoyed';
+    shareText(`${startText} #ngAtlanta session '${item.name}' by ${item.speaker} #angular http://ng-atl.org`);
   }
 
   public onDayChange( args ) {
@@ -255,11 +268,26 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
           this._scheduledIds.push(item.id);
         }
         const speaker = item.type !== item.speaker && item.speaker ? ' by ' + item.speaker : '';
-        const title = `In 15 mins: ${item.type}${speaker}`
+        const title = `In 15 mins: ${item.type}${speaker}`;
+        const date = new Date(item.date);
+        const startTimeParts = item.startTime.split(':');
+        if (startTimeParts && startTimeParts.length === 3) {
+          let hour = parseInt(startTimeParts[0], 10);
+          const min = parseInt(startTimeParts[1], 10);
+          const ampmParts = startTimeParts[2].split(' ');
+          let isPm = false;
+          if (ampmParts && ampmParts.length === 2) {
+            isPm = ampmParts[1].toLowerCase() === 'pm';
+          }
+          date.setHours(isPm ? (hour+12) : hour);
+          date.setMinutes(min);
+          this.log.debug('15 mins before start of event:', date);
+        }
         localNotifications.schedule([{
           id: <any>item.id,
           title,
           body: item.name,
+          // at: subMinutes(date,15), // PRODUCTION - Bring back before release!!
           at: addSeconds(new Date(), 10),
           badge: 1
         }]);

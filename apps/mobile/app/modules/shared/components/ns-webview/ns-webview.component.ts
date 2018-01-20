@@ -47,8 +47,4 @@ export class NSWebViewComponent extends BaseModalComponent {
       (<android.webkit.WebView>view.nativeView).getSettings().setDomStorageEnabled(true);
     }
   }
-
-  public close() {
-    this.params.closeCallback();
-  }
 }

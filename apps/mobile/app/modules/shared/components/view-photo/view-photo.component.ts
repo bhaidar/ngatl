@@ -3,13 +3,11 @@ import { Component, NgZone } from '@angular/core';
 // libs
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
-import { ProgressIndicatorActions, UserState, WindowService, UserActions, ProgressService } from '@ngatl/core';
+import { ProgressIndicatorActions, UserState, WindowService, UserActions, ProgressService, ModalActions } from '@ngatl/core';
 import { isIOS } from 'tns-core-modules/platform';
 import { WebView } from 'tns-core-modules/ui/web-view';
 import { Page } from 'tns-core-modules/ui/page';
-import * as tnsHttp from 'tns-core-modules/http';
 import { ModalDialogParams } from 'nativescript-angular/directives/dialogs';
-import { shareImage } from 'nativescript-social-share';
 
 // app
 import { NSAppService } from '../../../core/services/ns-app.service';
@@ -44,17 +42,9 @@ export class ViewPhotoComponent extends BaseModalComponent {
   }
 
   public share() {
-    this._progressService.toggleSpinner(true);
-    tnsHttp.getImage(this.url).then((imageSource) => {
-      this._ngZone.run(() => {
-        this._progressService.toggleSpinner();
-      });
-      shareImage(imageSource, `From ngAtl 2018`);
-    }, (err) => {
-      this._ngZone.run(() => {
-        this._progressService.toggleSpinner();
-      });
-      this._win.alert(this._translate.instant('general.error'));
+    super.close({
+      name: 'share-photo',
+      value: this.url
     });
   }
 
@@ -72,9 +62,5 @@ export class ViewPhotoComponent extends BaseModalComponent {
         })
       }
     });
-  }
-
-  public close() {
-    this.params.closeCallback();
   }
 }

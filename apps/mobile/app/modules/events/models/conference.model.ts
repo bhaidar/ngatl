@@ -12,6 +12,7 @@ export class Session extends observable.Observable implements EventState.IEvent 
     public name:string;
     public created:string;
     public modified:string;
+    public date: Date;
     public duration:string;
     public startTime:string;
     public startDate: Date;

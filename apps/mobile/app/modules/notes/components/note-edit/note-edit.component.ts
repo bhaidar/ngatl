@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 // libs
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
-import { ProgressIndicatorActions, UserActions, UserState, ProgressService, WindowService, LogService, BaseComponent, ModalActions } from '@ngatl/core';
+import { ProgressIndicatorActions, UserActions, UserState, ProgressService, WindowService, LogService, BaseComponent, ModalActions, IAppState, UIState, ModalState, isObject } from '@ngatl/core';
 import { isIOS } from 'tns-core-modules/platform';
 import { WebView } from 'tns-core-modules/ui/web-view';
 import { Page } from 'tns-core-modules/ui/page';
@@ -13,6 +13,8 @@ import { Page } from 'tns-core-modules/ui/page';
 import { ModalDialogParams } from 'nativescript-angular/directives/dialogs';
 import { CheckBox } from 'nativescript-checkbox';
 import { RouterExtensions } from 'nativescript-angular/router';
+import * as tnsHttp from 'tns-core-modules/http';
+import { shareImage } from 'nativescript-social-share';
 
 // app
 import { NSAppService } from '../../../core/services/ns-app.service';
@@ -81,6 +83,30 @@ export class NoteEditComponent extends BaseComponent {//BaseModalComponent {
               }
             }
           });
+
+    this.store.select((s: IAppState) => s.ui.modal)
+          .takeUntil(this.destroy$)
+          .subscribe((s: ModalState.IState) => {
+            if (isObject(s.latestResult) && s.latestResult.name === 'share-photo') {
+              this.progress.toggleSpinner(true);
+              tnsHttp.getImage(s.latestResult.value).then((imageSource) => {
+                // this._ngZone.run(() => {
+                // });
+                this.win.setTimeout(_ => {
+                  this.progress.toggleSpinner();
+                  shareImage(imageSource, `From ngAtl 2018 #ngAtlanta`);
+                }, 300);
+              }, (err) => {
+                // this._ngZone.run(() => {
+                // });
+                this.win.setTimeout(_ => {
+                  this.progress.toggleSpinner();
+                  this.win.alert(this._translate.instant('general.error'));
+                }, 300);
+              });
+              this._appService.resetModal();
+            }
+          })
 
     this.recordService.transcription$
       .takeUntil(this.destroy$)

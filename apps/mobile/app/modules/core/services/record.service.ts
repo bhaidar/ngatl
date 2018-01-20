@@ -287,22 +287,27 @@ export class RecordService {
 
   public saveRecording() {
     return new Promise((resolve, reject) => {
-      if (!this._fileState.isRemote) { // needs saving
-        const file = File.fromPath(this._fileState.path);
-        if (file) {
-          this._aws.upload(file).then((url) => {
-            resolve(url);
-          }, err => {
+      if (this.filepath) {
+        if (!this._fileState.isRemote) { // needs saving
+          const file = File.fromPath(this.filepath);
+          if (file) {
+            this._aws.upload(file).then((url) => {
+              resolve(url);
+            }, err => {
+              reject();
+            });
+          } else {
             reject();
-          });
+          }
+        } else if (this._fileState.isRemote) {
+          // already saved remotely
+          resolve(this.filepath);
         } else {
           reject();
         }
-      } else if (this._fileState.isRemote) {
-        // already saved remotely
-        resolve(this.filepath);
       } else {
-        reject();
+        // no audio file to save
+        resolve(null);
       }
     });
   }
