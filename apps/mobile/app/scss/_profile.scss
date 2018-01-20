@@ -29,6 +29,8 @@
   width: 80;
   height: 80;
   border-radius: 40;
+
+  
 }
 
 .top-border {
@@ -129,6 +131,10 @@
 
   &.static {
     background-color: $black;
+  }
+
+  &.darker {
+    background-color: #444;
   }
 }
 

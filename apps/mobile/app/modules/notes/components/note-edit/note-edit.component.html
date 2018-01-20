@@ -1,0 +1,66 @@
+<ngatl-ns-action-bar-back [title]="item?.peer?.name || 'Unknown'" [backGuard]="backGuard" [rightButtonLabel]="'general.save' | translate" (rightButtonTap)="save()"></ngatl-ns-action-bar-back>
+
+<GridLayout rows="auto,200,auto,*" columns="*" class="w-full h-full c-bg-black" *ngIf="renderView">
+  <!-- <ngatl-ns-modal-title-bar [title]="item?.peer?.name || 'Unknown'" [params]="params" [customClose]="customClose" row="0" col="0"></ngatl-ns-modal-title-bar> -->
+  <StackLayout row="1" col="0" class="note-section">
+    <TextView hint="Add notes..." [(ngModel)]="item.note" editable="true" class="w-full h-full t-20 note-area c-white"></TextView>
+  </StackLayout>
+  <GridLayout row="2" col="0" padding="10" rows="auto" columns="auto,*,auto">
+    <GridLayout rows="auto,auto" columns="auto,60,auto" row="0" col="0">
+      <Button [text]="recordService.isPlaying ? ('ion-stop' | fonticon) : ('ion-ios-play' | fonticon)" (tap)="togglePlay()" class="ion c-white t-40" [class.disabled]="recordService.isRecording || !recordService.filepath" row="0" col="0"></Button> 
+      <Label [text]="recordService.duration$ | async" class="c-white t-14 m-x-5 text-center" row="0" col="1"></Label>
+      <Button [text]="recordService.isRecording ? ('ion-stop' | fonticon) : ('ion-record' | fonticon)" (tap)="toggleRecord()" class="ion c-white t-40" [class.c-ngatl-red]="!recordService.isRecording" [class.disabled]="recordService.isPlaying" row="0" col="2"></Button> 
+    </GridLayout>
+    <!-- <Button [text]="'general.save' | translate" (tap)="save()" class="btn btn-primary" row="0" col="2"></Button>    -->
+    <StackLayout *ngIf="ios"
+        row="0" col="2"
+        orientation="horizontal"
+        class="checkbox-layout transcribe">
+        <CheckBox
+          verticalAlignment="top"
+          class="checkbox-item checkbox-transcribe"
+          [checked]="recordService.autoTranscribe"
+          (loaded)="checkboxLoaded($event)"
+          (checkedChange)="checkedChange($event)"
+          fontSize="20"
+          onTintColor="#b52d31"
+          ios:fillColor="#b52d31">
+        </CheckBox>
+        <Label [text]="'user.auto-transcribe' | translate" class="label text-right" (tap)="toggleAutoTranscribe()"></Label>
+      </StackLayout>
+  </GridLayout>
+  <GridLayout class="form-content static" rows="*" row="3" col="0">
+    <ScrollView row="0" class="fields-section static">
+      <StackLayout>
+        <StackLayout class="line darker m-b-5"></StackLayout>
+        <ScrollView orientation="horizontal">
+          <StackLayout orientation="horizontal">
+            <ns-picture (uploadedImage)="uploadedImage($event)" [addOnly]="true"></ns-picture>
+            <Image [src]="url" *ngFor="let url of item?.photos" height="75" width="75" marginRight="5" (tap)="viewPhoto(url)"></Image>
+          </StackLayout>
+        </ScrollView>
+        <StackLayout class="line darker"></StackLayout>
+        <!-- Email -->
+        <GridLayout ios:columns="auto,*" android:rows="auto, auto" verticalAlignment="top" class="m-t-8">
+          <!-- <Label [text]="'user.email' | translate" class="field-title"></Label> -->
+          <Label [text]="item?.peer?.email" class="field static text-center" ios:col="1" android:row="1" (tap)="email()"></Label>
+        </GridLayout>
+        <StackLayout class="line darker"></StackLayout>
+        <!-- Phone -->
+        <GridLayout ios:columns="auto,*" android:rows="auto, auto" verticalAlignment="top" *ngIf="item?.peer?.phone">
+          <!-- <Label [text]="'user.phone' | translate" class="field-title"></Label> -->
+          <Label [text]="item?.peer?.phone" class="field static text-center" ios:col="1" android:row="1" (tap)="phone()"></Label>
+        </GridLayout>
+        <StackLayout class="line darker"></StackLayout>
+        <!-- Company -->
+        <GridLayout ios:columns="auto,*" android:rows="auto, auto" verticalAlignment="top">
+          <Label [text]="'user.company' | translate" class="field-title"></Label>
+          <Label [text]="item?.peer?.company" class="field static-white" ios:col="1" android:row="1"></Label>
+        </GridLayout>
+        <StackLayout class="line darker"></StackLayout>
+        <Image [src]="item?.peer?.imageUrl" class="profile-picture" horizontalAlignment="center" *ngIf="item?.peer?.imageUrl"></Image>
+        
+      </StackLayout>
+    </ScrollView>
+  </GridLayout>
+</GridLayout>

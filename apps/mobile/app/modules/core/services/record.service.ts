@@ -19,7 +19,9 @@ import {
   IAppState,
   LogService,
   WindowService,
+  UserService,
 } from '@ngatl/core';
+import { AWSService } from './aws.service';
 
 @Injectable()
 export class RecordService {
@@ -45,6 +47,8 @@ export class RecordService {
     private _log: LogService,
     private _win: WindowService,
     private _translate: TranslateService,
+    private _userService: UserService,
+    private _aws: AWSService,
   ) {
 
     this._player = new TNSPlayer();
@@ -108,7 +112,7 @@ export class RecordService {
         return;
       }
 
-      const filename = `recording-${Date.now()}.${this.platformExtension()}`;
+      const filename = `${this._userService.currentUserId || ''}recording-${Date.now()}.${this.platformExtension()}`;
       this._fileState.path = path.join( knownFolders.documents().path, filename );
       this._fileState.isRemote = false;
 
@@ -284,15 +288,16 @@ export class RecordService {
   public saveRecording() {
     return new Promise((resolve, reject) => {
       if (!this._fileState.isRemote) { // needs saving
-        // TODO dispatch action to upload and create cdn url
-        // wire up subscription or do manual api to resolve directly the url 
-        // this.progressService.toggleSpinner(true, { message: this._translate.instant('audio.saving')});
-        // this._http.post(`${NetworkCommonService.API_URL}ConferenceAttendeeNotes`)
-        //   .map()
-        //   .subscribe((result) => {
-        //     resolve(result);
-        //   });
-        resolve(this.filepath); // remove this line when ready
+        const file = File.fromPath(this._fileState.path);
+        if (file) {
+          this._aws.upload(file).then((url) => {
+            resolve(url);
+          }, err => {
+            reject();
+          });
+        } else {
+          reject();
+        }
       } else if (this._fileState.isRemote) {
         // already saved remotely
         resolve(this.filepath);

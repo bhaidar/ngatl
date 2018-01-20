@@ -46,7 +46,7 @@ export class CameraModalComponent {
     _page.backgroundSpanUnderStatusBar = true;
     _page.backgroundColor = new Color('#000');
     this.close = this._closeFn.bind(this);
-    this.containerHeight = screen.mainScreen.heightDIPs - 75; // minus actionbar area at top
+    this.containerHeight = screen.mainScreen.heightDIPs - 150; // minus actionbar area at top
     if (isIOS) {
       // only for iOS (these buttons crash Android)
       this.showToggleIcon = true;

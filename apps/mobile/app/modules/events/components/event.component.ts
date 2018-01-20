@@ -18,10 +18,12 @@ import { SegmentedBarItem, SegmentedBar } from 'tns-core-modules/ui/segmented-ba
 import * as utils from "tns-core-modules/utils/utils";
 import { CheckBox } from 'nativescript-checkbox';
 import { shareText } from 'nativescript-social-share';
+import * as localNotifications from "nativescript-local-notifications";
+import { addSeconds, subMinutes } from 'date-fns';
 
 // app
 import { LoggerService } from '@ngatl/api';
-import { LocaleState, IAppState, BaseComponent, LogService, WindowService, ProgressService, UserService } from '@ngatl/core';
+import { LocaleState, IAppState, BaseComponent, LogService, WindowService, ProgressService, UserService, UserState } from '@ngatl/core';
 import { LinearGradient } from '../../../helpers';
 import { NSAppService } from '../../core/services/ns-app.service';
 import { ConferenceViewModel, Session } from '../models/conference.model';
@@ -48,6 +50,7 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
   private _checkbox: CheckBox;
   private _listview: ListView;
   private _toggleFavTimeout: number;
+  private _scheduledIds: Array<string> = [];
 
   constructor(
     private store: Store<any>,
@@ -102,6 +105,12 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
 
   ngOnInit() {
 
+    localNotifications.getScheduledIds().then(ids => {
+      if (ids) {
+        this._scheduledIds = ids;
+      }
+    });
+
     // this.store.select( ( s: IAppState ) => s.ui.locale )
     //   .takeUntil( this.destroy$ )
     //   .subscribe( ( locale: LocaleState.Locale ) => {
@@ -118,6 +127,10 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
     //     this.locale = `${locale}-${suffix}`;
     //     console.log( 'setting locale for calendar:', this.locale )
     //   } );
+
+    if (this.appService.currentUser && this.appService.currentUser.favs && this.appService.currentUser.favs.length) {
+      this.eventService.origFavs = [...this.appService.currentUser.favs];
+    }
 
     this.search$
       .debounceTime( 500 )
@@ -217,36 +230,40 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
     this._checkbox = e.object;
   }
 
-  public onDateSelected( e ) {
-    console.log( 'onDateSelected:' );
-    console.log( e );
-    if ( e ) {
-      for ( const key in e ) {
-        console.log( key, e[key] );
-      }
-    }
-  }
-
+  // binding scope
   public toggleItemFav(item: Session) {
     if (this.userService.isAuthenticated()) {
       item.toggleFavorite();
+      const index = this.eventService.conferenceModel.fullSchedule.findIndex(e => e.id === item.id);
+      if (index > -1) {
+        // keep full schedule up to date
+        this.eventService.conferenceModel.fullSchedule[index].isFavorite = item.isFavorite;
+      }
       this.win.setTimeout(_ => {
         this.getListView().refresh();
-      }, 500);
-
-      // TODO: PERSIST fav details
-      // this._toggleFavTimeout = this.win.setTimeout(_ => {
-
-      // });
+      }, 601);
+      this._updateLocalNotify(item);
     } else {
       this.win.alert(this.translate.instant('user.require-auth'));
     }
   }
 
-  private _resetToggleTimeout() {
-    if (typeof this._toggleFavTimeout !== 'undefined') {
-      this.win.clearTimeout(this._toggleFavTimeout);
-      this._toggleFavTimeout = undefined;
+  private _updateLocalNotify(item: Session) {
+    if (item) {
+      if (item.isFavorite) {
+        if (!this._scheduledIds.includes(item.id)) {
+          this._scheduledIds.push(item.id);
+        }
+        localNotifications.schedule([{
+          id: <any>item.id,
+          title: item.name,
+          body: item.speaker ? `by ${item.speaker}` : 'ngAtl Workshop happening in 15 mins!',
+          at: addSeconds(new Date(), 10),
+          badge: 1
+        }]);
+      } else if (this._scheduledIds.includes(item.id)) {
+        localNotifications.cancel(<any>item.id);
+      }
     }
   }
 

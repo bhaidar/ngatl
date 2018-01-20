@@ -1,6 +1,9 @@
 // angular
 import { Injectable } from '@angular/core';
 
+// libs
+// import { Subject } from 'rxjs/Subject';
+
 // app
 import { isObject, isNativeScript } from '../../helpers';
 
@@ -36,11 +39,17 @@ export class WindowPlatformService {
 @Injectable()
 export class WindowService {
 
+  // private _showToast: Subject<string> = new Subject();
+
   constructor(
     private _platformWindow: WindowPlatformService,
   ) {
 
   }
+
+  // public get showToast$() {
+  //   return this._showToast;
+  // }
 
   public get navigator() {
     return this._platformWindow.navigator;

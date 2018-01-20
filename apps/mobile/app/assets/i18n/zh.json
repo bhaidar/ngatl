@@ -9,6 +9,7 @@
     "conduct": "行為守則",
     "about": "關於",
     "credits": "積分",
+    "story": "起源的故事",
     "copyright": "2018 ngATL 由__建造 nStudio"
   },
   "error": {
@@ -32,6 +33,8 @@
     "delete-lbl": "刪除"
   },
   "general": {
+    "picture": "图片",
+    "back": "背部",
     "need-help": "需要幫忙？",
     "help": "幫幫我",
     "email-us": "請發送電子郵件至info@ng-atl.org",
@@ -45,6 +48,8 @@
     "ngatl-text-msg": "嗨，這個ngAtl會議真棒！ 我想伸手打個招呼。"
   },
   "user": {
+    "save-favs": "保存收藏夹...",
+    "add-notes": "添加备注...",
     "require-auth": "请声明您的徽章登录并使用此功能！",
     "language": "语言",
     "badge-claim": "這是你的徽章嗎？",

@@ -84,9 +84,9 @@ export class UserEffects extends Analytics {
           // TODO: use real/secure token
           // this._userService.token = 'admin-token';
           this._userService.token = this._userService.getTokenHash(user.attendee.id);
-          this._win.setTimeout(_ => {
-            this._win.alert(`${this._translate.instant('user.logged-in')} ${user.attendee.name}`);
-          }, 300);
+          // this._win.setTimeout(_ => {
+          //   this._win.alert(`${this._translate.instant('user.logged-in')} ${user.attendee.name}`);
+          // }, 300);
           return new UserActions.RefreshUserAction( user.attendee.id );
         } else {
           return new UserActions.LoginFailedAction( 'login failed' );
@@ -246,9 +246,12 @@ export class UserEffects extends Analytics {
         return this._userService.findUser( action.payload.badgeGuid, state.user.scanned )
           .map( ( foundUser ) => {
             // this._progressService.toggleSpinner(false);
+            this._log.debug('foundUser:', foundUser);
             if ( foundUser ) {
               if ( state.user.current ) {
                 // authenticated
+                this._log.debug('state.user.current.id:', state.user.current.id);
+                this._log.debug('foundUser.attendee.id:', foundUser.attendee.id);
                 if (state.user.current.id === foundUser.attendee.id) {
                   // re-scanning yourself for fun
                   this._win.setTimeout( _ => {
@@ -305,6 +308,7 @@ export class UserEffects extends Analytics {
           const currentScanned = state.user.current.notes || [];
           const alreadyScanned = currentScanned.find( u => u.peerAttendeeId === action.payload.attendee.id );
           this._currentScanAttendee = action.payload.attendee;
+          this._log.debug('alreadyScanned:', alreadyScanned);
           if ( alreadyScanned ) {
             this._win.setTimeout( _ => {
               this._win.alert( `${this._translate.instant( 'user.already-scanned' )} ${alreadyScanned.peer.name}.` );
@@ -348,25 +352,25 @@ export class UserEffects extends Analytics {
         this._log.debug( 'loadUser:', action.payload );
         return this._userService.loadUser( action.payload )
           .map( ( result: UserState.IRegisteredUser ) => {
-            if ( result && result.notes && ( this._currentScanAttendee || this._currentSavedNotes ) ) {
-              // update with appropriate name
-              // TODO: won't need this when Bram can add name in there
-              for ( let i = 0; i < result.notes.length; i++ ) {
-                if ( this._currentScanAttendee ) {
-                  if ( result.notes[i].peerAttendeeId === this._currentScanAttendee.id ) {
-                    result.notes[i].name = this._currentScanAttendee.name;
-                    break;
-                  }
-                } else if ( this._currentSavedNotes && this._currentSavedNotes.length ) {
-                  const savedNote = this._currentSavedNotes.find( n => n.id === result.notes[i].id );
-                  if ( savedNote ) {
-                    // ensure names are preserved
-                    result.notes[i].peer.name = savedNote.peer.name;
-                  }
-                }
-              }
-            }
-            this._currentScanAttendee = this._currentSavedNotes = null; // reset
+            // if ( result && result.notes && ( this._currentScanAttendee || this._currentSavedNotes ) ) {
+            //   // update with appropriate name
+            //   // TODO: won't need this when Bram can add name in there
+            //   for ( let i = 0; i < result.notes.length; i++ ) {
+            //     if ( this._currentScanAttendee ) {
+            //       if ( result.notes[i].peerAttendeeId === this._currentScanAttendee.id ) {
+            //         result.notes[i].name = this._currentScanAttendee.name;
+            //         break;
+            //       }
+            //     } else if ( this._currentSavedNotes && this._currentSavedNotes.length ) {
+            //       const savedNote = this._currentSavedNotes.find( n => n.id === result.notes[i].id );
+            //       if ( savedNote ) {
+            //         // ensure names are preserved
+            //         result.notes[i].peer.name = savedNote.peer.name;
+            //       }
+            //     }
+            //   }
+            // }
+            // this._currentScanAttendee = this._currentSavedNotes = null; // reset
             this._userService.persistUser( result );
             return new UserActions.ChangedAction( {
               current: result

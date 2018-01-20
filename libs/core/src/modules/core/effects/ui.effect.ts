@@ -14,6 +14,7 @@ import { TranslateService } from '@ngx-translate/core';
 // module
 import { AnalyticsService } from '../../analytics/services/analytics.service';
 import { Tracking } from '../../helpers';
+import { LogService } from '../services/log.service';
 import { ModalService } from '../services/modal.service';
 import { ProgressService } from '../services/progress.service';
 import {
@@ -53,6 +54,7 @@ export class UIEffects {
     this._actions$
         .ofType(ModalActions.ActionTypes.OPEN)
         .map((action: ModalActions.OpenAction) => {
+          this._log.debug('calling modal.open');
           const details = this._modal.open(action.payload);
           // this.analytics.track(Tracking.Actions.DIALOG_OPEN, {
           //   category : Tracking.Categories.DIALOGS,
@@ -154,6 +156,7 @@ export class UIEffects {
     private _store: Store<IAppState>,
     private _actions$: Actions,
     private _modal: ModalService,
+    private _log: LogService,
     private _localeService: LocaleService,
     private _translateService: TranslateService,
     // instantiates service automatically

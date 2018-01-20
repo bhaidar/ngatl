@@ -21,10 +21,9 @@ export class ModalTitleBarComponent implements OnInit {
   @Input() title: string;
   @Input() closeText: string;
   @Input() showMoreButton: boolean;
+  @Input() moreIcon: string;
   @Output() moreAction: EventEmitter<any> = new EventEmitter();
   @Input() customClose: () => void;
-
-  public moreIcon: string;
 
   constructor(
     private _store: Store<any>,
@@ -36,7 +35,9 @@ export class ModalTitleBarComponent implements OnInit {
       this.closeText = this._translate.instant('dialogs.close'); // default
     }
 
-    this.moreIcon = moreIcon();
+    if (!this.moreIcon) {
+      this.moreIcon = moreIcon();
+    }
   }
 
   public more(e) {

@@ -152,8 +152,20 @@ ListView {
     padding: 5 0 5 12;
     // background-color: $dark-blue;
     .label {
-        margin: 0 10;
+        margin: 0 0 0 10;
         color: $gold;
+    }
+
+    .checkbox-item {
+        &.checkbox-transcribe {
+            margin-top: 7;
+        }
+    }
+
+    &.transcribe {
+        .label {
+            color: $ngatl-red;
+        }
     }
 }
 

@@ -7,9 +7,9 @@
     <Button [text]="'ion-navicon' | fonticon" class="ion action-item" [class.ready]="ready" [class.intro]="intro"></Button>
   </ActionItem>
   <ActionItem (tap)="openProfileOrHelp()" ios.position="right">
-    <Button [text]="currentUser ? ('ion-person' | fonticon) : ('ion-ios-help' | fonticon)" class="ion action-item" [class.ready]="ready" [class.intro]="intro"></Button>
+    <Button [text]="(appService.currentUser$ | async) ? ('ion-person' | fonticon) : ('ion-ios-help' | fonticon)" class="ion action-item" [class.ready]="ready" [class.intro]="intro"></Button>
   </ActionItem>
-  <!-- <ActionItem (tap)="openHelp()" ios.position="right" *ngIf="!currentUser">
+  <!-- <ActionItem (tap)="openHelp()" ios.position="right" *ngIf="!appService.currentUser">
     <Button [text]="'ion-ios-help' | fonticon" class="ion action-item help" [class.ready]="ready" [class.intro]="intro"></Button>
   </ActionItem> -->
 </ActionBar>

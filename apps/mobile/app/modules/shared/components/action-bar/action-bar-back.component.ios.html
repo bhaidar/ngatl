@@ -1,6 +1,30 @@
-<ActionBar [title]="title" class="action-bar">
-  <NavigationButton text="Back"></NavigationButton>
-  <ActionItem (tap)="rightButtonTap.emit(true)" ios.position="right" *ngIf="showMoreIcon">
-    <Button [text]="moreIcon | fonticon" class="ion action-item"></Button>
+<!-- <ActionBar [title]="title" class="action-bar">
+  <NavigationButton [text]="'general.back' | translate"></NavigationButton>
+</ActionBar> -->
+
+<ActionBar
+  class="action-bar"
+  [title]="title">
+  <NavigationButton
+    [text]="'general.back' | translate"
+    [visibility]="backGuard  ? 'collapsed' : 'visible'">
+  </NavigationButton>
+  <ActionItem
+  [text]="'general.back' | translate"
+    ios.position="left"
+    (tap)="back()"
+    class="action-item"
+    *ngIf="backGuard">
+  </ActionItem>
+  <ActionItem
+    [text]="rightButtonLabel"
+    (tap)="rightButtonTap.next(true)"
+    ios.position="right"
+    class="action-item"
+    *ngIf="rightButtonLabel">
+    <!-- <Button
+      [text]="rightButtonLabel"
+      class="action-item text-right">
+    </Button> -->
   </ActionItem>
 </ActionBar>

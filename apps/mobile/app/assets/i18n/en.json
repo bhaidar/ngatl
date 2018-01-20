@@ -33,6 +33,8 @@
     "delete-lbl": "Delete"
   },
   "general": {
+    "picture": "Picture",
+    "back": "Back",
     "need-help": "Need Help?",
     "help": "Help",
     "email-us": "Email us at info@ng-atl.org",
@@ -47,6 +49,8 @@
       "Hi, this ngAtl conference is awesome! I wanted to reach out and say hello."
   },
   "user": {
+    "save-favs": "Saving favorites...",
+    "add-notes": "Add notes...",
     "require-auth": "Please claim your badge to login and use this feature!",
     "language": "Language",
     "badge-claim": "Is this your badge",

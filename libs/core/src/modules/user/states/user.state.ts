@@ -10,6 +10,7 @@ export namespace UserState {
     note?: string;
     audioUrl?: string;
     imageUrl?: string;
+    photos?: Array<string>;
     conferenceAttendeeId?: string;
     created?: string;
     modified?: string;

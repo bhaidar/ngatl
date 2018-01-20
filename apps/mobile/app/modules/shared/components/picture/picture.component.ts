@@ -14,6 +14,7 @@ import { isIOS, } from 'tns-core-modules/platform';
 import { isAndroid } from 'tns-core-modules/platform';
 import { ImageFormat } from 'tns-core-modules/ui/enums';
 import * as TNSUtils from 'tns-core-modules/utils/utils';
+import { File, path, knownFolders } from 'tns-core-modules/file-system';
 import {
   fromNativeSource,
   fromAsset,
@@ -35,8 +36,10 @@ import {
   ModalState,
   safeSplit,
   BaseComponent,
+  UserService,
 } from '@ngatl/core';
 // app
+import { AWSService } from '../../../core/services/aws.service';
 import { NSAppService } from '../../../core/services/ns-app.service';
 import { CameraModalComponent } from '../camera-modal/camera-modal.component';
 import { TranslateService } from '@ngx-translate/core';
@@ -62,6 +65,10 @@ export class PictureComponent extends BaseComponent implements OnInit {
 
   @Input()
   public selectedImage: ImageAsset | ImageSource | string;
+  @Input()
+  public addOnly: boolean;
+  @Output()
+  public uploadedImage: EventEmitter<string> = new EventEmitter();
   @Output()
   public deleteImage: EventEmitter<boolean> = new EventEmitter();
 
@@ -98,6 +105,8 @@ export class PictureComponent extends BaseComponent implements OnInit {
     private _win: WindowService,
     private _cdRef: ChangeDetectorRef,
     private _translateService: TranslateService,
+    private _userService: UserService,
+    private _awsService: AWSService,
   ) {
     super();
     this._cropper = new ImageCropper();
@@ -209,14 +218,12 @@ export class PictureComponent extends BaseComponent implements OnInit {
           okButtonText : this.okButtonText,
           cancelButtonText : this.cancelButtonText,
         };
-        (<any>this._win.confirm(<any>confirmOptions)).then((r: boolean) => {
-          if ( r ) {
-            this._ngZone.run(() => {
-              this._cropSelected = false;
-              this.selectedImage = null;
-              this.deleteImage.next(true);
-            });
-          }
+        this._win.confirm(<any>confirmOptions, (r: boolean) => {
+          this._ngZone.run(() => {
+            this._cropSelected = false;
+            this.selectedImage = null;
+            this.deleteImage.next(true);
+          });   
         });
         break;
     }
@@ -443,8 +450,8 @@ export class PictureComponent extends BaseComponent implements OnInit {
       this._win.setTimeout(() => {
         try {
           this._cropper.show(asset, {
-            maxWidth,
-            maxHeight,
+            maxWidth: longest,
+            maxHeight: longest, // cropping to square 
             origWidth: imageSource.width,
             origHeight: imageSource.height,
             lockAspect: true,
@@ -454,7 +461,10 @@ export class PictureComponent extends BaseComponent implements OnInit {
               this.log.debug(result.image);
               const imgSrc = result.image;
               this._cropSelected = true; // prevents binding flash
-              this.selectedImage = imgSrc;
+
+              if (!this.addOnly) {
+                this.selectedImage = imgSrc;
+              }
 
               let properFormat: any = 'jpeg';
               switch (format) {
@@ -532,7 +542,14 @@ export class PictureComponent extends BaseComponent implements OnInit {
     properFormat: string,
   ) {
     // JUST A NOTE THAT THIS DOES NOT WORK UNFORTUNATELY: imgSrc.toBase64String(properFormat);
+    this.appService.toggleSpinner(true);
+    const fileName = `${this._userService.currentUserId || ''}-${Date.now()}-image.jpg`;
+    this.log.debug('fileName:', fileName);
+    const filepath = path.join(knownFolders.documents().path, fileName);
+    this.log.debug('filepath:', filepath);
+    // const saved = imageAsset.saveToFile(filepath, "jpg");
 
+    // let base64Image;
     if (isIOS) {
       // NativeScript ImageSource has:
       // imgSrc.toBase64String(properFormat)
@@ -541,37 +558,60 @@ export class PictureComponent extends BaseComponent implements OnInit {
       // use native apis since this provides
       // accurately encoded string.
       const imageData = UIImageJPEGRepresentation(imageAsset.ios, .6);
-      this._base64ImgToUpload = imageData.base64EncodedStringWithOptions(NSDataBase64EncodingOptions.Encoding64CharacterLineLength);
+      imageData.writeToFileAtomically(filepath, true);
+      // base64Image = imageData.base64EncodedStringWithOptions(NSDataBase64EncodingOptions.Encoding64CharacterLineLength);
     } else {
       const bm = imageAsset.android;
       let baos = new java.io.ByteArrayOutputStream();
       bm.compress(android.graphics.Bitmap.CompressFormat.JPEG, 60, baos);
       const byteArrayImage = baos.toByteArray();
+      const javafile = new java.io.File(filepath);
+      const fos = new java.io.FileOutputStream(javafile);
+      fos.write(byteArrayImage);
+      fos.close();
 
-      this._base64ImgToUpload = android.util.Base64.encodeToString(byteArrayImage, android.util.Base64.DEFAULT);
-      baos = undefined;
+      // base64Image = android.util.Base64.encodeToString(byteArrayImage, android.util.Base64.DEFAULT);
+      // baos = undefined;
     }
+    // base64Image = `data:image/jpg;base64,${base64Image}`;
 
-    if (this._base64ImgToUpload) {
-      this._base64ImgToUpload = `data:image/jpg;base64,${this._base64ImgToUpload}`;
-      // this.log.debug('base64Img:');
-      // this.log.debug(base64Img);
-      this._uploadFilename = `attendee-pic-${Date.now()}.${properFormat}`;
-      // this.log.debug('name:', this._uploadFilename);
-      this.appService.toggleSpinner(true);
 
-      this._ngZone.run(() => {
-        // upload the image
-        this.log.debug('TODO - upload image action Bram!');
-        // this.store.dispatch(new FormActions.UploadImageAction({
-        //   name: this._uploadFilename,
-        //   image: this._base64ImgToUpload,
-        // }));
+    this.log.debug('image saved to:', filepath);
+    const file = File.fromPath(filepath);
+    this.log.debug('about to upload file:', file.name);
+
+      this._awsService.upload(file).then((result) => {
+        this.log.debug('uploaded:', result);
+        this._ngZone.run(() => {
+          this._progressService.toggleSpinner(false);
+          this.uploadedImage.next(result);
+        })
+      }, err => {
+        this._showUploadError(9);
       });
-    } else {
 
-      this._showUploadError(9);
-    }
+    
+    // if (this._base64ImgToUpload) {
+    //   this._base64ImgToUpload = `data:image/jpg;base64,${this._base64ImgToUpload}`;
+    //   // this.log.debug('base64Img:');
+    //   // this.log.debug(base64Img);
+    //   this._uploadFilename = `attendee-pic-${Date.now()}.${properFormat}`;
+    //   // this.log.debug('name:', this._uploadFilename);
+    //   this.appService.toggleSpinner(true);
+
+    //   this._ngZone.run(() => {
+    //     // upload the image
+    //     this.log.debug('TODO - upload image action Bram!');
+
+    //     // this.store.dispatch(new FormActions.UploadImageAction({
+    //     //   name: this._uploadFilename,
+    //     //   image: this._base64ImgToUpload,
+    //     // }));
+    //   });
+    // } else {
+
+    //   this._showUploadError(9);
+    // }
   }
 
   private _isHttps(url: string) {

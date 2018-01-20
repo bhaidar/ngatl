@@ -17,6 +17,7 @@ app/**/*.css
 npm-debug.log
 
 # app
+app/assets/aws.json
 !app/assets/font-awesome.min.css
 !app/assets/ionicons.min.css
 !app/SplashScreen.js

@@ -9,6 +9,7 @@
     "conduct": "Código de Conducta",
     "about": "Acerca de",
     "credits": "Créditos",
+    "story": "Historia de origen",
     "copyright": "2018 ngATL, construido por nStudio"
   },
   "error": {
@@ -32,6 +33,8 @@
     "delete-lbl": "Borrar"
   },
   "general": {
+    "picture": "Imagen",
+    "back": "Espalda",
     "need-help": "¿Necesitas ayuda?",
     "help": "Ayuda",
     "email-us": "Envíenos un correo electrónico a info@ng-atl.org",
@@ -46,6 +49,8 @@
       "Hola, esta conferencia ngAtl es increíble! Quería acercarme y decir hola."
   },
   "user": {
+    "save-favs": "Guardando favoritos...",
+    "add-notes": "Agregar notas...",
     "require-auth": "¡Solicite su credencial para iniciar sesión y use esta función!",
     "language": "Idioma",
     "badge-claim": "¿Es esta tu insignia?",

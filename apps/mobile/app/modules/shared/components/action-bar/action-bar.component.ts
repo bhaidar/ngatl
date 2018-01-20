@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { RouterExtensions } from 'nativescript-angular/router';
 
 // app
-import { IAppState, UserState, ModalActions, UserActions, UserService } from '@ngatl/core';
+import { IAppState, UserState, ModalActions, UserActions, UserService, BaseComponent, LogService } from '@ngatl/core';
 import { NSAppService } from '../../../core/services/ns-app.service';
 import { DrawerService } from '../../../core/services/drawer.service';
 import { HelpComponent } from '../help/help.component';
@@ -15,26 +15,21 @@ import { HelpComponent } from '../help/help.component';
   selector: 'ngatl-ns-action-bar',
   templateUrl: 'action-bar.component.html'
 } )
-export class ActionBarComponent {
+export class ActionBarComponent extends BaseComponent {
   @Input() title: string;
   @Input() ready: boolean = true;
   @Input() intro: boolean = false;
   @Output() tappedTop: EventEmitter<boolean> = new EventEmitter();
-  public currentUser: UserState.IRegisteredUser;
 
   constructor(
     private store: Store<IAppState>,
     private router: RouterExtensions,
     private drawer: DrawerService,
+    private log: LogService,
     private userService: UserService,
-    private appService: NSAppService,
-  ) { }
-
-  ngOnInit() {
-    this.store.select( ( s: IAppState ) => s.user )
-      .subscribe( ( s: UserState.IState ) => {
-        this.currentUser = s.current;
-      } )
+    public appService: NSAppService,
+  ) { 
+    super();
   }
 
   public toggleDrawer() {
@@ -43,14 +38,14 @@ export class ActionBarComponent {
 
   public refreshUser() {
     this.tappedTop.next(true);
-    if (this.currentUser) {
+    if (this.appService.currentUser) {
       // could optionally scroll the current notes list to the top by dispatching an event
       this.store.dispatch(new UserActions.RefreshUserAction( this.userService.currentUserId ));
     }
   }
 
   public openProfileOrHelp() {
-    if (this.currentUser) {
+    if (this.appService.currentUser) {
       this.router.navigate( ['/profile'] );
     } else {
       this.store.dispatch(new ModalActions.OpenAction({

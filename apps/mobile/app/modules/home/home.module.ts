@@ -3,7 +3,7 @@ import { NativeScriptRouterModule } from 'nativescript-angular/router';
 import { Routes } from '@angular/router';
 
 import { SharedModule } from '../shared/shared.module';
-import { HOME_COMPONENTS, HomeComponent, DashboardComponent, SampleComponent } from './components';
+import { HOME_COMPONENTS, HomeComponent, DashboardComponent } from './components';
 
 const routes: Routes = [
   {
@@ -15,10 +15,6 @@ const routes: Routes = [
         component: DashboardComponent
       },
       {
-        path: 'sample',
-        component: SampleComponent
-      },
-      {
         path: 'speakers',
         loadChildren: '~/modules/speakers/speaker.module#SpeakerModule'
       },
@@ -28,7 +24,7 @@ const routes: Routes = [
       },
       {
         path: 'events',
-        loadChildren: '~/modules/events/events.module#EventsModule'
+        loadChildren: '~/modules/events/events.module#EventsModule',
       },
       {
         path: 'misc',

@@ -46,6 +46,7 @@ export class ProfileComponent extends BaseComponent
   implements AfterViewInit, OnInit {
   public currentUser: UserState.IRegisteredUser;
   public userLanguage: string;
+  public renderView = false;
   private _langItems = [
     {
       name: 'English',
@@ -149,6 +150,11 @@ export class ProfileComponent extends BaseComponent
 
   }
 
+  public removeImage() {
+    this.currentUser.imageUrl = '';
+    this.save();
+  }
+
   public save() {
     // for (const key in this.currentUser) {
     //   this.log.debug(key, this.currentUser[key]);
@@ -159,6 +165,11 @@ export class ProfileComponent extends BaseComponent
       this.progress.toggleSpinner(false);
       this.win.alert(this.translate.instant('user.updated'));
     }, 1500);
+  }
+
+  public uploadedImage(e) {
+    this.currentUser.imageUrl = e;
+    this.save();
   }
 
   ngOnInit() {
@@ -197,6 +208,7 @@ export class ProfileComponent extends BaseComponent
           } ) );
         }
       } );
+    this.renderView = true;
   }
 
   private _updateLangLabel() {
