@@ -254,10 +254,12 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
         if (!this._scheduledIds.includes(item.id)) {
           this._scheduledIds.push(item.id);
         }
+        const speaker = item.type !== item.speaker && item.speaker ? ' by ' + item.speaker : '';
+        const title = `15 mins! ${item.type}${speaker}`
         localNotifications.schedule([{
           id: <any>item.id,
-          title: item.name,
-          body: item.speaker ? `by ${item.speaker}` : 'ngAtl Workshop happening in 15 mins!',
+          title,
+          body: item.name,
           at: addSeconds(new Date(), 10),
           badge: 1
         }]);
