@@ -10,6 +10,7 @@ import { isIOS, platformNames, device } from 'tns-core-modules/platform';
 import { SearchBar } from 'tns-core-modules/ui/search-bar';
 import { Color } from 'tns-core-modules/color';
 import { View } from 'tns-core-modules/ui/core/view';
+import * as tnsHttp from 'tns-core-modules/http';
 
 // app
 import { LoggerService } from '@ngatl/api';
@@ -59,7 +60,7 @@ export class SpeakerComponent extends BaseComponent implements AfterViewInit, On
     this.store.select( s => s.conference.speakers )
       .takeUntil( this.destroy$ )
       .subscribe( ( speakers: SpeakerState.IState ) => {
-        this._all = speakers.list;
+        this._all = this._adjustImage(speakers.list);
         this.speakerState$.next( this._all );
       } );
 
@@ -69,6 +70,23 @@ export class SpeakerComponent extends BaseComponent implements AfterViewInit, On
       .subscribe( this._searchSpeakers );
 
     this.renderView = true;
+  }
+
+  private _adjustImage(list: Array<any>) {
+    if (list) {
+      list.forEach(i => {
+        i.imageUrl$ = Observable.create(observer => {
+          tnsHttp.getImage(i.imageUrl).then(img => {
+            observer.next(img);
+            observer.complete();
+          }, err => {
+            observer.complete();
+          });
+        });
+      });
+      return [...list];
+    }
+    return [];
   }
 
   public onPullRefreshInitiated(e) {
