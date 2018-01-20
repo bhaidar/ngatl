@@ -188,7 +188,10 @@ export class PictureComponent extends BaseComponent implements OnInit {
           android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
         ] : [], permissionDesc).then((granted: boolean) => {
           if (granted) {
-            this._takePicture();
+            // avoid double dialog present issues
+            this._win.setTimeout(_ => {
+              this._takePicture();
+            }, 400);
           }
         }, () => {
           this.log.debug('no permissions.');

@@ -146,6 +146,10 @@ ListView {
 .note-area {
     background-color:rgba(21,31,47,.8);
     padding: 5;
+
+    &.recording {
+        background-color: $ngatl-red-translucent;
+    }
 }
 
 .checkbox-layout {
