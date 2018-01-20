@@ -161,6 +161,12 @@ ListView {
             margin-top: 7;
         }
     }
+
+    &.transcribe {
+        .label {
+            color: $ngatl-red;
+        }
+    }
 }
 
 .swipe-delete-btn {
