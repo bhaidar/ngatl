@@ -33,8 +33,8 @@
             
             <!-- <StackLayout class="hr-light"></StackLayout> -->
             <Label [text]="item.peer?.name" class="t-20 c-white font-weight-bold label" row="0" col="2"></Label>
-            <Label [text]="'ion-ios-arrow-right' | fonticon" class="ion t-30 c-light-blue label" row="0" col="3"></Label>
-            <Label [text]="item.note ? item.note : ('user.add-notes' | translate)" row="2" colSpan="4" class="t-20 c-light-blue label"></Label>
+            <Label [text]="'ion-ios-arrow-right' | fonticon" class="ion t-30 c-light-blue label" row="0" rowSpan="3" col="3" verticalAlignment="center"></Label>
+            <Label [text]="item.note ? item.note : ('user.add-notes' | translate)" row="2" colSpan="3" class="t-16 c-light-blue label"></Label>
             
           </GridLayout>
         </ng-template>
@@ -46,7 +46,7 @@
         </ng-template> -->
         <ng-template tkListItemSwipeTemplate rows="auto" columns="*,100">
           <GridLayout rows="11,*" columns="*,100">
-            <Button row="1" col="1" [fontSize]="fontSize" [text]="'ion-ios-close' | fonticon" class="ion swipe-delete-btn" (tap)="remove($event)"></Button>
+            <Button row="1" col="1" [text]="'ion-ios-close' | fonticon" class="ion swipe-delete-btn" (tap)="remove($event)"></Button>
           </GridLayout>
         </ng-template>
       </RadListView>

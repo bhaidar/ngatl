@@ -8,7 +8,7 @@
   <GridLayout row="2" col="0" padding="10" rows="auto" columns="auto,*,auto">
     <GridLayout rows="auto,auto" columns="auto,60,auto" row="0" col="0">
       <Button [text]="recordService.isPlaying ? ('ion-stop' | fonticon) : ('ion-ios-play' | fonticon)" (tap)="togglePlay()" class="ion c-white t-40" [class.disabled]="recordService.isRecording || !recordService.filepath" row="0" col="0"></Button> 
-      <Label [text]="recordService.duration$ | async" class="c-white t-14 m-x-5 text-center" row="0" col="1"></Label>
+      <Label [text]="recordService.duration$ | async" class="c-white t-14 m-x-5 text-center" row="0" col="1" verticalAlignment="center"></Label>
       <Button [text]="recordService.isRecording ? ('ion-stop' | fonticon) : ('ion-record' | fonticon)" (tap)="toggleRecord()" class="ion c-white t-40" [class.c-ngatl-red]="!recordService.isRecording" [class.disabled]="recordService.isPlaying" row="0" col="2"></Button> 
     </GridLayout>
     <!-- <Button [text]="'general.save' | translate" (tap)="save()" class="btn btn-primary" row="0" col="2"></Button>    -->
@@ -22,6 +22,7 @@
           [checked]="recordService.autoTranscribe"
           (loaded)="checkboxLoaded($event)"
           (checkedChange)="checkedChange($event)"
+          checkStyle="checkbox_gold"
           fontSize="20"
           onTintColor="#b52d31"
           ios:fillColor="#b52d31">

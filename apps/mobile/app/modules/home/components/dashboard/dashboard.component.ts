@@ -168,7 +168,6 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   public showSwiper = false;
   public showNotes = false;
   public badgeExit = false;
-  public fontSize = 15;
   public scans: Array<UserState.IConferenceAttendeeNote> = [];
   private _barcode: BarcodeScanner;
   private _swipeItemIndex: number;
@@ -505,7 +504,9 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
 
   private _startBeacon() {
     // app.on(app.suspendEvent, this._stopAnime);
-    app.on(app.resumeEvent, this._restartAnime);
+    if (isIOS) {
+      app.on(app.resumeEvent, this._restartAnime);
+    }
     this._playBeacon();
   }
 
@@ -856,7 +857,9 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
       console.log('dashboard ngOnDestroy!');
       super.ngOnDestroy();
       // app.off(app.suspendEvent, this._stopAnime);
-      app.off(app.resumeEvent, this._restartAnime);
+      if (isIOS) {
+        app.off(app.resumeEvent, this._restartAnime);
+      }
     }
   }
 

@@ -13,14 +13,14 @@
   [text]="'general.back' | translate"
     ios.position="left"
     (tap)="back()"
-    class="action-item"
+    class="action-item ready"
     *ngIf="backGuard">
   </ActionItem>
   <ActionItem
     [text]="rightButtonLabel"
     (tap)="rightButtonTap.next(true)"
     ios.position="right"
-    class="action-item"
+    class="action-item ready"
     *ngIf="rightButtonLabel">
     <!-- <Button
       [text]="rightButtonLabel"

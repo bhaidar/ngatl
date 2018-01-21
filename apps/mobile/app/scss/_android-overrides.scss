@@ -12,6 +12,10 @@ Button {
 
 }
 
+ActionBar {
+  background-color: $ab-background;
+}
+
 // Intro Override
 
 @keyframes intro-swipe-intro {
@@ -44,14 +48,16 @@ Button {
 }
 
 .schedule-main-content {
+    background-color: $dark-blue;
     .conf-segmented-bar {
-      background-color: #4ac1fa;
+      background-color: $dark-blue;
       color: white;
+      margin:0;
     }
 
     SearchBar {
       background-color: white;
-      margin: 16;
+      margin: 0;//16;
     }
 
     .session-favorite {
@@ -89,7 +95,7 @@ Button {
       /*font-weight: 700;*/
     font-size: 12;
     color: white;
-      text-transform: uppercase;
+      // text-transform: uppercase;
       margin: 16 0 0 4;
     }
 
@@ -115,5 +121,18 @@ Button {
   &.scanned {
       background-color: $dark-blue;
 
+  }
+}
+
+.checkbox-layout {
+  padding: 10 0 10 12;
+  // background-color: $dark-blue;
+  // .label {
+  //     margin: 0 0 0 10;
+  //     color: $gold;
+  // }
+
+  .checkbox-item {
+      margin-top: -4;
   }
 }

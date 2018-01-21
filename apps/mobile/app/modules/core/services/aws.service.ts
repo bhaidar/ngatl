@@ -42,13 +42,13 @@ export class AWSService {
     return new Promise( ( resolve, reject ) => {
       this._getCredentials().then( ( cred: IAWSCred ) => {
         // const file = File.fromPath( filePath );
-        this._log.debug('file path:', file.path);
+        // this._log.debug('file path:', file.path);
         const ext = file.extension.slice(1);
-        this._log.debug( 'file ext:', ext );
+        // this._log.debug( 'file ext:', ext );
         // const data = file.readSync();
         // this._log.debug( 'typeof data:', typeof data );
         const keyPath = file.name;
-        this._log.debug( 'keyPath:', keyPath );
+        // this._log.debug( 'keyPath:', keyPath );
         const params: any = {
           Bucket: 'ng-atl',
           Key: keyPath,
@@ -79,7 +79,7 @@ export class AWSService {
         let payloadHash = "UNSIGNED-PAYLOAD";
         const amzDate = this._getAmzDate(new Date().toISOString());
 
-        this._log.debug( 'amzDate:', amzDate );
+        // this._log.debug( 'amzDate:', amzDate );
         let options: any = {
           method: "PUT",
           headers: new HttpHeaders( {
@@ -99,7 +99,7 @@ export class AWSService {
           cred.access_key, cred.secret,
           cred.region, cred.bucket, keyPath, amzDate, payloadHash );
         options.headers.append( "Authorization", authorization );
-        this._log.debug('authorization:', authorization);
+        // this._log.debug('authorization:', authorization);
 
         let session = httpSession( "aws-uploader" );
         let request = {
@@ -181,7 +181,7 @@ export class AWSService {
     let signedHeaders = (<HttpHeaders>options.headers).keys()
       .map( function ( hdr ) { return hdr.toLowerCase(); } )
       .join( ";" );
-    this._log.debug('signedHeaders:', signedHeaders);
+    // this._log.debug('signedHeaders:', signedHeaders);
 
     // Signature=fe5f80f77d5fa3beca038a248ff027d0445342fe2855ddc963176630326f1024
     // The 256-bit signature expressed as 64 lowercase hexadecimal characters.
@@ -225,7 +225,7 @@ export class AWSService {
     strToSign += CryptoJS
       .SHA256( cannonicalRequest )
       .toString( CryptoJS.enc.Hex );
-    this._log.debug('strToSign:', strToSign);
+    // this._log.debug('strToSign:', strToSign);
 
     //console.log("<StrToSign>" + strToSign + "<StrToSignEnds>");
 
@@ -321,7 +321,7 @@ export class AWSService {
     let signature = CryptoJS
       .HmacSHA256( strToSign, signKey )
       .toString( CryptoJS.enc.Hex );
-    this._log.debug('signature:', signature);
+    // this._log.debug('signature:', signature);
 
     //console.log("Signature :", signature);
 
@@ -338,7 +338,7 @@ export class AWSService {
           } )
           .subscribe( ( result ) => {
             this._credentials = result;
-            this._log.debug( 'aws cred:', JSON.stringify( result ) );
+            // this._log.debug( 'aws cred:', JSON.stringify( result ) );
             resolve( this._credentials );
           } );
       } else {

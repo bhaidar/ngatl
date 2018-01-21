@@ -174,6 +174,7 @@ ListView {
 }
 
 .swipe-delete-btn {
+    font-size: 20;
     background-color:$ngatl-red-translucent;
     color:$white;
     // height: 100%;
@@ -266,6 +267,7 @@ ListView {
     border-width: 0 0 1 0;
     border-color: #ccc;
     padding: 8 8 8 16;
+    background-color: $white;
   
     .select-btn {
       font-size: 17;
