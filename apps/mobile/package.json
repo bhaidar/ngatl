@@ -30,7 +30,7 @@
     "@ngx-translate/core": "file:../../node_modules/@ngx-translate/core",
     "@nrwl/nx": "file:../../node_modules/@nrwl/nx",
     "crypto-js": "^3.1.9-1",
-    "date-fns": "file:../../node_modules/date-fns",
+    "date-fns": "2.0.0-alpha.4",
     "nativescript-angular": "~5.1.0",
     "nativescript-audio": "~4.3.3",
     "nativescript-background-http": "^3.1.0",
