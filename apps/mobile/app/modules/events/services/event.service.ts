@@ -42,10 +42,10 @@ export class EventService extends Cache {
       .subscribe((confState: IConferenceState) => {
         if (confState.events && confState.events.list) {
           this._conferenceModel.fullSchedule = [...confState.events.list];
-          // if (this._currentUser) {
-          //   // update event listing state with what user had favorited (if any)
-          //   this._updateFavs(this._currentUser);
-          // }
+          if (this._currentUser) {
+            // update event listing state with what user had favorited (if any)
+            this._updateFavs(this._currentUser);
+          }
         }
       });
 
@@ -58,10 +58,10 @@ export class EventService extends Cache {
         this._currentUser = userState.current;
         this.log.debug('event.service currentUser:', this._currentUser);
 
-        // if (this._currentUser) {
-        //   // update event listing state with what user had favorited (if any)
-        //   this._updateFavs(this._currentUser);
-        // }
+        if (this._currentUser) {
+          // update event listing state with what user had favorited (if any)
+          this._updateFavs(this._currentUser);
+        }
       });
 
     localNotifications.addOnMessageReceivedCallback((notification) => {
@@ -102,21 +102,21 @@ export class EventService extends Cache {
   //   }
   // }
 
-  // private _updateFavs(currentUser: UserState.IRegisteredUser) {
-  //   if (!this._updatedFavs && this._conferenceModel && this._conferenceModel.fullSchedule && this._conferenceModel.fullSchedule.length) {
-  //     this._updatedFavs = true;
-  //     if (currentUser.favs) {
-  //       for (let i = 0; i < this._conferenceModel.fullSchedule.length; i++) {
-  //         if (currentUser.favs.includes(this._conferenceModel.fullSchedule[i].id)) {
-  //           this._conferenceModel.fullSchedule[i].isFavorite = true;
-  //         }
-  //       }
-  //       this.store.dispatch(new EventActions.ChangedAction({
-  //         list: [...this._conferenceModel.fullSchedule]
-  //       }));
-  //     }
-  //   }
-  // }
+  private _updateFavs(currentUser: UserState.IRegisteredUser) {
+    if (!this._updatedFavs && currentUser && this._conferenceModel && this._conferenceModel.fullSchedule && this._conferenceModel.fullSchedule.length) {
+      this._updatedFavs = true;
+      if (currentUser.favs && Array.isArray(currentUser.favs)) {
+        for (let i = 0; i < this._conferenceModel.fullSchedule.length; i++) {
+          if (currentUser.favs.includes(this._conferenceModel.fullSchedule[i].id)) {
+            this._conferenceModel.fullSchedule[i].isFavorite = true;
+          }
+        }
+        this.store.dispatch(new EventActions.ChangedAction({
+          list: [...this._conferenceModel.fullSchedule]
+        }));
+      }
+    }
+  }
 
   public fetch(forceRefresh?: boolean): Observable<Array<Session>> {
     const stored = this.cache;

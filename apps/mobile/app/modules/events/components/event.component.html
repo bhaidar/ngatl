@@ -7,7 +7,7 @@
               android:selectedBackgroundColor="white"
               class="conf-segmented-bar" [items]="days">
       </SegmentedBar>
-      <GridLayout row="1" rows="auto, auto, *" (loaded)="onBackgroundLoaded($event)">
+      <GridLayout row="1" rows="auto, auto, *" class="c-bg-dark-blue">
           <!-- Search -->
           <SearchBar row="0" id="search" #search hint="Search" text="" (clear)="clear($event)" (submit)="search$.next(search.text)" (loaded)="doNotShowAndroidKeyboard($event)" android:height="40"></SearchBar>
           <!-- toggle faviorites -->

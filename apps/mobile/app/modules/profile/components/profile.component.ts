@@ -184,11 +184,12 @@ export class ProfileComponent extends BaseComponent
       .takeUntil(this.destroy$)
       .subscribe((s: UserState.IState) => {
         // clone so user can make editing changes to bindings
-        this.currentUser = new UserState.RegisteredUser(
-          Object.assign({}, s.current)
-        );
+        this.currentUser = new UserState.RegisteredUser(s.current);
         if (!this.currentUser.language) {
           this.currentUser.language = 'en';
+        }
+        if (!this.currentUser.imageUrl && this.currentUser.avatar) {
+          this.currentUser.imageUrl = this.currentUser.avatar;
         }
         this._updateLangLabel();
       });

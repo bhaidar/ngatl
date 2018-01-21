@@ -49,7 +49,7 @@
     src="res://uploadpic">
   </Image> -->
   <StackLayout class="profile-picture-box">
-    <ns-picture [selectedImage]="currentUser.imageUrl" (uploadedImage)="uploadedImage($event)" (deleteImage)="removeImage()"></ns-picture>
+    <ns-picture [selectedImage]="currentUser?.imageUrl" (uploadedImage)="uploadedImage($event)" (deleteImage)="removeImage()"></ns-picture>
   </StackLayout>
   <!-- <Image id="image" src="res://user" class="profile-picture" (tap)="onProfilePictureTapped($event)"></Image> -->
 </GridLayout>

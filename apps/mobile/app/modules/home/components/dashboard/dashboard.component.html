@@ -22,7 +22,6 @@
         (itemLoading)="disableRowColor($event)"
         (itemSwipeProgressStarted)="itemSwipeProgressStarted($event)"
         (itemSwipeProgressEnded)="itemSwipeProgressEnded($event)"
-        (itemSwipeProgressChanged)="itemSwipeProgressChanged($event)"
         (itemTap)="onItemTap($event)"
         pullToRefresh="true" 
         (pullToRefreshInitiated)="onPullRefreshInitiated($event)">
@@ -46,7 +45,7 @@
         </ng-template> -->
         <ng-template tkListItemSwipeTemplate rows="auto" columns="*,100">
           <GridLayout rows="11,*" columns="*,100">
-            <Button row="1" col="1" [text]="'ion-ios-close' | fonticon" class="ion swipe-delete-btn" (tap)="remove($event)"></Button>
+            <Button row="1" col="1" [text]="'ion-ios-close-outline' | fonticon" class="ion swipe-delete-btn" (tap)="remove($event)"></Button>
           </GridLayout>
         </ng-template>
       </RadListView>

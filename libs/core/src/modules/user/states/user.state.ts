@@ -14,12 +14,12 @@ export namespace UserState {
     conferenceAttendeeId?: string;
     created?: string;
     modified?: string;
-    swiping?: boolean;
     peer?: IRegisteredUser;
   }
 
   export interface IRegisteredUser {
     id?:string;
+    avatar?: string;
     email?:string;
     name?:string;
     company?:string;
@@ -45,6 +45,7 @@ export namespace UserState {
 
   export class RegisteredUser implements IRegisteredUser {
     public id: string;
+    public avatar: string;
     public email:string;
     public name:string;
     public company:string;
@@ -52,24 +53,28 @@ export namespace UserState {
     public imageUrl:string;
     public created:string;
     public modified:string;
+    public language: LocaleState.Locale;
     public notes: Array<IConferenceAttendeeNote>;
+    public favs: Array<string>;
 
     constructor(model?: any) {
-      for (const key in model) {
-        const cleanKey = key.toLowerCase().replace(/ /ig, '_');
-        const isDate = false;//cleanKey.indexOf('date') > -1;
-        this[cleanKey] = isDate ? new Date(model[key]) : model[key];
-      }
+      Object.assign(this, this, model);
+      // for (const key in model) {
+      //   const cleanKey = key.toLowerCase().replace(/ /ig, '_');
+      //   const isDate = false;//cleanKey.indexOf('date') > -1;
+      //   this[cleanKey] = isDate ? new Date(model[key]) : model[key];
+      // }
     }
   }
 
   export class ConferenceAttendeeNote implements IConferenceAttendeeNote {
     constructor(model?: any) {
-      for (const key in model) {
-        const cleanKey = key.toLowerCase().replace(/ /ig, '_');
-        const isDate = false;//cleanKey.indexOf('date') > -1;
-        this[cleanKey] = isDate ? new Date(model[key]) : model[key];
-      }
+      Object.assign(this, this, model);
+      // for (const key in model) {
+      //   const cleanKey = key.toLowerCase().replace(/ /ig, '_');
+      //   const isDate = false;//cleanKey.indexOf('date') > -1;
+      //   this[cleanKey] = isDate ? new Date(model[key]) : model[key];
+      // }
     }
   }
 

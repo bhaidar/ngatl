@@ -279,19 +279,19 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     }
   }
 
-  public itemSwipeProgressChanged(args: ListViewEventData) {
-    if (args && args.data) {
-      // console.log('itemSwipeProgressChanged args.data.x:', args.data.x);
-      // console.log('args.index:', args.index);
-      if (typeof args.index === 'number' && args.index > -1 && this.scans && this.scans.length) {
-        this._swipeItemIndex = args.index;
-        const scan = this.scans[args.index];
-        if (scan) {
-          scan.swiping = args.data.x !== 0;
-        }
-      } 
-    }
-  }
+  // public itemSwipeProgressChanged(args: ListViewEventData) {
+  //   if (args && args.data) {
+  //     // console.log('itemSwipeProgressChanged args.data.x:', args.data.x);
+  //     // console.log('args.index:', args.index);
+  //     if (typeof args.index === 'number' && args.index > -1 && this.scans && this.scans.length) {
+  //       this._swipeItemIndex = args.index;
+  //       const scan = this.scans[args.index];
+  //       if (scan) {
+  //         scan.swiping = args.data.x !== 0;
+  //       }
+  //     } 
+  //   }
+  // }
 
   public itemSwipeProgressEnded(args: ListViewEventData) {
     if (args) {

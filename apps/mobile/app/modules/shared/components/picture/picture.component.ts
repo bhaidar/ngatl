@@ -15,6 +15,7 @@ import { isAndroid } from 'tns-core-modules/platform';
 import { ImageFormat } from 'tns-core-modules/ui/enums';
 import * as TNSUtils from 'tns-core-modules/utils/utils';
 import { File, path, knownFolders } from 'tns-core-modules/file-system';
+import * as tnsHttp from 'tns-core-modules/http';
 import {
   fromNativeSource,
   fromAsset,
@@ -25,6 +26,7 @@ import { ImageAsset } from 'tns-core-modules/image-asset';
 import { ImageCropper, Result } from 'nativescript-imagecropper';
 // libs
 import { Store } from '@ngrx/store';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 import {
@@ -63,8 +65,27 @@ function isImageUrl(image: ImageAsset | ImageSource | string): image is string {
 })
 export class PictureComponent extends BaseComponent implements OnInit {
 
+  public activeImage$: BehaviorSubject<ImageAsset | ImageSource | string> = new BehaviorSubject(null);
+  public stretch = 'aspectFit';
+  public imageUploaded$: Subject<string> = new Subject();
+  public defaultImageUrl: string;
+
   @Input()
-  public selectedImage: ImageAsset | ImageSource | string;
+  public set selectedImage(value: ImageAsset | ImageSource | string) {
+    if (this._activeImage !== value) {
+      this._activeImage = value;
+      if (value && typeof value === 'string' && value.indexOf('http') > -1) {
+        tnsHttp.getImage(value).then(img => {
+          this.log.debug('set selectedImage tnsHttp got image:', img);
+          this._ngZone.run(() => {
+            this.activeImage$.next(img);
+          })
+        }, err => {});
+      } else {
+        this.activeImage$.next(value);
+      }
+    }
+  }
   @Input()
   public addOnly: boolean;
   @Output()
@@ -72,9 +93,8 @@ export class PictureComponent extends BaseComponent implements OnInit {
   @Output()
   public deleteImage: EventEmitter<boolean> = new EventEmitter();
 
-  public stretch = 'aspectFit';
-  public imageUploaded$: Subject<string> = new Subject();
-  public defaultImageUrl: string;
+  private _activeImage: ImageAsset | ImageSource | string;
+  private _placeholder: ImageAsset | ImageSource | string;
   private _imageSub: Subscription;
   private _cameraSub: Subscription;
   private _cropper: ImageCropper;
@@ -113,7 +133,13 @@ export class PictureComponent extends BaseComponent implements OnInit {
   }
 
   public ngOnInit() {
-
+    this._placeholder = this.addOnly ? 'res://uploadphoto' : 'res://uploadpic';
+    if (this.addOnly) {
+      this.selectedImage = this._placeholder;
+    } else if (!this._activeImage) {
+      this.selectedImage = this._placeholder;
+    }
+    this.log.debug('this._activeImage:', this._activeImage);
     this._uploadErrorMessage = this._translateService.instant('error.upload-photo-lbl');
     this.photoAlbumLabel = this._translateService.instant('general.photo-album-tle');
     this.cameraLabel = this._translateService.instant('dialogs.camera');
@@ -144,7 +170,7 @@ export class PictureComponent extends BaseComponent implements OnInit {
     if (isCameraAvailable) {
       actions.push(this.cameraLabel);
     }
-    if (this.selectedImage) {
+    if (this._activeImage && this._activeImage !== this._placeholder) {
       actions.push(this.editLabel);
       actions.push(this.deleteLabel);
       options.actions = actions;
@@ -202,14 +228,14 @@ export class PictureComponent extends BaseComponent implements OnInit {
         break;
 
       case this.editLabel:
-        if (isImageUrl(this.selectedImage)) {
+        if (isImageUrl(this._activeImage)) {
           this._progressService.toggleSpinner(true);
           this._urlToImageSource(true);
-        } else if (isImageAsset(this.selectedImage)) {
+        } else if (isImageAsset(this._activeImage)) {
           this._progressService.toggleSpinner(true);
           this._imageAssetToImageSource(true);
-        } else if (isImageSource(this.selectedImage)) {
-          this._showCropper(this.selectedImage, 'jpeg');
+        } else if (isImageSource(this._activeImage)) {
+          this._showCropper(this._activeImage, 'jpeg');
         } else {
           this._showUploadError(3);
         }
@@ -224,7 +250,7 @@ export class PictureComponent extends BaseComponent implements OnInit {
         this._win.confirm(<any>confirmOptions, (r: boolean) => {
           this._ngZone.run(() => {
             this._cropSelected = false;
-            this.selectedImage = null;
+            this.selectedImage = this._placeholder;
             this.deleteImage.next(true);
           });   
         });
@@ -465,9 +491,9 @@ export class PictureComponent extends BaseComponent implements OnInit {
               const imgSrc = result.image;
               this._cropSelected = true; // prevents binding flash
 
-              if (!this.addOnly) {
-                this.selectedImage = imgSrc;
-              }
+              // if (!this.addOnly) {
+              //   this.selectedImage = imgSrc;
+              // }
 
               let properFormat: any = 'jpeg';
               switch (format) {
@@ -507,8 +533,8 @@ export class PictureComponent extends BaseComponent implements OnInit {
   }
 
   private _urlToImageSource(editing?: boolean) {
-    if (isImageUrl(this.selectedImage)) {
-      fromUrl(this.selectedImage).then((imageSource: ImageSource) => {
+    if (isImageUrl(this._activeImage)) {
+      fromUrl(this._activeImage).then((imageSource: ImageSource) => {
         this._progressService.toggleSpinner();
         this.selectedImage = imageSource;
         if (editing) {
@@ -524,8 +550,8 @@ export class PictureComponent extends BaseComponent implements OnInit {
   }
 
   private _imageAssetToImageSource(editing?: boolean) {
-    if (isImageAsset(this.selectedImage)) {
-      fromAsset(this.selectedImage).then((imageSource: ImageSource) => {
+    if (isImageAsset(this._activeImage)) {
+      fromAsset(this._activeImage).then((imageSource: ImageSource) => {
         this._progressService.toggleSpinner();
         this.selectedImage = imageSource;
         if (editing) {
@@ -586,9 +612,12 @@ export class PictureComponent extends BaseComponent implements OnInit {
       this._awsService.upload(file).then((result) => {
         this.log.debug('uploaded:', result);
         this._ngZone.run(() => {
+          if (!this.addOnly) {
+            this.selectedImage = result;
+          }
           this._progressService.toggleSpinner(false);
           this.uploadedImage.next(result);
-        })
+        });
       }, err => {
         this._showUploadError(9);
       });

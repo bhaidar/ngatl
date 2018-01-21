@@ -19,6 +19,18 @@ ListView {
     &.disabled {
         color:$grey-slate;
     }
+
+    &.swipe-delete-btn {
+        font-size: 40;
+        background-color:$ngatl-red-translucent;
+        color:$white;
+        // height: 100%;
+        border-radius: 30;
+        width: 60;
+        height: 60;
+        vertical-align: center;
+        text-align:center;
+    }
 }
 //override for action-bar colored fonticons
 // .action-bar Button {
@@ -171,18 +183,6 @@ ListView {
             color: $ngatl-red;
         }
     }
-}
-
-.swipe-delete-btn {
-    font-size: 20;
-    background-color:$ngatl-red-translucent;
-    color:$white;
-    // height: 100%;
-    border-radius: 30;
-    width: 60;
-    height: 60;
-    vertical-align: center;
-    text-align:center;
 }
 
 @import 'schedule';
