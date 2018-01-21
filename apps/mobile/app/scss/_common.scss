@@ -108,10 +108,10 @@ ListView {
     &.scanned {
         padding: 10 20 10 20;
         background-color: $ngatl-blue-translucent;
-        animation-name: cell-bg-default;
-        animation-duration: .3;
-        animation-fill-mode: forwards;
-        animation-iteration-count: 1;
+        // animation-name: cell-bg-default;
+        // animation-duration: .3;
+        // animation-fill-mode: forwards;
+        // animation-iteration-count: 1;
 
         // &.swiping {
         //     // background-color: rgba(255,255,255,1);
@@ -181,6 +181,7 @@ ListView {
     width: 60;
     height: 60;
     vertical-align: center;
+    text-align:center;
 }
 
 @import 'schedule';
@@ -204,6 +205,12 @@ ListView {
     100% {
         opacity: 1;
     }
+}
+.action-bar-title-modal {
+    font-size:      17;
+    vertical-align: center;
+    text-align:     center;
+    color:          $white;
 }
 .action-item {
     color: $white;

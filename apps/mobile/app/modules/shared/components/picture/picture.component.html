@@ -8,6 +8,7 @@
     (tap)="choose()"
     [stretch]="addOnly ? 'none' : 'aspectFill'"
     class="profile-picture"
+    [class.add-only]="addOnly"
     [class.placeholder]="!selectedImage"
     [class.profile-image]="selectedImage"
     [src]="selectedImage || (addOnly ? 'res://uploadphoto' : 'res://uploadpic')">

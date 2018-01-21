@@ -57,8 +57,8 @@
 -dontnote com.google.**.internal.*
 -dontnote com.google.app*.api.**
 -dontnote com.google.**.zz*
+-dontnote com.google.zxing.**
 -dontnote okhttp3.internal.**
-
 
 -keep,includedescriptorclasses public class android.**
 -keep,includedescriptorclasses public interface android.**
@@ -83,20 +83,30 @@
 -keep,includedescriptorclasses public class com.yalantis.ucrop.UCrop** { public *; }
 -keep,includedescriptorclasses public interface com.yalantis.ucrop.** { *; }
 
+-keep,includedescriptorclasses public class net.gotev.uploadservice.** { *; }
+-keep,includedescriptorclasses public interface net.gotev.uploadservice.** { *; }
+-keep,includedescriptorclasses public enum net.gotev.uploadservice.** { *; }
+
 -keep,includedescriptorclasses class org.nativescript.** { !private *; }
 -keep,includedescriptorclasses public interface org.nativescript.** { *; }
 
 -keep,includedescriptorclasses public class com.facebook.shimmer.** { public *; }
 -keep,includedescriptorclasses public interface com.facebook.shimmer.** { *; }
 
+######### Camera Plus
+-keep,includedescriptorclasses public class io.nstudio.**
+-keep,includedescriptorclasses public interface io.nstudio.**
+
 
 -keep public class * extends java.lang.Exception
 
-######### Telerik ui
+######### Telerik
 -keep,includedescriptorclasses public class com.telerik.widget.list.** { public *; }
 -keep,includedescriptorclasses public interface com.telerik.widget.list.** { *; }
 -keep,includedescriptorclasses public class com.telerik.android.primitives.widget.** { public *; }
 -keep,includedescriptorclasses public interface com.telerik.android.primitives.widget.** { *; }
+-keep,includedescriptorclasses public class com.telerik.localnotifications.** { public *; }
+-keep,includedescriptorclasses public interface com.telerik.localnotifications.** { *; }
 # for some reason
 -dontwarn com.telerik.widget.feedback.**
 

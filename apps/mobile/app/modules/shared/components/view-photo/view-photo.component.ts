@@ -20,7 +20,6 @@ import { BaseModalComponent } from '../../abstract/base-modal-component';
 })
 export class ViewPhotoComponent extends BaseModalComponent {
   public url;
-  public title;
   public item: UserState.IConferenceAttendeeNote;
 
   constructor(
@@ -34,7 +33,6 @@ export class ViewPhotoComponent extends BaseModalComponent {
     private _ngZone: NgZone,
   ) {
     super(store, page, params);
-    this.title = this._translate.instant('general.photo');
     if (this.params && this.params.context) {
       this.url = this.params.context.url;
       this.item = this.params.context.item;

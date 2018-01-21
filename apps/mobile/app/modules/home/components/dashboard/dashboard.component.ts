@@ -861,23 +861,24 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   }
 
   private _openScanner(requestPerm: boolean = true) {
-    this._barcode.hasCameraPermission().then( ( granted: boolean ) => {
-      this._log.debug( 'granted:', granted );
-      if ( granted ) {
-        this._barcode.available().then( ( avail: boolean ) => {
-          this._log.debug( 'avail:', avail ); 
-          if ( avail ) {
-            this._launchScanner();
-          }
-        } );
-      } else if (requestPerm) {
-        this._barcode.requestCameraPermission().then( () => {
-          this._launchScanner();
-        } );
-      } else {
-        //this._win.alert( 'Please enable camera permissions in your device settings.' );
-      }
-    } );
+    this._launchScanner();
+    // this._barcode.hasCameraPermission().then( ( granted: boolean ) => {
+    //   this._log.debug( 'granted:', granted );
+    //   if ( granted ) {
+    //     this._barcode.available().then( ( avail: boolean ) => {
+    //       this._log.debug( 'avail:', avail ); 
+    //       if ( avail ) {
+    //         this._launchScanner();
+    //       }
+    //     } );
+    //   } else if (requestPerm) {
+    //     this._barcode.requestCameraPermission().then( () => {
+    //       this._launchScanner();
+    //     } );
+    //   } else {
+    //     //this._win.alert( 'Please enable camera permissions in your device settings.' );
+    //   }
+    // } );
   }
 
   private _launchScanner() {

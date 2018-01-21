@@ -8,7 +8,8 @@ Button {
   background-color: transparent;
   border-color: transparent;
   border-width: 1;
-  text-transform: lowercase;
+  // text-transform: lowercase; // causes toLowerCase crash
+
 }
 
 // Intro Override
@@ -107,4 +108,12 @@ Button {
 }
 .search-bar SearchBar{
   background-color: white;
+}
+
+.card{
+
+  &.scanned {
+      background-color: $dark-blue;
+
+  }
 }

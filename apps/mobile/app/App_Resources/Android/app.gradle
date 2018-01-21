@@ -17,17 +17,17 @@ android {
   aaptOptions {  
     additionalParameters "--no-version-vectors"  
   } 
-  buildTypes {
-      debug {
-//            shrinkResources true
-          minifyEnabled true
-//            useProguard false
-          proguardFiles getDefaultProguardFile('proguard-android.txt'), 'src/main/res/proguard-rules.pro'
-      }
-      release {
-//            shrinkResources true
-          minifyEnabled true
-          proguardFiles getDefaultProguardFile('proguard-android.txt'), 'src/main/res/proguard-rules.pro'
-      }
-  } 
+//   buildTypes {
+//       debug {
+// //            shrinkResources true
+//           minifyEnabled true
+// //            useProguard false
+//           proguardFiles getDefaultProguardFile('proguard-android.txt'), 'src/main/res/proguard-rules.pro'
+//       }
+//       release {
+// //            shrinkResources true
+//           minifyEnabled true
+//           proguardFiles getDefaultProguardFile('proguard-android.txt'), 'src/main/res/proguard-rules.pro'
+//       }
+//   } 
 } 

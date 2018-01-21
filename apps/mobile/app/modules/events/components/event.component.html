@@ -4,7 +4,7 @@
       <!-- Segmented Bar -->
       <SegmentedBar row="0" [selectedIndex]="selectedDay" (selectedIndexChange)="onDayChange($event)"
               ios:selectedBackgroundColor="white"
-              android:selectedBackgroundColor="#FAC950"
+              android:selectedBackgroundColor="white"
               class="conf-segmented-bar" [items]="days">
       </SegmentedBar>
       <GridLayout row="1" rows="auto, auto, *" (loaded)="onBackgroundLoaded($event)">

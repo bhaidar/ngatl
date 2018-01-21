@@ -28,7 +28,13 @@ import { ViewPhotoComponent } from '../../../shared/components/view-photo/view-p
   templateUrl: './note-edit.component.html'
 })
 export class NoteEditComponent extends BaseComponent {//BaseModalComponent {
-  public item: UserState.IConferenceAttendeeNote = {};
+  public item: UserState.IConferenceAttendeeNote = {
+    // prevents Android binding crash 'Cannot read property toLowerCase of undefined
+    note: '',
+    peer: {
+      name: ''
+    }
+  };
   public ios: boolean;
   public customClose: () => void;
   public images: Array<string> = [];

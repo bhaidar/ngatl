@@ -1,10 +1,10 @@
-<ActionBar class="action-bar">
-  <NavigationButton visibility="collapsed"></NavigationButton>
-  <GridLayout rows="auto" columns="50,*,50">
+<ActionBar>
+  <!-- <NavigationButton visibility="collapsed"></NavigationButton> -->
+  <GridLayout rows="auto" columns="50,*,50" class="action-bar" height="65">
     <!--<Button text="&#xf008;" (tap)="back()" class="fontello action-item"-->
     <Button [text]="backIcon | fonticon" (tap)="back()" class="ion action-item"
       row="0" col="0"></Button>
-    <Label [text]="title" class="action-bar-title text-left" 
+    <Label [text]="title || ''" class="action-bar-title" verticalAlignment="center"
       row="0" col="1"></Label>
     <Button [text]="rightButtonLabel" 
       (tap)="rightButtonTap.next(true)" class="action-item text-right"

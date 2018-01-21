@@ -46,7 +46,7 @@
         </ng-template> -->
         <ng-template tkListItemSwipeTemplate rows="auto" columns="*,100">
           <GridLayout rows="11,*" columns="*,100">
-            <Button row="1" col="1" [fontSize]="fontSize" [text]="'item.delete-lbl' | translate" class="swipe-delete-btn" (tap)="remove($event)"></Button>
+            <Button row="1" col="1" [fontSize]="fontSize" [text]="'ion-ios-close' | fonticon" class="ion swipe-delete-btn" (tap)="remove($event)"></Button>
           </GridLayout>
         </ng-template>
       </RadListView>
@@ -81,7 +81,8 @@
                 verticalAlignment="center"
                 textWrap="true"
                 color="#8DA1AB"
-                textAlignment="center"></Label>
+                textAlignment="center"
+                marginRight="10" marginLeft="10"></Label>
 
                 
         <Label id="intro-version"
