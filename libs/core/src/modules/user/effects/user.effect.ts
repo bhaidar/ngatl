@@ -43,7 +43,7 @@ export class UserEffects extends Analytics {
       .ofType( UserActions.ActionTypes.CLAIM_USER )
       .switchMap( ( action: UserActions.ClaimUserAction ) =>
         this._userService
-          .claimUser( action.payload, this._currentBadgeId )
+          .claimUser( action.payload, this._userService.tmpBadgeId )
           .map( user => {
             return new UserActions.LoginAction( action.payload );
           } )
@@ -77,9 +77,9 @@ export class UserEffects extends Analytics {
       .map( ( action: UserActions.LoginAction ) => {
         const user = action.payload;
         if ( user ) {
-          this._userService.badgeId = this._currentBadgeId;
+          this._userService.badgeId = this._userService.tmpBadgeId;
           // clear ref, no longer needed
-          this._currentBadgeId = null;
+          this._userService.tmpBadgeId = null;
           this._userService.claimId = user.attendee.id;
           // TODO: use real/secure token
           // this._userService.token = 'admin-token';
@@ -87,7 +87,7 @@ export class UserEffects extends Analytics {
           // this._win.setTimeout(_ => {
           //   this._win.alert(`${this._translate.instant('user.logged-in')} ${user.attendee.name}`);
           // }, 300);
-          return new UserActions.RefreshUserAction( user.attendee.id );
+          return new UserActions.RefreshUserAction( { id: user.attendee.id, user: user.attendee } );
         } else {
           return new UserActions.LoginFailedAction( 'login failed' );
         }
@@ -100,7 +100,7 @@ export class UserEffects extends Analytics {
       .switchMap( ( action: UserActions.LoginSuccessAction ) => {
         const user = action.payload;
         if ( user ) {
-          this._userService.loadUser( user.id )
+          this._userService.loadUser( { id: user.id } )
             .map( user => {
               this._userService.persistUser( user );
 
@@ -126,12 +126,18 @@ export class UserEffects extends Analytics {
   userUpdate$: Observable<Action> =
     this._actions$
         .ofType(UserActions.ActionTypes.UPDATE)
-        .switchMap((action: UserActions.UpdateAction) => {
+        .withLatestFrom( this._store )
+        .switchMap( ( [action, state]: [UserActions.UpdateAction, IAppState] ) => {
           this._progressService.toggleSpinner(true);
           return this._userService
                      .updateUser(action.payload)
                      .map(user => {
-                         return new UserActions.RefreshUserAction(user.id);
+                       const currentUser = Object.assign({}, state.user.current);
+                       if (!user.sponsor) {
+                        // updated user might have just unlinked sponsor, make sure user passed to refresh is cleared as well
+                        delete currentUser.sponsor;
+                       }
+                         return new UserActions.RefreshUserAction({id: user.id, user: currentUser });
                         //  if ( user.authenticationToken ) {
                         //    this._userService.token = user.authenticationToken;
                         //  }
@@ -151,7 +157,7 @@ export class UserEffects extends Analytics {
       .ofType( UserActions.ActionTypes.LOGOUT )
       .map( ( action: UserActions.LogoutAction ) => {
         this._log.debug( UserActions.ActionTypes.LOGOUT );
-        this._currentBadgeId = null;
+        this._userService.tmpBadgeId = null;
         // clear persisted user
         this._userService.clear();
         // clear token
@@ -242,7 +248,7 @@ export class UserEffects extends Analytics {
       .switchMap( ( [action, state]: [UserActions.FindUserAction, IAppState] ) => {
 
         // this._progressService.toggleSpinner();
-        this._currentBadgeId = action.payload.badgeGuid;
+        this._userService.tmpBadgeId = action.payload.badgeGuid;
         return this._userService.findUser( action.payload.badgeGuid, state.user.scanned )
           .map( ( foundUser ) => {
             // this._progressService.toggleSpinner(false);
@@ -250,13 +256,16 @@ export class UserEffects extends Analytics {
             if ( foundUser ) {
               if ( state.user.current ) {
                 // authenticated
-                this._log.debug('state.user.current.id:', state.user.current.id);
-                this._log.debug('foundUser.attendee.id:', foundUser.attendee.id);
+                // this._log.debug('state.user.current.id:', state.user.current.id);
+                // this._log.debug('foundUser.attendee.id:', foundUser.attendee.id);
                 if (state.user.current.id === foundUser.attendee.id) {
                   // re-scanning yourself for fun
                   this._win.setTimeout( _ => {
                     this._win.alert( this._translate.instant( 'user.scan-yourself' ) );
                   }, 300 );
+                  return new AppActions.NoopAction();
+                } else if (foundUser.attendee.pin) {
+                  this._userService.promptSponsorPin$.next( foundUser );
                   return new AppActions.NoopAction();
                 } else {
                   // just add to notes
@@ -267,6 +276,11 @@ export class UserEffects extends Analytics {
                 const claimedLocallyId = this._userService.claimId;
                 if ( claimedLocallyId === foundUser.attendee.id ) {
                   return new UserActions.LoginAction( foundUser );
+                } else if (foundUser.attendee.pin) {
+                  this._win.setTimeout( _ => {
+                    this._win.alert( this._translate.instant( 'user.claim-personal-first' ) );
+                  }, 300 );
+                  return new AppActions.NoopAction();
                 } else if ( !foundUser.claimed ) {
                   // if they haven't claimed one themselves, prompt if they want to claim it
                   this._userService.promptUserClaim$.next( foundUser );
@@ -275,8 +289,6 @@ export class UserEffects extends Analytics {
                   this._win.setTimeout( _ => {
                     this._win.alert( this._translate.instant( 'user.already-claimed' ) );
                   }, 300 );
-                  // TODO: check if sponsor, if so the prompt them to enter pin code to verify they are a valid member of the sponsor group
-                  // this._userService.promptSponsorPin$.next( foundUser );
                   return new AppActions.NoopAction();
                 }
               }
@@ -304,8 +316,9 @@ export class UserEffects extends Analytics {
       .withLatestFrom( this._store )
       .switchMap( ( [action, state]: [UserActions.AddUserAction, IAppState] ) => {
 
-        if ( state.user.current ) {
-          const currentScanned = state.user.current.notes || [];
+        const currentUser = state.user.current;
+        if ( currentUser ) {
+          const currentScanned = currentUser.notes || [];
           const alreadyScanned = currentScanned.find( u => u.peerAttendeeId === action.payload.attendee.id );
           this._currentScanAttendee = action.payload.attendee;
           this._log.debug('alreadyScanned:', alreadyScanned);
@@ -317,7 +330,7 @@ export class UserEffects extends Analytics {
           } else {
             return this._userService.createAttendeeNote( action.payload.attendee.id )
               .map( ( result: UserState.IRegisteredUser ) => {
-                return new UserActions.RefreshUserAction( this._userService.currentUserId );
+                return new UserActions.RefreshUserAction( {id: this._userService.currentUserId, user: currentUser} );
               } )
               .catch( ( err ) => {
                 return Observable.of( new AppActions.NoopAction() );
@@ -337,7 +350,7 @@ export class UserEffects extends Analytics {
       .switchMap( ( [action, state]: [UserActions.UpdateNoteAction, IAppState] ) =>
         this._userService.updateAttendeeNote( action.payload )
           .map( ( result: UserState.IConferenceAttendeeNote ) => {
-            return new UserActions.RefreshUserAction( this._userService.currentUserId );
+            return new UserActions.RefreshUserAction( {id: this._userService.currentUserId, user: state.user.current} );
           } )
           .catch( ( err ) => {
             return Observable.of( new AppActions.NoopAction() );
@@ -352,25 +365,6 @@ export class UserEffects extends Analytics {
         this._log.debug( 'loadUser:', action.payload );
         return this._userService.loadUser( action.payload )
           .map( ( result: UserState.IRegisteredUser ) => {
-            // if ( result && result.notes && ( this._currentScanAttendee || this._currentSavedNotes ) ) {
-            //   // update with appropriate name
-            //   // TODO: won't need this when Bram can add name in there
-            //   for ( let i = 0; i < result.notes.length; i++ ) {
-            //     if ( this._currentScanAttendee ) {
-            //       if ( result.notes[i].peerAttendeeId === this._currentScanAttendee.id ) {
-            //         result.notes[i].name = this._currentScanAttendee.name;
-            //         break;
-            //       }
-            //     } else if ( this._currentSavedNotes && this._currentSavedNotes.length ) {
-            //       const savedNote = this._currentSavedNotes.find( n => n.id === result.notes[i].id );
-            //       if ( savedNote ) {
-            //         // ensure names are preserved
-            //         result.notes[i].peer.name = savedNote.peer.name;
-            //       }
-            //     }
-            //   }
-            // }
-            // this._currentScanAttendee = this._currentSavedNotes = null; // reset
             this._userService.persistUser( result );
             return new UserActions.ChangedAction( {
               current: result
@@ -437,7 +431,7 @@ export class UserEffects extends Analytics {
               // TODO: use valid token
               this._userService.token = this._userService.getTokenHash(user.id);// 'admin-token';
               this._currentSavedNotes = user.notes;
-              return new UserActions.RefreshUserAction( user.id );
+              return new UserActions.RefreshUserAction( { id: user.id, user } );
             } else {
               // just ignore, no user
               return new AppActions.NoopAction();
@@ -448,7 +442,6 @@ export class UserEffects extends Analytics {
     );
 
   private _postingData: any; // used with create user chain
-  private _currentBadgeId: string;
   private _currentScanAttendee: UserState.IRegisteredUser;
   private _currentSavedNotes: Array<UserState.IConferenceAttendeeNote>;
 

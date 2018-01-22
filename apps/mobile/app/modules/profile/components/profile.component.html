@@ -1,6 +1,6 @@
 <ngatl-ns-profile-action-bar [title]="'general.profile' | translate" (logout)="logout()"></ngatl-ns-profile-action-bar>
 <GridLayout id="example-background" (loaded)="onBackgroundLoaded($event)" *ngIf="renderView">
-  <GridLayout id="form-content" class="form-content" rows="auto,*,auto" (loaded)="onContentLoaded($event)">
+  <GridLayout id="form-content" class="form-content" rows="auto,*,auto,auto" (loaded)="onContentLoaded($event)">
     <StackLayout class="top-border" row="0"></StackLayout>
     <ScrollView row="1" class="fields-section">
       <StackLayout>
@@ -41,7 +41,8 @@
        
       </StackLayout>
     </ScrollView>
-    <Label [text]="'user.unclaim' | translate" (tap)="unclaim()" class="btn btn-primary c-bg-ngatl-red text-center m-b-5" row="2" col="0" [touchColor]="'#7c1f21,#571618'"></Label>
+    <Label [text]="'user.unlink-sponsor' | translate" (tap)="leaveSponsor()" class="btn btn-primary c-bg-ngatl-red text-center m-b-5" row="2" col="0" [touchColor]="'#7c1f21,#571618'" *ngIf="currentUser.sponsor"></Label>
+    <Label [text]="'user.unclaim' | translate" (tap)="unclaim()" class="btn btn-primary c-bg-ngatl-red text-center m-b-5" row="3" col="0" [touchColor]="'#7c1f21,#571618'"></Label>
   </GridLayout>
   <!-- Picture -->
   <!-- <Image

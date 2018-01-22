@@ -29,12 +29,12 @@ export class LoopBackAuth {
    * The constructor will initialize the token loading data from storage
    **/
   constructor(@Inject(InternalStorage) protected storage: InternalStorage) {
-    this.token.id = this.load('id');
-    this.token.user = this.load('user');
-    this.token.userId = this.load('userId');
-    this.token.created = this.load('created');
-    this.token.ttl = this.load('ttl');
-    this.token.rememberMe = this.load('rememberMe');
+    // this.token.id = this.load('id');
+    // this.token.user = this.load('user');
+    // this.token.userId = this.load('userId');
+    // this.token.created = this.load('created');
+    // this.token.ttl = this.load('ttl');
+    // this.token.rememberMe = this.load('rememberMe');
   }
   /**
    * @method setRememberMe

@@ -76,12 +76,6 @@ export class HomeComponent implements AfterViewInit, OnInit {
     this.store.select((s: IAppState) => s.user).subscribe((state: UserState.IState) => {
       this.user = state.current;
     });
-
-    this.router.events.subscribe(e => {
-      if (e instanceof NavigationEnd) {
-        this.drawerService.toggle(false);
-      }
-    });
   }
 
   ngAfterViewInit() {

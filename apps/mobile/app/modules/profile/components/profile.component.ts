@@ -155,6 +155,17 @@ export class ProfileComponent extends BaseComponent
     this.save();
   }
 
+  public leaveSponsor() {
+    this.win.confirm(this.translate.instant('user.unlink-sponsor-confirm'), () => {
+      this.currentUser.sponsor = null;
+      this.save();
+    }).then(_ => {
+
+    }, _ => {
+
+    });
+  }
+
   public save() {
     // for (const key in this.currentUser) {
     //   this.log.debug(key, this.currentUser[key]);

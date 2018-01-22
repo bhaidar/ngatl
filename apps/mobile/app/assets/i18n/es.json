@@ -49,12 +49,18 @@
       "Hola, esta conferencia ngAtl es increíble! Quería acercarme y decir hola."
   },
   "user": {
+    "scanned-by": "Añadido por ",
+    "claim-personal-first": "Debe reclamar su propia insignia antes de unirse a un grupo de patrocinadores.",
     "save-favs": "Guardando favoritos...",
     "add-notes": "Agregar notas...",
     "require-auth": "¡Solicite su credencial para iniciar sesión y use esta función!",
     "language": "Idioma",
     "badge-claim": "¿Es esta tu insignia?",
     "confirm-sponsor-pin": "Confirma el PIN del patrocinador:",
+    "sponsor-confirmed": "Ahora eres parte de:",
+    "wrong-sponsor-pin": "Ese número de pin era incorrecto.",
+    "unlink-sponsor": "Desenlazar grupo de patrocinadores",
+    "unlink-sponsor-confirm": "¿Seguro que quieres desvincular tu cuenta del grupo de patrocinadores?",
     "scan-action": "Escanear una insignia",
     "already-scanned": "Ya has escaneado el maravillosamente delicioso",
     "already-claimed":

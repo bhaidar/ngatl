@@ -40,7 +40,7 @@ export class ActionBarComponent extends BaseComponent {
     this.tappedTop.next(true);
     if (this.appService.currentUser) {
       // could optionally scroll the current notes list to the top by dispatching an event
-      this.store.dispatch(new UserActions.RefreshUserAction( this.userService.currentUserId ));
+      this.store.dispatch(new UserActions.RefreshUserAction( {id: this.userService.currentUserId, user: this.appService.currentUser} ));
     }
   }
 

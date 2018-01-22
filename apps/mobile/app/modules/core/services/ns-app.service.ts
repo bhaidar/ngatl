@@ -392,9 +392,7 @@ export class NSAppService {
             // fancy alert confirm
             this._confirmClaim( user );
           } ).then( _ => {
-            if ( !isIOS ) {
-              this._confirmClaim( user );
-            }
+
           }, _ => {
             // reject/cancel
             // this._win.setTimeout(_ => {
@@ -408,10 +406,20 @@ export class NSAppService {
       .subscribe( ( user: UserState.IClaimStatus ) => {
         this._win.setTimeout( _ => {
           let options: IPromptOptions = {
-            action: () => {
-              this._log.debug( 'fancyalert confirm:', user );
-              // fancy alert confirm
-              this._confirmClaim( user );
+            action: (text: string) => {
+              if (text) {
+                this._log.debug( 'fancyalert prompt confirm:', text );
+                this._log.debug( 'user.attendee.pin:', user.attendee.pin );
+                // fancy alert confirm
+                const pin = parseInt(text, 10);
+                if (user.attendee.pin === pin) {
+                  this._confirmSponsor(user);
+                } else {
+                  this._win.setTimeout(_ => {
+                    this._win.alert(this._translate.instant('user.wrong-sponsor-pin'));
+                  }, 300);
+                }
+              }
             },
             placeholder: this._translate.instant( 'dialogs.pin-number' ),
             initialValue: '',
@@ -431,6 +439,17 @@ export class NSAppService {
   private _confirmClaim( user: UserState.IClaimStatus ) {
     this._ngZone.run( () => {
       this._store.dispatch( new UserActions.ClaimUserAction( user ) );
+    } );
+  }
+
+  private _confirmSponsor( user: UserState.IClaimStatus ) {
+    this._ngZone.run( () => {
+      const updateUser = Object.assign({}, this.currentUser);
+      updateUser.sponsor = this._userService.tmpBadgeId;
+      this._store.dispatch( new UserActions.UpdateAction( updateUser ) );
+      this._win.setTimeout(_ => {
+        this._win.alert(this._translate.instant('user.sponsor-confirmed') + ' ' + user.attendee.name);
+      }, 600);
     } );
   }
 

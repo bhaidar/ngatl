@@ -276,9 +276,9 @@ export namespace UserActions {
     type = ActionTypes.REFRESH_USER;
 
     /**
-     * @param payload user id
+     * @param payload user id and optional full user object
      */
-    constructor(public payload: string) {}
+    constructor(public payload: { id: string, user?: UserState.IRegisteredUser}) {}
   }
 
   export class AddUserAction implements Action {

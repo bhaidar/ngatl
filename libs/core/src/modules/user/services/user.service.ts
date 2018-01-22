@@ -26,6 +26,7 @@ import {
   isNativeScript,
   isObject,
   getYear,
+  flatten
 } from '../../helpers';
 import { IAppState } from '../../ngrx';
 
@@ -39,6 +40,7 @@ export class UserService extends Cache {
   private _unauthorizedRouteAttempt: Subject<string> = new Subject();
   // for quick access in other api calls
   private _currentUserId: string;
+  private _tmpBadgeId: string;
   // allow various effect chain to prevent the default loaderOff$ handling in user.effect
   private _preventDefaultSpinner: boolean;
   private _preventDefaultSpinnerTimeout: number;
@@ -253,11 +255,13 @@ export class UserService extends Cache {
 
   public updateUser(user: UserState.IRegisteredUser) {
     const url = `${NetworkCommonService.API_URL}ConferenceAttendees/${user.id}`;
+    const updates = Object.assign({}, user);
+    delete updates.notes; // these should never go up with updates
     // this._serializeUpdates(user);
     return this._http.put( url, user )
-      .map( ( user: any ) => {
-        this._log.debug( 'updated user:', user );
-        return new UserState.RegisteredUser( user );
+      .map( ( updatedUser: any ) => {
+        this._log.debug( 'updated user:', updatedUser );
+        return new UserState.RegisteredUser( updatedUser );
       } );
   }
 
@@ -265,9 +269,9 @@ export class UserService extends Cache {
   //   return this._apiUsers.deleteUser(id);
   // }
 
-  public loadUser( id: string ): Observable<UserState.IRegisteredUser> {
+  public loadUser( details: { id: string, user?: UserState.IRegisteredUser} ): Observable<UserState.IRegisteredUser> {
     // get user with all details in case reloading from a fresh login
-    this._log.debug( 'loadUser:', id );
+    this._log.debug( 'loadUser:', details.id );
     /**
      * {
     "include": {
@@ -277,7 +281,13 @@ export class UserService extends Cache {
         }
     }
      */
-    const url = `${NetworkCommonService.API_URL}ConferenceAttendees/${id}?filter=%7B%22include%22%3A%7B%22relation%22%3A%22notes%22%2C%22scope%22%3A%7B%22include%22%3A%22peer%22%7D%7D%7D`;
+    let url = `${NetworkCommonService.API_URL}ConferenceAttendees/${details.id}?filter=%7B%22include%22%3A%7B%22relation%22%3A%22notes%22%2C%22scope%22%3A%7B%22include%22%3A%22peer%22%7D%7D%7D`;
+
+    const inSponsorGroup = details.user ? !!details.user.sponsor : false;
+    if (inSponsorGroup) {
+      // include notes from all sponsor members
+      url = `${NetworkCommonService.API_URL}ConferenceAttendees?filter=%7B%22include%22%3A%7B%22relation%22%3A%22notes%22%2C%22scope%22%3A%7B%22include%22%3A%5B%7B%22relation%22%3A%22peer%22%7D%2C%7B%22relation%22%3A%22attendee%22%7D%5D%7D%7D%2C%22where%22%3A%7B%22sponsor%22%3A%20%22${details.user.sponsor}%22%7D%7D`;
+    }
     this._log.debug( url );
     // let params = new HttpParams();
 
@@ -287,6 +297,23 @@ export class UserService extends Cache {
     return this._http.get( url )
       .map( ( user: any ) => {
         this._log.debug( 'loaded user:', user );
+        if (inSponsorGroup) {
+          // collect notes together and condense attendee data
+          const users = <Array<any>>user;
+          const currentUser = user.find(u => u.id === details.id);
+          const notes = flatten(users.map(u => u.notes)).map((n: UserState.IConferenceAttendeeNote) => { 
+            if (n.attendee.id === details.id) { 
+              // reduces duplicate data
+             delete n.attendee;
+             return n;
+           } else {
+             return n;
+           } });
+           if (currentUser) {
+              user = currentUser;
+              user.notes = notes;
+           }
+        }
         return new UserState.RegisteredUser( user );
       } );
   }
@@ -301,11 +328,11 @@ export class UserService extends Cache {
     return this._http.get(`${NetworkCommonService.API_URL}ConferenceTickets/${badgeId}/claim?confirm=${confirmHash}`)
     // return this._http.get( `${NetworkCommonService.API_URL}ConferenceTickets/${badgeId}/claim?confirm=true` )
       .map( ( user: any ) => {
-        this._log.debug( 'confirmed:', user );
-        this._log.debug( 'typeof user:', typeof user );
-        for ( const key in user ) {
-          this._log.debug( key, user[key] );
-        }
+        // this._log.debug( 'confirmed:', user );
+        // this._log.debug( 'typeof user:', typeof user );
+        // for ( const key in user ) {
+        //   this._log.debug( key, user[key] );
+        // }
         return new UserState.RegisteredUser( user.attendee );
       } );
   }
@@ -379,7 +406,7 @@ export class UserService extends Cache {
       return stored.id;
     }
     return null;
-  }
+  }e
 
   public set claimId( id: string ) {
     if ( id ) {
@@ -387,6 +414,15 @@ export class UserService extends Cache {
     } else {
       this._storageService.removeItem( StorageKeys.CLAIMED_ID );
     }
+  }
+
+  // helps data flows
+  public get tmpBadgeId() {
+    return this._tmpBadgeId;
+  }
+
+  public set tmpBadgeId(value: string) {
+    this._tmpBadgeId = value;
   }
 
   public get badgeId() {

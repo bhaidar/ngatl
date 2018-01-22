@@ -49,12 +49,18 @@
       "Hi, this ngAtl conference is awesome! I wanted to reach out and say hello."
   },
   "user": {
+    "scanned-by": "Added by ",
+    "claim-personal-first": "You must claim your own badge first before joining a sponsor group.",
     "save-favs": "Saving favorites...",
     "add-notes": "Add notes...",
     "require-auth": "Please claim your badge to login and use this feature!",
     "language": "Language",
     "badge-claim": "Is this your badge",
     "confirm-sponsor-pin": "Please confirm the sponsor PIN:",
+    "sponsor-confirmed": "You are now a part of:",
+    "wrong-sponsor-pin": "That pin number was incorrect.",
+    "unlink-sponsor": "Unlink sponsor group",
+    "unlink-sponsor-confirm": "Are you sure you want to unlink your account from the sponsor group?",
     "scan-action": "Scan a badge",
     "already-scanned": "You have already scanned the wonderfully delightful",
     "already-claimed":

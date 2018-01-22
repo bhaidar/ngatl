@@ -1,4 +1,5 @@
-import { Directive, ElementRef, Input, SimpleChanges } from '@angular/core';
+import { Directive, ElementRef, Input, SimpleChanges, NgZone } from '@angular/core';
+import { Router } from '@angular/router';
 
 // nativescript
 import { Color } from 'tns-core-modules/color';
@@ -9,6 +10,7 @@ import { TouchGestureEventData } from 'tns-core-modules/ui/gestures';
 // libs
 import { Subject } from 'rxjs/Subject';
 import { WindowService, BaseComponent, safeSplit } from '@ngatl/core';
+import { DrawerService } from '../../core/services/drawer.service';
 
 @Directive({
   selector: '[touchColor]'
@@ -16,6 +18,7 @@ import { WindowService, BaseComponent, safeSplit } from '@ngatl/core';
 export class TouchColorDirective extends BaseComponent {
 
   @Input() touchColor: string;
+  @Input() touchActive: string;
 
   private _baseBgColor: string; // base/default background color
   private _baseColor: string; // base/default text color
@@ -23,14 +26,20 @@ export class TouchColorDirective extends BaseComponent {
   private _highlightColor: string; // highlight text color on touch
   private _currentBgColor: string; // currently active bg color
   private _currentColor: string; // currently active text color
+  private _activeUrlPath: string;
+  private _activeBgColor: string;
   private _view: View;
   private _animation: Animation;
+  private _animateOptions: AnimationDefinition;
   private _viewInit = false;
   private _touchHandler: (args: TouchGestureEventData) => void;
 
   constructor(
     private _el: ElementRef,
     private _win: WindowService,
+    private _router: Router,
+    private _drawerService: DrawerService,
+    private _ngZone: NgZone,
   ) {
     super();
     this._touchHandler = this._touchHandlerFn.bind(this);
@@ -51,6 +60,41 @@ export class TouchColorDirective extends BaseComponent {
         }
       }
     }
+    if (this.touchActive) {
+      const parts = safeSplit(this.touchActive, ',');
+      if (parts.length > 1) {
+        this._activeUrlPath = parts[0];
+        this._activeBgColor = parts[1];
+      }
+      this._drawerService.activeRoute$
+        .takeUntil(this.destroy$)
+        .subscribe(urlPath => {
+          console.log('urlPath:', urlPath);
+          console.log('this._activeUrlPath:', this._activeUrlPath);
+          if (urlPath === this._activeUrlPath && this._view) {
+            console.log('animating to bg color:', this._activeBgColor);
+            this._animateOptions = {
+              backgroundColor: this._platformColor(this._activeBgColor),
+              duration: 300,
+              iterations: 1,
+              target: this._view
+            };
+      
+            this._animation = new Animation([this._animateOptions]);
+            this._play();
+          } else if (this._currentBgColor === this._activeBgColor) {
+            this._animateOptions = {
+              backgroundColor: this._platformColor(this._baseBgColor),
+              duration: 400,
+              iterations: 1,
+              target: this._view
+            };
+      
+            this._animation = new Animation([this._animateOptions]);
+            this._changeStyle(this._baseBgColor, null);
+          }
+        })
+    }
   }
 
   ngAfterViewInit() {
@@ -61,14 +105,14 @@ export class TouchColorDirective extends BaseComponent {
       this._view.on('touch', this._touchHandler);
 
       // setup fade out
-      let animateOptions: AnimationDefinition = {
+      this._animateOptions = {
         backgroundColor: this._platformColor(this._baseBgColor),
         duration: 400,
         iterations: 1,
         target: this._view
       };
 
-      this._animation = new Animation([animateOptions]);
+      this._animation = new Animation([this._animateOptions]);
     }
   }
 
@@ -135,6 +179,7 @@ export class TouchColorDirective extends BaseComponent {
         // avoid changing native props unless they are truly different
         this._currentBgColor = bgColor;
         this._view.backgroundColor = this._platformColor(bgColor);
+        console.log('set bg to:', bgColor)
       }
       if (color && color !== this._currentColor) {
         this._currentColor = color;

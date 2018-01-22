@@ -346,7 +346,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
 
   public refreshUser() {
     if (this._userService.currentUserId) {   
-      this._store.dispatch(new UserActions.RefreshUserAction(this._userService.currentUserId));
+      this._store.dispatch(new UserActions.RefreshUserAction({id: this._userService.currentUserId, user: this.appService.currentUser }));
     }
   }
 
@@ -643,9 +643,11 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
         duration: 620,
         iterations: 1,
       }).then(_ => {
-        this._ngZone.run(() => {
-          this.showNotes = true;
-        });
+        this._win.setTimeout(() => {
+          this._ngZone.run(() => {
+            this.showNotes = true;
+          });
+        }, 300);
       }, _ => {
 
       });

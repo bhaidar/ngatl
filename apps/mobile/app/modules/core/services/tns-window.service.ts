@@ -186,7 +186,7 @@ export class MobileWindowPlatformService {
             }),
             SCLAlertViewStyleKit.imageOfWarning(),
             '#fff',
-            '_______________',
+            '---',
             options.msg,
           );
         } else {    

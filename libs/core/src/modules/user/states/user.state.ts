@@ -15,6 +15,7 @@ export namespace UserState {
     created?: string;
     modified?: string;
     peer?: IRegisteredUser;
+    attendee?: IRegisteredUser;
   }
 
   export interface IRegisteredUser {
@@ -30,6 +31,8 @@ export namespace UserState {
     modified?:string;
     notes?: Array<IConferenceAttendeeNote>;
     favs?: Array<string>;
+    pin?: number;
+    sponsor?: string;
   }
   
   export interface IClaimStatus {
@@ -56,6 +59,8 @@ export namespace UserState {
     public language: LocaleState.Locale;
     public notes: Array<IConferenceAttendeeNote>;
     public favs: Array<string>;
+    public pin: number;
+    public sponsor: string;
 
     constructor(model?: any) {
       Object.assign(this, this, model);
