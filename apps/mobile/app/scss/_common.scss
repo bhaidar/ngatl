@@ -89,7 +89,7 @@ ListView {
                 color: $grey-light;
             }
             &.active {
-                // background-color: $white;
+                background-color: $white;
                 .sidedrawer-list-item-icon {
                     color: $ngatl-red;
                 }

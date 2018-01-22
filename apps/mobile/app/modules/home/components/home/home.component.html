@@ -8,63 +8,63 @@
       <GridLayout class="sidedrawer-content" rows="*" columns="*">
         <StackLayout row="0" col="0" class="h-full">
           <!-- Home -->
-          <GridLayout columns="60,*,auto" rows="60" [nsRouterLink]="['/landing/home']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}" pageTransition="slideLeft" class="sidedrawer-item" [touchColor]="'#4d4d4d,#5a5a5a'">
+          <GridLayout columns="60,*,auto" rows="60" [nsRouterLink]="['/landing/home']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}" pageTransition="slideLeft" class="sidedrawer-item">
             <Label [text]="'ion-home' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
             <Label [text]="'menu.home' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
           </GridLayout>
   
            <!-- Schedule -->
            <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'events']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
-           pageTransition="slideleft" class="sidedrawer-item" [touchColor]="'#4d4d4d,#5a5a5a'">
+           pageTransition="slideleft" class="sidedrawer-item">
                <Label [text]="'ion-ios-calendar-outline' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
                <Label [text]="'menu.schedule' | translate"  class="sidedrawer-list-item-text" row="0" col="1"></Label>
            </GridLayout>
   
           <!-- Speakers -->
           <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'speakers']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
-          pageTransition="slideleft" class="sidedrawer-item" [touchColor]="'#4d4d4d,#5a5a5a'">
+          pageTransition="slideleft" class="sidedrawer-item">
               <Label [text]="'ion-mic-b' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
               <Label [text]="'menu.speakers' | translate"  class="sidedrawer-list-item-text" row="0" col="1"></Label>
           </GridLayout>
   
           <!-- Sponsors -->
           <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'sponsors']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
-          pageTransition="slideleft" class="sidedrawer-item" [touchColor]="'#4d4d4d,#5a5a5a'">
+          pageTransition="slideleft" class="sidedrawer-item">
               <Label [text]="'ion-ribbon-b' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
               <Label [text]="'menu.sponsors' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
           </GridLayout>
 
           <!-- Community -->
           <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'misc', 'community']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
-          pageTransition="slideleft" class="sidedrawer-item" [touchColor]="'#4d4d4d,#5a5a5a'">
+          pageTransition="slideleft" class="sidedrawer-item">
               <Label [text]="'ion-ios-people' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
               <Label [text]="'menu.community' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
           </GridLayout>
 
           <!-- Media Partners -->
           <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'misc', 'media']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
-          pageTransition="slideleft" class="sidedrawer-item" [touchColor]="'#4d4d4d,#5a5a5a'">
+          pageTransition="slideleft" class="sidedrawer-item">
               <Label [text]="'ion-wand' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
               <Label [text]="'menu.media' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
           </GridLayout>
   
           <!-- Code of Conduct -->
           <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'misc', 'conduct']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
-          pageTransition="slideleft" class="sidedrawer-item" [touchColor]="'#4d4d4d,#5a5a5a'">
+          pageTransition="slideleft" class="sidedrawer-item">
               <Label [text]="'ion-ios-list-outline' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
               <Label [text]="'menu.conduct' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
           </GridLayout>
   
           <!-- About -->
           <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'misc', 'about']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
-          pageTransition="slideleft" class="sidedrawer-item" [touchColor]="'#4d4d4d,#5a5a5a'">
+          pageTransition="slideleft" class="sidedrawer-item">
               <Label [text]="'ion-ios-book-outline' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
               <Label [text]="'menu.story' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
           </GridLayout>
 
           <!-- Credits -->
           <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'misc', 'credits']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
-          pageTransition="slideleft" class="sidedrawer-item" [touchColor]="'#4d4d4d,#5a5a5a'" [touchActive]="'/landing/home/misc/credits,#fff'">
+          pageTransition="slideleft" class="sidedrawer-item"><!--[touchColor]="'#4d4d4d,#5a5a5a'" [touchActive]="'/landing/home/misc/credits,#fff'"-->
               <Label [text]="'ion-ios-information' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
               <Label [text]="'menu.credits' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
           </GridLayout>
