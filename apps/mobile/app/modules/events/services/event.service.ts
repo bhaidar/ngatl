@@ -1,6 +1,7 @@
 // angular
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 // lib
 import { Store } from '@ngrx/store';
@@ -8,6 +9,7 @@ import { Observable } from 'rxjs/Observable';
 import { ConferenceEventApi } from '@ngatl/api';
 import { Cache, StorageKeys, StorageService, NetworkCommonService, UserService, UserState, LogService, WindowService } from '@ngatl/core';
 import * as localNotifications from "nativescript-local-notifications";
+import { RouterExtensions } from 'nativescript-angular/router';
 
 // app
 import { IConferenceAppState, IConferenceState } from '../../ngrx';
@@ -32,6 +34,8 @@ export class EventService extends Cache {
     private userService: UserService,
     private log: LogService,
     private win: WindowService,
+    private router: Router,
+    private routerExt: RouterExtensions,
     private events: ConferenceEventApi
   ) {
     super(storage);
@@ -65,12 +69,17 @@ export class EventService extends Cache {
       });
 
     localNotifications.addOnMessageReceivedCallback((notification) => {
-      this.log.debug("ID: " + notification.id);
-      this.log.debug("Title: " + notification.title);
-      this.log.debug("Body: " + notification.body);
-      this.win.setTimeout(_ => {
-        this.win.alert(`id: ${notification.id}, title: ${notification.title}, body: ${notification.body}`);
-      }, 400);
+      // this.log.debug("ID: " + notification.id);
+      // this.log.debug("Title: " + notification.title);
+      // this.log.debug("Body: " + notification.body);
+      // this.win.setTimeout(_ => {
+      //   this.win.alert(`id: ${notification.id}, title: ${notification.title}, body: ${notification.body}`);
+      // }, 400);
+      if (this.router.url && this.router.url.indexOf('events') === -1) {
+        this.win.setTimeout(() => {
+          this.routerExt.navigate(['/landing/home', 'events']);
+        }, 300);
+      }
     }).then(() => {
       this.log.debug("localNotifications addOnMessageReceivedCallback added");
     });

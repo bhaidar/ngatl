@@ -287,8 +287,8 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
           id: <any>item.id,
           title,
           body: item.name,
-          // at: subMinutes(date,15), // PRODUCTION - Bring back before release!!
-          at: addSeconds(new Date(), 10),
+          at: subMinutes(date,15), // PRODUCTION - Bring back before release!!
+          // at: addSeconds(new Date(), 10),
           badge: 1
         }]);
       } else if (this._scheduledIds.includes(item.id)) {
