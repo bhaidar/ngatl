@@ -41,10 +41,12 @@ export class NSWebViewComponent extends BaseModalComponent {
   }
 
   public webViewLoaded(view: WebView) {
-    view.src = this.url;
-
-    if ( !isIOS && view.nativeView ) {
-      (<android.webkit.WebView>view.nativeView).getSettings().setDomStorageEnabled(true);
+    if (this.url) {
+      view.src = this.url;
+  
+      if ( !isIOS && view.nativeView ) {
+        (<android.webkit.WebView>view.nativeView).getSettings().setDomStorageEnabled(true);
+      }
     }
   }
 }

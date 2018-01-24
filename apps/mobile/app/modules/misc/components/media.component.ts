@@ -24,12 +24,12 @@ export class MediaComponent {
     {
       name: '31South',
       logo: '~/assets/images/media/31south.jpg',
-      link: 'https://www.31south.io/',
+      link: 'https://www.31south.io',
     },
     {
       name: 'This Dot',
       logo: '~/assets/images/media/this-dot-logo.jpg',
-      link: 'https://www.thisdot.co/',
+      link: 'https://www.thisdot.co',
     }
   ];
 
@@ -49,12 +49,12 @@ export class MediaComponent {
     this.renderView = true;
   }
 
-  public openWeb(url: string) {
+  public openWeb(url: string, title: string) {
     this.appService.openWebView({
       vcRef: this.vcRef,
       context: {
         url,
-        title: this.translate.instant('conduct.title')
+        title
       }
     })
   }

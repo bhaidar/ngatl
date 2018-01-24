@@ -2,6 +2,7 @@ import { Component, AfterViewInit, OnInit, ViewContainerRef, ViewChild, ElementR
 
 // libs
 import { Store } from '@ngrx/store';
+import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -10,7 +11,6 @@ import { isIOS, platformNames, device } from 'tns-core-modules/platform';
 import { SearchBar } from 'tns-core-modules/ui/search-bar';
 import { Color } from 'tns-core-modules/color';
 import { View } from 'tns-core-modules/ui/core/view';
-import * as tnsHttp from 'tns-core-modules/http';
 
 // app
 import { LoggerService } from '@ngatl/api';
@@ -50,6 +50,7 @@ export class SpeakerComponent extends BaseComponent implements AfterViewInit, On
     private appService: NSAppService,
     private _progressService: ProgressService,
     private _win: WindowService,
+    private _translate: TranslateService,
   ) {
     super();
     this.appService.currentVcRef = this.vcRef;
@@ -60,7 +61,7 @@ export class SpeakerComponent extends BaseComponent implements AfterViewInit, On
     this.store.select( s => s.conference.speakers )
       .takeUntil( this.destroy$ )
       .subscribe( ( speakers: SpeakerState.IState ) => {
-        this._all = this._adjustImage(speakers.list);
+        this._all = [...speakers.list];
         this.speakerState$.next( this._all );
       } );
 
@@ -70,23 +71,6 @@ export class SpeakerComponent extends BaseComponent implements AfterViewInit, On
       .subscribe( this._searchSpeakers );
 
     this.renderView = true;
-  }
-
-  private _adjustImage(list: Array<any>) {
-    if (list) {
-      list.forEach(i => {
-        i.imageUrl$ = Observable.create(observer => {
-          tnsHttp.getImage(i.imageUrl).then(img => {
-            observer.next(img);
-            observer.complete();
-          }, err => {
-            observer.complete();
-          });
-        });
-      });
-      return [...list];
-    }
-    return [];
   }
 
   public onPullRefreshInitiated(e) {
@@ -134,14 +118,20 @@ export class SpeakerComponent extends BaseComponent implements AfterViewInit, On
     }
   }
 
-  public openDetail( speaker: any ) {
-    this.appService.openWebView( {
-      vcRef: this.vcRef,
-      context: {
-        url: `https://twitter.com/${speaker.twitter}`,
-        title: `@${speaker.twitter}`
-      }
-    } )
+  public openDetail( speaker: SpeakerState.ISpeaker ) {
+    if (speaker['twitter-link']) {
+      const twitterLink = speaker['twitter-link'];
+      const twitterHandle = twitterLink.indexOf('http') > -1 ? twitterLink.split('/').slice(-1) : twitterLink;
+      this.appService.openWebView( {
+        vcRef: this.vcRef,
+        context: {
+          url: twitterLink,
+          title: `@${twitterHandle}`
+        }
+      } );
+    } else {
+      this._win.alert(this._translate.instant('general.twitter-unknown'));
+    }
   }
 
   public clear( e ) {

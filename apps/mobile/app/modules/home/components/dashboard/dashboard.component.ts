@@ -794,7 +794,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   }
 
   ngAfterViewInit() {
-    console.log('dashboard ngAfterViewInit!');
+    // console.log('dashboard ngAfterViewInit!');
     this._badgeViewAvail = true;
 
     this._setupSwipe();
@@ -843,7 +843,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   }
 
   public swipeHandler(args: SwipeGestureEventData) {
-    console.log('mainScreen swipe:', args.direction);
+    // console.log('mainScreen swipe:', args.direction);
     if (args.direction && !this._swipeStarted) {
       this._swipeStarted = true;
       this.enter();
@@ -856,7 +856,7 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
       this._ngOnInitFired = false;
       this._authStateChecked = false;
       this._stopBeacon();
-      console.log('dashboard ngOnDestroy!');
+      // console.log('dashboard ngOnDestroy!');
       super.ngOnDestroy();
       // app.off(app.suspendEvent, this._stopAnime);
       if (isIOS) {

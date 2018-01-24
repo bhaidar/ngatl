@@ -3,7 +3,7 @@
   <ListView [items]="mediaState$ | async" class="list-group h-full">
     <ng-template let-item="item" let-odd="odd" let-even="even">
       <StackLayout>
-        <StackLayout class="card" (tap)="viewSite(item.link, item.name)">
+        <StackLayout class="card" (tap)="openWeb(item.link, item.name)">
           <Image [src]="item.logo" height="120" horizontalAlignment="center" verticalAlignment="center" class="w-full p-5 c-bg-white"></Image>
 
           <!-- <StackLayout class="hr-light"></StackLayout> -->

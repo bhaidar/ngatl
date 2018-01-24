@@ -11,6 +11,7 @@ import { LoggerService } from '@ngatl/api';
 import { AppActions, WindowService } from '@ngatl/core';
 import { SpeakerService } from '../services/speaker.service';
 import { SpeakerActions } from '../actions/speaker.action';
+import { SpeakerState } from '../states';
 
 @Injectable()
 export class SpeakerEffects {

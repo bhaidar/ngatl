@@ -286,10 +286,13 @@ export class NSAppService {
         }
       } )
     );
-    this._modal.showModal( NSWebViewComponent, {
-      viewContainerRef: options.vcRef || this.currentVcRef,
-      context: options.context
-    } );
+    this._store.dispatch(new ModalActions.OpenAction({
+      cmpType: NSWebViewComponent,
+      modalOptions: {
+        viewContainerRef: options.vcRef || this.currentVcRef,
+        context: options.context
+      }
+    }));
   }
 
   /**
