@@ -278,14 +278,7 @@ export class NSAppService {
    * @param options IOpenWebViewOptions
    */
   public openWebView( options: IOpenWebViewOptions ) {
-    this._store.dispatch(
-      new ProgressIndicatorActions.ShowAction( {
-        page: {
-          enabled: true,
-          message: 'Loading...'
-        }
-      } )
-    );
+    this._progressService.toggleSpinner(true, { message: 'Loading...'});
     this._store.dispatch(new ModalActions.OpenAction({
       cmpType: NSWebViewComponent,
       modalOptions: {
@@ -293,6 +286,12 @@ export class NSAppService {
         context: options.context
       }
     }));
+    if (!isIOS) {
+      // android load callback does not fire so ensure spinner just hides
+      this._win.setTimeout(_ => {
+        this._progressService.toggleSpinner();
+      }, 500);
+    }
   }
 
   /**

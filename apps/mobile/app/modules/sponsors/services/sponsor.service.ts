@@ -568,7 +568,8 @@ export class SponsorService extends Cache {
   }
 
   public fetch(forceRefresh?: boolean) {
-    return Observable.of(this._adjustImage(this._sponsorList).sort( sortAlpha ));
+    const list = this._adjustImage(this._sponsorList).sort( sortAlpha );
+    return Observable.of(list);
     // const stored = this.cache;
     // if (!forceRefresh && stored) {
     //   console.log('using cached sponsors.');

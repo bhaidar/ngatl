@@ -320,7 +320,8 @@ export class CommunityComponent {
     private appService: NSAppService,
   ) {
     this.appService.currentVcRef = this.vcRef;
-    this.communityState$ = Observable.of(this._adjustImage(this._community).sort(sortAlpha));
+    const list = this._adjustImage(this._community).sort(sortAlpha);
+    this.communityState$ = Observable.of(list);
   }
 
   private _adjustImage(list: Array<any>) {

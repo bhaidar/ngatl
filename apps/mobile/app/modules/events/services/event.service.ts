@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { ConferenceEventApi } from '@ngatl/api';
-import { Cache, StorageKeys, StorageService, NetworkCommonService, UserService, UserState, LogService, WindowService } from '@ngatl/core';
+import { Cache, StorageKeys, StorageService, NetworkCommonService, UserService, UserState, LogService, WindowService, dateIsValid } from '@ngatl/core';
 import * as localNotifications from "nativescript-local-notifications";
 import { RouterExtensions } from 'nativescript-angular/router';
 
@@ -130,12 +130,12 @@ export class EventService extends Cache {
   public fetch(forceRefresh?: boolean): Observable<Array<Session>> {
     const stored = this.cache;
     if (!forceRefresh && stored) {
-      console.log('using cached events.');
+      // console.log('using cached events.');
       // this._parseDates(stored);
       this._fixDates(stored);
       return Observable.of(this._createSessions(stored));
     } else {
-      console.log('fetch events fresh!');
+      // console.log('fetch events fresh!');
       return this.http.get(`${NetworkCommonService.API_URL}ConferenceEvents`) //?filter%5Bwhere%5D%5Btype%5D=Workshop
         .map((events: Array<EventState.IEvent>) => {
 
@@ -166,33 +166,39 @@ export class EventService extends Cache {
   }
 
   private _parseTimes(ev: EventState.IEvent) {
-    const currentDate = new Date(ev.date);
-    let month = currentDate.getMonth();
-    let day = currentDate.getDate();
-    switch( day) {
-      case 29:
-        month = 0;
-        day = 30;
-        break;
-      case 30:
-        month = 0;
-        day = 31;
-        break;
-      case 31:
-        month = 1;
-        day = 1;
-        break;
-      case 1:
-        month = 1;
-        day = 2;
-        break;  
+    if (ev.date) {
+      const currentDate = new Date(ev.date);
+      if (dateIsValid(currentDate)) {
+        let month = currentDate.getMonth();
+        let day = currentDate.getDate();
+        // console.log(`month: ${month}, day: ${day}`);
+        switch( day) {
+          case 29:
+            month = 0;
+            day = 30;
+            break;
+          case 30:
+            month = 0;
+            day = 31;
+            break;
+          case 31:
+            month = 1;
+            day = 1;
+            break;
+          case 1:
+            month = 1;
+            day = 2;
+            break;  
+        }
+        let {hour, min, sec, ampm} = this._parseTime(ev.startTime);
+        ev.startDate = new Date(2018,month,day,hour,min);
+        // console.log(`ev.startDate:`, ev.startDate.toString());
+        ev.startTime = `${hour}:${min < 10 ? ('0'+min) : min} ${ampm}`;
+        const end = this._parseTime(ev.endTime);
+        ev.endDate = new Date(2018,month,day,end.hour,end.min);
+        ev.endTime = `${end.hour}:${end.min < 10 ? ('0'+end.min) : min} ${end.ampm}`;
+      }
     }
-    let {hour, min, sec, ampm} = this._parseTime(ev.startTime);
-    ev.startDate = new Date(2018,month,day,hour,min);
-    ev.startTime = `${hour}:${min < 10 ? ('0'+min) : min} ${ampm}`;
-    const end = this._parseTime(ev.endTime);
-    ev.endDate = new Date(2018,month,day,end.hour,end.min);
-    ev.endTime = `${end.hour}:${end.min < 10 ? ('0'+end.min) : min} ${end.ampm}`;
   }
 
   private _parseTime(time: string) {

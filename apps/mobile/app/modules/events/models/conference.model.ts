@@ -181,18 +181,22 @@ export class ConferenceViewModel extends observable.Observable {
 
         if (this._fullSchedule) {
             let filteredSessions = this._fullSchedule.filter((session) => {
-              const isDay = session.startDate.getDate() === day;
-              const isMatch = !textFilter || session.name.toLocaleLowerCase().indexOf(textFilter) >= 0;
-                let include = false;
-                if (this._favoritesOnly) {
-                  include = isDay && session.isFavorite && isMatch;
+                if (session.startDate) {
+                    const isDay = session.startDate.getDate() === day;
+                    const isMatch = !textFilter || session.name.toLocaleLowerCase().indexOf(textFilter) >= 0;
+                      let include = false;
+                      if (this._favoritesOnly) {
+                        include = isDay && session.isFavorite && isMatch;
+                      } else {
+                        include = isDay && isMatch;
+                      }
+                      if (include) {
+                          session.cssClass = "session-favorite";
+                      }
+                      return include;
                 } else {
-                  include = isDay && isMatch;
+                    return false;
                 }
-                if (include) {
-                    session.cssClass = "session-favorite";
-                }
-                return include;
             });
     
             this.schedule$.next(filteredSessions);

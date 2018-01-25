@@ -172,10 +172,16 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
     if (listview) {
       // this.progressService.toggleSpinner(true);
       this.store.dispatch(new EventActions.FetchAction(true));
-      this.win.setTimeout(_ => {
+      if (isIOS) {
+        this.win.setTimeout(_ => {
+          listview.notifyPullToRefreshFinished();
+          // this.progressService.toggleSpinner(false);
+        }, 1500);
+      } else {
+        // android needs to be called right away
+        // https://github.com/telerik/nativescript-ui-feedback/issues/64
         listview.notifyPullToRefreshFinished();
-        // this.progressService.toggleSpinner(false);
-      }, 1500);
+      }
     }
   }
 

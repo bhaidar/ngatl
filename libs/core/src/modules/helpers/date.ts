@@ -30,3 +30,10 @@ export function getYear(date: string): number {
   const year = (new Date(date)).getFullYear();
   return year;
 }
+
+export function dateIsValid(date: Date) {
+  if (date) {
+    return date instanceof Date && !isNaN(date.valueOf());
+  }
+  return false;
+}

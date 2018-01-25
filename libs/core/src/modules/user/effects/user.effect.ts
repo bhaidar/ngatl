@@ -247,11 +247,11 @@ export class UserEffects extends Analytics {
       .withLatestFrom( this._store )
       .switchMap( ( [action, state]: [UserActions.FindUserAction, IAppState] ) => {
 
-        // this._progressService.toggleSpinner();
+        this._progressService.toggleSpinner(true);
         this._userService.tmpBadgeId = action.payload.badgeGuid;
         return this._userService.findUser( action.payload.badgeGuid, state.user.scanned )
           .map( ( foundUser ) => {
-            // this._progressService.toggleSpinner(false);
+            this._progressService.toggleSpinner(false);
             this._log.debug('foundUser:', foundUser);
             if ( foundUser ) {
               if ( state.user.current ) {

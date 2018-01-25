@@ -32,3 +32,5 @@ app/modules/profile/components/profile-action-bar.component.html
 
 # app uses platform specific scss which can inadvertently get renamed which will cause problems
 app/app.scss
+
+nathan.jks

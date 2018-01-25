@@ -1157,7 +1157,8 @@ export class SpeakerService extends Cache {
   }
 
   public fetch( forceRefresh?: boolean ) {
-    return Observable.of(this._adjustImage(this._speakerList).filter(s => !s["only-workshop-speaker"]).sort( sortAlpha ));
+    const list = this._adjustImage(this._speakerList).filter(s => !s["only-workshop-speaker"]).sort( sortAlpha );
+    return Observable.of(list);
     // const stored = this.cache;
     // if (!forceRefresh && stored) {
     //   console.log('using cached speakers.');
