@@ -22,7 +22,7 @@ export class EventEffects {
     .ofType(EventActions.ActionTypes.FETCH)
     .switchMap((action: EventActions.FetchAction) => this.eventService.fetch(action.payload))
     .map((value: Array<Session>) => {
-      console.log('fetched events result:', value);
+      // console.log('fetched events result:', value);
       // console.log(JSON.stringify(value));
 
       return new EventActions.ChangedAction({

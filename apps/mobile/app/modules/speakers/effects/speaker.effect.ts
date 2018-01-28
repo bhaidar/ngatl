@@ -21,7 +21,7 @@ export class SpeakerEffects {
     .ofType(SpeakerActions.ActionTypes.FETCH)
     .switchMap((action:SpeakerActions.FetchAction) => this.speakerService.fetch(action.payload))
     .map(value => {
-      this.log.info('fetched speakers result:', value);
+      // this.log.debug('fetched speakers result:', value);
       // this.log.info(JSON.stringify(value));
 
       return new SpeakerActions.ChangedAction({

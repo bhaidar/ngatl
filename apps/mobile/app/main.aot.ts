@@ -1,9 +1,12 @@
 // this import should be first in order to load some required settings (like globals and reflect-metadata)
 import { platformNativeScript } from 'nativescript-angular/platform-static';
+import { enableProdMode }from '@angular/core';
 import * as app from 'tns-core-modules/application';
 import * as utils from 'tns-core-modules/utils/utils';
 
 import { AppModuleNgFactory } from './app.module.ngfactory';
+
+enableProdMode();
 
 if (app.android) {
   app.on('launch', args => {

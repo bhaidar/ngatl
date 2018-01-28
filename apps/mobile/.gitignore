@@ -21,6 +21,7 @@ app/assets/aws.json
 !app/assets/font-awesome.min.css
 !app/assets/ionicons.min.css
 !app/SplashScreen.js
+!app/webpack.config.js
 app/modules/shared/components/action-bar/action-bar-back.component.html
 app/modules/shared/components/action-bar/action-bar-segment.component.html
 app/modules/shared/components/action-bar/action-bar.component.html

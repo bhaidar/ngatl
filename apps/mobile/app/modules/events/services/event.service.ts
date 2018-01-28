@@ -47,7 +47,7 @@ export class EventService extends Cache {
 
     this.store.select( 'conference' )
       .subscribe((confState: IConferenceState) => {
-        if (confState.events && confState.events.list) {
+        if (confState && confState.events && confState.events.list && confState.events.list.length) {
           this._conferenceModel.fullSchedule = [...confState.events.list];
           if (this._currentUser) {
             // update event listing state with what user had favorited (if any)
@@ -78,11 +78,9 @@ export class EventService extends Cache {
       // this.win.setTimeout(_ => {
       //   this.win.alert(`id: ${notification.id}, title: ${notification.title}, body: ${notification.body}`);
       // }, 400);
-      if (this.router.url && this.router.url.indexOf('events') === -1) {
-        this.win.setTimeout(() => {
-          this.routerExt.navigate(['/landing/home', 'events']);
-        }, 300);
-      }
+      this.win.setTimeout(() => {
+        this.win.alert(`${notification.title}, ${notification.body}`);
+      }, 700);
     }).then(() => {
       this.log.debug("localNotifications addOnMessageReceivedCallback added");
     });
@@ -153,6 +151,8 @@ export class EventService extends Cache {
             observer.complete();
             // return this._createSessions(eventList);
             // return this._parseDates(eventList);
+          }, err => {
+
           });
       });
     }

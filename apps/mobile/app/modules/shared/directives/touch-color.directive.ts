@@ -69,10 +69,10 @@ export class TouchColorDirective extends BaseComponent {
       this._drawerService.activeRoute$
         .takeUntil(this.destroy$)
         .subscribe(urlPath => {
-          console.log('urlPath:', urlPath);
-          console.log('this._activeUrlPath:', this._activeUrlPath);
+          // console.log('urlPath:', urlPath);
+          // console.log('this._activeUrlPath:', this._activeUrlPath);
           if (urlPath === this._activeUrlPath && this._view) {
-            console.log('animating to bg color:', this._activeBgColor);
+            // console.log('animating to bg color:', this._activeBgColor);
             this._animateOptions = {
               backgroundColor: this._platformColor(this._activeBgColor),
               duration: 300,
@@ -179,7 +179,7 @@ export class TouchColorDirective extends BaseComponent {
         // avoid changing native props unless they are truly different
         this._currentBgColor = bgColor;
         this._view.backgroundColor = this._platformColor(bgColor);
-        console.log('set bg to:', bgColor)
+        // console.log('set bg to:', bgColor)
       }
       if (color && color !== this._currentColor) {
         this._currentColor = color;
