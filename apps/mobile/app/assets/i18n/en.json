@@ -33,6 +33,7 @@
     "delete-lbl": "Delete"
   },
   "general": {
+    "export": "Export",
     "twitter-unknown": "Twitter unknown! So sorry!",
     "picture": "Picture",
     "back": "Back",
@@ -50,6 +51,7 @@
       "Hi, this ngAtl conference is awesome! I wanted to reach out and say hello."
   },
   "user": {
+    "export-confirm": "Are you sure you want to export all notes to a CSV file which you can email to yourself or your team?",
     "scanned-by": "Added by ",
     "claim-personal-first": "You must claim your own badge first before joining a sponsor group.",
     "save-favs": "Saving favorites...",

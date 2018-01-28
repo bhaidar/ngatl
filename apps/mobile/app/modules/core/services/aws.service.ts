@@ -8,6 +8,7 @@ import {
 } from 'date-fns';
 import { session as httpSession } from 'nativescript-background-http';
 import { File, path } from 'tns-core-modules/file-system';
+import * as tnsHttp from 'tns-core-modules/http';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs/Observable';
 import { LogService, WindowService, isObject, UserService, ProgressService } from '@ngatl/core';
@@ -38,6 +39,56 @@ export class AWSService {
 
   }
 
+  public getJSON(url: string): Promise<Array<any>> {
+    return new Promise( ( resolve, reject ) => {
+      this._getCredentials().then( ( cred: IAWSCred ) => {
+        const params: any = {
+          Bucket: 'ng-atl',
+          ContentType: 'application/json',
+          Key: url.split('/').slice(-1)[0],
+          // Body: new Buffer( data ),
+          ACL: 'public-read',
+          CacheControl: 'max-age=2628000'
+        };
+
+        // let payloadHash = this.getPayloadHash(payload);
+        let payloadHash = "UNSIGNED-PAYLOAD";
+        const amzDate = this._getAmzDate(new Date().toISOString());
+
+        // this._log.debug( 'amzDate:', amzDate );
+        let request: any = {
+          url,
+          method: 'GET',
+          headers: new HttpHeaders( {
+            "Host": "s3.amazonaws.com",                 // Mandatory
+            "Content-Type": params.ContentType,                   // Mandatory
+            //"Content-Length": "10000",                // Mandatory: This header is required for PUTs
+            // When you specify the Authorization header, you must specify either the x-amz-date or the Date header
+            "x-amz-date": amzDate,
+            "x-amz-content-sha256": payloadHash,        // Mandatory: It provides a hash of the request payload.
+            "x-amz-acl": "public-read"                // Optional: By default, all objects are private: only the owner has full control.
+            //"Authorization"   // Will be added by addAuthorizationHeader
+            //"Content-MD5"     // Recommended: The base64 encoded 128-bit MD5 digest of the message
+          } )
+        };
+        // Adding the authorization header
+        let authorization = this.getAuthorizationHeader( request,
+          cred.access_key, cred.secret,
+          cred.region, cred.bucket, params.Key, amzDate, payloadHash );
+          request.headers.append( "Authorization", authorization );
+        tnsHttp.request(request).then(result => {
+          if (result) {
+            resolve(result.content.toJSON());
+          } else {
+            reject();
+          }
+        }, err => {
+          reject(err);
+        });
+      });
+    });
+  }
+
   public upload( file: File ): Promise<string> {
     return new Promise( ( resolve, reject ) => {
       this._getCredentials().then( ( cred: IAWSCred ) => {
@@ -61,6 +112,9 @@ export class AWSService {
           case 'caf':
             params.ContentType = 'audio/x-caf';
             break;
+          case 'csv':
+            params.ContentType = 'text/csv';
+            break;
           case 'mp3':
             params.ContentType = 'audio/mp3';
             break;
@@ -81,7 +135,7 @@ export class AWSService {
 
         // this._log.debug( 'amzDate:', amzDate );
         let options: any = {
-          method: "PUT",
+          method: 'PUT',
           headers: new HttpHeaders( {
             "Host": "s3.amazonaws.com",                 // Mandatory
             "Content-Type": params.ContentType,                   // Mandatory
@@ -104,7 +158,7 @@ export class AWSService {
         let session = httpSession( "aws-uploader" );
         let request = {
           url: url,
-          method: "PUT",
+          method: 'PUT',
           headers: {
             "Host": "s3.amazonaws.com",                 // Mandatory
             "Content-Type": params.ContentType,                   // Mandatory
@@ -119,7 +173,7 @@ export class AWSService {
           },
           description: "{ 'Uploading': '" + file.name + "' }"
         };
-
+        
         const task = session.uploadFile( file.path, request );
         task.on( "progress", ( e ) => {
           // console.log( 'progress:', e );

@@ -112,7 +112,7 @@ export class RecordService {
         return;
       }
 
-      const filename = `${this._userService.currentUserId || ''}recording-${Date.now()}.${this.platformExtension()}`;
+      const filename = `${this._userService.currentUserId || ''}-recording-${Date.now()}.${this.platformExtension()}`;
       this._fileState.path = path.join( knownFolders.documents().path, filename );
       this._fileState.isRemote = false;
 

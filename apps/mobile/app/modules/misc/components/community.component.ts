@@ -31,7 +31,7 @@ export class CommunityComponent {
        "name":"Angular Beers",
        "logo":{  
           "fileId":"5a57b30371150700014a2db3",
-          "url":"https://daks2k3a4ib2z.cloudfront.net/59f85d8ca38c420001ebea6f/5a57b30371150700014a2db3_beers.png"
+          "url":"~/assets/images/community/beers.png"
        },
        "slug":"angular-beers",
        "updated-on":"2018-01-11T18:55:01.582Z",
@@ -50,7 +50,7 @@ export class CommunityComponent {
        "name":"Tech Talent South",
        "logo":{  
           "fileId":"5a4e9ce0832dd5000175cba3",
-          "url":"https://daks2k3a4ib2z.cloudfront.net/59f85d8ca38c420001ebea6f/5a4e9ce0832dd5000175cba3_techtalent.png"
+          "url":"~/assets/images/community/techtalent.png"
        },
        "slug":"tech-talent-south",
        "updated-on":"2018-01-04T21:30:14.340Z",
@@ -69,7 +69,7 @@ export class CommunityComponent {
        "name":"Angular Academy",
        "logo":{  
           "fileId":"5a2fc7cd99408a0001744430",
-          "url":"https://daks2k3a4ib2z.cloudfront.net/59f85d8ca38c420001ebea6f/5a1b6a9f90e70f000124a3aa_AngularAcademy.png"
+          "url":"~/assets/images/community/AngularAcademy.png"
        },
        "slug":"angular-academy",
        "updated-on":"2017-11-27T01:30:26.246Z",
@@ -89,7 +89,7 @@ export class CommunityComponent {
        "slug":"thoughtram",
        "logo":{  
           "fileId":"5a2fc7cd99408a0001744385",
-          "url":"https://daks2k3a4ib2z.cloudfront.net/59f85d8ca38c420001ebea6f/5a13313960b93f00019b2bb9_logo.svg"
+          "url":"~/assets/images/community/thoughtram.png"
        },
        "updated-on":"2017-11-20T19:47:10.833Z",
        "updated-by":"Collaborator_5a009ab5cd54e70001a53c9b",
@@ -107,7 +107,7 @@ export class CommunityComponent {
        "name":"Technologists of Color",
        "logo":{  
           "fileId":"5a2fc7cd99408a00017443a7",
-          "url":"https://daks2k3a4ib2z.cloudfront.net/59f85d8ca38c420001ebea6f/5a0c692b25bfc9000190ad7a_Toc.png"
+          "url":"~/assets/images/community/toc.png"
        },
        "slug":"technologists-of-color",
        "updated-on":"2017-11-15T16:19:58.580Z",
@@ -126,7 +126,7 @@ export class CommunityComponent {
        "name":"Latinos In Tech",
        "logo":{  
           "fileId":"5a2fc7cd99408a0001744423",
-          "url":"https://daks2k3a4ib2z.cloudfront.net/59f85d8ca38c420001ebea6f/5a0c60e1f16f8200016b656b_lit-atl-logo.png"
+          "url":"~/assets/images/community/lit-atl-logo.png"
        },
        "slug":"latinos-in-tech",
        "updated-on":"2017-11-15T15:45:08.363Z",
@@ -146,7 +146,7 @@ export class CommunityComponent {
        "slug":"women-techmakers-atlanta",
        "logo":{  
           "fileId":"5a2fc7cd99408a0001744409",
-          "url":"https://daks2k3a4ib2z.cloudfront.net/59f85d8ca38c420001ebea6f/59fc8f73b6086d0001493976_wtm-logo.png"
+          "url":"~/assets/images/community/wtm-logo.png"
        },
        "updated-on":"2017-11-15T16:17:46.146Z",
        "updated-by":"Collaborator_5a009ab5cd54e70001a53c9b",
@@ -163,7 +163,7 @@ export class CommunityComponent {
        "name":"Women Who Code, Atlanta",
        "logo":{  
           "fileId":"5a2fc7cd99408a00017443d4",
-          "url":"https://daks2k3a4ib2z.cloudfront.net/59f85d8ca38c420001ebea6f/59f9c2daea359e000107acc6_womens-who-code.png"
+          "url":"~/assets/images/community/WomenWhoCode.jpg"
        },
        "slug":"women-who-code-atlanta",
        "updated-on":"2017-11-03T15:46:17.947Z",
@@ -183,7 +183,7 @@ export class CommunityComponent {
        "slug":"vets-who-code",
        "logo":{  
           "fileId":"5a2fc7cd99408a00017443d6",
-          "url":"https://daks2k3a4ib2z.cloudfront.net/59f85d8ca38c420001ebea6f/59f9c2c2ea359e000107acc4_vets-who-code.png"
+          "url":"~/assets/images/community/VetsWhoCode.jpg"
        },
        "updated-on":"2017-11-03T15:46:09.860Z",
        "updated-by":"Collaborator_59fb40d65a1f1a00019b0b02",
@@ -202,7 +202,7 @@ export class CommunityComponent {
        "slug":"nggirls",
        "logo":{  
           "fileId":"5a2fc7cd99408a00017443d3",
-          "url":"https://daks2k3a4ib2z.cloudfront.net/59f85d8ca38c420001ebea6f/59f9c2b53b3286000183a08f_ng-girls.png"
+          "url":"~/assets/images/community/ngGirls.png"
        },
        "updated-on":"2017-11-03T15:45:56.479Z",
        "updated-by":"Collaborator_59fb40d65a1f1a00019b0b02",
@@ -220,7 +220,7 @@ export class CommunityComponent {
        "name":"Google Developer Group, Atlanta",
        "logo":{  
           "fileId":"5a2fc7cd99408a00017443d7",
-          "url":"https://daks2k3a4ib2z.cloudfront.net/59f85d8ca38c420001ebea6f/59f9c2a93b3286000183a088_google-dev-group-atl.png"
+          "url":"~/assets/images/community/gdg-atl-logo.png"
        },
        "slug":"google-developer-group-atlanta",
        "updated-on":"2017-11-15T16:17:52.324Z",
@@ -239,7 +239,7 @@ export class CommunityComponent {
        "name":"Front End Happy Hour",
        "logo":{  
           "fileId":"5a2fc7cd99408a00017443d5",
-          "url":"https://daks2k3a4ib2z.cloudfront.net/59f85d8ca38c420001ebea6f/59f9c297269fd6000139bef2_front-end-happy-hour.png"
+          "url":"~/assets/images/community/front-end-happy-hour.png"
        },
        "slug":"front-end-happy-hour",
        "updated-on":"2017-11-03T15:45:48.919Z",
@@ -259,7 +259,7 @@ export class CommunityComponent {
        "slug":"atlanta-javascript-meetup",
        "logo":{  
           "fileId":"5a2fc7cd99408a00017443d2",
-          "url":"https://daks2k3a4ib2z.cloudfront.net/59f85d8ca38c420001ebea6f/59f9c28901b9500001e84c5e_atl-js-meetup.png"
+          "url":"~/assets/images/community/AtlJS.png"
        },
        "updated-on":"2017-11-03T15:44:07.246Z",
        "updated-by":"Collaborator_59fb40d65a1f1a00019b0b02",
@@ -277,7 +277,7 @@ export class CommunityComponent {
        "name":"ATL-Angular",
        "logo":{  
           "fileId":"5a2fc7cd99408a00017443da",
-          "url":"https://daks2k3a4ib2z.cloudfront.net/59f85d8ca38c420001ebea6f/59f9a83bc9a5280001e4e806_atl-angular.png"
+          "url":"~/assets/images/community/AtlAngular.png"
        },
        "slug":"atl-angular",
        "updated-on":"2017-11-15T16:17:39.363Z",
@@ -297,7 +297,7 @@ export class CommunityComponent {
        "name":"Angular Air",
        "logo":{  
           "fileId":"5a2fc7cd99408a00017443db",
-          "url":"https://daks2k3a4ib2z.cloudfront.net/59f85d8ca38c420001ebea6f/59f9a6a8c9a5280001e4e77e_ang-air.png"
+          "url":"~/assets/images/community/ng-air-logo-light.png"
        },
        "slug":"angular-air",
        "updated-on":"2017-11-01T10:49:39.226Z",
@@ -330,6 +330,11 @@ export class CommunityComponent {
         i.imageUrl$ = Observable.create(observer => {
           observer.next('~/assets/images/loading.png');
           if (i.logo && i.logo.url) {
+            if (i.logo.url.indexOf('~') === 0) {
+              observer.next(i.logo.url);
+              observer.complete();
+              return;
+            }
             tnsHttp.getImage(i.logo.url).then(img => {
               observer.next(img);
               observer.complete();

@@ -8,10 +8,16 @@
     </AbsoluteLayout>
 
     <GridLayout row="0" col="0" rows="auto,*" columns="*" class="c-bg-transparent" *ngIf="showNotes">
-      <GridLayout class="card badge-scan" rows="*" columns="*,auto" (tap)="openBarcode()" row="0" col="0" [touchColor]="'#151F2F,#273957'">
-        <Label [text]="'user.scan-action' | translate" class="label c-white t-20" row="0" col="0"></Label>
-        <Image src="~/assets/images/barcode.png" row="0" col="1" height="50"></Image>
-      </GridLayout>
+        <GridLayout rows="*" columns="*,auto" row="0" col="0">
+          <GridLayout class="card badge-scan" rows="*" columns="auto,10,*" (tap)="openBarcode()" row="0" col="0" [touchColor]="'#151F2F,#273957'">
+            <Image src="~/assets/images/barcode.png" row="0" col="0" height="50"></Image>
+            <Label [text]="'user.scan-action' | translate" class="label c-white t-20" row="0" col="2"></Label>
+          </GridLayout>
+          <GridLayout class="card badge-scan" rows="*" columns="*,10,auto" (tap)="shareList()" row="0" col="1" [touchColor]="'#151F2F,#273957'">
+            <Label [text]="'general.export' | translate" class="label c-white t-20" row="0" col="0" height="50"></Label>
+            <Label [text]="'ion-ios-upload-outline' | fonticon" class="ion c-white" row="0" col="2"></Label>
+          </GridLayout>
+        </GridLayout>
       <RadListView [items]="scans"
         id="scans-listview"
         row="1" col="0"

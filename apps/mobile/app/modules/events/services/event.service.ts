@@ -17,7 +17,9 @@ import { sortAlpha } from '../../../helpers';
 import { EventActions } from '../actions';
 import { ConferenceViewModel, Session } from '../models/conference.model';
 import { EventState } from '../states';
+import { AWSService } from '../../core/services/aws.service';
 import { NSAppService } from '../../core/services/ns-app.service';
+
 
 @Injectable()
 export class EventService extends Cache {
@@ -36,7 +38,8 @@ export class EventService extends Cache {
     private win: WindowService,
     private router: Router,
     private routerExt: RouterExtensions,
-    private events: ConferenceEventApi
+    private events: ConferenceEventApi,
+    private aws: AWSService,
   ) {
     super(storage);
     this.key = StorageKeys.SCHEDULE;
@@ -136,17 +139,22 @@ export class EventService extends Cache {
       return Observable.of(this._createSessions(stored));
     } else {
       // console.log('fetch events fresh!');
-      return this.http.get(`${NetworkCommonService.API_URL}ConferenceEvents`) //?filter%5Bwhere%5D%5Btype%5D=Workshop
-        .map((events: Array<EventState.IEvent>) => {
+      return Observable.create(observer => {
+        this.aws.getJSON(`https://s3.amazonaws.com/ng-atl/ConferenceEvents.json`).then(events => {
+        // return this.http.get(`https://s3.amazonaws.com/ng-atl/ConferenceEvents.json`)//`${NetworkCommonService.API_URL}ConferenceEvents`) //?filter%5Bwhere%5D%5Btype%5D=Workshop
+          // .map((events: Array<EventState.IEvent>) => {
 
-          // cache list
-          this.cache = events;
-          const eventList = [...events];
-          this._updatedFavs = false; // reset when getting fresh list
-          this._fixDates(eventList);
-          return this._createSessions(eventList);
-          // return this._parseDates(eventList);
-        });
+            // cache list
+            this.cache = events;
+            const eventList = [...events];
+            this._updatedFavs = false; // reset when getting fresh list
+            this._fixDates(eventList);
+            observer.next(this._createSessions(eventList));
+            observer.complete();
+            // return this._createSessions(eventList);
+            // return this._parseDates(eventList);
+          });
+      });
     }
   }
 

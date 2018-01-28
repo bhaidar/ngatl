@@ -33,6 +33,7 @@
     "delete-lbl": "Borrar"
   },
   "general": {
+    "export": "Exportar",
     "twitter-unknown": "Twitter desconocido! ¡Lo siento mucho!",
     "picture": "Imagen",
     "back": "Espalda",
@@ -50,6 +51,7 @@
       "Hola, esta conferencia ngAtl es increíble! Quería acercarme y decir hola."
   },
   "user": {
+    "export-confirm": "¿Seguro que quieres exportar todas las notas a un archivo CSV que puedes enviar por correo electrónico a ti o a tu equipo?",
     "scanned-by": "Añadido por ",
     "claim-personal-first": "Debe reclamar su propia insignia antes de unirse a un grupo de patrocinadores.",
     "save-favs": "Guardando favoritos...",

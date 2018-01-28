@@ -32,6 +32,7 @@ import { screen, isIOS, isAndroid } from 'tns-core-modules/platform';
 import { File, path, knownFolders } from 'tns-core-modules/file-system';
 import { ListViewEventData, RadListView } from 'nativescript-pro-ui/listview';
 import { RouterExtensions } from 'nativescript-angular/router';
+import { compose } from 'nativescript-email';
 
 // app
 import { getResolution } from '../../../../helpers';
@@ -217,6 +218,89 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
         this.ngOnInit();
       });
     });
+  }
+
+  public shareList() {
+    if (this.appService.currentUser && this.appService.currentUser.notes) {
+      this._win.confirm(this._translate.instant('user.export-confirm'), () => {
+        this._ngZone.run(() => {
+          this.appService.toggleSpinner(true, { message: 'Exporting...'});
+          const filename = `${this._userService.currentUserId || ''}-notes-${Date.now()}.csv`;
+          const filepath = path.join( knownFolders.documents().path, filename );
+          const file = File.fromPath(filepath);
+          file.writeText(this._createCSV(this.appService.currentUser.notes)).then(_ => {
+            this._aws.upload(file).then(url => {
+              this._ngZone.run(() => {
+                this.appService.toggleSpinner();
+                this._win.setTimeout(_ => {
+                  compose({
+                    subject: 'ngAtl 2018 Notes',
+                    body: `Download CSV of notes: \r\n${url}`
+                  });
+                }, 300);
+              });
+            }, _ => {
+              this._showError();
+            })
+          }, _ => {
+            this._showError();
+          });
+        });
+      });
+    }
+  }
+
+  private _showError() {
+    this._ngZone.run(() => {
+      this.appService.toggleSpinner();
+      this._win.setTimeout(() => {
+        this._win.alert(this._translate.instant('general.error'));
+      }, 300);
+    });
+  }
+
+  private _noteKeys = ['name','email','phone','company','note','audioUrl','photos','madeBy'];
+  private _createCSV(notes: Array<UserState.IConferenceAttendeeNote>) {
+    let str = this._noteKeys.join(',') + '\r\n'; // header
+    let unknown = 'Unknown';
+    let none = 'none';
+    let values = [];
+    for (const note of notes) {
+      values = [];
+      for (const key of this._noteKeys) {
+        switch (key) {
+          case 'name':
+          case 'email':
+          case 'phone':
+          case 'company':
+            if (note.peer) {
+              values.push(note.peer[key] || ' ');
+            } else {
+              values.push(' ');
+            }
+            break;
+          case 'photos':
+            if (note.photos && note.photos.length) {
+              values.push(note.photos.join(' '));
+            } else {
+              values.push(' ');
+            }
+            break;
+          case 'madeBy':
+            if (note.attendee) {
+              values.push(note.attendee.name || unknown);
+            } else {
+              values.push('You');
+            }
+            break;
+          default:
+            values.push(note[key] || ' ');
+            break;        
+        }
+      }
+      str += values.join(',') + '\r\n';
+    }
+    return str;
   }
 
   public openItem(item) {

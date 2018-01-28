@@ -135,7 +135,7 @@ ListView {
     }
 
     &.badge-scan {
-        padding: 10 10 10 20;
+        padding: 10 10 10 10;
         background-color: $ngatl-blue-translucent;
         margin-top:15;
         margin-bottom: 10;
@@ -398,7 +398,7 @@ ListView {
 //     margin-bottom:    20;
 //   }
 .search-bar{
-    background-color:rgba(21,31,47,.8);
+    background-color:$ab-background;
 }
 .first-item{
     margin-top: 50;
