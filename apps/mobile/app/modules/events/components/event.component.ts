@@ -251,7 +251,7 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
 
   // binding scope
   public toggleItemFav(item: Session) {
-    // if (this.userService.isAuthenticated()) {
+    if (this.userService.isAuthenticated()) {
       item.toggleFavorite();
       const index = this.eventService.conferenceModel.fullSchedule.findIndex(e => e.id === item.id);
       if (index > -1) {
@@ -262,9 +262,9 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
         this.getListView().refresh();
       }, 601);
       this._updateLocalNotify(item);
-    // } else {
-    //   this.win.alert(this.translate.instant('user.require-auth'));
-    // }
+    } else {
+      this.win.alert(this.translate.instant('user.require-auth'));
+    }
   }
 
   private _updateLocalNotify(item: Session) {
@@ -293,8 +293,8 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
           id: <any>item.id,
           title,
           body: item.name,
-          // at: subMinutes(date,15), // PRODUCTION - Bring back before release!!
-          at: addSeconds(new Date(), 10),
+          at: subMinutes(date,15), // PRODUCTION - Bring back before release!!
+          // at: addSeconds(new Date(), 10),
           badge: 1
         }]);
       } else if (this._scheduledIds.includes(item.id)) {
