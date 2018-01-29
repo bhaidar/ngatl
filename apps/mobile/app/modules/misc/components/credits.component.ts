@@ -61,8 +61,11 @@ export class CreditsComponent implements OnInit {
       case 6:
         utils.openUrl( 'https://github.com/sis0k0');
         break;
-      case 8:
+      case 7:
         utils.openUrl( 'https://github.com/EddyVerbruggen');
+        break;
+      case 8:
+        utils.openUrl( 'https://github.com/beeman');
         break;
     }
   }
