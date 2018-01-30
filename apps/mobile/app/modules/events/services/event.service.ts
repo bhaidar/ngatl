@@ -137,24 +137,24 @@ export class EventService extends Cache {
       return Observable.of(this._createSessions(stored));
     } else {
       // console.log('fetch events fresh!');
-      return Observable.create(observer => {
-        this.aws.getJSON(`https://s3.amazonaws.com/ng-atl/ConferenceEvents.json`).then(events => {
-        // return this.http.get(`https://s3.amazonaws.com/ng-atl/ConferenceEvents.json`)//`${NetworkCommonService.API_URL}ConferenceEvents`) //?filter%5Bwhere%5D%5Btype%5D=Workshop
-          // .map((events: Array<EventState.IEvent>) => {
+      // return Observable.create(observer => {
+      //   this.aws.getJSON(`https://s3.amazonaws.com/ng-atl/ConferenceEvents.json`).then(events => {
+        return this.http.get(`${NetworkCommonService.API_URL}ConferenceEvents`) //?filter%5Bwhere%5D%5Btype%5D=Workshop
+          .map((events: Array<EventState.IEvent>) => {
 
             // cache list
             this.cache = events;
             const eventList = [...events];
             this._updatedFavs = false; // reset when getting fresh list
             this._fixDates(eventList);
-            observer.next(this._createSessions(eventList));
-            observer.complete();
-            // return this._createSessions(eventList);
+            // observer.next(this._createSessions(eventList));
+            // observer.complete();
+            return this._createSessions(eventList);
             // return this._parseDates(eventList);
-          }, err => {
+          // }, err => {
 
           });
-      });
+      // });
     }
   }
 

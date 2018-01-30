@@ -2,6 +2,8 @@ import { Observable } from 'rxjs/Observable';
 export namespace SpeakerState {
 
   export interface ISpeaker {
+    "social"?: { twitter?: string; };
+    "imageUrl"?: string;
     "twitter-link"?:string;
     "only-workshop-speaker"?: boolean;
     "_archived"?:boolean;

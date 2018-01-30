@@ -572,28 +572,28 @@ export class SponsorService extends Cache {
     return Observable.of(list);
     // const stored = this.cache;
     // if (!forceRefresh && stored) {
-    //   console.log('using cached sponsors.');
-    //   return Observable.of(stored.sort(sortAlpha));
+    //   // console.log('using cached sponsors.');
+    //   return Observable.of(this._adjustImage(stored).sort(sortAlpha));
     // } else {
-    //   console.log('fetch sponsors fresh!');
+    //   // console.log('fetch sponsors fresh!');
     //   // return this.sponsors.find();
-    //   const sortedList = this._sponsorList.sort(sortAlpha);
-    //   for (const sponsor of sortedList) {
-    //     for (const level of sponsor.level) {
-    //         level.styleClass = `level-${level.name.toLowerCase().replace(/ /ig, '-')}`; 
-    //         // console.log(level.styleClass);
-    //     }
-    //   }
+    //   // const sortedList = this._sponsorList.sort(sortAlpha);
+    //   // for (const sponsor of sortedList) {
+    //   //   for (const level of sponsor.level) {
+    //   //       level.styleClass = `level-${level.name.toLowerCase().replace(/ /ig, '-')}`; 
+    //   //       // console.log(level.styleClass);
+    //   //   }
+    //   // }
     //   return this.http.get(`${NetworkCommonService.API_URL}ConferenceSponsors`)
     //     .map(sponsors => {
     //       // cache list
     //       this.cache = sponsors;
-    //       return sponsors;
+    //       return this._adjustImage(sponsors).sort(sortAlpha);
     //     });
     // }
   }
   
-  private _adjustImage(list: Array<SponsorState.ISponsor>) {
+  private _adjustImage(list: any) {
     if (list) {
       list.forEach(i => {
         i.imageUrl$ = Observable.create(observer => {

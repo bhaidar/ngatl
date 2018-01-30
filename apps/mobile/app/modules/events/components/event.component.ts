@@ -275,7 +275,13 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
         }
         const speaker = item.type !== item.speaker && item.speaker ? ' by ' + item.speaker : '';
         const title = `In 15 mins: ${item.type}${speaker}`;
-        const date = new Date(item.date);
+        const eventDate = new Date(item.date);
+        // console.log('eventDate:', eventDate);
+        const date = new Date(); // correct timezone
+        date.setMonth(eventDate.getMonth());
+        date.setDate(eventDate.getDate());
+        date.setFullYear(eventDate.getFullYear());
+        // console.log('schedule date:', date);
         const startTimeParts = item.startTime.split(':');
         if (startTimeParts && startTimeParts.length === 3) {
           let hour = parseInt(startTimeParts[0], 10);

@@ -35,7 +35,7 @@ import { RouterExtensions } from 'nativescript-angular/router';
 import { compose } from 'nativescript-email';
 
 // app
-import { getResolution } from '../../../../helpers';
+import { getResolution, sortAlpha } from '../../../../helpers';
 import { IConferenceAppState } from '../../../ngrx';
 import { AWSService } from '../../../core/services/aws.service';
 import { NSAppService } from '../../../core/services/ns-app.service';
@@ -218,6 +218,10 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
         this.ngOnInit();
       });
     });
+  }
+
+  public donate() {
+    utils.openUrl( 'https://venmo.com/ngAtlConf' );
   }
 
   public shareList() {
@@ -815,7 +819,9 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
         .subscribe((s: UserState.IState) => {
           // this._log.debug('DashboardComponent s.user fired! s.current:', s.current);
           if (s.current) {
-            this.scans = [...(s.current.notes || [])];
+            this.scans = [...(s.current.notes || [])].sort(function(a,b) {
+              return sortAlpha(a.peer, b.peer);
+            });
 
             if (!this.badgeExit && this.scans.length) {
               // console.log('scans available, this.appService.shownIntro:', this.appService.shownIntro);

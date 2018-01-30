@@ -119,8 +119,8 @@ export class SpeakerComponent extends BaseComponent implements AfterViewInit, On
   }
 
   public openDetail( speaker: SpeakerState.ISpeaker ) {
-    if (speaker['twitter-link']) {
-      const twitterLink = speaker['twitter-link'];
+    if (speaker.social && speaker.social.twitter) {
+      const twitterLink = speaker.social.twitter;
       const twitterHandle = twitterLink.indexOf('http') > -1 ? twitterLink.split('/').slice(-1) : twitterLink;
       this.appService.openWebView( {
         vcRef: this.vcRef,

@@ -31,11 +31,11 @@ export class SponsorComponent implements AfterViewInit, OnInit {
   }
 
   public viewSite(sponsor: any) {
-    if (sponsor["link-to-site"]) {
+    if (sponsor['link-to-site']) {
       this.appService.openWebView({
         vcRef: this.vcRef,
         context: {
-          url: sponsor["link-to-site"],
+          url: sponsor['link-to-site'],
           title: sponsor.name
         }
       });

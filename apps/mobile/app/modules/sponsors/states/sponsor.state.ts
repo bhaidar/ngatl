@@ -1,6 +1,8 @@
 import { Observable } from 'rxjs/Observable';
 export namespace SponsorState {
   export interface ISponsor {
+    "imageUrl"?: string;
+    "url"?: string;
     "link-to-site"?:string;
     "color"?:string;
     "_archived"?:boolean;

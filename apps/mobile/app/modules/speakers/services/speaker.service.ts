@@ -1157,22 +1157,22 @@ export class SpeakerService extends Cache {
   }
 
   public fetch( forceRefresh?: boolean ) {
-    const list = this._adjustImage(this._speakerList).filter(s => !s["only-workshop-speaker"]).sort( sortAlpha );
-    return Observable.of(list);
-    // const stored = this.cache;
-    // if (!forceRefresh && stored) {
-    //   console.log('using cached speakers.');
-    //   return Observable.of(stored.sort(sortAlpha));
-    // } else {
-    //   console.log('fetch speakers fresh!');
-    //   // return this.speakers.find();
-    //   return this.http.get(`${NetworkCommonService.API_URL}ConferenceSpeakers`)
-    //     .map((speakers: Array<any>) => {
-    //       // cache list
-    //       this.cache = speakers.sort(sortAlpha);
-    //       return speakers;
-    //     });
-    // }
+    // const list = this._adjustImage(this._speakerList).filter(s => !s["only-workshop-speaker"]).sort( sortAlpha );
+    // return Observable.of(list);
+    const stored = this.cache;
+    if (!forceRefresh && stored) {
+      console.log('using cached speakers.');
+      return Observable.of(this._adjustImage(stored).sort(sortAlpha));
+    } else {
+      console.log('fetch speakers fresh!');
+      // return this.speakers.find();
+      return this.http.get(`${NetworkCommonService.API_URL}ConferenceSpeakers`)
+        .map((speakers: Array<any>) => {
+          // cache list
+          this.cache = speakers;
+          return this._adjustImage(speakers).sort(sortAlpha);
+        });
+    }
   }
 
   private _adjustImage(list: Array<SpeakerState.ISpeaker>) {
@@ -1180,8 +1180,8 @@ export class SpeakerService extends Cache {
       list.forEach(i => {
         i.imageUrl$ = Observable.create(observer => {
           observer.next('~/assets/images/loading.png');
-          if (i.photo && i.photo.url) {
-            tnsHttp.getImage(i.photo.url).then(img => {
+          if (i.imageUrl) {
+            tnsHttp.getImage(i.imageUrl).then(img => {
               observer.next(img);
               observer.complete();
             }, err => {
