@@ -70,6 +70,10 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
   ) {
     super();
     this.appService.currentVcRef = this.vcRef;
+  }
+
+  ngOnInit() {
+
     const day1 = new SegmentedBarItem();
     day1.title = 'Jan 30';
     this.days.push( day1 );
@@ -108,15 +112,6 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
     } else {
       this.selectedDay = 0;
     }
-  }
-
-  ngOnInit() {
-
-    localNotifications.getScheduledIds().then(ids => {
-      if (ids) {
-        this._scheduledIds = ids;
-      }
-    });
 
     // this.store.select( ( s: IAppState ) => s.ui.locale )
     //   .takeUntil( this.destroy$ )
@@ -267,12 +262,30 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
     }
   }
 
+  public scheduledIds(): Promise<Array<string>> {
+    return new Promise((resolve, reject) => {
+      if (!this._scheduledIds) {
+        localNotifications.getScheduledIds().then(ids => {
+          if (ids) {
+            this._scheduledIds = ids;
+          }
+          resolve(this._scheduledIds);
+        }, err => {
+
+        });
+      }
+      return resolve(this._scheduledIds);
+    });
+  }
+
   private _updateLocalNotify(item: Session) {
     if (item) {
       if (item.isFavorite) {
-        if (!this._scheduledIds.includes(item.id)) {
-          this._scheduledIds.push(item.id);
-        }
+        this.scheduledIds().then(ids => {
+          if (ids && !ids.includes(item.id)) {
+            this._scheduledIds.push(item.id);
+          }
+        });
         const speaker = item.type !== item.speaker && item.speaker ? ' by ' + item.speaker : '';
         const title = `In 15 mins: ${item.type}${speaker}`;
         const eventDate = new Date(item.date);
@@ -303,8 +316,12 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
           // at: addSeconds(new Date(), 10),
           badge: 1
         }]);
-      } else if (this._scheduledIds.includes(item.id)) {
-        localNotifications.cancel(<any>item.id);
+      } else {
+        this.scheduledIds().then(ids => {
+          if (ids && ids.includes(item.id)) {
+            localNotifications.cancel(<any>item.id);
+          }
+        });
       }
     }
   }

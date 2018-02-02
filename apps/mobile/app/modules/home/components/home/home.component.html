@@ -8,62 +8,62 @@
       <GridLayout class="sidedrawer-content" rows="*" columns="*">
         <StackLayout row="0" col="0" class="h-full">
           <!-- Home -->
-          <GridLayout columns="60,*,auto" rows="60" [nsRouterLink]="['/landing/home']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}" pageTransition="slideLeft" class="sidedrawer-item">
-            <Label [text]="'ion-home' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
-            <Label [text]="'menu.home' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
+          <GridLayout columns="60,*,auto" rows="60" (tap)="changeNav(['/landing/home'])" pageTransition="slideLeft" class="sidedrawer-item" [class.active]="activeUrl == '/landing/home' || activeUrl == '/'">
+            <Label [text]="'ion-home' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0" (tap)="changeNav(['/landing/home'])"></Label>
+            <Label [text]="'menu.home' | translate" class="sidedrawer-list-item-text" row="0" col="1" (tap)="changeNav(['/landing/home'])"></Label>
           </GridLayout>
   
            <!-- Schedule -->
-           <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'events']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
-           pageTransition="slideleft" class="sidedrawer-item">
-               <Label [text]="'ion-ios-calendar-outline' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
-               <Label [text]="'menu.schedule' | translate"  class="sidedrawer-list-item-text" row="0" col="1"></Label>
+           <GridLayout rows="60" columns="60,*,auto" (tap)="changeNav(['/landing/home', 'events'])" 
+           pageTransition="slideleft" class="sidedrawer-item" [class.active]="activeUrl == '/landing/home/events'">
+               <Label [text]="'ion-ios-calendar-outline' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0" (tap)="changeNav(['/landing/home', 'events'])" ></Label>
+               <Label [text]="'menu.schedule' | translate"  class="sidedrawer-list-item-text" row="0" col="1" (tap)="changeNav(['/landing/home', 'events'])" ></Label>
            </GridLayout>
   
           <!-- Speakers -->
-          <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'speakers']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
+          <GridLayout rows="60" columns="60,*,auto" (tap)="changeNav(['/landing/home', 'speakers'])" [class.active]="activeUrl == '/landing/home/speakers'"
           pageTransition="slideleft" class="sidedrawer-item">
-              <Label [text]="'ion-mic-b' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
-              <Label [text]="'menu.speakers' | translate"  class="sidedrawer-list-item-text" row="0" col="1"></Label>
+              <Label [text]="'ion-mic-b' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0" (tap)="changeNav(['/landing/home', 'speakers'])"></Label>
+              <Label [text]="'menu.speakers' | translate"  class="sidedrawer-list-item-text" row="0" col="1" (tap)="changeNav(['/landing/home', 'speakers'])"></Label>
           </GridLayout>
   
           <!-- Sponsors -->
-          <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'sponsors']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
+          <GridLayout rows="60" columns="60,*,auto" (tap)="changeNav(['/landing/home', 'sponsors'])" [class.active]="activeUrl == '/landing/home/sponsors'"
           pageTransition="slideleft" class="sidedrawer-item">
               <Label [text]="'ion-ribbon-b' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
               <Label [text]="'menu.sponsors' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
           </GridLayout>
 
           <!-- Community -->
-          <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'misc', 'community']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
+          <GridLayout rows="60" columns="60,*,auto" (tap)="changeNav(['/landing/home', 'misc', 'community'])" [class.active]="activeUrl == '/landing/home/misc/community'"
           pageTransition="slideleft" class="sidedrawer-item">
               <Label [text]="'ion-ios-people' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
               <Label [text]="'menu.community' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
           </GridLayout>
 
           <!-- Media Partners -->
-          <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'misc', 'media']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
+          <GridLayout rows="60" columns="60,*,auto" (tap)="changeNav(['/landing/home', 'misc', 'media'])" [class.active]="activeUrl == '/landing/home/misc/media'"
           pageTransition="slideleft" class="sidedrawer-item">
               <Label [text]="'ion-wand' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
               <Label [text]="'menu.media' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
           </GridLayout>
   
           <!-- Code of Conduct -->
-          <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'misc', 'conduct']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
+          <GridLayout rows="60" columns="60,*,auto" (tap)="changeNav(['/landing/home', 'misc', 'conduct'])" [class.active]="activeUrl == '/landing/home/misc/conduct'"
           pageTransition="slideleft" class="sidedrawer-item">
               <Label [text]="'ion-ios-list-outline' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
               <Label [text]="'menu.conduct' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
           </GridLayout>
   
           <!-- About -->
-          <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'misc', 'about']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
+          <GridLayout rows="60" columns="60,*,auto" (tap)="changeNav(['/landing/home', 'misc', 'about'])" [class.active]="activeUrl == '/landing/home/misc/about'"
           pageTransition="slideleft" class="sidedrawer-item">
               <Label [text]="'ion-ios-book-outline' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
               <Label [text]="'menu.story' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>
           </GridLayout>
 
           <!-- Credits -->
-          <GridLayout rows="60" columns="60,*,auto" [nsRouterLink]="['/landing/home', 'misc', 'credits']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"
+          <GridLayout rows="60" columns="60,*,auto" (tap)="changeNav(['/landing/home', 'misc', 'credits'])" [class.active]="activeUrl == '/landing/home/misc/credits'"
           pageTransition="slideleft" class="sidedrawer-item"><!--[touchColor]="'#4d4d4d,#5a5a5a'" [touchActive]="'/landing/home/misc/credits,#fff'"-->
               <Label [text]="'ion-ios-information' | fonticon" class="ion sidedrawer-list-item-icon" row="0" col="0"></Label>
               <Label [text]="'menu.credits' | translate" class="sidedrawer-list-item-text" row="0" col="1"></Label>

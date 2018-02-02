@@ -13,9 +13,9 @@
             <Image src="~/assets/images/barcode.png" row="0" col="0" height="50"></Image>
             <Label [text]="'user.scan-action' | translate" class="label c-white t-20" row="0" col="2"></Label>
           </GridLayout>
-          <GridLayout class="card badge-scan" rows="*" columns="*,10,auto" (tap)="shareList()" row="0" col="1" [touchColor]="'#151F2F,#273957'">
-            <Label [text]="'general.export' | translate" class="label c-white t-20" row="0" col="0" height="50"></Label>
-            <Label [text]="'ion-ios-upload-outline' | fonticon" class="ion c-white" row="0" col="2"></Label>
+          <GridLayout class="card badge-scan" rows="50" columns="*,10,auto" (tap)="shareList()" row="0" col="1" [touchColor]="'#151F2F,#273957'">
+            <Label [text]="'general.export' | translate" class="label c-white t-20" row="0" col="0" verticalAlignment="center"></Label>
+            <Label [text]="'ion-ios-upload-outline' | fonticon" class="ion c-white" row="0" col="2" verticalAlignment="center"></Label>
           </GridLayout>
         </GridLayout>
       <RadListView [items]="scans"
@@ -57,8 +57,8 @@
         </ng-template>
       </RadListView>
       <GridLayout class="card badge-scan" rows="*" columns="auto,10,*" (tap)="donate()" row="2" col="0" [touchColor]="'#151F2F,#273957'">
-        <Label [text]="'ion-ios-heart' | fonticon" class="ion c-white" row="0" col="0" height="50"></Label>
-        <Label [text]="'general.donate' | translate" class="label c-white t-20" row="0" col="2"></Label>
+        <Label [text]="'ion-ios-heart' | fonticon" class="ion c-white" row="0" col="0" verticalAlignment="center"></Label>
+        <Label [text]="'general.donate' | translate" class="label c-white t-20" row="0" col="2" verticalAlignment="center"></Label>
       </GridLayout>
     </GridLayout>
 
