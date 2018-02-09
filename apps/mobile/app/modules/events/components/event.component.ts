@@ -19,7 +19,7 @@ import * as utils from "tns-core-modules/utils/utils";
 import { CheckBox } from 'nativescript-checkbox';
 import { shareText } from 'nativescript-social-share';
 import * as localNotifications from "nativescript-local-notifications";
-import { addSeconds, subMinutes } from 'date-fns';
+// import { addSeconds, subMinutes } from 'date-fns';
 
 // app
 import { LoggerService } from '@ngatl/api';
@@ -279,49 +279,51 @@ export class EventComponent extends BaseComponent implements AfterViewInit, OnIn
   }
 
   private _updateLocalNotify(item: Session) {
-    if (item) {
-      if (item.isFavorite) {
-        this.scheduledIds().then(ids => {
-          if (ids && !ids.includes(item.id)) {
-            this._scheduledIds.push(item.id);
+    if (isIOS) {
+      if (item) {
+        if (item.isFavorite) {
+          this.scheduledIds().then(ids => {
+            if (ids && !ids.includes(item.id)) {
+              this._scheduledIds.push(item.id);
+            }
+          });
+          const speaker = item.type !== item.speaker && item.speaker ? ' by ' + item.speaker : '';
+          const title = `In 15 mins: ${item.type}${speaker}`;
+          const eventDate = new Date(item.date);
+          // console.log('eventDate:', eventDate);
+          const date = new Date(); // correct timezone
+          date.setMonth(eventDate.getMonth());
+          date.setDate(eventDate.getDate());
+          date.setFullYear(eventDate.getFullYear());
+          // console.log('schedule date:', date);
+          const startTimeParts = item.startTime.split(':');
+          if (startTimeParts && startTimeParts.length === 3) {
+            let hour = parseInt(startTimeParts[0], 10);
+            const min = parseInt(startTimeParts[1], 10);
+            const ampmParts = startTimeParts[2].split(' ');
+            let isPm = false;
+            if (ampmParts && ampmParts.length === 2) {
+              isPm = ampmParts[1].toLowerCase() === 'pm';
+            }
+            date.setHours(isPm ? (hour+12) : hour);
+            date.setMinutes(min);
+            this.log.debug('15 mins before start of event:', date);
           }
-        });
-        const speaker = item.type !== item.speaker && item.speaker ? ' by ' + item.speaker : '';
-        const title = `In 15 mins: ${item.type}${speaker}`;
-        const eventDate = new Date(item.date);
-        // console.log('eventDate:', eventDate);
-        const date = new Date(); // correct timezone
-        date.setMonth(eventDate.getMonth());
-        date.setDate(eventDate.getDate());
-        date.setFullYear(eventDate.getFullYear());
-        // console.log('schedule date:', date);
-        const startTimeParts = item.startTime.split(':');
-        if (startTimeParts && startTimeParts.length === 3) {
-          let hour = parseInt(startTimeParts[0], 10);
-          const min = parseInt(startTimeParts[1], 10);
-          const ampmParts = startTimeParts[2].split(' ');
-          let isPm = false;
-          if (ampmParts && ampmParts.length === 2) {
-            isPm = ampmParts[1].toLowerCase() === 'pm';
-          }
-          date.setHours(isPm ? (hour+12) : hour);
-          date.setMinutes(min);
-          this.log.debug('15 mins before start of event:', date);
+          localNotifications.schedule([{
+            id: <any>item.id,
+            title,
+            body: item.name,
+            at: date,//subMinutes(date,15), // PRODUCTION - Bring back before release!!
+            // at: addSeconds(new Date(), 10),
+            badge: 1
+          }]);
+        } else {
+          this.scheduledIds().then(ids => {
+            if (ids && ids.includes(item.id)) {
+              localNotifications.cancel(<any>item.id);
+            }
+          });
         }
-        localNotifications.schedule([{
-          id: <any>item.id,
-          title,
-          body: item.name,
-          at: subMinutes(date,15), // PRODUCTION - Bring back before release!!
-          // at: addSeconds(new Date(), 10),
-          badge: 1
-        }]);
-      } else {
-        this.scheduledIds().then(ids => {
-          if (ids && ids.includes(item.id)) {
-            localNotifications.cancel(<any>item.id);
-          }
-        });
       }
     }
   }

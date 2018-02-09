@@ -3,9 +3,7 @@ import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
 
 // libs
 const CryptoJS = require( 'crypto-js' );
-import {
-  format
-} from 'date-fns';
+// import { format } from 'date-fns';
 import { session as httpSession } from 'nativescript-background-http';
 import { File, path } from 'tns-core-modules/file-system';
 import * as tnsHttp from 'tns-core-modules/http';

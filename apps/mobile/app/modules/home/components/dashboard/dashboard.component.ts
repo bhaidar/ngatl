@@ -688,58 +688,58 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
   }
 
   private _retractBadge() {
-    this.badgeExit = true;
-    // this._win.setTimeout(_ => {
-    //   this.showNotes = true;
-    // }, 800);
+    this._win.setTimeout(_ => {
+      this.badgeExit = true;
+      this.showNotes = true;
+    }, 300);
 
-    this._hideBeacon(1);
+    // this._hideBeacon(1);
 
-    const top = <View>this._page.getViewById('badge-top');
-    const bottom = <View>this._page.getViewById('badge-bottom');
-    if (bottom && top) {
+    // const top = <View>this._page.getViewById('badge-top');
+    // const bottom = <View>this._page.getViewById('badge-bottom');
+    // if (bottom && top) {
 
-      top.animate({
-        translate: {
-          x: (screen.mainScreen.widthDIPs/2) - 42,
-          y: -600
-        },
-        scale: {
-          x: .4,
-          y: .4,
-        },
-        rotate: 0,
-        duration: 600,
-        iterations: 1,
-      }).then(_ => {
+    //   top.animate({
+    //     translate: {
+    //       x: (screen.mainScreen.widthDIPs/2) - 42,
+    //       y: -600
+    //     },
+    //     scale: {
+    //       x: .4,
+    //       y: .4,
+    //     },
+    //     rotate: 0,
+    //     duration: 600,
+    //     iterations: 1,
+    //   }).then(_ => {
 
-      }, _ => {
+    //   }, _ => {
 
-      });
+    //   });
   
-      bottom.animate({
-        translate: {
-          x: (screen.mainScreen.widthDIPs/2) - 275,
-          y: -600
-        },
-        scale: {
-          x: .6,
-          y: .6,
-        },
-        opacity:0,
-        rotate:0,
-        duration: 620,
-        iterations: 1,
-      }).then(_ => {
-        this._win.setTimeout(() => {
-          this._ngZone.run(() => {
-            this.showNotes = true;
-          });
-        }, 300);
-      }, _ => {
+    //   bottom.animate({
+    //     translate: {
+    //       x: (screen.mainScreen.widthDIPs/2) - 275,
+    //       y: -600
+    //     },
+    //     scale: {
+    //       x: .6,
+    //       y: .6,
+    //     },
+    //     opacity:0,
+    //     rotate:0,
+    //     duration: 620,
+    //     iterations: 1,
+    //   }).then(_ => {
+    //     this._win.setTimeout(() => {
+    //       this._ngZone.run(() => {
+    //         this.showNotes = true;
+    //       });
+    //     }, 300);
+    //   }, _ => {
 
-      });
-    }
+    //   });
+    // }
   }
 
   private _hideBeacon(duration: number = 100) {

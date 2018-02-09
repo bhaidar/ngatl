@@ -30,7 +30,7 @@ import 'nativescript-angular/router';
 import 'nativescript-angular/forms';
 import 'nativescript-angular/http';
 
-import 'date-fns';
+// import 'date-fns';
 
 // shared libs across all apps in Nx workspace
 // TODO: import any shared libs here

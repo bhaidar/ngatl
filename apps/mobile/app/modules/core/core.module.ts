@@ -71,11 +71,11 @@ NetworkCommonService.API_URL = 'http://ngatl.beeman.nl/api/v1/';
  * DEBUGGING
  * Only enabled when not production api
  */
-LogService.DEBUG.LEVEL_4 = true;// !isApiProd(NetworkCommonService.API_URL);
+LogService.DEBUG.LEVEL_4 = false;// !isApiProd(NetworkCommonService.API_URL);
 // optionally debug analytics (will log out all data before its sent)
 // LogService.DEBUG_ANALYTICS = true;
 // enable http logging early to get all init http request as well
-toggleHttpLogs(true);//true);//TNSApplicationSettings.getBoolean(DebugKeys.httpLogs, false));
+toggleHttpLogs(false);//true);//TNSApplicationSettings.getBoolean(DebugKeys.httpLogs, false));
 // JSON files:
 // * comment out toggleHttpLogs above and uncomment below to use local json files:
 // toggleHttpLogs(true, '/assets/json/');

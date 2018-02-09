@@ -28,7 +28,7 @@ section {
 .home {
   .hero {
     color: $white;
-    background-image: url('~/assets/homepage_banner.jpg');
+    background-image: url('/assets/homepage_banner.jpg');
     padding: 200px;
     @media only screen and (max-width: 768px) {
       padding: 25px;
