@@ -9,6 +9,14 @@ export interface IDebug {
   LEVEL_5: boolean;
 }
 
+export interface IHttpDebug {
+  enable: boolean;
+  includeRequestBody?: boolean;
+  includeRequestHeaders?: boolean;
+  includeResponse?: boolean;
+  jsonFilePath?: string; // if this is set, it will use local json files
+}
+
 @Injectable()
 export class LogService {
   public static DEBUG: IDebug = {
@@ -18,6 +26,15 @@ export class LogService {
     LEVEL_4: false, // .log + all the above + info
     LEVEL_5: false // just info (excluding all else)
   };
+
+  public static DEBUG_HTTP: IHttpDebug = {
+    enable : false,
+    includeRequestBody : false,
+    includeRequestHeaders : false,
+    includeResponse : false,
+  };
+
+  public static DEBUG_ANALYTICS = false;
 
   // info (extra messages like analytics)
   // use LEVEL_5 to see only these

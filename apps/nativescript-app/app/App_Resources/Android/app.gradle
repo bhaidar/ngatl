@@ -5,12 +5,71 @@
 //	compile 'com.android.support:recyclerview-v7:+'
 //}
 
-android {  
-  defaultConfig {  
-    generatedDensities = []
-    applicationId = "__PACKAGE__"  
-  }  
-  aaptOptions {  
-    additionalParameters "--no-version-vectors"  
-  }  
-} 
+dependencies {
+    configurations.all {
+        exclude group: 'commons-logging', module: 'commons-logging'
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            def requested = details.requested
+            if (requested.group == 'com.google.firebase') {
+              details.useVersion '+'
+            }
+            if (requested.group == 'com.google.android.gms') {
+                details.useVersion '16.+'
+            }
+            if (requested.group == 'com.android.support' && requested.name != 'multidex') {
+                // com.android.support major version should match buildToolsVersion
+                details.useVersion '28.+'
+            }
+            if (requested.group == 'com.github.yalantis' && requested.name != 'ucrop') {
+                details.useVersion '2.2.2-native'
+            }
+        }
+    }
+    implementation 'com.google.firebase:firebase-appindexing:16.0.4'
+}
+
+project.ext {
+    googlePlayServicesVersion = "16.+"
+    supportVersion = "28.+"
+}
+
+android {
+  compileSdkVersion 28
+  buildToolsVersion "28.0.3"
+  defaultConfig {
+      generatedDensities = []
+      applicationId System.getenv('SUPPLY_PACKAGE_NAME') ?: 'io.nstudio.ngatl'
+      minSdkVersion 21
+      targetSdkVersion 28
+      versionCode System.getenv('XPLAT_BUILD_NUMBER') ? System.getenv('XPLAT_BUILD_NUMBER').toInteger() : 1
+      versionName System.getenv('XPLAT_VERSION_STRING') ?: "1.0"
+      ndk {
+          abiFilters "arm64-v8a", "armeabi-v7a", "x86"
+      }
+//      multiDexEnabled false
+  }
+  aaptOptions {
+      additionalParameters "--no-version-vectors"
+  }
+  buildTypes {
+    debug {
+//      TODO some assets are missing with this
+//      shrinkResources true
+      minifyEnabled true
+      // useProguard true
+      // proguardFiles(
+      //   getDefaultProguardFile('proguard-android.txt'),
+      //   '../../../app/App_Resources/Android/proguard-rules.pro'
+      // )
+    }
+    release {
+//      shrinkResources true
+      minifyEnabled true
+      // useProguard true
+      // proguardFiles(
+      //   getDefaultProguardFile('proguard-android.txt'),
+      //   '../../../app/App_Resources/Android/proguard-rules.pro'
+      // )
+    }
+  }
+}

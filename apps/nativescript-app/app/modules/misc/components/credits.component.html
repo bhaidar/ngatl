@@ -1,0 +1,43 @@
+<ngatl-ns-action-bar [title]="'menu.about' | translate"></ngatl-ns-action-bar>
+<ScrollView *ngIf="renderView" #scrollView (scroll)="onScroll($event, scrollView, topView)">
+  <GridLayout rows="auto,auto,*"  columns="*" class="page parallax-bg">
+    <StackLayout #topView height="200" class="about-bg p-t-10" row="0" col="0">
+      <Label text="Built w/ NativeScript for Angular" (tap)="viewPage()" textWrap="true" class="c-black text-center"></Label>
+      <Image src="~/assets/nng.png" padding="20" (tap)="viewPage()" top="30" horizontalAlignment="center" height="150" class="text-center"></Image>
+    </StackLayout>
+    <StackLayout class="listing p-y-10" row="1" col="0">
+        <Label text="by nStudio" textWrap="true" class="c-sky text-center p-10 w-full c-bg-dark-blue" (tap)="viewGH()"></Label>
+      <Label text="Credits:" textWrap="true" class="c-white mention"></Label>
+      <Label text="Ionicons are awesome." textWrap="true" (tap)="viewCredit(1)"></Label>
+      <Label text="Zack Chapple is amazing." textWrap="true" (tap)="viewCredit(2)"></Label>
+      <Label text="Josh Sommer has skills." textWrap="true" (tap)="viewCredit(5)"></Label>
+      <Label text="Stanimira Vlaeva is fantastic." textWrap="true" (tap)="viewCredit(6)"></Label>
+      <Label text="Nitish Dayal is talented." textWrap="true" (tap)="viewCredit(3)"></Label>
+      <Label text="Eddy Verbruggen is a plugin jedi." textWrap="true" (tap)="viewCredit(7)"></Label>
+      <Label text="Bram Borggreve 'beeman' colmena backend." textWrap="true" (tap)="viewCredit(8)"></Label>
+      <Label text="Nathan Walker loves you." textWrap="true" (tap)="viewCredit(4)"></Label>
+    </StackLayout>
+    <StackLayout class="listing p-y-10" row="2" col="0">
+      <Label text="Community plugins used:" textWrap="true" class="c-white mention"></Label>
+      <Label text="nativescript-audio" textWrap="true" (tap)="viewPlugin(13)"></Label>
+      <Label text="nativescript-background-http" textWrap="true" (tap)="viewPlugin(20)"></Label>
+      <Label text="nativescript-barcodescanner" textWrap="true" (tap)="viewPlugin(21)"></Label>
+      <Label text="nativescript-camera-plus" textWrap="true" (tap)="viewPlugin(22)"></Label>
+      <Label text="nativescript-checkbox" textWrap="true" (tap)="viewPlugin(23)"></Label>
+      <Label text="nativescript-dev-sass" textWrap="true" (tap)="viewPlugin(16)"></Label>
+      <Label text="nativescript-email" textWrap="true" (tap)="viewPlugin(19)"></Label>
+      <Label text="nativescript-fancyalert" textWrap="true" (tap)="viewPlugin(3)"></Label>
+      <Label text="nativescript-imagecropper" textWrap="true" (tap)="viewPlugin(24)"></Label>
+      <Label text="nativescript-imagepicker" textWrap="true" (tap)="viewPlugin(25)"></Label>
+      <Label text="nativescript-iqkeyboardmanager" textWrap="true" (tap)="viewPlugin(26)"></Label>
+      <Label text="nativescript-loading-indicator" textWrap="true" (tap)="viewPlugin(5)"></Label>
+      <Label text="nativescript-local-notifications" textWrap="true" (tap)="viewPlugin(27)"></Label>
+      <Label text="nativescript-ngx-fonticon" textWrap="true" (tap)="viewPlugin(6)"></Label>
+      <Label text="nativescript-permissions" textWrap="true" (tap)="viewPlugin(14)"></Label>
+      <Label text="nativescript-phone" textWrap="true" (tap)="viewPlugin(28)"></Label>
+      <Label text="nativescript-pro-ui" textWrap="true" (tap)="viewPlugin(10)"></Label>
+      <Label text="nativescript-social-share" textWrap="true" (tap)="viewPlugin(17)"></Label>
+      <Label text="nativescript-theme-core" textWrap="true" (tap)="viewPlugin(30)"></Label>
+    </StackLayout>
+  </GridLayout>
+</ScrollView>

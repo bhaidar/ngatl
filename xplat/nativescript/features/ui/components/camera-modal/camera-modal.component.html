@@ -1,0 +1,23 @@
+<GridLayout rows="auto,*" columns="*" class="c-bg-black">
+  <ngatl-ns-modal-title-bar
+    [title]="'dialogs.camera' | translate"
+    [isDark]="true"
+    [params]="params"
+    [customClose]="close" row="0" col="0"></ngatl-ns-modal-title-bar>
+
+  <CameraPlus
+    row="1" col="0"
+    [height]="containerHeight"
+    confirmPhotos="true"
+    saveToGallery="true"
+    showCaptureIcon="true"
+    [showToggleIcon]="showToggleIcon"
+    [showFlashIcon]="showFlashIcon"
+    showGalleryIcon="false"
+    insetButtons="true"
+    insetButtonsPercent="0.02"
+    (loaded)="camLoaded($event)"
+    (photoCapturedEvent)="photoCapturedEvent($event)"
+    (errorEvent)="errorHandler($event)">
+  </CameraPlus>
+</GridLayout>

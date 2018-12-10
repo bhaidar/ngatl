@@ -1,24 +1,35 @@
-import { NgModule, Optional, SkipSelf } from '@angular/core';
+import { NgModule, Optional, SkipSelf, Injector, NgZone } from '@angular/core';
 
 // nativescript
 import { NativeScriptModule } from 'nativescript-angular/nativescript.module';
 import { NativeScriptHttpClientModule } from 'nativescript-angular/http-client';
+import { RouterExtensions } from 'nativescript-angular/router';
 import { device } from 'tns-core-modules/platform';
 import { TNSFontIconModule } from 'nativescript-ngx-fonticon';
+import { LoadingIndicator } from 'nativescript-loading-indicator';
+import * as TNSFirebase from 'nativescript-plugin-firebase';
 
 // libs
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {
   CoreModule,
+  StorageService,
   PlatformLanguageToken,
+  PlatformLoaderService,
+  ModalPlatformService,
+  PlatformFirebaseToken,
+  PlatformRouterToken,
   WindowPlatformService
 } from '@ngatl/core';
+import { AudioModule } from '@ngatl/features';
 import { throwIfAlreadyLoaded } from '@ngatl/utils';
 
 // app
 import { PROVIDERS } from './services';
-import { TNSWindowPlatformService } from './services/tns-window.service';
+import { TNSWindowService } from './services/tns-window.service';
 import { TNSTranslateLoader } from './services/tns-translate.loader';
+import { TNSStorageService } from './services/tns-storage.service';
+import { TNSModalService } from './services/tns-modal.service';
 
 // factories
 export function platformLangFactory() {
@@ -29,12 +40,20 @@ export function createTranslateLoader() {
   return new TNSTranslateLoader('/assets/i18n/');
 }
 
+export function loadingIndicatorFactory() {
+  return new LoadingIndicator();
+}
+
+export function firebaseFactory() {
+  return TNSFirebase;
+}
+
 @NgModule({
   imports: [
     NativeScriptModule,
     NativeScriptHttpClientModule,
     TNSFontIconModule.forRoot({
-      fa: './assets/fontawesome.min.css'
+      ion: './assets/ionicons.min.css'
     }),
     CoreModule.forRoot([
       {
@@ -43,7 +62,28 @@ export function createTranslateLoader() {
       },
       {
         provide: WindowPlatformService,
-        useClass: TNSWindowPlatformService
+        useClass: TNSWindowService,
+        deps: [Injector, NgZone]
+      },
+      {
+        provide : StorageService,
+        useClass : TNSStorageService,
+      },
+      {
+        provide : ModalPlatformService,
+        useClass : TNSModalService,
+      },
+      {
+        provide : PlatformLoaderService,
+        useFactory : loadingIndicatorFactory,
+      },
+      {
+        provide : PlatformFirebaseToken,
+        useFactory : firebaseFactory,
+      },
+      {
+        provide: PlatformRouterToken,
+        useClass: RouterExtensions
       }
     ]),
     TranslateModule.forRoot({
@@ -51,7 +91,9 @@ export function createTranslateLoader() {
         provide: TranslateLoader,
         useFactory: createTranslateLoader
       }
-    })
+    }),
+    // feature modules
+    AudioModule
   ],
   providers: [...PROVIDERS]
 })

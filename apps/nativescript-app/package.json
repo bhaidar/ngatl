@@ -3,7 +3,10 @@
   "license": "SEE LICENSE IN <your-license-filename>",
   "version": "0.0.0",
   "nativescript": {
-    "id": "io.nstudio.ngatl"
+    "id": "io.nstudio.ngatl",
+    "tns-ios": {
+      "version": "5.0.0"
+    }
   },
   "scripts": {
     "reset": "npx rimraf -- hooks node_modules platforms && npm run js.clean",
@@ -33,14 +36,34 @@
     "@ngrx/store": "file:../../node_modules/@ngrx/store",
     "@ngatl/nativescript": "file:../../xplat/nativescript",
     "@ngatl/scss": "file:../../libs/scss",
+    "@nstudio/nativescript-camera-plus": "file:../../node_modules/@nstudio/nativescript-camera-plus",
+    "crypto-js": "file:../../node_modules/crypto-js",
     "nativescript-angular": "file:../../node_modules/nativescript-angular",
+    "nativescript-audio": "file:../../node_modules/nativescript-audio",
+    "nativescript-background-http": "file:../../node_modules/nativescript-background-http",
+    "nativescript-barcodescanner": "file:../../node_modules/nativescript-barcodescanner",
+    "nativescript-checkbox": "file:../../node_modules/nativescript-checkbox",
+    "nativescript-email": "file:../../node_modules/nativescript-email",
+    "nativescript-fancyalert": "file:../../node_modules/nativescript-fancyalert",
+    "nativescript-imagecropper": "file:../../xplat/nativescript/plugins/nativescript-imagecropper-1.0.2-gradle-include-fix.tgz",
+    "nativescript-imagepicker": "file:../../xplat/nativescript/plugins/nativescript-imagepicker-6.0.1-rm-pod-platform.tgz",
+    "nativescript-loading-indicator": "file:../../node_modules/nativescript-loading-indicator",
+    "nativescript-local-notifications": "file:../../node_modules/nativescript-local-notifications",
     "nativescript-ngx-fonticon": "file:../../node_modules/nativescript-ngx-fonticon",
+    "nativescript-permissions": "file:../../node_modules/nativescript-permissions",
+    "nativescript-phone": "file:../../node_modules/nativescript-phone",
+    "nativescript-plugin-firebase": "file:../../node_modules/nativescript-plugin-firebase",
+    "nativescript-social-share": "file:../../node_modules/nativescript-social-share",
     "nativescript-theme-core": "file:../../node_modules/nativescript-theme-core",
+    "nativescript-ui-sidedrawer": "~5.0.0",
+    "nativescript-ui-listview": "file:../../xplat/nativescript/plugins/nativescript-ui-listview-5.0.0-12-5-2018-commit-59ad57c.tgz",
     "reflect-metadata": "file:../../node_modules/reflect-metadata",
     "rxjs": "file:../../node_modules/rxjs",
     "rxjs-compat": "file:../../node_modules/rxjs-compat",
     "tns-core-modules": "file:../../node_modules/tns-core-modules",
-    "zone.js": "file:../../node_modules/zone.js"
+    "tns-core-modules-widgets": "file:../../node_modules/tns-core-modules-widgets",
+    "zone.js": "file:../../node_modules/zone.js",
+    "~app-plugin-last": "file:tools/~app-plugin-last"
   },
   "devDependencies": {
     "@angular/compiler-cli": "~7.0.0",
@@ -48,6 +71,7 @@
     "@ngtools/webpack": "~7.0.0",
     "codelyzer": "file:../../node_modules/codelyzer",
     "nativescript-dev-webpack": "~0.18.0",
+    "terser-webpack-plugin": "file:../../node_modules/terser-webpack-plugin",
     "tns-platform-declarations": "file:../../node_modules/tns-platform-declarations",
     "typescript": "file:../../node_modules/typescript"
   }

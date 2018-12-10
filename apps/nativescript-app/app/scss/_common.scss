@@ -1,0 +1,421 @@
+// customized variables
+@import 'variables';
+// theme standard rulesets
+@import '~nativescript-theme-core/scss/index';
+
+/*pallette chosen from http://www.colourlovers.com/palette/541086/Loyal_Friends*/
+
+Page, .page {
+    background-color: #EDEDF4;
+}
+ListView {
+    background-color: #EDEDF4;
+}
+/*icons*/
+.ion {
+    font-family: Ionicons, ionicons;
+    font-size: 30;
+
+    &.disabled {
+        color:$grey-slate;
+    }
+
+    &.swipe-delete-btn {
+        font-size: 40;
+        background-color:$ngatl-red-translucent;
+        color:$white;
+        // height: 100%;
+        border-radius: 30;
+        width: 60;
+        height: 60;
+        vertical-align: center;
+        text-align:center;
+    }
+}
+//override for action-bar colored fonticons
+// .action-bar Button {
+//     color: $white;
+// }
+.gray {
+    color: gray;
+}
+.red {
+    color: red;
+}
+
+@keyframes cell-bg-default {
+    0% {
+        background-color: rgba(21,31,47,.5);
+    }
+    100% {
+        background-color: rgba(21,31,47,.8);
+    }
+}
+@keyframes cell-bg-touch {
+    0% {
+        background-color: rgba(255,255,255,.2);
+    }
+    100% {
+        background-color: rgba(255,255,255,1);
+    }
+}
+
+.sidedrawer-left {
+    background-color: $grey-slate;
+    .sidedrawer-header {
+        padding: 20 16 0 16;
+        background-color: $white;
+
+        .sidedrawer-header-image {
+        background-color: $white;
+            height: 220;
+            width: 220;
+            border-radius: 0;//60;
+            margin-bottom: 20;
+        }
+    }
+    .sidedrawer-content {
+        background-color: $grey-slate;
+        .sidedrawer-item {
+            .sidedrawer-list-item-icon {
+                horizontal-align: center;
+                text-align: center;
+                font-size:28;
+                color: $grey-light;
+            }
+            .sidedrawer-list-item-text {
+                border-width: 0;
+                font-size:20;
+                color: $grey-light;
+            }
+            &.active {
+                background-color: $white;
+                .sidedrawer-list-item-icon {
+                    color: $ngatl-red;
+                }
+                .sidedrawer-list-item-text {
+                    font-weight: bold;
+                    color: $black;
+                }
+            }
+        }
+    }
+}
+/*cards*/
+.card{
+    margin-top: 10;
+    margin-left: 10;
+    margin-right: 10;
+    padding:10;
+    vertical-align:top;
+    background-color: white;
+    // border-width: 1;
+    // border-radius: 3;
+    // border-color: white;
+
+    &.speaker-card {
+        background-color: $ngatl-red;
+    }
+
+    &.scanned {
+        padding: 10 20 10 20;
+        background-color: $ngatl-blue-translucent;
+        // animation-name: cell-bg-default;
+        // animation-duration: .3;
+        // animation-fill-mode: forwards;
+        // animation-iteration-count: 1;
+
+        // &.swiping {
+        //     // background-color: rgba(255,255,255,1);
+        //     animation-name: cell-bg-touch;
+        //     animation-duration: .3;
+        //     animation-fill-mode: forwards;
+        //     animation-iteration-count: 1;
+        // }
+    }
+
+    &.badge-scan {
+        padding: 10 10 10 10;
+        background-color: $ngatl-blue-translucent;
+        margin-top:15;
+        margin-bottom: 10;
+    }
+
+    .label {
+        vertical-align: center;
+    }
+}
+.hr-light {
+    margin-top: 10;
+}
+.social-controls{
+    padding-top: 10;
+}
+.note-section {
+    background-color: $black;
+    padding: 10 10 0 10;
+}
+.note-area {
+    background-color:rgba(21,31,47,.8);
+    padding: 5;
+
+    &.recording {
+        background-color: $ngatl-red-translucent;
+    }
+}
+
+.checkbox-layout {
+    padding: 5 0 5 12;
+    // background-color: $dark-blue;
+    .label {
+        margin: 0 0 0 10;
+        color: $gold;
+    }
+
+    .checkbox-item {
+        &.checkbox-transcribe {
+            margin-top: 7;
+        }
+    }
+
+    &.transcribe {
+        .label {
+            color: $ngatl-red;
+        }
+    }
+}
+
+@import 'schedule';
+@import 'intro';
+@import 'profile';
+
+// .home-bg {
+//     background-image: url('res://home-bg');
+//     background-repeat: no-repeat;
+//     background-position: center;
+//     background-size: cover;
+// }
+
+@keyframes action-image-animate {
+    0% {
+        opacity: 0;
+    }
+    66.25% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+.action-bar-title-modal {
+    font-size:      17;
+    vertical-align: center;
+    text-align:     center;
+    color:          $white;
+}
+.action-item {
+    color: $white;
+
+    &.help {
+        color: $blue-light;
+    }
+}
+.action-image, .action-item {
+    opacity: 0;
+    &.ready {
+        opacity:1;
+    }
+    &.intro {
+        animation-name: action-image-animate;
+        animation-duration: 1;
+        animation-fill-mode: forwards;
+        animation-iteration-count: 1;
+        animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+}
+.action-image {
+    width: 50;
+}
+
+// modal action bar override
+.action-bar {
+    &.modal-ab {
+        .action-item {
+            opacity:1;
+        }
+    }
+}
+
+.beacon {
+    border-radius: 47;
+    background-color:$blue-light;
+    width:100;
+    height:100;
+    opacity:0;
+}
+
+.badge-bottom-intro {
+    transform: rotate(0) scale(0.6, 0.6) translate(100, -600);
+    opacity:0;
+}
+.badge-top-intro {
+    transform: rotate(0) scale(0.4, 0.4) translate(150, -600);
+    opacity:0;
+}
+
+.selectable-row {
+    border-width: 0 0 1 0;
+    border-color: #ccc;
+    padding: 8 8 8 16;
+    background-color: $white;
+  
+    .select-btn {
+      font-size: 17;
+      color: $black;
+      width: 100%;
+      text-align: left;
+      vertical-align: center;
+      white-space: normal;
+  
+    }
+    &.selected {
+      background-color:  $primary;
+  
+      .select-btn {
+        color: $white;
+      }
+    }
+  }
+
+.c-dark-blue {
+    color:  $dark-blue;
+}
+.c-bg-dark-blue {
+    background-color:  $dark-blue;
+}
+.c-bg-transparent {
+    background-color: transparent;
+}
+.c-ngatl-red {
+    color: $ngatl-red;
+}
+.c-bg-ngatl-red {
+    background-color: $ngatl-red;
+}
+.c-gold {
+    color: $gold;
+}
+.c-bg-gold {
+    background-color: $gold;
+}
+.c-light-blue {
+    color: $blue-light;
+}
+.c-bg-light-blue {
+    background-color: $blue-light;
+}
+.c-bg-sky {
+    background-color: $sky;
+}
+.c-grey-darker {
+    color: $grey-darker;
+}
+.c-grey-slate {
+    color: $grey-slate;
+}
+.c-grey-light {
+    color: $grey-light;
+}
+.t-40 {
+    font-size: 40;
+}
+.list-background{
+    background-color:  #EDEDF4;
+}
+.listing {
+    background-color:  $dark-blue;
+
+    Label {
+        margin: 12 0 12 0;
+        text-align: center;
+        color: $sky;
+
+        &.mention {
+            color: $grey-light;
+            font-style: italic;
+            margin-bottom: 6;
+        }
+
+    }
+}
+
+
+.level, .sponsor-card {
+    background-color: #50e3c2;
+    padding:3;
+    &.level-silver {
+        background-color: #9498a2;
+    }
+    &.level-gold {
+        background-color: #ffb720;
+    }
+
+}
+
+.about-bg {
+    background-image: url('~/assets/images/skyline.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.copyright {
+    background-color: #404040;
+
+    .label {
+        color: #696969;
+        vertical-align: center;
+        font-size: 12;
+    }
+}
+
+// .picture-none {
+//     width:            245;
+//     height:           180;
+//     border-width:     1;
+//     border-color:     $grey-slate;
+//     background-color: $white;
+//     margin-bottom:    20;
+//     .placeholder {
+//       width: 35;
+//     }
+//   }
+
+//   .picture-upload-box {
+//     border-width:     1;
+//     border-color:     $grey-slate;
+//     background-color: $black;
+//     margin-bottom:    20;
+//   }
+.search-bar{
+    background-color:$ab-background;
+}
+.first-item{
+    margin-top: 50;
+}
+.letter-wrap{
+	margin-top: 160;
+	font-size: 13px;
+}
+
+.letter-wrap Label{
+	height: 14;
+	font-weight: bold;
+	color: $dark-blue;
+	text-transform: uppercase;
+	text-align: center
+}
+
+.parallax-bg{
+    background-color: $dark-blue;
+}

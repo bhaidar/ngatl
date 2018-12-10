@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "44586341428",
+    "firebase_url": "https://ngatl-1954b.firebaseio.com",
+    "project_id": "ngatl-1954b",
+    "storage_bucket": "ngatl-1954b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:44586341428:android:5992778396cf5716",
+        "android_client_info": {
+          "package_name": "io.nstudio.ngatl"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "44586341428-v1qkvdq1c1c4q18ol01ss6egkkldq201.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA17-KLB25UKWZm23scXoLAeGwba_u2AnQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

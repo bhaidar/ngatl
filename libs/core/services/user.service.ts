@@ -1,0 +1,460 @@
+import { Injectable, } from '@angular/core';
+import { Router } from '@angular/router';
+import { HttpClient, HttpParams } from '@angular/common/http';
+// libs
+import { Store } from '@ngrx/store';
+import { Observable, BehaviorSubject, Subject, of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
+import { SystemUser, SystemUserApi } from '@ngatl/api';
+// app
+import { AnalyticsService } from './analytics.service';
+import { environment } from '../environments/environment';
+import {
+  UserActions,
+} from '../state';
+import { LogService } from './log.service';
+import {
+  Cache,
+  StorageKeys,
+  StorageService,
+} from './storage.service';
+import { WindowService } from './window.service';
+import { UserState } from '../state/user.state';
+import {
+  isNativeScript,
+  isObject,
+  flatten
+} from '@ngatl/utils';
+import { ICoreState } from '../state';
+
+const CryptoJS = require( 'crypto-js' );
+
+@Injectable()
+export class UserService extends Cache {
+  // init helpers
+  private _userInitialized: BehaviorSubject<boolean> = new BehaviorSubject( false );
+  // see getters below for docs
+  private _unauthorizedRouteAttempt: Subject<string> = new Subject();
+  // for quick access in other api calls
+  private _currentUserId: string;
+  private _tmpBadgeId: string;
+  // allow various effect chain to prevent the default loaderOff$ handling in user.effect
+  private _preventDefaultSpinner: boolean;
+  private _preventDefaultSpinnerTimeout: number;
+  // control alerts
+  private _showingAlert = false;
+  // badge list
+  private _promptUserClaim$: Subject<UserState.IClaimStatus> = new Subject();
+  // sponsor handling
+  private _promptSponsorPin$: Subject<UserState.IClaimStatus> = new Subject();
+
+  constructor(
+    private _store: Store<ICoreState>,
+    private _http: HttpClient,
+    private _log: LogService,
+    private _storageService: StorageService,
+    private _win: WindowService,
+    private _router: Router,
+    private _analytics: AnalyticsService,
+    private _translateService: TranslateService,
+    private _systemUserApi: SystemUserApi,
+  ) {
+    super( _storageService );
+    this.isObjectCache = true;
+    this.key = StorageKeys.USER;
+
+    _store
+      .select( (s:ICoreState) => s.user )
+      .subscribe( ( state: UserState.IState ) => {
+        // this.currentUserId = state.current && state.current.id ? state.current.id : null;
+        this.currentUserId = state.current && state.current.id ? state.current.id : null;
+      } );
+  }
+
+  public getTokenHash(id: string) {
+    return CryptoJS.SHA256(`${id}this-is-our-salt`).toString();
+  }
+
+  /**
+   * Get specificity on the crucial boot init phase of the user
+   * Helpful for deep linking on several data resolvers for routes
+   */
+  public get userInitialized$() {
+    return this._userInitialized;
+  }
+
+  public get currentUserId() {
+    return this._currentUserId;
+  }
+
+  public set currentUserId( id: any ) {
+    if ( this._currentUserId !== id ) {
+      this._currentUserId = id || null;
+      // ensure user id is tracked with analytics all the time (mainly for gtm)
+      this._analytics.userId = id;
+      // fire user initialized anytime this changes (safely determines whether the user boot phase has fired yet or not)
+      this._userInitialized.next( true );
+      // only if actually changing (to new user or null)
+      // preloadData
+      this.preloadData( id != null );
+    }
+  }
+
+  public get promptUserClaim$() {
+    return this._promptUserClaim$;
+  }
+
+  public get promptSponsorPin$() {
+    return this._promptSponsorPin$;
+  }
+
+  /**
+   * Subscribe to this (public getter below) to customize app behavior
+   * whenever an unauthorized attempt to a route is made
+   * For example, route app somewhere specific, show dialog, etc.
+   */
+  public get unauthorizedRouteAttempt$() {
+    return this._unauthorizedRouteAttempt;
+  }
+
+  // convenient for some effect chains
+  public get translateService() {
+    return this._translateService;
+  }
+
+  // public firebaseConnect(firebaseToken: string) {
+  //   return this._apiUsers.linkAuthFirebase({ firebaseToken });
+  // }
+
+  public emailConnect( credentials: { email: string; password: string } ) {
+    return this._systemUserApi.login( credentials );
+  }
+
+  public createUser( user: SystemUser ) {
+    return this._systemUserApi.create( user );
+  }
+
+  public findUser( badgeId: string, scanned: Array<UserState.IRegisteredUser> ) {
+    // if (scanned) {
+    //   const alreadyScanned = scanned.find(u => {
+    //     return u.unique_ticket_url.indexOf(badgeId) > -1;
+    //   });
+    //   if (alreadyScanned) {
+    //     return null;
+    //   }
+    // }
+    // return foundUser;
+    return this._http.get( `${environment.API_URL}ConferenceTickets/${badgeId}/claim` )
+      .pipe(map( ( claimStatus: UserState.IClaimStatus ) => {
+        return claimStatus;
+      } ));
+
+  }
+
+  public loadAll(): Observable<UserState.ILoadAllResult> {
+    // return this._http.get(`${environment.API_URL}ConferenceAttendees`)//'/assets/users.json')
+    //   .map((users) => {
+    // this._log.debug(typeof users);
+    // this._log.debug('isarray:', Array.isArray(users));
+    // this._log.debug(users);
+    let scanned = [];
+    const savedScans = this._storageService.getItem( StorageKeys.SCANNED );
+    if ( savedScans ) {
+      scanned = savedScans.map( u => new UserState.RegisteredUser( u ) )
+    }
+    if ( scanned.length ) {
+      // TODO: may want to query updates from colmena to get latest attendee profile updates
+      // will want to get new photo or other information if user had updated it
+    }
+    return of( {
+      // all: (<Array<any>>users).map(u => new UserState.RegisteredUser(u)),
+      scanned
+    } );
+    // });
+  }
+
+  public deleteAttendeeNote( id: string ) {
+    return this._http.delete( `${environment.API_URL}ConferenceAttendeeNotes/${id}` )
+      .pipe(map( ( result ) => {
+        // assume it worked
+        return true;
+      } ));
+  }
+
+  public saveScans( scanned: Array<UserState.IRegisteredUser> ) {
+    if ( scanned ) {
+      this._storageService.setItem( StorageKeys.SCANNED, scanned );
+    }
+  }
+
+  public getCurrentUser(): Observable<UserState.IRegisteredUser> {
+    let storedUser = this.cache;
+    // if ( !storedUser ) {
+    //   // check if there is a token
+    //   return this.loadUser();
+    // } else {
+    //   // ensure network is updated to handle auth token headers
+    //   if ( storedUser.authenticationToken ) {
+    //     this._network.authToken = storedUser.authenticationToken;
+    //   } else {
+    //     // check storage
+    //     const token = this.token;
+    //     if ( token ) {
+    //       this._network.authToken = token;
+    //     } else {
+    //       // no valid token, force user to relogin
+    //       storedUser = null;
+    //     }
+    //   }
+    // }
+
+    return of( storedUser ? new UserState.RegisteredUser( storedUser ) : null );
+  }
+
+  public isAuthenticated(): boolean {
+    return this.currentUserId != null;
+  }
+
+  // public emailIsAvailable(email: string): Observable<any> {
+  //   return this._http.get(`api/4.0/users?username=${email.replace(/\+/g, '%2B')}`).map((response: any) => {
+  //     if ( response && response._body ) {
+  //       const data = response.json();
+  //       if ( data ) {
+  //         if ( data instanceof Array ) {
+  //           return data;
+  //         } else if ( data.id && data.username ) {
+  //           return [data];
+  //         }
+  //       }
+  //     }
+  //     return new Error('Invalid response data');
+  //   });
+  // }
+
+  // public forgotPasswordRequest(email: string): Observable<any> {
+  //   const resetRequest = new ResetPasswordRequest({ email });
+  //   return this._apiResetting.pnpPasswordAskForToken(resetRequest);
+  // }
+
+  // public updatePasswordRequest(
+  //   token: string,
+  //   confirmPassword: string,
+  //   plainPassword: string,
+  // ): Observable<any> {
+  //   const forgotRequest = new ForgotPasswordTokenRequest({
+  //     token,
+  //     confirmPassword,
+  //     plainPassword,
+  //   });
+  //   return this._apiResetting.pnpUpdatePassword(forgotRequest);
+  // }
+
+  public updateUser(user: UserState.IRegisteredUser) {
+    const url = `${environment.API_URL}ConferenceAttendees/${user.id}`;
+    const updates = Object.assign({}, user);
+    delete updates.notes; // these should never go up with updates
+    // this._seriaAVAudioEnvironmentNodelizeUpdates(user);
+    return this._http.put( url, user )
+    .pipe(
+      map( ( updatedUser: any ) => {
+        this._log.debug( 'updated user:', updatedUser );
+        return new UserState.RegisteredUser( updatedUser );
+      } ));
+  }
+
+  // public deleteUser(id: string) {
+  //   return this._apiUsers.deleteUser(id);
+  // }
+
+  public loadUser( details: { id: string, user?: UserState.IRegisteredUser} ): Observable<UserState.IRegisteredUser> {
+    // get user with all details in case reloading from a fresh login
+    this._log.debug( 'loadUser:', details.id );
+    /**
+     * {
+    "include": {
+        "relation":"notes",
+        "scope":{
+            "include":"peer"
+        }
+    }
+     */
+    let url = `${environment.API_URL}ConferenceAttendees/${details.id}?filter=%7B%22include%22%3A%7B%22relation%22%3A%22notes%22%2C%22scope%22%3A%7B%22include%22%3A%22peer%22%7D%7D%7D`;
+
+    const inSponsorGroup = details.user ? !!details.user.sponsor : false;
+    if (inSponsorGroup) {
+      // include notes from all sponsor members
+      url = `${environment.API_URL}ConferenceAttendees?filter=%7B%22include%22%3A%7B%22relation%22%3A%22notes%22%2C%22scope%22%3A%7B%22include%22%3A%5B%7B%22relation%22%3A%22peer%22%7D%2C%7B%22relation%22%3A%22attendee%22%7D%5D%7D%7D%2C%22where%22%3A%7B%22sponsor%22%3A%20%22${details.user.sponsor}%22%7D%7D`;
+    }
+    this._log.debug( url );
+    // let params = new HttpParams();
+
+    // // Begin assigning parameters
+    // params = params.append('filter', );
+    // params = params.append('secondParameter', parameters.valueTwo);
+    return this._http.get( url )
+    .pipe(
+      map( ( user: any ) => {
+        this._log.debug( 'loaded user:', user );
+        if (inSponsorGroup) {
+          // collect notes together and condense attendee data
+          const users = <Array<any>>user;
+          const currentUser = user.find(u => u.id === details.id);
+          const notes = flatten(users.map(u => u.notes)).map((n: UserState.IConferenceAttendeeNote) => { 
+            if (n.attendee.id === details.id) { 
+              // reduces duplicate data
+             delete n.attendee;
+             return n;
+           } else {
+             return n;
+           } });
+           if (currentUser) {
+              user = currentUser;
+              user.notes = notes;
+           }
+        }
+        return new UserState.RegisteredUser( user );
+      } ));
+  }
+
+  /**
+   * claim user badge and cache it (aka persist in browser/mobile device)
+   * @param token authenticated token
+   */
+  public claimUser( user: UserState.IClaimStatus, badgeId: string ): Observable<UserState.IRegisteredUser> {
+    const confirmHash = this.getTokenHash(user.attendee.id);//CryptoJS.AES.encrypt( user.attendee.id, 'user' ).toString().replace( /\//ig, '+' ); // ensure slashes are replaced by '+'
+    this._log.debug( 'confirmHash:', confirmHash );
+    return this._http.get(`${environment.API_URL}ConferenceTickets/${badgeId}/claim?confirm=${confirmHash}`)
+    // return this._http.get( `${NetworkCommonService.API_URL}ConferenceTickets/${badgeId}/claim?confirm=true` )
+      .pipe(map( ( user: any ) => {
+        // this._log.debug( 'confirmed:', user );
+        // this._log.debug( 'typeof user:', typeof user );
+        // for ( const key in user ) {
+        //   this._log.debug( key, user[key] );
+        // }
+        return new UserState.RegisteredUser( user.attendee );
+      } ));
+  }
+
+  public unclaimUser( id: string ): Observable<boolean> {
+    return this._http.get( `${environment.API_URL}ConferenceTickets/${id}/unclaim` )
+      .pipe(map( ( user: any ) => {
+        return true;
+      } ));
+  }
+
+  public createAttendeeNote( id: string ): Observable<UserState.IConferenceAttendeeNote> {
+    this._log.debug( 'createAttendeeNote for:', id );
+    // get user with all details in case reloading from a fresh login
+    return this._http.post( `${environment.API_URL}ConferenceAttendeeNotes`, {
+      conferenceAttendeeId: this.currentUserId,
+      peerAttendeeId: id
+    } )
+      .pipe(map( ( note: any ) => {
+        return new UserState.ConferenceAttendeeNote( note );
+      } ));
+  }
+
+  public updateAttendeeNote( updates: UserState.IConferenceAttendeeNote ): Observable<UserState.IConferenceAttendeeNote> {
+    const id = updates.id;
+    this._serializeUpdates(updates);
+    return this._http.put( `${environment.API_URL}ConferenceAttendeeNotes/${id}`, updates )
+      .pipe(map( ( note: any ) => {
+        return new UserState.ConferenceAttendeeNote( note );
+      } ));
+  }
+
+  private _serializeUpdates(updates: any) {
+    for (const key of ['id', 'modified', 'created']) {
+      // disallow updating of these props
+      delete updates[key];
+    }
+  }
+
+  public persistUser( user: UserState.IRegisteredUser ) {// SystemUser) {
+    // persist user
+    this.cache = user;
+  }
+
+  public set token( value: string ) {
+    // persist token
+    if ( value ) {
+      this._storageService.setItem( StorageKeys.TOKEN, { token: value } );
+    } else {
+      this._storageService.removeItem( StorageKeys.TOKEN );
+    }
+    // used via http request to set auth token on request headers
+    this._win.authToken = value;
+  }
+
+  public get token(): string {
+    const value = this._storageService.getItem( StorageKeys.TOKEN );
+    if ( value && value.token ) {
+      return value.token;
+    }
+    return null;
+  }
+
+  public removeToken() {
+    this.token = null;
+  }
+
+  public get claimId() {
+    const stored = this._storageService.getItem( StorageKeys.CLAIMED_ID );
+    if ( stored ) {
+      return stored.id;
+    }
+    return null;
+  }e
+
+  public set claimId( id: string ) {
+    if ( id ) {
+      this._storageService.setItem( StorageKeys.CLAIMED_ID, { id } );
+    } else {
+      this._storageService.removeItem( StorageKeys.CLAIMED_ID );
+    }
+  }
+
+  // helps data flows
+  public get tmpBadgeId() {
+    return this._tmpBadgeId;
+  }
+
+  public set tmpBadgeId(value: string) {
+    this._tmpBadgeId = value;
+  }
+
+  public get badgeId() {
+    const stored = this._storageService.getItem( StorageKeys.BADGE_ID );
+    if ( stored ) {
+      return stored.id;
+    }
+    return null;
+  }
+
+  public set badgeId( id: string ) {
+    if ( id ) {
+      this._storageService.setItem( StorageKeys.BADGE_ID, { id } );
+    } else {
+      this._storageService.removeItem( StorageKeys.BADGE_ID );
+    }
+  }
+
+  /**
+   * Preload various user data to help boost performance
+   */
+  public preloadData( isAuth?: boolean ) {
+    // ** Preload data **
+
+    // only for authenticated users
+    if ( isAuth ) {
+
+    } else {
+
+    }
+  }
+
+  private _resetAlert() {
+    this._showingAlert = false;
+  }
+}

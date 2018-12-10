@@ -1,1 +1,22 @@
-// app specific: override or add new variables...
+// baseline theme colors
+@import '~nativescript-theme-core/scss/light';
+
+$ngatl-blue: #0854C7;
+$ngatl-red: #b52d31;
+$ngatl-red-translucent: rgba(181,45,49,.6);
+$ngatl-dark-red: #7c1f21;
+$gold: #fed03d;
+$dark-blue: #151F2F;
+$ngatl-blue-translucent: rgba(21,31,47,.8);
+$grey-slate: #4d4d4d;
+$grey-light: #999999;
+$blue-light: #4ac1fa;
+$grey-darker: #2e2e2e;
+$primary: $ngatl-dark-red;
+$btn-color: $primary;
+$btn-color-inverse: $white;
+
+$ab-background: #242424;
+$ab-color: $white;
+$headings-color: $white;
+$headings-font-weight: bold;

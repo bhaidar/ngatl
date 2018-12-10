@@ -1,2 +1,6 @@
-@import '~@ngatl/nativescript/scss/index.ios';
-@import 'scss/index';
+// @import '~@ngatl/nativescript/scss/index.ios';
+// @import 'scss/index';
+
+
+@import 'scss/common';
+@import 'scss/ios-overrides';

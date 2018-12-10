@@ -6,5 +6,7 @@ import { InjectionToken, Type } from '@angular/core';
  */
 
 export const PlatformLanguageToken = new InjectionToken<string>(
-  'PlatformLanguage'
+  'PlatformLanguageToken'
 );
+export const PlatformFirebaseToken = new InjectionToken<any>('PlatformFirebaseToken');
+export const PlatformRouterToken = new InjectionToken<any>('PlatformRouterToken');

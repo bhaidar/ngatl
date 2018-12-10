@@ -1,0 +1,138 @@
+// SASS theme setup: https://docs.nativescript.org/ui/theme#sass-usage
+@import '~nativescript-theme-core/scss/platforms/index.android';
+
+// place Android overrides here...
+// for example, this resets the Button to be consistent with iOS
+
+Button {
+  background-color: transparent;
+  border-color: transparent;
+  border-width: 1;
+  // text-transform: lowercase; // causes toLowerCase crash
+
+}
+
+ActionBar {
+  background-color: $ab-background;
+}
+
+// Intro Override
+
+@keyframes intro-swipe-intro {
+  0% {
+      opacity: 0;
+      transform: translate(0, 200);
+  }
+  88.25% {
+      opacity: 0;
+      transform: translate(0, 200);
+  }
+  100% {
+      opacity: .9;
+      transform: translate(0, 420);
+  }
+}
+
+// End Intro Override
+
+@keyframes session-favorite-selected {
+  from { transform: scale(1, 1) rotate(-120); opacity: 0; animation-timing-function: linear; }
+  50% { transform: scale(2, 2) rotate(-60); opacity: 0.3; animation-timint-function: ease-in; }
+  to { transform: scale(1, 1) rotate(0); opacity: 1; }
+}
+
+@keyframes session-favorite-unselected {
+  from { transform: scale(1, 1) rotate(120); opacity: 0; animation-timing-function: linear; }
+  60% { transform: scale(2, 2) rotate(60); opacity: 0.3; animation-timint-function: ease-in; }
+  to { transform: scale(1, 1) rotate(0); opacity: 1; }
+}
+
+.schedule-main-content {
+    background-color: $dark-blue;
+    .conf-segmented-bar {
+      background-color: $dark-blue;
+      color: white;
+      margin:0;
+    }
+
+    SearchBar {
+      background-color: white;
+      margin: 0;//16;
+    }
+
+    .session-favorite {
+      vertical-align: center;
+      horizontal-align: center;
+      margin: 0 26 0 16;
+    }
+
+    .session-favorite-selected {
+      animation-name: session-favorite-selected;
+      animation-duration: 0.4;
+      vertical-align: center;
+      horizontal-align: center;
+      margin: 0 26 0 16;
+    }
+
+    .session-favorite-unselected {
+      animation-name: session-favorite-unselected;
+      animation-duration: 0.2;
+      vertical-align: center;
+      horizontal-align: center;
+      margin: 0 26 0 16;
+    }
+
+    .session-time {
+      font-family: "sans-serif";
+      /*font-weight: 700;*/
+    font-size: 12;
+      color: #4ac1fa;
+      margin-top: 16;
+    }
+
+    .session-room {
+      font-family: "sans-serif";
+      /*font-weight: 700;*/
+    font-size: 12;
+    color: white;
+      // text-transform: uppercase;
+      margin: 16 0 0 4;
+    }
+
+    .session-title {
+      font-family: "sans-serif";
+      /*font-weight: 300;*/
+    font-size: 20;
+    color: #c3c3c3;
+      margin-bottom: 16;
+    }
+}
+
+
+.search-bar{
+  padding: 10 5;
+}
+.search-bar SearchBar{
+  background-color: white;
+}
+
+.card{
+
+  &.scanned {
+      background-color: $dark-blue;
+
+  }
+}
+
+.checkbox-layout {
+  padding: 20 0 10 12;
+  // background-color: $dark-blue;
+  // .label {
+  //     margin: 0 0 0 10;
+  //     color: $gold;
+  // }
+
+  .checkbox-item {
+      margin-top: 0;
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "~app-plugin-last",
+  "version": "1.0.0",
+  "nativescript": {
+    "platforms": {
+      "ios": "4.2.0"
+    }
+  }
+}

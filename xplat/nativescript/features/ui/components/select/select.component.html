@@ -1,0 +1,20 @@
+<GridLayout rows="auto,*" columns="*">
+  <ngatl-ns-modal-title-bar
+    [title]="title"
+    [params]="params"
+    [closeText]="'dialogs.cancel' | translate" row="0" col="0">
+  </ngatl-ns-modal-title-bar>
+
+  <RadListView row="1" col="0"
+    class="list-group"
+    [items]="items$ | async"
+    (itemLoading)="disableRowColor($event)"
+    separatorColor="transparent">
+    <ng-template
+      let-item="item">
+      <StackLayout class="selectable-row" [class.selected]="item.selected">
+        <Button [text]="item.name" (tap)="select(item)" class="select-btn"></Button>
+      </StackLayout>
+    </ng-template>
+  </RadListView>
+</GridLayout>

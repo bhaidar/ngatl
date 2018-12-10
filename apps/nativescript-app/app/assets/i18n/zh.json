@@ -1,0 +1,102 @@
+{
+  "menu": {
+    "home": "家",
+    "schedule": "時間表",
+    "speakers": "音箱",
+    "sponsors": "贊助商",
+    "community": "社區",
+    "media": "媒體夥伴",
+    "conduct": "行為守則",
+    "about": "關於",
+    "credits": "積分",
+    "story": "起源的故事",
+    "copyright": "2018 ngATL 由__建造 nStudio"
+  },
+  "error": {
+    "upload-photo-lbl": "抱歉，上傳該照片時發生錯誤。"
+  },
+  "dialogs": {
+    "confirm": "確認",
+    "yes": "是",
+    "yes-login": "是的，登錄！",
+    "yes-delete": "是的，刪除",
+    "cancel": "取消",
+    "no": "沒有",
+    "delete-scan": "您確定要刪除徽章掃描嗎",
+    "pin-number": "PIN號碼",
+    "camera": "相機",
+    "confirm-photo-delete": "你確定要刪除這張照片？",
+    "close": "關",
+    "sms": "短信"
+  },
+  "item": {
+    "delete-lbl": "刪除"
+  },
+  "general": {
+    "donate": "捐",
+    "export": "出口",
+    "twitter-unknown": "Twitter未知！ 非常抱歉！",
+    "picture": "图片",
+    "back": "背部",
+    "need-help": "需要幫忙？",
+    "help": "幫幫我",
+    "email-us": "請發送電子郵件至info@ng-atl.org",
+    "tweet-us": "鳴叫在我們",
+    "error": "我們很抱歉發生錯誤。",
+    "photo-album-tle": "相片集",
+    "edit": "編輯",
+    "save": "保存",
+    "update": "更新",
+    "profile": "輪廓",
+    "ngatl-text-msg": "嗨，這個ngAtl會議真棒！ 我想伸手打個招呼。"
+  },
+  "user": {
+    "export-confirm": "您确定要将所有笔记导出为CSV文件，您可以通过电子邮件发送给自己或您的团队？",
+    "scanned-by": "添加 ",
+    "claim-personal-first": "加入赞助商组织之前，您必须先索取自己的徽章。",
+    "save-favs": "保存收藏夹...",
+    "add-notes": "添加备注...",
+    "require-auth": "请声明您的徽章登录并使用此功能！",
+    "language": "语言",
+    "badge-claim": "這是你的徽章嗎？",
+    "confirm-sponsor-pin": "請確認贊助商PIN碼：",
+    "sponsor-confirmed": "你现在是以下的一部分：",
+    "wrong-sponsor-pin": "该PIN号码是不正确的。",
+    "unlink-sponsor": "取消赞助商组的链接",
+    "unlink-sponsor-confirm": "您确定要取消您的帐户与赞助商组的关联吗？",
+    "scan-action": "掃描一個徽章",
+    "already-scanned": "你已經掃描了美妙的愉快",
+    "already-claimed":
+      "這個徽章已經被要求。 如果這是您的徽章，請發送電子郵件至info@ng-atl.org，我們將為您解決這個問題。",
+    "scan-yourself":
+      "那麼這個確實很有趣，不是嗎？:) 你已經聲稱這個徽章是傻的褲子。",
+    "unclaim-confirm": "你確定要取消這個徽章嗎？ 這將使其他人可以索賠。",
+    "unsaved": "您有未保存的更改。 你確定要退出而不儲蓄？",
+    "person": "個人站在你面前。",
+    "name": "名稱",
+    "phone": "電話",
+    "company": "公司",
+    "email": "電子郵件",
+    "updated": "您的個人資料已成功更新！",
+    "logout": "登出",
+    "logged-in": "您現在已經登錄",
+    "unclaim": "不聲明的徽章",
+    "toggle-fav": "切換收藏夾",
+    "auto-transcribe": "自動擷取音訊",
+    "not-found": "在我們的數據庫中找不到這個條形碼的徽章。",
+    "email-confirm-compose":
+      "你想現在寫一封郵件給他們嗎？ 這將關閉此模式以打開撰寫視圖。",
+    "sms-confirm-compose":
+      "你想現在寫一個短信嗎？ 這將關閉此模式以打開撰寫視圖。"
+  },
+  "conduct": {
+    "title": "行為守則"
+  },
+  "audio": {
+    "disabled": "此設備無法錄製音頻。",
+    "no-file": "沒有錄音可以播放。",
+    "saving": "儲存筆記...",
+    "transcribe-error":
+      "我們很抱歉，抄錄失敗了。 這或者是一些古怪的談話，或者某種加密貨幣涉及整個網絡。"
+  }
+}

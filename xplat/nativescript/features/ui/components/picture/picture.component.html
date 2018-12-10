@@ -1,0 +1,14 @@
+
+<!-- <GridLayout
+  [class.picture-none]="!selectedImage"
+  [class.picture-upload-box]="selectedImage"
+  horizontalAlignment="left"
+  (tap)="choose()"> -->
+  <Image
+    (tap)="choose()"
+    [stretch]="addOnly ? 'none' : 'aspectFill'"
+    class="profile-picture"
+    [class.add-only]="addOnly"
+    [src]="activeImage$ | async">
+  </Image>
+<!-- </GridLayout> -->

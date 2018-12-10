@@ -8,7 +8,7 @@ const CleanWebpackPlugin = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const { NativeScriptWorkerPlugin } = require("nativescript-worker-loader/NativeScriptWorkerPlugin");
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const TerserPlugin = require('terser-webpack-plugin');
 const { AngularCompilerPlugin } = require("@ngtools/webpack");
 
 module.exports = env => {
@@ -43,6 +43,7 @@ module.exports = env => {
         report, // --env.report
         sourceMap, // --env.sourceMap
         hmr, // --env.hmr,
+        ci, // --env.ci
     } = env;
     const externals = (env.externals || []).map((e) => { // --env.externals
         return new RegExp(e + ".*");
@@ -58,7 +59,7 @@ module.exports = env => {
         hostReplacementPaths: nsWebpack.getResolver([platform, "tns"]),
         platformTransformers: aot ? [nsReplaceBootstrap(() => ngCompilerPlugin)] : null,
         mainPath: resolve(appPath, entryModule),
-        tsConfigPath: join(__dirname, "tsconfig.tns.json"),
+        tsConfigPath: join(__dirname, "tsconfig.json"),
         skipCodeGeneration: !aot,
         sourceMap: !!sourceMap,
     });
@@ -128,10 +129,10 @@ module.exports = env => {
             },
             minimize: !!uglify,
             minimizer: [
-                new UglifyJsPlugin({
+                new TerserPlugin({
                     parallel: true,
-                    cache: true,
-                    uglifyOptions: {
+                    cache: !ci,
+                    terserOptions: {
                         output: {
                             comments: false,
                         },
@@ -154,11 +155,11 @@ module.exports = env => {
                             ],
                             global_defs: {
                               __UGLIFIED__: true,
-                            }
+                            },
                         },
                         // custom
                         ecma: 6,
-                        safari10: platform !== 'android'
+                        safari10: platform !== 'android',
                     }
                 })
             ],
@@ -206,13 +207,18 @@ module.exports = env => {
                 { test: /\.css$/, exclude: /[\/|\\]app\.css$/, use: "raw-loader" },
                 { test: /\.scss$/, exclude: /[\/|\\]app\.scss$/, use: ["raw-loader", "resolve-url-loader", "sass-loader"] },
 
+                // Compile TypeScript files with ahead-of-time compiler.
                 {
-                    test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
-                    use: [
-                        "nativescript-dev-webpack/moduleid-compat-loader",
-                        "@ngtools/webpack",
-                    ]
+                  test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
+                  exclude: /\.worker\.ts$/,
+                  use: [
+                      "nativescript-dev-webpack/moduleid-compat-loader",
+                      "@ngtools/webpack",
+                  ]
                 },
+
+                // Compile Worker files with ts-loader
+                { test: /\.worker\.ts$/, loader: "ts-loader" },
 
                 // Mark files inside `@angular/core` as using SystemJS style dynamic imports.
                 // Removing this will cause deprecation warnings to appear.
@@ -240,8 +246,10 @@ module.exports = env => {
             ]),
             // Copy assets to out dir. Add your own globs as needed.
             new CopyWebpackPlugin([
-                { from: "assets/**" },
-                { from: "fonts/**" }
+                { from: { glob: 'assets/**' } },
+                { from: { glob: "fonts/**" } },
+                { from: { glob: "**/*.jpg" } },
+                { from: { glob: "**/*.png" } },
             ], { ignore: [`${relative(appPath, appResourcesFullPath)}/**`] }),
             // Generate a bundle starter script and activate it in package.json
             new nsWebpack.GenerateBundleStarterPlugin([

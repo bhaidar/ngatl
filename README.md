@@ -1,6 +1,27 @@
-# Ngatl
+# ngAtlanta
 
+* iOS: `npm run ios`
+* Android: `npm run android`
+
+Use webpack HMR:
+
+* iOS: `npm run ios.hmr`
+* Android: `npm run android.hmr`
+
+## Clean the workspace
+
+```
+npm run clean.all
+```
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) using [Nrwl Nx](https://nrwl.io/nx).
+
+## xplat
+
+The setup also utilizes [xplat](https://nstudio.io/xplat/) - multi-platform tools for Nx workspaces.
+
+You can view a presentation about xplat from ngConf 2018 here:
+
+https://www.youtube.com/watch?v=EqqNexmu3Ug
 
 ## Nrwl Extensions for Angular (Nx)
 

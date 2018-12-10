@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+  <!-- related to Manifest note: for now this is done to get around inability to disable allowBackup -->
+  <include domain="file" path="__ignored__"/>
+  <include domain="database" path="__ignored__"/>
+  <include domain="sharedpref" path="__ignored__"/>
+  <include domain="external" path="__ignored__"/>
+  <include domain="root" path="__ignored__"/>
+</full-backup-content>

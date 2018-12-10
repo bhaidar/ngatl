@@ -1,0 +1,19 @@
+<ActionBar class="action-bar">
+  <NavigationButton
+    text=""
+    visibility="collapse">
+  </NavigationButton>
+  <GridLayout horizontalAlignment="center" verticalAlignment="center" padding="2" rows="*" columns="50,*,50">
+    <Image src="res://ngatltop" class="action-image" [class.ready]="ready" [class.intro]="intro" *ngIf="!title" (tap)="refreshUser()" horizontalAlignment="center" verticalAlignment="center" row="0" col="1"></Image>
+    <Label [text]="title" class="action-bar-title" *ngIf="title" horizontalAlignment="center" verticalAlignment="center" row="0" col="1"></Label>
+  </GridLayout>
+  <ActionItem (tap)="toggleDrawer()">
+    <Button [text]="'ion-navicon' | fonticon" class="ion action-item" [class.ready]="ready" [class.intro]="intro"></Button>
+  </ActionItem>
+  <ActionItem (tap)="openProfileOrHelp()" ios.position="right">
+    <Button [text]="(appService.currentUser$ | async) ? ('ion-person' | fonticon) : ('ion-ios-help' | fonticon)" class="ion action-item" [class.ready]="ready" [class.intro]="intro"></Button>
+  </ActionItem>
+  <!-- <ActionItem (tap)="openHelp()" ios.position="right" *ngIf="!appService.currentUser">
+    <Button [text]="'ion-ios-help' | fonticon" class="ion action-item help" [class.ready]="ready" [class.intro]="intro"></Button>
+  </ActionItem> -->
+</ActionBar>

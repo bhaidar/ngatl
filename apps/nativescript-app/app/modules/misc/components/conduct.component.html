@@ -1,0 +1,18 @@
+<ngatl-ns-action-bar [title]="'conduct.title' | translate"></ngatl-ns-action-bar>
+<ScrollView *ngIf="renderView">
+    <GridLayout rows="auto,*" columns="*" class="w-full h-full">
+        <StackLayout row="0" col="0" class="c-bg-charcoal p-10">
+            <Label [text]="'general.need-help' | translate" class="h2 text-center"></Label>
+            <Label [text]="'general.email-us' | translate" class="t-20 c-sky text-center p-y-8" (tap)="emailUs()"></Label>
+            <StackLayout orientation="horizontal" class="p-10 text-center" horizontalAlignment="center">
+                <Label [text]="'general.tweet-us' | translate" class="t-15 c-white p-r-5" verticalAlignment="center"></Label>
+                <Label text="@ngAtlanta" class="t-15 c-sky" (tap)="openWeb('https://twitter.com/ngAtlanta')"  verticalAlignment="center"></Label>
+            </StackLayout>
+        </StackLayout>
+
+        <StackLayout row="1" col="0" class="p-10 c-bg-white w-full h-full">
+            <WebView src="~/assets/conduct.html" class="w-full h-full"></WebView>
+        </StackLayout>
+        
+    </GridLayout>
+</ScrollView>

@@ -1,0 +1,10 @@
+<ActionBar class="action-bar" [title]="title">
+  <!--<StackLayout orientation="horizontal" ios:horizontalAlignment="center" android:horizontalAlignment="left">-->
+  <!--</StackLayout>-->
+  <!-- <ActionItem (tap)="back()">
+    <Button [text]="backIcon | fonticon" class="ion action-item ready"></Button>
+  </ActionItem> -->
+  <ActionItem (tap)="logout.next(true)" ios.position="right">
+    <Button [text]="'user.logout' | translate" class="action-item ready"></Button>
+  </ActionItem>
+</ActionBar>

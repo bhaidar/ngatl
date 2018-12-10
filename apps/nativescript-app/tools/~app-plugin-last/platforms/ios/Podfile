@@ -1,0 +1,127 @@
+# Target Context
+self.inhibit_all_warnings! # TODO
+self.platform :ios, '9.0'
+
+### TODO
+pod 'IQKeyboardManager'
+
+#########
+pod "SwiftyCam", :git => "https://github.com/NathanWalker/SwiftyCam.git"
+pod "QBImagePickerController", :git => "https://github.com/DickSmith/QBImagePicker"
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    if target.name == 'SwiftyCam'
+      target.build_configurations.each do |config|
+        config.build_settings['SWIFT_VERSION'] = '3.0'
+      end
+    end
+  end
+end
+########
+
+### FOr now because of travis
+# pod 'Firebase/Core', '~> 5.6.0'
+# pod 'Firebase/Auth'
+
+# Realtime DB
+# pod 'Firebase/Database' TODO why?
+
+# Crashlytics
+# pod 'Fabric'
+# pod 'Crashlytics'
+
+# Crashlytics works best without bitcode
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['ENABLE_BITCODE'] = "NO"
+      config.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = "YES"
+    end
+  end
+end
+
+# Firebase Cloud Messaging (FCM)
+# pod 'Firebase/Messaging'
+
+# Facebook Authentication
+# pod 'FBSDKCoreKit'
+# pod 'FBSDKLoginKit'
+
+# Google Authentication
+# pod 'GoogleSignIn'
+# #################
+# pod 'FirebaseAnalytics'
+# pod 'GoogleTagManager'
+# pod 'QBImagePickerController', '~> 3.4.0'
+# pod 'GoogleSignIn', '~> 4.1.2'
+
+pre_install do |installer|
+  installer.analysis_result.specifications.each do |s|
+    s.swift_version = '4.2' unless s.swift_version
+  end
+
+  # The shell script won't be updated if this is changed in post_install
+  # This is only if running without Xcode, if run in Xcode this won't work
+  ########## XCODE RUN BEGIN
+  # installer.pod_targets.each do |e|
+  #   begin
+  #     # map: 'key' => []
+  #     e.resource_paths.each do |conf_k, conf_v|
+  #       # resource paths are an array
+  #       temp_array = []
+  #       conf_v.each do |r_path|
+  #         temp_path = "${BUILT_PRODUCTS_DIR}/#{r_path.split('/')[2]}"
+  #         puts "Renaming #{r_path} -> #{temp_path}"
+  #         temp_array.push(temp_path)
+  #       end
+  #       e.resource_paths[conf_k] = temp_array if temp_array.length > 0
+  #     end
+  #   rescue
+  #     # not a built resource bundle, e.resource_paths fails trying to access it
+  #   end
+  # end
+  ########## XCODE RUN END
+
+  # Pod Context
+  self.platform :ios, '8.0'
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |nt|
+    if nt.isa != 'PBXAggregateTarget'
+      # PBXNativeTarget.name is BlueprintName
+      # PBXNativeTarget.product_reference.path is BuildableName
+      # But opening Xcode auto-corrects product_reference.path -> product_reference.name
+      ref_name = nt.product_reference.name
+      if nt.product_reference.path != ref_name
+        puts "Renaming #{nt.product_reference.path} -> #{ref_name}"
+        nt.product_reference.path = ref_name
+      end
+    end
+    nt.build_configurations.each do |config|
+      config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'] = 'YES'
+      config.build_settings['EXPANDED_CODE_SIGN_IDENTITY'] = ""
+      config.build_settings['CODE_SIGNING_REQUIRED']       = "NO"
+      config.build_settings['CODE_SIGNING_ALLOWED']        = "NO"
+      config.build_settings['ENABLE_BITCODE']              = "NO"
+#      config.build_settings['ASSETCATALOG_COMPILER_OPTIMIZATION'] = "time"
+#      config.build_settings['SWIFT_OPTIMIZATION_LEVEL'] = "-O"
+#      config.build_settings['GCC_OPTIMIZATION_LEVEL'] = "3"
+#      config.build_settings['ARCHS'] = "$(ARCHS_STANDARD_64_BIT)"
+#      config.build_settings['VALID_ARCHS'] = "arm64"
+#      config.build_settings['ONLY_ACTIVE_ARCH'] = "YES"
+      config.build_settings['DEBUG_INFORMATION_FORMAT'] = "dwarf-with-dsym"
+#      if config.build_settings['MACH_O_TYPE'] != "mh_bundle"
+#        config.build_settings['MACH_O_TYPE'] = "staticlib"
+#        config.build_settings['OTHER_LDFLAGS'] = "#{config.build_settings['OTHER_LDFLAGS']} -ObjC"
+#      end
+
+
+      # config.build_settings['DEFINES_MODULE'] = 'YES'
+      # config.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
+      # config.build_settings['CLANG_ENABLE_MODULES'] = 'YES'
+      # config.build_settings['CLANG_ENABLE_MODULE_DEBUGGING'] = 'NO'
+    end
+  end
+end

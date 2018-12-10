@@ -1,0 +1,149 @@
+<ngatl-ns-action-bar class="action-bar" [intro]="showIntro" [ready]="appService.shownIntro" (tappedTop)="tappedTop($event)"> 
+</ngatl-ns-action-bar>
+<GridLayout id="content-root" rows="*" columns="*">
+    <AbsoluteLayout (loaded)="startBadge()" class="w-full h-full home-bg" row="0" col="0" *ngIf="appService.shownIntro && !showNotes"><!--(tap)="retractTest()"-->
+        <Image src="~/assets/images/badge_bottom.png" id="badge-bottom" (tap)="openBarcode()" class="badge-bottom-intro" width="549" height="865"></Image><!--[class.exit]="badgeExit"-->
+        <Image src="~/assets/images/badge_top.png" id="badge-top" class="badge-top-intro" width="83" height="465"></Image><!--[class.exit]="badgeExit"-->
+        <Label text="" id="beacon" class="beacon beacon-pulse" (tap)="openBarcode()"></Label> <!--[class.exit]="badgeExit"--> 
+    </AbsoluteLayout>
+
+    <GridLayout row="0" col="0" rows="auto,*,auto" columns="*" class="c-bg-transparent" *ngIf="showNotes">
+        <GridLayout rows="*" columns="*,auto" row="0" col="0">
+          <GridLayout class="card badge-scan" rows="*" columns="auto,10,*" (tap)="openBarcode()" row="0" col="0" [touchColor]="'#151F2F,#273957'">
+            <Image src="~/assets/images/barcode.png" row="0" col="0" height="50"></Image>
+            <Label [text]="'user.scan-action' | translate" class="label c-white t-20" row="0" col="2"></Label>
+          </GridLayout>
+          <GridLayout class="card badge-scan" rows="50" columns="*,10,auto" (tap)="shareList()" row="0" col="1" [touchColor]="'#151F2F,#273957'">
+            <Label [text]="'general.export' | translate" class="label c-white t-20" row="0" col="0" verticalAlignment="center"></Label>
+            <Label [text]="'ion-ios-upload-outline' | fonticon" class="ion c-white" row="0" col="2" verticalAlignment="center"></Label>
+          </GridLayout>
+        </GridLayout>
+      <RadListView [items]="scans"
+        id="scans-listview"
+        row="1" col="0"
+        class="c-bg-transparent"
+        separatorColor="transparent"
+        swipeActions="true"
+        (loaded)="listviewLoaded($event)"
+        (itemLoading)="disableRowColor($event)"
+        (itemSwipeProgressStarted)="itemSwipeProgressStarted($event)"
+        (itemSwipeProgressEnded)="itemSwipeProgressEnded($event)"
+        (itemTap)="onItemTap($event)"
+        pullToRefresh="true" 
+        (pullToRefreshInitiated)="onPullRefreshInitiated($event)">
+        <ng-template tkListItemTemplate let-item="item">
+          <GridLayout class="card scanned" rows="auto,10,auto,auto" columns="auto,10,*,auto" (tap)="openItem(item)" [touchColor]="'#151F2F,#273957'">
+            <!-- <Image [src]="item.image" horizontalAlignment="center" class="w-full" backgroundColor="#fff"></Image> -->
+            <Label [text]="'ion-social-angular-outline' | fonticon" class="ion t-30 c-ngatl-red" row="0" col="0"></Label>
+            
+            <!-- <StackLayout class="hr-light"></StackLayout> -->
+            <Label [text]="item.peer?.name" class="t-20 c-white font-weight-bold label" row="0" col="2"></Label>
+            <Label [text]="'ion-ios-arrow-right' | fonticon" class="ion t-30 c-light-blue label" row="0" rowSpan="3" col="3" verticalAlignment="center"></Label>
+            <Label [text]="item.note ? item.note : ('user.add-notes' | translate)" row="2" colSpan="3" class="t-16 c-light-blue label"></Label>
+            <Label [text]="('user.scanned-by' | translate) + item.attendee.name" row="3" colSpan="3" class="t-12 c-grey-light label" *ngIf="item.attendee"></Label>
+            
+          </GridLayout>
+        </ng-template>
+        <!-- <ng-template tkListViewHeader>
+          <GridLayout class="card badge-scan" rows="*" columns="*,auto" (tap)="openBarcode()">
+              <Label [text]="'user.scan-action' | translate" class="label c-white t-20" row="0" col="0"></Label>
+              <Image src="~/assets/images/barcode.png" row="0" col="1" height="50"></Image>
+          </GridLayout>
+        </ng-template> -->
+        <ng-template tkListItemSwipeTemplate rows="auto" columns="*,100">
+          <GridLayout rows="11,*" columns="*,100">
+            <Button row="1" col="1" [text]="'ion-ios-close-outline' | fonticon" class="ion swipe-delete-btn" (tap)="remove($event)"></Button>
+          </GridLayout>
+        </ng-template>
+      </RadListView>
+      <GridLayout class="card badge-scan" rows="*" columns="auto,10,*" (tap)="donate()" row="2" col="0" [touchColor]="'#151F2F,#273957'">
+        <Label [text]="'ion-ios-heart' | fonticon" class="ion c-white" row="0" col="0" verticalAlignment="center"></Label>
+        <Label [text]="'general.donate' | translate" class="label c-white t-20" row="0" col="2" verticalAlignment="center"></Label>
+      </GridLayout>
+    </GridLayout>
+
+    <GridLayout id="intro-elements" row="0" col="0" *ngIf="!appService.shownIntro"  (swipe)="swipeHandler($event)">
+        <GridLayout id="intro-background" class="intro-background-intro" originY="0"></GridLayout>
+        
+        <GridLayout id="intro-logo-bg" class="intro-logo-bg-intro" backgroundColor="#fff" width="93" height="93" horizontalAlignment="center" verticalAlignment="center" borderRadius="100" ></GridLayout>
+        <Image id="intro-logo-n" class="intro-logo-n-intro" src="res://ngatlsplash" width="341" height="366" stetch="aspectFit" horizontalAlignment="center" verticalAlignment="center" ></Image>
+        <!-- <GridLayout id="intro-logo-n" class="intro-logo-n-intro" backgroundImage="res://ngatlsplash" width="341" height="366" stetch="aspectFit" horizontalAlignment="center" verticalAlignment="center" ></GridLayout> -->
+
+        <Image id="intro-logo-ng" class="intro-logo-ng-intro" src="res://ng" width="118" height="134" stetch="aspectFit" horizontalAlignment="center" verticalAlignment="center"></Image>
+        <!-- <GridLayout id="intro-logo-ng" class="intro-logo-ng-intro" backgroundImage="res://ng" width="118" height="134" stetch="aspectFit" horizontalAlignment="center" verticalAlignment="center"></GridLayout> -->
+        <Image id="intro-logo-atl" class="intro-logo-atl-intro" src="res://atl" width="171" height="131" stetch="aspectFit" horizontalAlignment="center" verticalAlignment="center"></Image>
+        <!-- <GridLayout id="intro-logo-atl" class="intro-logo-atl-intro" backgroundImage="res://atl" width="171" height="131" stetch="aspectFit" horizontalAlignment="center" verticalAlignment="center"></GridLayout> -->
+
+        <Label id="intro-text-one"
+                class="intro-text-one-intro"
+                text="Diversity, Inclusion&#xA;and Angular"
+                fontSize="37"
+                horizontalAlignment="center"
+                verticalAlignment="center"
+                textWrap="true"
+                color="white"
+                textAlignment="center"></Label>
+        <Label id="intro-text-two"
+                class="intro-text-two-intro"
+                text="1st annual Angular conference in Atlanta, GA&#xA;focused on diversity in technology."
+                fontSize="19"
+                horizontalAlignment="center"
+                verticalAlignment="center"
+                textWrap="true"
+                color="#8DA1AB"
+                textAlignment="center"
+                marginRight="10" marginLeft="10"></Label>
+
+                
+        <Label id="intro-version"
+            class="intro-version-intro"
+            text="Enjoy the time of your life."
+            fontSize="14"
+            horizontalAlignment="center"
+            verticalAlignment="center"
+            color="white"
+            textAlignment="center"></Label>
+
+        <GridLayout class="intro-swipe-intro" *ngIf="showSwiper" id="intro-swipe" padding="10">
+          <Shimmer [enabled]="swipeEnable">
+              <Label text="Swipe for fun" class="swipe-text c-white w-full text-center" (swipe)="swipeHandler($event)"></Label>     
+          </Shimmer>
+        </GridLayout>
+    </GridLayout>
+</GridLayout>
+
+<!-- <ScrollView class="page">
+  <StackLayout class="page">
+    <StackLayout class="card">
+      <Button text="Barcode" (tap)="openBarcode()"></Button>
+      <StackLayout class="hr-light"></StackLayout>
+    </StackLayout>
+
+    <StackLayout class="card">
+      <Label text="A sample" textWrap="true"></Label>
+      <StackLayout class="hr-light"></StackLayout>
+      <GridLayout rows="auto" columns="*,*,*" class="social-controls">
+        <Button col="1" text="Toggle Spinner" class="gray" (tap)="toggleSpinner()"></Button>
+      </GridLayout>
+    </StackLayout>
+
+    <StackLayout class="card">
+      <Label text="This is a sample card. Do with it what you will!" textWrap="true"></Label>
+      <StackLayout class="hr-light"></StackLayout>
+      <GridLayout rows="auto" columns="*,*,*" class="social-controls">
+        <Button col="0" [text]="'ion-heart' | fonticon" class="ion red"></Button>
+        <Button col="1" [text]="'ion-star' | fonticon" class="ion gray"></Button>
+        <Button col="2" [text]="'ion-ios-upload-outline' | fonticon" class="ion gray"></Button>
+      </GridLayout>
+      <StackLayout>
+        <TextField hint="First Name" [(ngModel)]="user.firstName"></TextField>
+        <TextField hint="Last Name" [(ngModel)]="user.lastName"></TextField>
+        <TextField hint="Email" [(ngModel)]="user.email" autocapitalizationType="none" autocorrect="false" keyboardType="email"></TextField>
+        <TextField secure="true" hint="Password" [(ngModel)]="user.password" autocapitalizationType="none" autocorrect="false" returnKeyType="go"
+          (returnPress)="login()"></TextField>
+        <Button text="Create" (tap)="create()"></Button>
+        <Button text="Login" (tap)="login()"></Button>
+      </StackLayout>
+    </StackLayout>
+  </StackLayout>
+</ScrollView> -->

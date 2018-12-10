@@ -1,3 +1,105 @@
 {
-  "hello": "Hello xplat"
+  "menu": {
+    "home": "Home",
+    "schedule": "Schedule",
+    "speakers": "Speakers",
+    "sponsors": "Sponsors",
+    "community": "Community",
+    "media": "Media Partners",
+    "conduct": "Code of Conduct",
+    "about": "About",
+    "credits": "Credits",
+    "story": "Origin Story",
+    "copyright": "2018 ngATL, built by nStudio"
+  },
+  "error": {
+    "upload-photo-lbl": "Sorry, an error occurred uploading that photo."
+  },
+  "dialogs": {
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "yes-login": "Yes, login!",
+    "yes-delete": "Yes, delete",
+    "cancel": "Cancel",
+    "no": "No",
+    "delete-scan": "Are you sure want to remove the badge scan for",
+    "pin-number": "PIN number",
+    "camera": "Camera",
+    "confirm-photo-delete": "Are you sure you want to remove this photo?",
+    "close": "Close",
+    "sms": "Text message"
+  },
+  "item": {
+    "delete-lbl": "Delete"
+  },
+  "general": {
+    "donate": "Donate",
+    "export": "Export",
+    "twitter-unknown": "Twitter unknown! So sorry!",
+    "picture": "Picture",
+    "back": "Back",
+    "need-help": "Need Help?",
+    "help": "Help",
+    "email-us": "Email us at info@ng-atl.org",
+    "tweet-us": "Tweet at us",
+    "error": "We're sorry an error occurred.",
+    "photo-album-tle": "Photo Album",
+    "edit": "Edit",
+    "save": "Save",
+    "update": "Update",
+    "profile": "Profile",
+    "ngatl-text-msg":
+      "Hi, this ngAtl conference is awesome! I wanted to reach out and say hello."
+  },
+  "user": {
+    "export-confirm": "Are you sure you want to export all notes to a CSV file which you can email to yourself or your team?",
+    "scanned-by": "Added by ",
+    "claim-personal-first": "You must claim your own badge first before joining a sponsor group.",
+    "save-favs": "Saving favorites...",
+    "add-notes": "Add notes...",
+    "require-auth": "Please claim your badge to login and use this feature!",
+    "language": "Language",
+    "badge-claim": "Is this your badge",
+    "confirm-sponsor-pin": "Please confirm the sponsor PIN:",
+    "sponsor-confirmed": "You are now a part of:",
+    "wrong-sponsor-pin": "That pin number was incorrect.",
+    "unlink-sponsor": "Unlink sponsor group",
+    "unlink-sponsor-confirm": "Are you sure you want to unlink your account from the sponsor group?",
+    "scan-action": "Scan a badge",
+    "already-scanned": "You have already scanned the wonderfully delightful",
+    "already-claimed":
+      "This badge has already been claimed. If this is your badge, please send email to info@ng-atl.org and we will correct this for you.",
+    "scan-yourself":
+      "Well this sure is fun isn't it :) You have already claimed this badge silly pants.",
+    "unclaim-confirm":
+      "Are you sure you would like to unclaim this badge? This will make it available for someone else to claim.",
+    "unsaved":
+      "You have unsaved changes. Are you sure you want to exit without saving?",
+    "person": "individual standing before you.",
+    "name": "Name",
+    "phone": "Phone",
+    "company": "Company",
+    "email": "Email",
+    "updated": "Your profile was successfully updated!",
+    "logout": "Logout",
+    "logged-in": "You are now logged in",
+    "unclaim": "Unclaim Badge",
+    "toggle-fav": "Toggle Favorites",
+    "auto-transcribe": "Auto-Transcribe",
+    "not-found": "A badge was not found in our database for this barcode.",
+    "email-confirm-compose":
+      "Would you like to compose an email to them now? This will close this modal to open the compose view.",
+    "sms-confirm-compose":
+      "Would you like to compose a text message to them now? This will close this modal to open the compose view."
+  },
+  "conduct": {
+    "title": "Code of Conduct"
+  },
+  "audio": {
+    "disabled": "This device cannot record audio.",
+    "no-file": "There is no recording to play.",
+    "saving": "Saving notes...",
+    "transcribe-error":
+      "We're sorry, transcription failed. That was either some wacky conversation or somehow crypto currencies are involved in bringing down the entire web."
+  }
 }

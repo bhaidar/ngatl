@@ -12,3 +12,11 @@ try {
 } catch (err) {
   // ignore
 }
+
+console.warn('Removing imagepicker / camera-plus Podfile because of conflict on QBImagePickerController.');
+try {
+  fs.unlinkSync('node_modules/nativescript-imagepicker/platforms/ios/Podfile');
+  fs.unlinkSync('node_modules/@nstudio/nativescript-camera-plus/platforms/ios/Podfile');
+} catch (e) {
+  // ignore, already done
+}

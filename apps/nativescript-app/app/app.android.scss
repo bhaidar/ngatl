@@ -1,3 +1,52 @@
-@import '~@ngatl/nativescript/scss/index.android';
-@import 'scss/index';
-@import 'scss/overrides.android';
+// @import '~@ngatl/nativescript/scss/index.android';
+// @import 'scss/index';
+// @import 'scss/overrides.android';
+
+
+@import 'scss/common';
+@import 'scss/android-overrides';
+
+@keyframes intro-swipe-intro-android {
+  0% {
+      opacity: 0;
+      transform: translate(0, 400);
+  }
+  88.25% {
+      opacity: 0;
+      transform: translate(0, 400);
+  }
+  100% {
+      opacity: .9;
+      transform: translate(0, 304);
+  }
+}
+@keyframes intro-swipe-enter-android {
+  0% {
+      opacity: .9;
+      transform: translate(0, 304);
+  }
+  12% {
+      opacity: .5;
+      transform: translate(0, 400);
+  }
+  100% {
+      opacity: 0;
+      transform: translate(0, 400);
+  }
+}
+
+.intro-swipe-intro {
+  animation-name: intro-swipe-intro-android;
+  animation-duration: .5;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.intro-swipe-enter {
+  animation-name: intro-swipe-enter-android;
+  animation-duration: 1.25;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+}

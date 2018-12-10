@@ -7,5 +7,7 @@ import { AppService } from '@ngatl/nativescript/core';
 export abstract class AppBaseComponent extends BaseComponent {
   constructor(protected appService: AppService) {
     super();
+
+    this.appService.initFirebase();
   }
 }

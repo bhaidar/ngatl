@@ -1,0 +1,15 @@
+<ngatl-ns-action-bar [title]="'menu.community' | translate"></ngatl-ns-action-bar>
+<StackLayout class="page h-full p-b-20" *ngIf="renderView">
+  <ListView [items]="communityState$ | async" class="list-group h-full">
+    <ng-template let-item="item" let-odd="odd" let-even="even">
+      <StackLayout>
+        <StackLayout class="card" (tap)="viewSite(item)">
+          <Image [src]="item.imageUrl$ | async" height="120" horizontalAlignment="center" verticalAlignment="center" class="w-full p-5 c-bg-white"></Image>
+
+          <!-- <StackLayout class="hr-light"></StackLayout> -->
+          <Label [text]="item.name" class="text-center t-20 w-full c-black p-5 font-weight-bold"></Label>
+        </StackLayout>
+      </StackLayout>
+    </ng-template>
+  </ListView>
+  </StackLayout>
