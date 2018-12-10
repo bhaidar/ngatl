@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { Observable, BehaviorSubject, Subject, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
-import { SystemUser, SystemUserApi } from '@ngatl/api';
+// import { SystemUser} from '@ngatl/api';
 // app
 import { AnalyticsService } from './analytics.service';
 import { environment } from '../environments/environment';
@@ -28,7 +28,7 @@ import {
 } from '@ngatl/utils';
 import { ICoreState } from '../state';
 
-const CryptoJS = require( 'crypto-js' );
+import * as CryptoJS from 'crypto-js' ;
 
 @Injectable()
 export class UserService extends Cache {
@@ -58,7 +58,7 @@ export class UserService extends Cache {
     private _router: Router,
     private _analytics: AnalyticsService,
     private _translateService: TranslateService,
-    private _systemUserApi: SystemUserApi,
+    // private _systemUserApi: SystemUserApi,
   ) {
     super( _storageService );
     this.isObjectCache = true;
@@ -127,13 +127,13 @@ export class UserService extends Cache {
   //   return this._apiUsers.linkAuthFirebase({ firebaseToken });
   // }
 
-  public emailConnect( credentials: { email: string; password: string } ) {
-    return this._systemUserApi.login( credentials );
-  }
+  // public emailConnect( credentials: { email: string; password: string } ) {
+  //   // return this._systemUserApi.login( credentials );
+  // }
 
-  public createUser( user: SystemUser ) {
-    return this._systemUserApi.create( user );
-  }
+  // public createUser( user: SystemUser ) {
+  //   // return this._systemUserApi.create( user );
+  // }
 
   public findUser( badgeId: string, scanned: Array<UserState.IRegisteredUser> ) {
     // if (scanned) {
@@ -300,8 +300,8 @@ export class UserService extends Cache {
           // collect notes together and condense attendee data
           const users = <Array<any>>user;
           const currentUser = user.find(u => u.id === details.id);
-          const notes = flatten(users.map(u => u.notes)).map((n: UserState.IConferenceAttendeeNote) => { 
-            if (n.attendee.id === details.id) { 
+          const notes = flatten(users.map(u => u.notes)).map((n: UserState.IConferenceAttendeeNote) => {
+            if (n.attendee.id === details.id) {
               // reduces duplicate data
              delete n.attendee;
              return n;

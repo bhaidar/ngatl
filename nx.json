@@ -16,6 +16,12 @@
     },
     "nativescript-app": {
       "tags": []
+    },
+    "web-admin": {
+      "tags": []
+    },
+    "web-admin-e2e": {
+      "tags": []
     }
   }
 }

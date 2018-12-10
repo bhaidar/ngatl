@@ -7,10 +7,12 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { throwIfAlreadyLoaded } from '@ngatl/utils';
 import {
-  CoreModule,
-  PlatformLanguageToken,
+  CoreModule, PlatformFirebaseToken,
+  PlatformLanguageToken, PlatformRouterToken,
   WindowPlatformService
-} from '@ngatl/core';
+} from '@ngatl/core'
+import { RouterModule } from '@angular/router'
+import * as firebase from 'firebase/app';
 
 // bring in custom web services here...
 
@@ -29,6 +31,10 @@ export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, `./assets/i18n/`, '.json');
 }
 
+export function firebaseFactory() {
+  return firebase;
+}
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -41,7 +47,15 @@ export function createTranslateLoader(http: HttpClient) {
       {
         provide: WindowPlatformService,
         useFactory: winFactory
-      }
+      },
+      {
+        provide: PlatformRouterToken,
+        useClass: RouterModule,
+      },
+      {
+        provide : PlatformFirebaseToken,
+        useFactory : firebaseFactory,
+      },
     ]),
     TranslateModule.forRoot({
       loader: {
