@@ -53,6 +53,7 @@
     "nativescript-permissions": "file:../../node_modules/nativescript-permissions",
     "nativescript-phone": "file:../../node_modules/nativescript-phone",
     "nativescript-plugin-firebase": "file:../../node_modules/nativescript-plugin-firebase",
+    "nativescript-shimmer": "file:../../node_modules/nativescript-shimmer",
     "nativescript-social-share": "file:../../node_modules/nativescript-social-share",
     "nativescript-theme-core": "file:../../node_modules/nativescript-theme-core",
     "nativescript-ui-sidedrawer": "~5.0.0",

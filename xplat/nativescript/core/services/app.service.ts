@@ -54,6 +54,7 @@ export class AppService {
   private _currentUser$: BehaviorSubject<UserState.IRegisteredUser> = new BehaviorSubject(null);
   private _initUser = false;
   private _isPasswordLogin: boolean;
+  private _registeredPush: boolean;
   private _pushTokenPosted: boolean;
   // specific android handling for devices
   public preventAndroidGlobalHardwareBack = false;
@@ -564,57 +565,11 @@ export class AppService {
         } else if (!this._initUser) {
           this._initUser = true;
           // wire up things once for global app behavior when user is authenticated
-          this._ngZone.run(() => {
-
-            TNSFirebase.addOnMessageReceivedCallback((payload: any) => {
-              // NOTE: This behaves very differently between iOS/Android
-              // mainly because likely android we configure to use launchMode: "singleTask"
-              if (payload) {
-                this._log.debug('push notification', payload);
-                this._log.debug('push notification', JSON.stringify(payload));
-                if (isIOS) {
-                  // NOTE: iOS will fire this only when user TAPS on the notification message
-                  // this is achieved only when initializing firebase.init with:
-                  // showNotificationsWhenInForeground: true
-                  // if that is not set, this will fire immediately when message comes in disregarding a user tap on it
-                  // this is because iOS will not show the message by default on screen when app is in foreground therefore will just fire this right away
-                  try {
-                    this._preparePushData(payload);
-                  } catch (err) {
-                    // ignore
-                  }
-                } else {
-                  // NOTE: Android launchMode is set to singleTask which means this method will fire immediately when the message arrives when app is in the foreground
-                  // * Will NOT fire when app is in background even if user tapped on the notification
-                  // * Will fire when app is in foreground immediately without waiting for a user tap or anything
-                  // This is bad because it could initiate a flow and interrupt the user currently using the app
-                  // the data is handled instead inside Intents via app events (see initAppEvents and _androidProcessIntent)
-                  this.androidTapPushNotificationData = payload;
-                  if (payload.title || payload.body) {
-                    // show toast message of the push data since android doesn't show anything on top of app when it's in the foreground
-                    // this.showToast(null, null, true, {
-                    //   title: payload.title || '',
-                    //   body: payload.body || '',
-                    //   color: '#007a42',
-                    //   level: 'info'
-                    // });
-                  }
-                }
-              }
-            });
-
-            TNSFirebase.addOnPushTokenReceivedCallback((token: any) => {
-              // platforms return proprietary objects here
-              // use following method to retrieve string value to post
-              this._registerPushDeviceToken();
-            });
-
-            // also register here since the callback above may not fire
-            this._registerPushDeviceToken();
-          });
+          
         } else if (!this._pushTokenPosted) {
           this._registerPushDeviceToken();
         }
+
       } );
 
     this._userService.promptUserClaim$
@@ -683,6 +638,60 @@ export class AppService {
         // }
       }
     });
+  }
+
+  public promptForPush() {
+    if (!this._registeredPush) {
+      this._registeredPush = true;
+      this._ngZone.run(() => {
+
+        TNSFirebase.addOnMessageReceivedCallback((payload: any) => {
+          // NOTE: This behaves very differently between iOS/Android
+          // mainly because likely android we configure to use launchMode: "singleTask"
+          if (payload) {
+            this._log.debug('push notification', payload);
+            this._log.debug('push notification', JSON.stringify(payload));
+            if (isIOS) {
+              // NOTE: iOS will fire this only when user TAPS on the notification message
+              // this is achieved only when initializing firebase.init with:
+              // showNotificationsWhenInForeground: true
+              // if that is not set, this will fire immediately when message comes in disregarding a user tap on it
+              // this is because iOS will not show the message by default on screen when app is in foreground therefore will just fire this right away
+              try {
+                this._preparePushData(payload);
+              } catch (err) {
+                // ignore
+              }
+            } else {
+              // NOTE: Android launchMode is set to singleTask which means this method will fire immediately when the message arrives when app is in the foreground
+              // * Will NOT fire when app is in background even if user tapped on the notification
+              // * Will fire when app is in foreground immediately without waiting for a user tap or anything
+              // This is bad because it could initiate a flow and interrupt the user currently using the app
+              // the data is handled instead inside Intents via app events (see initAppEvents and _androidProcessIntent)
+              this.androidTapPushNotificationData = payload;
+              if (payload.title || payload.body) {
+                // show toast message of the push data since android doesn't show anything on top of app when it's in the foreground
+                // this.showToast(null, null, true, {
+                //   title: payload.title || '',
+                //   body: payload.body || '',
+                //   color: '#007a42',
+                //   level: 'info'
+                // });
+              }
+            }
+          }
+        });
+
+        TNSFirebase.addOnPushTokenReceivedCallback((token: any) => {
+          // platforms return proprietary objects here
+          // use following method to retrieve string value to post
+          this._registerPushDeviceToken();
+        });
+
+        // also register here since the callback above may not fire
+        this._registerPushDeviceToken();
+      });
+    }
   }
 
   private _processPushData(data: IProcessPushData) {

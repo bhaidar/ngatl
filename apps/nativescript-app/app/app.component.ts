@@ -11,6 +11,7 @@ import { isAndroid } from 'tns-core-modules/platform';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { registerElement } from 'nativescript-angular/element-registry';
 registerElement('CameraPlus', () => require('@nstudio/nativescript-camera-plus').CameraPlus);
+registerElement('Shimmer', () => require('nativescript-shimmer').Shimmer);
 
 import { Store, select } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
