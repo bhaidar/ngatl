@@ -30,6 +30,9 @@
       ],
       "@ngatl/web/*": [
         "xplat/web/*"
+      ],
+      "@ngatl/admin/ui": [
+        "libs/admin/ui/src/index.ts"
       ]
     }
   },

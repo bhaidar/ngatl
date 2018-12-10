@@ -10,11 +10,24 @@ import { SharedModule } from './features/shared/shared.module';
 import { AppComponent } from './app.component';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AdminUiModule, LayoutComponent } from '@ngatl/admin/ui';
 
-export const routes: Routes = [];
+export const routes: Routes = [
+  {
+    path: '',
+    component: LayoutComponent,
+    children: []
+  }
+];
 
 @NgModule({
-  imports: [CoreModule, SharedModule, RouterModule.forRoot(routes), BrowserAnimationsModule],
+  imports: [
+    CoreModule,
+    SharedModule,
+    AdminUiModule,
+    RouterModule.forRoot(routes),
+    BrowserAnimationsModule
+  ],
   declarations: [AppComponent],
   bootstrap: [AppComponent]
 })

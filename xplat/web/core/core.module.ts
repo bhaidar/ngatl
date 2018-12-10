@@ -7,11 +7,13 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { throwIfAlreadyLoaded } from '@ngatl/utils';
 import {
-  CoreModule, PlatformFirebaseToken,
-  PlatformLanguageToken, PlatformRouterToken,
+  CoreModule,
+  PlatformFirebaseToken,
+  PlatformLanguageToken,
+  PlatformRouterToken,
   WindowPlatformService
-} from '@ngatl/core'
-import { RouterModule } from '@angular/router'
+} from '@ngatl/core';
+import { RouterModule } from '@angular/router';
 import * as firebase from 'firebase/app';
 
 // bring in custom web services here...
@@ -50,12 +52,12 @@ export function firebaseFactory() {
       },
       {
         provide: PlatformRouterToken,
-        useClass: RouterModule,
+        useClass: RouterModule
       },
       {
-        provide : PlatformFirebaseToken,
-        useFactory : firebaseFactory,
-      },
+        provide: PlatformFirebaseToken,
+        useFactory: firebaseFactory
+      }
     ]),
     TranslateModule.forRoot({
       loader: {

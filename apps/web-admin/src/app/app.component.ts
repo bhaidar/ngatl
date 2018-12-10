@@ -5,7 +5,7 @@ import { AppBaseComponent } from '@ngatl/web';
 
 @Component({
   selector: 'ngatl-root',
-  templateUrl: './app.component.html'
+  template: `<router-outlet></router-outlet>`
 })
 export class AppComponent extends AppBaseComponent {
   constructor() {
