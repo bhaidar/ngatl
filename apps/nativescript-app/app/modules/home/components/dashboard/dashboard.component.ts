@@ -792,6 +792,9 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     this._win.setTimeout(_ => {
       this._ngZone.run(() => {
         this.appService.shownIntro = this.showIntro = true;
+        this._win.setTimeout(_=> {
+          this.appService.promptForPush();
+        }, 300);
       });
     }, 1500);
   }
@@ -937,10 +940,6 @@ export class DashboardComponent extends BaseComponent implements AfterViewInit, 
     if (args.direction && !this._swipeStarted) {
       this._swipeStarted = true;
       this.enter();
-
-      this._win.setTimeout(_=> {
-        this.appService.promptForPush();
-      }, 1600);
     }
   }
 

@@ -65,7 +65,7 @@
     <GridLayout id="intro-elements" row="0" col="0" *ngIf="!appService.shownIntro"  (swipe)="swipeHandler($event)">
         <GridLayout id="intro-background" class="intro-background-intro" originY="0"></GridLayout>
         
-        <GridLayout id="intro-logo-bg" class="intro-logo-bg-intro" backgroundColor="#fff" width="93" height="93" horizontalAlignment="center" verticalAlignment="center" borderRadius="120"></GridLayout>
+        <StackLayout id="intro-logo-bg" class="intro-logo-bg-intro" backgroundColor="#fff" width="92" height="92" horizontalAlignment="center" verticalAlignment="center" borderRadius="92"></StackLayout>
         <Image id="intro-logo-n" class="intro-logo-n-intro" src="res://ngatlsplash" width="341" height="366" stetch="aspectFit" horizontalAlignment="center" verticalAlignment="center" ></Image>
         <!-- <GridLayout id="intro-logo-n" class="intro-logo-n-intro" backgroundImage="res://ngatlsplash" width="341" height="366" stetch="aspectFit" horizontalAlignment="center" verticalAlignment="center" ></GridLayout> -->
 
