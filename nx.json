@@ -16,6 +16,18 @@
     },
     "nativescript-app": {
       "tags": []
+    },
+    "web-admin": {
+      "tags": []
+    },
+    "web-admin-e2e": {
+      "tags": []
+    },
+    "admin-ui": {
+      "tags": []
+    },
+    "admin-conference": {
+      "tags": []
     }
   }
 }
