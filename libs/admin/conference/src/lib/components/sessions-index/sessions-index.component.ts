@@ -17,7 +17,7 @@ import { ConferenceSessionsService } from '../../services/conference-sessions.se
           [payload]="item"
           [title]="item.title"
           [editAction]="item.editAction"
-          [subtitle]="item.subtitle">
+          [subtitle]="item.description">
         </ui-card>
       </ng-container>
     </ui-grid>
