@@ -5,5 +5,5 @@
     "types": []
   },
   "exclude": ["test.ts", "**/*.spec.ts"],
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts", "../../libs/admin/conference/src/index.ts"]
 }

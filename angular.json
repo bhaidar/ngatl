@@ -232,6 +232,34 @@
           }
         }
       }
+    },
+    "admin-conference": {
+      "root": "libs/admin/conference",
+      "sourceRoot": "libs/admin/conference/src",
+      "projectType": "library",
+      "prefix": "ngatl",
+      "architect": {
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/admin/conference/src/test.ts",
+            "tsConfig": "libs/admin/conference/tsconfig.spec.json",
+            "karmaConfig": "libs/admin/conference/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/conference/tsconfig.lib.json",
+              "libs/admin/conference/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {

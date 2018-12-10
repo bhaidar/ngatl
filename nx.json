@@ -25,6 +25,9 @@
     },
     "admin-ui": {
       "tags": []
+    },
+    "admin-conference": {
+      "tags": []
     }
   }
 }

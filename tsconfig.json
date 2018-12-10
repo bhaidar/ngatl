@@ -33,6 +33,9 @@
       ],
       "@ngatl/admin/ui": [
         "libs/admin/ui/src/index.ts"
+      ],
+      "@ngatl/admin/conference": [
+        "libs/admin/conference/src/index.ts"
       ]
     }
   },

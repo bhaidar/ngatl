@@ -16,7 +16,13 @@ export const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
-    children: []
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: 'conference' },
+      {
+        path: 'conference',
+        loadChildren: '@ngatl/admin/conference#AdminConferenceModule'
+      }
+    ]
   }
 ];
 

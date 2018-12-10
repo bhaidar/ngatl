@@ -12,16 +12,16 @@ export class LayoutComponent {
   public title = 'NG-ATL 2019'
   public links = [{
     label: 'Speakers',
-    path: 'speakers',
+    path: '/conference/speakers',
   }, {
     label: 'Sessions',
-    path: 'sessions',
+    path: '/conference/sessions',
   }, {
     label: 'Schedule',
-    path: 'schedule',
+    path: '/conference/schedule',
   }, {
     label: 'Sponsors',
-    path: 'sponsors',
+    path: '/conference/sponsors',
   }];
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
