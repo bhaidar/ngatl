@@ -8,7 +8,7 @@ a { color: white };
 
 @include mat-core();
 
-$primary: mat-palette($mat-pink, 700, 500, 900);
+$primary: mat-palette($mat-red, 700, 500, 900);
 
 $accent:  mat-palette($mat-blue-grey, A200, A100, A400);
 

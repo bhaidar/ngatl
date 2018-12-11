@@ -3,13 +3,13 @@
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="!(isHandset$ | async)">
-    <mat-toolbar color="primary" routerLink="/">
-      {{ title }}
+    <mat-toolbar routerLink="/">
+      <img src="/assets/logo.svg" alt="NG Atl Logo" class="logo">
     </mat-toolbar>
     <ui-sidebar [groups]="groups" [topLinks]="topLinks"></ui-sidebar>
   </mat-sidenav>
   <mat-sidenav-content>
-    <mat-toolbar color="primary">
+    <mat-toolbar>
       <mat-toolbar-row>
         <button
           type="button"
