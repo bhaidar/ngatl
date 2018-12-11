@@ -6,7 +6,7 @@ import { FlexLayoutModule } from '@angular/flex-layout'
 import { AdminUiFormsModule } from './admin-ui-forms.module'
 import { AdminUiMaterialModule } from './admin-ui-material.module';
 
-import { AutocompleteComponent } from './components/autocomplete/autocomplete.component'
+import { SearchComponent } from './components/search/search.component'
 import { CardComponent } from './components/card/card.component';
 import { FormComponent } from './components/form/form.component';
 import { FormRepeatComponent } from './components/form-repeat/form-repeat.component';
@@ -24,7 +24,7 @@ const ENTRY_COMPONENTS = [
 
 const COMPONENTS = [
   ...ENTRY_COMPONENTS,
-  AutocompleteComponent,
+  SearchComponent,
   CardComponent,
   FormComponent,
   FormRepeatComponent,

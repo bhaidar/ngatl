@@ -116,7 +116,7 @@ export class ConferenceSessionsService {
     return this.items
   }
 
-  get autocomplete(): Observable<any> {
+  get options(): Observable<any> {
     return this.query$
       .pipe(
         distinctUntilChanged(),

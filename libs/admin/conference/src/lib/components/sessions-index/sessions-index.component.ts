@@ -4,7 +4,7 @@ import { ConferenceSessionsService } from '../../services/conference-sessions.se
 
 @Component({
   template: `
-    <ui-autocomplete [options]="crud.autocomplete | async" (action)="crud.handleAction($event)"></ui-autocomplete>
+    <ui-search [options]="crud.options | async" (action)="crud.handleAction($event)"></ui-search>
     <div class="add-button">
       <button mat-fab color="primary" (click)="crud.addItem()">
         <mat-icon>add</mat-icon>

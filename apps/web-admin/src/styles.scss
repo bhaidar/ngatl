@@ -10,7 +10,7 @@ a { color: white };
 
 $primary: mat-palette($mat-red, 700, 500, 900);
 
-$accent:  mat-palette($mat-blue-grey, A200, A100, A400);
+$accent: mat-palette($mat-blue-grey, A200, A100, A400);
 
 $theme: mat-dark-theme($primary, $accent);
 
@@ -20,3 +20,11 @@ $theme: mat-dark-theme($primary, $accent);
 .mat-list-item-active {
   color: mat-color($primary) !important;
 }
+
+
+// Define the theme.
+$toolbar-primary: mat-palette($mat-grey, 700, 500, 900);
+$toolbar-theme: mat-dark-theme($toolbar-primary, $accent);
+
+@include mat-toolbar-theme($toolbar-theme);
+
