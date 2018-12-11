@@ -60,15 +60,13 @@ export class ConferenceSessionsService {
 
   constructor(private ui: AdminUiService) {
     this.actions = actions
-    this.items = Array(100)
+    this.allItems = this.items = Array(100)
       .fill(0)
       .map((_, idx) => {
         return {
           title: 'Session title ' + idx,
           description: 'Session description ' + idx,
           type: 'talk',
-          // editAction: actions.EDIT,
-          // deleteAction: actions.DELETE
         }
       })
   }
