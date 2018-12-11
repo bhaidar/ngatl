@@ -9,50 +9,35 @@ enum actions {
   EDIT = 'EDIT'
 }
 
-class ConferenceSession {
-  title: string
-  description: string
-  date?: Date
-  time?: Date
-  duration?: number
-  type: string
+class SystemUser {
+  name: string
+  email: string
+  role: string
 }
 
 @Injectable({providedIn: 'root'})
-export class ConferenceSessionsService {
+export class SystemUsersService {
   public actions;
-  public allItems: ConferenceSession[] = []
-  public items: ConferenceSession[] = []
+  public allItems: SystemUser[] = []
+  public items: SystemUser[] = []
   public formFields: FormField[] = [
-    FormField.input('title', {
-      label: 'Title',
+    FormField.input('name', {
+      label: 'Name',
       required: true,
     }),
-    FormField.textarea('description', {
-      label: 'Description',
+    FormField.email('email', {
+      label: 'Email',
       required: true,
     }),
-    FormField.date('date', {
-      label: 'Date',
-      required: true,
-    }),
-    FormField.date('time', {
-      label: 'Time',
-      required: true,
-    }),
-    FormField.number('duration', {
-      label: 'Duration',
-      required: true,
-    }),
-    FormField.select('type', {
-      label: 'Type',
+    FormField.select('role', {
+      label: 'Role',
       required: true,
       options: [{
-        key: 'talk',
-        value: 'Talk',
+        key: 'admin',
+        value: 'Admin',
       },{
-        key: 'workshop',
-        value: 'Workshop',
+        key: 'editor',
+        value: 'Editor',
       },]
     })
   ]
@@ -60,15 +45,13 @@ export class ConferenceSessionsService {
 
   constructor(private ui: AdminUiService) {
     this.actions = actions
-    this.items = Array(100)
+    this.allItems = this.items = Array(100)
       .fill(0)
       .map((_, idx) => {
         return {
-          title: 'Session title ' + idx,
-          description: 'Session description ' + idx,
-          type: 'talk',
-          // editAction: actions.EDIT,
-          // deleteAction: actions.DELETE
+          name: 'Dummy User' + idx,
+          email: `user-${idx}@email.com`,
+          role: 'editor',
         }
       })
   }
@@ -112,8 +95,8 @@ export class ConferenceSessionsService {
     return this.query.asObservable()
   }
 
-  filterItems(query: string): ConferenceSession[] {
-    this.items = this.allItems.filter(item => item.title.toLowerCase().includes(query.toLowerCase()))
+  filterItems(query: string): SystemUser[] {
+    this.items = this.allItems.filter(item => item.name.toLowerCase().includes(query.toLowerCase()))
 
     return this.items
   }
@@ -123,7 +106,7 @@ export class ConferenceSessionsService {
       .pipe(
         distinctUntilChanged(),
         map(query => this.filterItems(query)),
-        map(items => items.map(item => item.title))
+        map(items => items.map(item => item.name))
       )
   }
 

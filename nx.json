@@ -28,6 +28,9 @@
     },
     "admin-conference": {
       "tags": []
+    },
+    "admin-system": {
+      "tags": []
     }
   }
 }

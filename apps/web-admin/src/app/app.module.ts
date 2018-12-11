@@ -21,6 +21,10 @@ export const routes: Routes = [
       {
         path: 'conference',
         loadChildren: '@ngatl/admin/conference#AdminConferenceModule'
+      },
+      {
+        path: 'system',
+        loadChildren: '@ngatl/admin/system#AdminSystemModule'
       }
     ]
   }
