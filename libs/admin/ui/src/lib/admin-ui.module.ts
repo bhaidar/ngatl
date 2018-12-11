@@ -8,6 +8,7 @@ import { AdminUiMaterialModule } from './admin-ui-material.module';
 
 import { SearchComponent } from './components/search/search.component'
 import { CardComponent } from './components/card/card.component';
+import { CrudGridComponent } from './components/crud-grid/crud-grid.component';
 import { FormComponent } from './components/form/form.component';
 import { FormRepeatComponent } from './components/form-repeat/form-repeat.component';
 import { GridComponent } from './components/grid/grid.component';
@@ -26,6 +27,7 @@ const COMPONENTS = [
   ...ENTRY_COMPONENTS,
   SearchComponent,
   CardComponent,
+  CrudGridComponent,
   FormComponent,
   FormRepeatComponent,
   FormComponent,

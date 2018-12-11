@@ -9,10 +9,22 @@ import { SpeakersIndexComponent } from './components/speakers-index/speakers-ind
 import { SponsorsIndexComponent } from './components/sponsors-index/sponsors-index.component'
 
 const routes = [
-  {path: 'schedule', component: ScheduleIndexComponent, },
-  {path: 'sessions', component: SessionsIndexComponent, },
-  {path: 'speakers', component: SpeakersIndexComponent, },
-  {path: 'sponsors', component: SponsorsIndexComponent, },
+  {
+    path: 'schedule',
+    component: ScheduleIndexComponent,
+  },
+  {
+    path: 'sessions',
+    component: SessionsIndexComponent,
+  },
+  {
+    path: 'speakers',
+    component: SpeakersIndexComponent,
+  },
+  {
+    path: 'sponsors',
+    component: SponsorsIndexComponent,
+  },
 ]
 @NgModule({
   imports: [
