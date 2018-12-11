@@ -3,39 +3,59 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout'
 
-import { MATERIAL_COMPONENTS } from './admin-ui-material.module';
+import { AdminUiFormsModule } from './admin-ui-forms.module'
+import { AdminUiMaterialModule } from './admin-ui-material.module';
 
+import { AutocompleteComponent } from './components/autocomplete/autocomplete.component'
 import { CardComponent } from './components/card/card.component';
+import { FormComponent } from './components/form/form.component';
+import { FormRepeatComponent } from './components/form-repeat/form-repeat.component';
 import { GridComponent } from './components/grid/grid.component';
 import { GridTemplateDirective } from './components/grid/grid-template.directive';
 import { LayoutComponent } from './components/layout/layout.component';
 import { ModalConfirmComponent } from './components/modal-confirm/modal-confirm.component'
 import { ModalFormComponent } from './components/modal-form/modal-form.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+
+const ENTRY_COMPONENTS = [
+  ModalConfirmComponent,
+  ModalFormComponent,
+]
+
+const COMPONENTS = [
+  ...ENTRY_COMPONENTS,
+  AutocompleteComponent,
+  CardComponent,
+  FormComponent,
+  FormRepeatComponent,
+  FormComponent,
+  GridComponent,
+  GridTemplateDirective,
+  LayoutComponent,
+  SidebarComponent,
+]
+
+const MODULES = [
+  CommonModule,
+  FlexLayoutModule,
+  RouterModule,
+  AdminUiFormsModule,
+  AdminUiMaterialModule,
+]
 
 @NgModule({
   imports: [
-    CommonModule,
-    FlexLayoutModule,
-    RouterModule,
-    ...MATERIAL_COMPONENTS,
-  ],
-  declarations: [
-    LayoutComponent,
-    ModalConfirmComponent,
-    ModalFormComponent,
-    CardComponent,
-    GridComponent,
-    GridTemplateDirective
+    ...MODULES,
   ],
   exports: [
-    LayoutComponent,
-    ModalConfirmComponent,
-    ModalFormComponent,
-    CardComponent,
-    GridComponent,
-    GridTemplateDirective,
-    ...MATERIAL_COMPONENTS
+    ...MODULES,
+    ...COMPONENTS,
   ],
-  entryComponents: [ModalConfirmComponent, ModalFormComponent]
+  declarations: [
+    ...COMPONENTS,
+  ],
+  entryComponents: [
+    ...ENTRY_COMPONENTS
+  ]
 })
 export class AdminUiModule {}

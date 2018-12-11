@@ -1,5 +1,22 @@
 @import 'scss/index';
+@import '~@angular/material/theming';
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 a { color: white };
+
+
+@include mat-core();
+
+$primary: mat-palette($mat-pink, 700, 500, 900);
+
+$accent:  mat-palette($mat-blue-grey, A200, A100, A400);
+
+$theme: mat-dark-theme($primary, $accent);
+
+@include angular-material-theme($theme);
+
+
+.mat-list-item-active {
+  color: mat-color($primary) !important;
+}
