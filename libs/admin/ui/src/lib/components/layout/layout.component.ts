@@ -46,8 +46,8 @@ export class LayoutComponent {
       links: [
         {
           label: 'Users',
-          path: '/users',
-          icon: 'person'
+          path: '/system/users',
+          icon: 'people'
         },
         {
           label: 'Settings',
