@@ -1,16 +1,28 @@
 import { Injectable } from '@angular/core'
 import { AdminUiService } from '@ngatl/admin/ui/src/lib/services/admin-ui.service'
-import { map } from 'rxjs/operators'
+import { distinctUntilChanged, filter, map, map, map, tap } from 'rxjs/operators'
 import { FormField } from '@ngatl/admin/ui'
+import { BehaviorSubject, Observable, of, ReplaySubject } from 'rxjs'
 
 enum actions {
   DELETE = 'DELETE',
   EDIT = 'EDIT'
 }
 
+class ConferenceSession {
+  title: string
+  description: string
+  date?: Date
+  time?: Date
+  duration?: number
+  type: 'talk' | 'workshop'
+}
+
 @Injectable({providedIn: 'root'})
 export class ConferenceSessionsService {
-  public items = []
+  public actions;
+  public allItems: ConferenceSession[] = []
+  public items: ConferenceSession[] = []
   public formFields: FormField[] = [
     FormField.input('title', {
       label: 'Title',
@@ -44,16 +56,19 @@ export class ConferenceSessionsService {
       },]
     })
   ]
+  public query = new BehaviorSubject<string>('');
 
   constructor(private ui: AdminUiService) {
-    this.items = Array(100)
+    this.actions = actions
+    this.allItems = this.items = Array(100)
       .fill(0)
       .map((_, idx) => {
         return {
           title: 'Session title ' + idx,
           description: 'Session description ' + idx,
-          editAction: actions.EDIT,
-          deleteAction: actions.DELETE
+          type: 'talk',
+          // editAction: actions.EDIT,
+          // deleteAction: actions.DELETE
         }
       })
   }
@@ -72,6 +87,12 @@ export class ConferenceSessionsService {
           .pipe(map(res => this.saveItem(res)))
           .subscribe()
       }
+      case 'SEARCH': {
+        return this.query.next(payload);
+      }
+      default: {
+        console.log('Unhandled action', { type, payload })
+      }
     }
   }
 
@@ -86,4 +107,24 @@ export class ConferenceSessionsService {
   saveItem(payload) {
     console.log('Saving item', payload)
   }
+
+  public get query$(): Observable<string> {
+    return this.query.asObservable()
+  }
+
+  filterItems(query: string): ConferenceSession[] {
+    this.items = this.allItems.filter(item => item.title.toLowerCase().includes(query.toLowerCase()))
+
+    return this.items
+  }
+
+  get autocomplete(): Observable<any> {
+    return this.query$
+      .pipe(
+        distinctUntilChanged(),
+        map(query => this.filterItems(query)),
+        map(items => items.map(item => item.title))
+      )
+  }
+
 }

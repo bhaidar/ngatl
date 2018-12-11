@@ -4,6 +4,7 @@ import { ConferenceSessionsService } from '../../services/conference-sessions.se
 
 @Component({
   template: `
+    <ui-autocomplete [options]="crud.autocomplete | async" (action)="crud.handleAction($event)"></ui-autocomplete>
     <div class="add-button">
       <button mat-fab color="primary" (click)="crud.addItem()">
         <mat-icon>add</mat-icon>
@@ -13,10 +14,10 @@ import { ConferenceSessionsService } from '../../services/conference-sessions.se
       <ng-container *uiGridTemplate="let item">
         <ui-card
           (action)="crud.handleAction($event)"
-          [deleteAction]="item.deleteAction"
+          [deleteAction]="crud.actions.DELETE"
+          [editAction]="crud.actions.EDIT"
           [payload]="item"
           [title]="item.title"
-          [editAction]="item.editAction"
           [subtitle]="item.description">
         </ui-card>
       </ng-container>

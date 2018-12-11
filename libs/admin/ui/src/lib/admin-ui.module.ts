@@ -6,6 +6,7 @@ import { FlexLayoutModule } from '@angular/flex-layout'
 import { AdminUiFormsModule } from './admin-ui-forms.module'
 import { AdminUiMaterialModule } from './admin-ui-material.module';
 
+import { AutocompleteComponent } from './components/autocomplete/autocomplete.component'
 import { CardComponent } from './components/card/card.component';
 import { FormComponent } from './components/form/form.component';
 import { FormRepeatComponent } from './components/form-repeat/form-repeat.component';
@@ -14,36 +15,44 @@ import { GridTemplateDirective } from './components/grid/grid-template.directive
 import { LayoutComponent } from './components/layout/layout.component';
 import { ModalConfirmComponent } from './components/modal-confirm/modal-confirm.component'
 import { ModalFormComponent } from './components/modal-form/modal-form.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 const ENTRY_COMPONENTS = [
   ModalConfirmComponent,
   ModalFormComponent,
 ]
+
 const COMPONENTS = [
   ...ENTRY_COMPONENTS,
+  AutocompleteComponent,
   CardComponent,
   FormComponent,
   FormRepeatComponent,
   FormComponent,
   GridComponent,
   GridTemplateDirective,
-  LayoutComponent
+  LayoutComponent,
+  SidebarComponent,
+]
+
+const MODULES = [
+  CommonModule,
+  FlexLayoutModule,
+  RouterModule,
+  AdminUiFormsModule,
+  AdminUiMaterialModule,
 ]
 
 @NgModule({
   imports: [
-    CommonModule,
-    FlexLayoutModule,
-    RouterModule,
-    AdminUiFormsModule,
-    AdminUiMaterialModule,
+    ...MODULES,
+  ],
+  exports: [
+    ...MODULES,
+    ...COMPONENTS,
   ],
   declarations: [
     ...COMPONENTS,
-  ],
-  exports: [
-    ...COMPONENTS,
-    AdminUiMaterialModule
   ],
   entryComponents: [
     ...ENTRY_COMPONENTS

@@ -5,7 +5,16 @@ import { GridTemplateDirective } from './grid-template.directive';
 @Component({
   selector: 'ui-grid',
   template: `
-    <mat-grid-list cols="2" [rowHeight]="rowHeight" [gutterSize]="gutterSize">
+    <mat-grid-list [cols]="cols" [rowHeight]="rowHeight" [gutterSize]="gutterSize">
+      <mat-grid-tile *ngIf="!items.length">
+        <div class="grid-tile">
+          
+          <ui-card>
+            <h2 style="margin: 20px; padding: 20px;">No items found...</h2>
+          </ui-card>
+          
+        </div>
+      </mat-grid-tile>
       <mat-grid-tile *ngFor="let item of items">
         <div class="grid-tile">
           <ng-container
@@ -38,4 +47,8 @@ export class GridComponent {
 
   @ContentChild(GridTemplateDirective, { read: TemplateRef })
   itemTemplate: TemplateRef<any>;
+
+  get cols() {
+    return this.items.length ? 2 : 1
+  }
 }
