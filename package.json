@@ -28,6 +28,8 @@
     "clean.shared": "cd libs/ && git clean -dfX && cd ../xplat/ && git clean -dfX",
     "clean": "npx rimraf hooks node_modules package-lock.json && npm i",
     "clean.all": "npm run clean && npm run clean.nativescript.app",
+    "build.web.admin.prod": "ng build web-admin --prod",
+    "deploy.web.admin": "firebase deploy",
     "start.nativescript.app.ios": "cd apps/nativescript-app && tns run ios --emulator --bundle",
     "start.nativescript.app.ios-hmr": "cd apps/nativescript-app && tns run ios --emulator --bundle --hmr",
     "start.nativescript.app.android": "cd apps/nativescript-app && tns run android --emulator --bundle",

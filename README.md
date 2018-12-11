@@ -23,6 +23,19 @@ You can view a presentation about xplat from ngConf 2018 here:
 
 https://www.youtube.com/watch?v=EqqNexmu3Ug
 
+## Build and deploy web-admin
+
+Build the web-admin app and set the BASE_HREF
+
+```
+npm run build.web.admin.prod
+```
+
+Deploy to Firebase
+```
+npm run deploy.web.admin
+```
+
 ## Nrwl Extensions for Angular (Nx)
 
 <a href="https://nrwl.io/nx"><img src="https://preview.ibb.co/mW6sdw/nx_logo.png"></a>
