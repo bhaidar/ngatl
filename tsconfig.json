@@ -39,6 +39,9 @@
       ],
       "@ngatl/admin/system": [
         "libs/admin/system/src/index.ts"
+      ],
+      "@ngatl/admin/auth": [
+        "libs/admin/auth/src/index.ts"
       ]
     }
   },

@@ -286,6 +286,34 @@
           }
         }
       }
+    },
+    "admin-auth": {
+      "root": "libs/admin/auth",
+      "sourceRoot": "libs/admin/auth/src",
+      "projectType": "library",
+      "prefix": "ngatl",
+      "architect": {
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/admin/auth/src/test.ts",
+            "tsConfig": "libs/admin/auth/tsconfig.spec.json",
+            "karmaConfig": "libs/admin/auth/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/auth/tsconfig.lib.json",
+              "libs/admin/auth/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {

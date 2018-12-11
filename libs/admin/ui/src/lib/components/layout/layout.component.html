@@ -19,14 +19,12 @@
           <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
         </button>
         <span class="toolbar-spacer"></span>
-        <button
-          type="button"
-          aria-label="Toggle sidenav"
-          mat-stroked-button
-          (click)="logout()">
+        <a
+          routerLink="/logout"
+          mat-stroked-button>
           <mat-icon aria-label="Log out user">person</mat-icon>
           Logout
-        </button>
+        </a>
       </mat-toolbar-row>
 
     </mat-toolbar>
