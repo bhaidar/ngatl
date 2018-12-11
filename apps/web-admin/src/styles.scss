@@ -5,6 +5,10 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 a { color: white };
 
+.app-background {
+  background: url(/assets/background.webp);
+  background-size: cover;
+}
 
 @include mat-core();
 

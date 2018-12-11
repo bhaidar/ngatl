@@ -4,7 +4,7 @@ import { Component } from '@angular/core'
   selector: 'app-auth-base',
   template: `
     <mat-sidenav-container>
-      <mat-sidenav-content>
+      <mat-sidenav-content class="app-background">
         <div fxFlexFill>
           <main fxFlexFill fxLayout="row" fxLayoutAlign="center center">
             <div fxFlex="30%" fxFlex.lg="40%" fxFlex.xs="100%" fxFlex.sm="80%" fxFlex.md="60%">
