@@ -1,21 +1,15 @@
 import { Component, Input } from '@angular/core'
-
-export class LinkGroup {
-  label: string
-  links: Link[]
-  open?: boolean
-  icon?: string
-}
-
-export class Link {
-  label: string
-  path: string
-  icon?: string
-}
+import { Link, LinkGroup } from '../../config/navigation'
 
 @Component({
   selector: 'ui-sidebar',
   template: `
+    <mat-nav-list>
+      <a mat-list-item [routerLink]="link.path" *ngFor="let link of topLinks" routerLinkActive="mat-list-item-active">
+        <mat-icon *ngIf="link.icon">{{link.icon}}</mat-icon>
+        {{link.label}}
+      </a>
+    </mat-nav-list>
     <mat-accordion [multi]="true">
       <mat-expansion-panel *ngFor="let group of groups" [expanded]="group.open">
         <mat-expansion-panel-header>
@@ -35,13 +29,23 @@ export class Link {
   `,
   styles: [`
     mat-icon {
-      margin-right: 10px;
+      margin-right: 16px;
     }
     mat-panel-title span {
       padding-top: 4px;
+    }
+    mat-expansion-panel-header {
+      padding: 0 16px;
+    }
+    :host ::ng-deep .mat-expansion-panel-body {
+      padding: 0 0 16px;
+    }
+    :host ::ng-deep .mat-expansion-panel-body mat-icon {
+      margin-left: 24px;
     }
   `]
 })
 export class SidebarComponent {
   @Input() public groups: LinkGroup[] = []
+  @Input() public topLinks: Link[] = []
 }

@@ -10,7 +10,7 @@ import { ConferenceSessionsService } from '../../services/conference-sessions.se
         <mat-icon>add</mat-icon>
       </button>
     </div>
-    <ui-grid [items]="crud.items">
+    <ui-grid [items]="crud.items" [rowHeight]="150">
       <ng-container *uiGridTemplate="let item">
         <ui-card
           (action)="crud.handleAction($event)"
