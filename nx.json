@@ -31,6 +31,9 @@
     },
     "admin-system": {
       "tags": []
+    },
+    "admin-auth": {
+      "tags": []
     }
   }
 }

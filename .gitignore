@@ -48,7 +48,7 @@ libs/**/*.d.ts
 libs/**/*.metadata.json
 libs/**/*.ngfactory.ts
 libs/**/*.ngsummary.json
-      
+
 # xplat
 xplat/**/*.js
 xplat/**/*.map
@@ -58,4 +58,4 @@ xplat/**/*.ngfactory.ts
 xplat/**/*.ngsummary.json
 
 package-lock.json
-      
+/.firebase/

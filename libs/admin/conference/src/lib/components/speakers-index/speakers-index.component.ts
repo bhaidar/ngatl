@@ -1,28 +1,11 @@
-import { Component, OnInit } from '@angular/core'
+import { Component } from '@angular/core'
+import { ConferenceSpeakersService } from '../../services/conference-speakers.service'
 
 @Component({
   template: `
-    <ui-grid [items]="items">
-      <ng-container *uiGridTemplate="let item">
-        <ui-card
-          [title]="item.title"
-          [titleLink]="item.path"
-          [subtitle]="item.subtitle">
-        </ui-card>
-      </ng-container>
-    </ui-grid>
+    <ui-crud-grid [service]="crud"></ui-crud-grid>
   `
 })
-export class SpeakersIndexComponent implements OnInit {
-  public items = [];
-
-  ngOnInit() {
-    this.items = Array(100).fill(0).map((_, idx) => {
-      return {
-        title: 'Speakers title ' + idx,
-        subtitle: 'Speakers subtitle ' + idx,
-        path: idx,
-      }
-    })
-  }
+export class SpeakersIndexComponent {
+  constructor(public crud: ConferenceSpeakersService ) {}
 }

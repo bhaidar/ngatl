@@ -3,9 +3,9 @@ import { FormControl } from '@angular/forms';
 import { map, startWith } from 'rxjs/operators';
 
 @Component({
-  selector: 'ui-autocomplete',
+  selector: 'ui-search',
   template: `    
-    <mat-toolbar>
+    <mat-toolbar color="primary">
       <mat-form-field>
         <input type="text"
                #q
@@ -34,7 +34,7 @@ import { map, startWith } from 'rxjs/operators';
   `
   ]
 })
-export class AutocompleteComponent {
+export class SearchComponent {
   @Input() public options: string[];
   @Output() public action = new EventEmitter();
 
