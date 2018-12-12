@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core'
 import { Route } from '@angular/router'
 import { CommonModule } from '@angular/common'
+import { HTTP_INTERCEPTORS } from '@angular/common/http'
 import { AdminUiModule } from '@ngatl/admin/ui'
+import { NgxAuthFirebaseUIModule } from 'ngx-auth-firebaseui'
 
 import { AuthLayoutComponent } from './components/auth-layout/auth-layout.component'
 import { AuthLogoutComponent } from './containers/auth-logout/auth-logout.component'
 import { AuthLoginComponent } from './containers/auth-login/auth-login.component'
-import { HTTP_INTERCEPTORS } from '@angular/common/http'
 import { HttpAuthInterceptor } from './interceptors/http-auth-interceptor'
 
 export const routes: Route[] = [
@@ -27,7 +28,7 @@ export const routes: Route[] = [
 ]
 
 @NgModule({
-  imports: [CommonModule, AdminUiModule],
+  imports: [CommonModule, AdminUiModule, NgxAuthFirebaseUIModule],
   declarations: [AuthLayoutComponent, AuthLoginComponent, AuthLogoutComponent],
   providers: [
     {

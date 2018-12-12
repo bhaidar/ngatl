@@ -15,11 +15,14 @@ import { CoreModule } from './core/core.module';
 import { SharedModule } from './features/shared/shared.module';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './core/dashboard/dashboard.component';
+import { NgxAuthFirebaseUIModule } from 'ngx-auth-firebaseui';
+import { IsLoggedInGuard } from '@ngatl/admin/auth/src/lib/guards/is-logged-in.guard'
 
 export const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
+    canActivate: [ IsLoggedInGuard ],
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       {
@@ -49,7 +52,16 @@ export const routes: Routes = [
     AdminAuthModule,
     AdminUiModule,
     RouterModule.forRoot(routes),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgxAuthFirebaseUIModule.forRoot(
+      environment.firebase,
+      () => 'FIREBASE_AUTH_FAC',
+      {
+        enableFirestoreSync: true,
+        onlyEmailPasswordAuth: true,
+
+      }
+    )
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent]

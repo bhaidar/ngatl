@@ -91,7 +91,12 @@
             "tsConfig": "apps/web-admin/tsconfig.app.json",
             "assets": [
               "apps/web-admin/src/favicon.ico",
-              "apps/web-admin/src/assets"
+              "apps/web-admin/src/assets",
+              {
+                "glob": "**/*",
+                "input": "node_modules/ngx-auth-firebaseui/assets/",
+                "output": "./assets/"
+              }
             ],
             "styles": [
               "xplat/web/scss/_index.scss",

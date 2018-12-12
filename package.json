@@ -84,6 +84,7 @@
     "nativescript-shimmer": "~2.0.0",
     "nativescript-social-share": "~1.5.0",
     "nativescript-theme-core": "^1.0.4",
+    "ngx-auth-firebaseui": "^2.2.0",
     "reflect-metadata": "^0.1.12",
     "rxjs": "~6.3.3",
     "rxjs-compat": "~6.3.3",

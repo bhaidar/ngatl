@@ -31,3 +31,11 @@ mat-sidenav mat-toolbar {
 .toolbar-spacer {
   flex: 1 1 auto;
 }
+
+.avatar {
+  height: 24px;
+  border-radius: 50%;
+}
+button .avatar {
+  margin-right: 10px;
+}
