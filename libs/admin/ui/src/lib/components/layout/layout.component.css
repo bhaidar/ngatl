@@ -35,7 +35,5 @@ mat-sidenav mat-toolbar {
 .avatar {
   height: 24px;
   border-radius: 50%;
-}
-button .avatar {
   margin-right: 10px;
 }

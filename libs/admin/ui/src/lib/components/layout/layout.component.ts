@@ -12,7 +12,6 @@ import { User } from 'firebase/app';
   styleUrls: ['./layout.component.css']
 })
 export class LayoutComponent {
-  public title = 'NG-ATL 2019';
   public topLinks: Link[] = sidebarTopLinks
   public groups: LinkGroup[] = sidebarGroups
 
