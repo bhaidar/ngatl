@@ -68,12 +68,16 @@ export class CrudService<T> {
     return this.items
   }
 
-  public getTitleProp(item: T) {
-    return item.toString()
+  public getImageProp(item: T): string|null {
+    return null
   }
 
-  public getSubtitleProp(item: T) {
-    return item.toString()
+  public getTitleProp(item: T): string|null {
+    return null
+  }
+
+  public getSubtitleProp(item: T): string|null {
+    return null
   }
 
   getOptions(items: T[]) {

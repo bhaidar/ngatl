@@ -1,20 +1,18 @@
 import { Component, ContentChild, Input, TemplateRef } from '@angular/core';
 
 import { GridTemplateDirective } from './grid-template.directive';
+import { AdminUiService } from '@ngatl/admin/ui'
 
 @Component({
   selector: 'ui-grid',
   template: `
-    <mat-grid-list [cols]="cols" [rowHeight]="rowHeight" [gutterSize]="gutterSize">
-      <mat-grid-tile *ngIf="!items.length">
-        <div class="grid-tile">
-          
-          <ui-card>
-            <h2 style="margin: 20px; padding: 20px;">No items found...</h2>
-          </ui-card>
-          
-        </div>
-      </mat-grid-tile>
+    <div class="no-items"  *ngIf="!items.length">
+      <ui-card>
+        <h2 class="no-items-text">No items found...</h2>
+      </ui-card>
+    </div>
+
+    <mat-grid-list [cols]="ui.gridCols" [rowHeight]="ui.gridRowHeight" [gutterSize]="gutterSize">
       <mat-grid-tile *ngFor="let item of items">
         <div class="grid-tile">
           <ng-container
@@ -32,6 +30,14 @@ import { GridTemplateDirective } from './grid-template.directive';
       mat-grid-list {
         margin: 0 20px;
       }
+      .no-items {
+        padding: 0 22px;
+      }
+      .no-items-text {
+        margin: 20px;
+        padding: 20px;
+        text-align: center;
+      }
       .grid-tile {
         width: 100%;
         height: 100%;
@@ -48,7 +54,16 @@ export class GridComponent {
   @ContentChild(GridTemplateDirective, { read: TemplateRef })
   itemTemplate: TemplateRef<any>;
 
+  constructor(public ui: AdminUiService) {
+
+  }
+
+
   get cols() {
-    return this.items.length ? 2 : 1
+    return this.items.length ? 3 : 1
+  }
+
+  get rows() {
+    return this.rowHeight ? this.rowHeight : '2:3'
   }
 }
