@@ -1,7 +1,7 @@
 import { Component, ContentChild, Input, TemplateRef } from '@angular/core'
 
 import { CrudService } from '../../services/crud.service'
-import { GridTemplateDirective } from '@ngatl/admin/ui/src/lib/components/grid/grid-template.directive'
+import { GridTemplateDirective } from '../grid/grid-template.directive'
 
 @Component({
   selector: 'ui-crud-grid',

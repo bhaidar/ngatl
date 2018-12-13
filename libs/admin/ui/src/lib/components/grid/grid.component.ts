@@ -1,7 +1,7 @@
 import { Component, ContentChild, Input, TemplateRef } from '@angular/core';
 
 import { GridTemplateDirective } from './grid-template.directive';
-import { AdminUiService } from '@ngatl/admin/ui'
+import { AdminUiService } from '../../services/admin-ui.service'
 
 @Component({
   selector: 'ui-grid',
