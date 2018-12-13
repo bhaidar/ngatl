@@ -53,15 +53,7 @@ export const routes: Routes = [
     AdminUiModule,
     RouterModule.forRoot(routes),
     BrowserAnimationsModule,
-    NgxAuthFirebaseUIModule.forRoot(
-      environment.firebase,
-      () => 'FIREBASE_AUTH_FAC',
-      {
-        enableFirestoreSync: true,
-        onlyEmailPasswordAuth: true,
-
-      }
-    )
+    NgxAuthFirebaseUIModule.forRoot(environment.firebase)
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent]

@@ -1,35 +1,68 @@
-import { Injectable } from '@angular/core'
+import { Injectable, OnDestroy } from '@angular/core'
 import { AdminUiService, CrudService } from '@ngatl/admin/ui'
 import { FormField } from '@ngatl/admin/ui'
+import { Observable, Subscription } from 'rxjs'
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore'
+import { map, tap } from 'rxjs/operators'
 
-class SystemUser {
-  name: string
+class FbUser {
+  uid: string
+  displayName: string
   email: string
-  role: string
+  photoURL: string
 }
 
-@Injectable({providedIn: 'root'})
-export class SystemUsersService extends CrudService<SystemUser> {
+class SystemUser {
+  id: string
+  name: string
+  email: string
+  avatar?: string
+  role?: string
+}
 
-  constructor(ui: AdminUiService) {
-    super(ui);
-    this.allItems = this.items = Array(100)
-      .fill(0)
-      .map((_, idx) => {
-        return {
-          name: 'Dummy User' + idx,
-          email: `user-${idx}@email.com`,
-          role: 'editor',
-        }
-      })
+const convertFbUser = (user: FbUser): SystemUser => ({
+  id: user.uid,
+  name: user.displayName,
+  email: user.email,
+  avatar: user.photoURL,
+})
+
+const convertSystemUser = (user: SystemUser): FbUser => ({
+  uid: user.id,
+  displayName: user.name,
+  email: user.email,
+  photoURL: user.avatar,
+})
+
+@Injectable({providedIn: 'root'})
+export class SystemUsersService extends CrudService<SystemUser> implements OnDestroy {
+  sub: Subscription;
+  collection: AngularFirestoreCollection<FbUser>;
+
+  get items$(): Observable<SystemUser[]> {
+    return this.collection.valueChanges()
+      .pipe(
+        map(users => users.map((user => convertFbUser(user))))
+      )
+  }
+
+  constructor(ui: AdminUiService, db: AngularFirestore) {
+    super(ui)
+    this.collection = db.collection<FbUser>('users');
+
+    this.sub = this.items$
+      .subscribe(res => this.setItems(res))
+
     this.formFields = [
       FormField.input('name', {
         label: 'Name',
         required: true,
+        disabled: true,
       }),
       FormField.email('email', {
         label: 'Email',
         required: true,
+        disabled: true,
       }),
       FormField.select('role', {
         label: 'Role',
@@ -37,12 +70,16 @@ export class SystemUsersService extends CrudService<SystemUser> {
         options: [{
           key: 'admin',
           value: 'Admin',
-        },{
+        }, {
           key: 'editor',
           value: 'Editor',
         },]
       })
     ]
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
   deleteItem(payload) {
@@ -51,6 +88,7 @@ export class SystemUsersService extends CrudService<SystemUser> {
 
   saveItem(payload) {
     console.log('Saving item', payload)
+    this.collection.doc(payload.id).update(convertSystemUser(payload))
   }
 
   getTitleProp(item: SystemUser) {
@@ -61,4 +99,7 @@ export class SystemUsersService extends CrudService<SystemUser> {
     return item.email
   }
 
+  private setItems(res: SystemUser[]) {
+    this.allItems = this.items = res;
+  }
 }
