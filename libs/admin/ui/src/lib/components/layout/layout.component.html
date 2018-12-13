@@ -19,14 +19,19 @@
           <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
         </button>
         <span class="toolbar-spacer"></span>
-        <a
-          routerLink="/logout"
-          mat-stroked-button>
-          <mat-icon aria-label="Log out user">person</mat-icon>
-          Logout
-        </a>
+        <ng-container *ngIf="user$ | async as user">
+          <button mat-button [matMenuTriggerFor]="menu">
+            <img [attr.src]="user.photoURL" alt="" class="avatar">
+            <span>{{ user.displayName }}</span>
+          </button>
+          <mat-menu #menu="matMenu" xPosition="before">
+            <a mat-menu-item routerLink="/logout">
+              <mat-icon>exit_to_app</mat-icon>
+              <span>Sign out</span>
+            </a>
+          </mat-menu>
+        </ng-container>
       </mat-toolbar-row>
-
     </mat-toolbar>
     <div class="main-content">
       <router-outlet></router-outlet>

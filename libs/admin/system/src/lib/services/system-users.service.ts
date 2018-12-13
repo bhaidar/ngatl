@@ -1,35 +1,31 @@
 import { Injectable } from '@angular/core'
 import { AdminUiService, CrudService } from '@ngatl/admin/ui'
 import { FormField } from '@ngatl/admin/ui'
-
-class SystemUser {
-  name: string
-  email: string
-  role: string
-}
+import { AngularFirestore } from '@angular/fire/firestore'
+import { SystemUser } from '../types'
 
 @Injectable({providedIn: 'root'})
 export class SystemUsersService extends CrudService<SystemUser> {
 
-  constructor(ui: AdminUiService) {
-    super(ui);
-    this.allItems = this.items = Array(100)
-      .fill(0)
-      .map((_, idx) => {
-        return {
-          name: 'Dummy User' + idx,
-          email: `user-${idx}@email.com`,
-          role: 'editor',
-        }
-      })
+  constructor(ui: AdminUiService, db: AngularFirestore) {
+    super(ui, db)
+    this.init('users')
+    this.items$.subscribe(res => this.setItems(res))
+
     this.formFields = [
-      FormField.input('name', {
+      FormField.input('displayName', {
         label: 'Name',
         required: true,
+        disabled: true,
       }),
       FormField.email('email', {
         label: 'Email',
         required: true,
+        disabled: true,
+      }),
+      FormField.input('photoURL', {
+        label: 'Photo URL',
+        required: false,
       }),
       FormField.select('role', {
         label: 'Role',
@@ -37,7 +33,7 @@ export class SystemUsersService extends CrudService<SystemUser> {
         options: [{
           key: 'admin',
           value: 'Admin',
-        },{
+        }, {
           key: 'editor',
           value: 'Editor',
         },]
@@ -45,20 +41,11 @@ export class SystemUsersService extends CrudService<SystemUser> {
     ]
   }
 
-  deleteItem(payload) {
-    console.log('Delete item', payload)
-  }
-
-  saveItem(payload) {
-    console.log('Saving item', payload)
-  }
-
   getTitleProp(item: SystemUser) {
-    return item.name
+    return item.displayName
   }
 
   getSubtitleProp(item: SystemUser) {
     return item.email
   }
-
 }

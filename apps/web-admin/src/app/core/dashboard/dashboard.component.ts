@@ -13,5 +13,5 @@ import { sidebarGroups } from '@ngatl/admin/ui/src/lib/config/navigation'
   `
 })
 export class DashboardComponent {
-  public items = sidebarGroups
+  public items = [sidebarGroups[0]]
 }

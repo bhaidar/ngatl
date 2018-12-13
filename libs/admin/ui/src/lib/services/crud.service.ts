@@ -3,6 +3,8 @@ import { AdminUiService } from './admin-ui.service'
 import { distinctUntilChanged, map } from 'rxjs/operators'
 import { FormField } from '../helpers'
 import { BehaviorSubject, Observable } from 'rxjs'
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore'
+import { ConferenceSpeaker } from '@ngatl/admin/conference/src/lib/types'
 
 enum actions {
   DELETE = 'DELETE',
@@ -11,15 +13,18 @@ enum actions {
 
 @Injectable()
 export class CrudService<T> {
-  public ui: AdminUiService;
+  public readonly db: AngularFirestore
+  public readonly ui: AdminUiService;
+  public collection: AngularFirestoreCollection<T>;
   public actions;
   public allItems: T[] = []
   public items: T[] = []
   public formFields: FormField[] = []
   public query = new BehaviorSubject<string>('');
 
-  constructor(ui: AdminUiService) {
+  constructor(ui: AdminUiService, db: AngularFirestore) {
     this.ui = ui;
+    this.db = db;
     this.actions = actions
   }
 
@@ -46,16 +51,34 @@ export class CrudService<T> {
     }
   }
 
+  init(path: string) {
+    this.collection = this.db.collection<T>(path);
+    this.items$.subscribe(res => this.setItems(res))
+  }
+
+  get items$(): Observable<T[]> {
+    return this.collection.valueChanges()
+  }
+
+  setItems(items: T[]) {
+    this.allItems = this.items = items;
+  }
+
   addItem() {
     this.handleAction({type: actions.EDIT, payload: {}})
   }
 
-  deleteItem(payload) {
-    console.log('Delete item', payload)
+  async deleteItem(payload) {
+    await this.collection.doc(payload.id).delete()
   }
 
-  saveItem(payload) {
-    console.log('Saving item', payload)
+  async saveItem(payload: any) {
+    if (!payload.id || !payload.uid) {
+      payload.uid = payload.id = this.db.createId()
+      await this.collection.doc(payload.id).set(payload)
+    } else {
+      await this.collection.doc(payload.id).update(payload)
+    }
   }
 
   public get query$(): Observable<string> {
@@ -68,12 +91,16 @@ export class CrudService<T> {
     return this.items
   }
 
-  public getTitleProp(item: T) {
-    return item.toString()
+  public getImageProp(item: T): string|null {
+    return null
   }
 
-  public getSubtitleProp(item: T) {
-    return item.toString()
+  public getTitleProp(item: T): string|null {
+    return null
+  }
+
+  public getSubtitleProp(item: T): string|null {
+    return null
   }
 
   getOptions(items: T[]) {

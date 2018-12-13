@@ -2,31 +2,15 @@ import { Injectable } from '@angular/core'
 import { AdminUiService } from '@ngatl/admin/ui'
 import { FormField } from '@ngatl/admin/ui'
 import { CrudService } from '@ngatl/admin/ui'
-
-class ConferenceSession {
-  title: string
-  description: string
-  date?: Date
-  time?: Date
-  duration?: number
-  type: string
-}
+import { AngularFirestore } from '@angular/fire/firestore'
+import { ConferenceSession } from '../types'
 
 @Injectable({providedIn: 'root'})
 export class ConferenceSessionsService extends CrudService<ConferenceSession> {
 
-  constructor(ui: AdminUiService) {
-    super(ui)
-    this.allItems = this.items = Array(100)
-      .fill(0)
-      .map((_, idx) => {
-        return {
-          title: 'Session title ' + idx,
-          description: 'Session description ' + idx,
-          type: 'talk',
-        }
-      })
-
+  constructor(ui: AdminUiService, db: AngularFirestore) {
+    super(ui, db)
+    this.init('session')
     this.formFields = [
       FormField.input('title', {
         label: 'Title',
@@ -60,14 +44,6 @@ export class ConferenceSessionsService extends CrudService<ConferenceSession> {
         },]
       })
     ]
-  }
-
-  deleteItem(payload) {
-    console.log('Delete item', payload)
-  }
-
-  saveItem(payload) {
-    console.log('Saving item', payload)
   }
 
   getTitleProp(item: ConferenceSession) {

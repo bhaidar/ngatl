@@ -2,27 +2,15 @@ import { Injectable } from '@angular/core'
 import { AdminUiService } from '@ngatl/admin/ui'
 import { FormField } from '@ngatl/admin/ui'
 import { CrudService } from '@ngatl/admin/ui'
-
-class ConferenceSpeaker {
-  name: string
-  bio: string
-  avatar?: string
-}
+import { AngularFirestore } from '@angular/fire/firestore'
+import { ConferenceSpeaker } from '../types'
 
 @Injectable({providedIn: 'root'})
 export class ConferenceSpeakersService extends CrudService<ConferenceSpeaker> {
 
-  constructor(ui: AdminUiService) {
-    super(ui)
-    this.allItems = this.items = Array(100)
-      .fill(0)
-      .map((_, idx) => {
-        return {
-          name: 'Speaker name ' + idx,
-          bio: 'Speaker description ' + idx,
-          avatar: `https://randomuser.me/api/portraits/women/${idx}.jpg`,
-        }
-      })
+  constructor(ui: AdminUiService, db: AngularFirestore) {
+    super(ui, db)
+    this.init('speakers')
     this.formFields = [
       FormField.input('name', {
         label: 'Name',
@@ -37,14 +25,6 @@ export class ConferenceSpeakersService extends CrudService<ConferenceSpeaker> {
         required: false,
       }),
     ]
-  }
-
-  deleteItem(payload) {
-    console.log('Delete item', payload)
-  }
-
-  saveItem(payload) {
-    console.log('Saving item', payload)
   }
 
   getTitleProp(item: ConferenceSpeaker) {

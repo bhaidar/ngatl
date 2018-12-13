@@ -19,7 +19,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core'
         <mat-card-subtitle>{{ subtitle }}</mat-card-subtitle>
       </mat-card-header>
       <ng-container *ngIf="image">
-        <img mat-card-image class="card-image" [attr.src]="image" [attr.alt]="title">
+        <img mat-card-image class="card-image" [attr.src]="image" [attr.alt]="title" height="auto">
       </ng-container>
       <mat-card-content>
         <ng-content></ng-content>
